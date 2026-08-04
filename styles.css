@@ -761,3 +761,14 @@ body {
     letter-spacing: 0.05em;
     border: 1px solid var(--border-card);
 }
+
+/* Persistent Viewport Frame */
+.viewport-frame {
+    position: fixed;
+    inset: 4px;
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-card);
+    pointer-events: none;
+    z-index: 9999;
+    box-sizing: border-box;
+}
