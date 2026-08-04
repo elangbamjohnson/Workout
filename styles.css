@@ -483,6 +483,11 @@ body {
     overflow: hidden;
 }
 .item-header {
+    width: 100%;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    text-align: left;
     padding: var(--sp-4);
     cursor: pointer;
     display: flex;

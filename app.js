@@ -18,7 +18,81 @@ const icons = {
 };
 
 const appContainer = document.getElementById('app-container');
-let currentDayIndex = 1; // Phase 1 placeholder (Day 2)
+// PHASE 2 HOOK: This should read from persistence (e.g., localStorage).
+// For now, defaulting to Day 1 (index 0).
+let currentDayIndex = 0; 
+let expandedCardIds = new Set();
+
+function toggleCard(id) {
+    if (expandedCardIds.has(id)) {
+        expandedCardIds.delete(id);
+    } else {
+        expandedCardIds.add(id);
+    }
+    // Re-render the current day to reflect state
+    const currentDay = workoutData.days[currentDayIndex];
+    if (document.getElementById('app-container').className === '') {
+        // We are on a day detail page. Let's just toggle the DOM class to avoid full re-render, 
+        // or we can just re-render. Re-rendering is easiest.
+        renderDay(currentDay.id);
+    }
+}
+
+function expandAll() {
+    const currentDay = workoutData.days[currentDayIndex];
+    if (!currentDay) return;
+    
+    // Add all valid ids
+    if (currentDay.exercises) currentDay.exercises.forEach(ex => expandedCardIds.add(ex.id));
+    if (currentDay.sections) currentDay.sections.forEach(sec => expandedCardIds.add(sec.id));
+    
+    renderDay(currentDay.id);
+}
+
+function collapseAll() {
+    expandedCardIds.clear();
+    const currentDay = workoutData.days[currentDayIndex];
+    if (currentDay) renderDay(currentDay.id);
+}
+
+function renderItemCard(item, dayType) {
+    const isExpanded = expandedCardIds.has(item.id);
+    
+    let html = `
+        <div class="item-card type-${dayType} ${isExpanded ? 'expanded' : ''}" data-id="${item.id}">
+            <button class="item-header" onclick="toggleCard('${item.id}')" aria-expanded="${isExpanded}">
+                <div class="item-header-top">
+                    <div class="item-title-wrap">
+                        <div class="num-badge" aria-hidden="true">${item.badge}</div>
+                        <h3 class="title-card">${item.title}</h3>
+                    </div>
+                    <div class="item-chevron" aria-hidden="true">${icons.chevron}</div>
+                </div>
+                <div class="item-stats">
+                    ${item.stats.map((s, idx) => {
+                        if (s === 'divider') return '<div class="stat-divider" aria-hidden="true"></div>';
+                        return `<div class="stat-item">${s.icon ? s.icon : ''} <span class="text-mono">${s.value}</span> ${s.label ? `<span class="stat-item-label">${s.label}</span>` : ''}</div>`;
+                    }).join('')}
+                </div>
+            </button>
+            <div class="item-content">
+                ${item.callout ? `
+                <div class="item-callout" style="margin-bottom: var(--sp-4);">
+                    ${item.callout.icon} <span>${item.callout.text}</span>
+                </div>
+                ` : ''}
+                ${item.sections.map(sec => `
+                <div class="item-content-section">
+                    <h4 class="label-small">${sec.title}</h4>
+                    ${sec.content}
+                </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+    return html;
+}
+
 
 function init() {
     renderHome();
@@ -43,7 +117,7 @@ function updateGlobalHeader(isHome) {
             <div class="header-pills">
                 <div class="pill pill-accent"><div class="dot"></div> Phase 1 of 3</div>
                 <div class="pill">Week 1</div>
-                <div class="pill" onclick="renderAbout()">${icons.info} About</div>
+                <button class="pill" onclick="renderAbout()">${icons.info} About</button>
             </div>
         </div>
     `;
@@ -82,7 +156,7 @@ function renderHome() {
     html += `
         <div class="today-banner">
             <div class="flex items-center">
-                <div class="banner-icon">${icons.flame}</div>
+                <div class="banner-icon" aria-hidden="true">${icons.flame}</div>
                 <div>
                     <div class="label-small" style="color: var(--strength-accent); margin-bottom: 4px;">TODAY</div>
                     <div style="font-size: 18px; font-weight: 700; color: #fff;">Day ${today.id} — ${today.title}</div>
@@ -94,7 +168,7 @@ function renderHome() {
     `;
 
     // Week Grid
-    html += `<div class="section-header">This Week</div><div class="days-grid">`;
+    html += `<h2 class="section-header">This Week</h2><div class="days-grid">`;
     workoutData.days.forEach((day, index) => {
         const isCurrent = index === currentDayIndex;
         let iconName = day.type === 'rest' ? 'rest' : (day.type === 'strength' ? 'strength' : (day.type === 'bag' ? 'bag' : 'technical'));
@@ -107,13 +181,13 @@ function renderHome() {
         let dayLabelStr = typeof day.id === 'string' ? day.id : `Day ${day.id}`;
         
         html += `
-            <div class="card day-card type-${day.type} ${isCurrent ? 'is-current' : ''}" onclick="renderDay('${day.id}')">
+            <a href="#" class="card day-card type-${day.type} ${isCurrent ? 'is-current' : ''}" onclick="event.preventDefault(); renderDay('${day.id}')" style="text-decoration: none;">
                 <div class="flex justify-between items-start" style="margin-bottom: var(--sp-4);">
                     <div class="flex items-center gap-2">
-                        <div class="card-icon-box">${icons[iconName]}</div>
+                        <div class="card-icon-box" aria-hidden="true">${icons[iconName]}</div>
                         <span class="label-small">DAY ${typeof day.id === 'number' ? day.id : '6-7'}</span>
                     </div>
-                    <div class="type-badge">${icons[iconName]} ${day.type}</div>
+                    <div class="type-badge" aria-hidden="true">${icons[iconName]} ${day.type}</div>
                 </div>
                 <div class="title-card" style="margin-bottom: 4px;">${day.title}</div>
                 <div class="text-sec" style="font-size: 12px; margin-bottom: var(--sp-3); min-height: 18px;">${day.subtitle || ''}</div>
@@ -122,23 +196,25 @@ function renderHome() {
                     <span>${countLabel}</span>
                     <span style="color: var(--text-primary); font-weight: 500;">View ${icons.forward}</span>
                 </div>
-            </div>
+            </a>
         `;
     });
     html += `</div>`;
 
     // Locked Phase
-    html += `
-        <div class="card locked-card">
-            <div class="flex items-center gap-4">
-                <div class="card-icon-box" style="background: var(--bg-nested); color: var(--text-muted); border-radius: 50%;">${icons.trend}</div>
-                <div>
-                    <div class="title-card" style="color: var(--text-secondary);">Phase 2 — Plyometric Power</div>
-                    <div class="text-sec" style="font-size: 13px;">Unlocks after 3 complete cycles of Phase 1</div>
+    if (workoutData.lockedPhase) {
+        html += `
+            <div class="card locked-card">
+                <div class="flex items-center gap-4">
+                    <div class="card-icon-box" aria-hidden="true" style="background: var(--bg-nested); color: var(--text-muted); border-radius: 50%;">${icons.trend}</div>
+                    <div>
+                        <h2 class="title-card" style="color: var(--text-secondary);">${workoutData.lockedPhase.title}</h2>
+                        <div class="text-sec" style="font-size: 13px;">${workoutData.lockedPhase.subtitle}</div>
+                    </div>
                 </div>
             </div>
-        </div>
-    `;
+        `;
+    }
 
     // Program Goal
     html += `
@@ -184,7 +260,7 @@ function renderDay(dayIdRaw) {
         <div class="card day-header-card type-${day.type}">
             <div class="flex justify-between items-start" style="margin-bottom: var(--sp-2);">
                 <span class="label-small">DAY ${typeof day.id === 'number' ? day.id : '6-7'}</span>
-                <span class="type-badge">${icons[iconName]} ${day.type}</span>
+                <span class="type-badge" aria-hidden="true">${icons[iconName]} ${day.type}</span>
             </div>
             <h1 class="title-page" style="margin-bottom: var(--sp-1);">${day.title}</h1>
             ${day.subtitle ? `<div class="text-sec" style="margin-bottom: var(--sp-4);">${day.subtitle}</div>` : ''}
@@ -206,16 +282,48 @@ function renderDay(dayIdRaw) {
     if (day.type !== 'rest') {
         let countLabel = '';
         let totalTime = null;
-        if (day.type === 'strength') countLabel = `EXERCISES · ${day.exercises.length}`;
-        else if (day.type === 'bag') { countLabel = `ROUNDS · ${day.exercises.length}`; totalTime = "18 min total"; }
-        else if (day.type === 'technical') { countLabel = `SECTIONS · ${day.sections.length}`; totalTime = "40 min total"; }
+        
+        if (day.type === 'strength') {
+            countLabel = `EXERCISES · ${day.exercises.length}`;
+        } else if (day.type === 'bag') {
+            countLabel = `ROUNDS · ${day.exercises.length}`;
+            let totalSeconds = day.exercises.reduce((sum, ex) => {
+                let w = ex.workSeconds || 0;
+                let r = ex.restSeconds || 0;
+                let sets = parseInt((ex.setsReps || "1").split(" ")[0]) || 1;
+                return sum + (w + r) * sets;
+            }, 0);
+            if (totalSeconds > 0) totalTime = `${Math.ceil(totalSeconds / 60)} min total`;
+        } else if (day.type === 'technical') {
+            countLabel = `SECTIONS · ${day.sections.length}`;
+            let totalMins = day.sections.reduce((sum, sec) => {
+                let minStr = sec.duration.replace(/[^0-9]/g, '');
+                return sum + (parseInt(minStr) || 0);
+            }, 0);
+            if (totalMins > 0) totalTime = `${totalMins} min total`;
+        }
+
+        let allExpanded = false;
+        let toggleAction = "expandAll()";
+        let toggleText = "Expand all";
+        
+        let totalExpandable = 0;
+        let totalExpanded = 0;
+        if (day.exercises) { totalExpandable = day.exercises.length; totalExpanded = day.exercises.filter(ex => expandedCardIds.has(ex.id)).length; }
+        if (day.sections) { totalExpandable = day.sections.length; totalExpanded = day.sections.filter(sec => expandedCardIds.has(sec.id)).length; }
+        
+        if (totalExpandable > 0 && totalExpanded === totalExpandable) {
+            allExpanded = true;
+            toggleAction = "collapseAll()";
+            toggleText = "Collapse all";
+        }
 
         html += `
             <div class="content-header-row">
-                <span class="label-small">${countLabel}</span>
+                <h2 class="label-small">${countLabel}</h2>
                 <div class="right-actions">
                     ${totalTime ? `<span class="time-pill type-${day.type}">${icons.clock} ${totalTime}</span>` : ''}
-                    <button class="btn-nav" style="font-size: 11px;" onclick="document.querySelectorAll('.item-card').forEach(c => c.classList.add('expanded'))">Expand all</button>
+                    <button class="btn-nav" style="font-size: 11px;" onclick="${toggleAction}">${toggleText}</button>
                 </div>
             </div>
         `;
@@ -227,7 +335,7 @@ function renderDay(dayIdRaw) {
         html += `
             <div class="card type-rest">
                 <ul class="rest-list">
-                    ${day.notes.map(n => `<li>${n}</li>`).join('')}
+                    ${day.notes.map(n => `<li>${n.text}</li>`).join('')}
                 </ul>
             </div>
         `;
@@ -235,116 +343,78 @@ function renderDay(dayIdRaw) {
         day.sections.forEach((sec, idx) => {
             let drillsHtml = sec.rounds ? sec.rounds.map(r => `
                 <div class="nested-row">
-                    <div class="nested-icon">${icons.checkmark}</div>
+                    <div class="nested-icon" aria-hidden="true">${icons.checkmark}</div>
                     <div>Round ${r.round} — ${r.combo} : ${r.focus}</div>
                 </div>`).join('') : '';
 
-            html += `
-                <div class="item-card type-${day.type}">
-                    <div class="item-header" onclick="this.parentElement.classList.toggle('expanded')">
-                        <div class="item-header-top">
-                            <div class="item-title-wrap">
-                                <div class="num-badge">${idx + 1}</div>
-                                <div class="title-card">${sec.name}</div>
-                            </div>
-                            <div class="item-chevron">${icons.chevron}</div>
-                        </div>
-                        <div class="item-stats">
-                            <div class="stat-item"><span class="text-mono">${sec.duration}</span></div>
-                            <div class="stat-item"><span class="stat-item-label">· ${sec.rounds ? sec.rounds.length : 'Multiple'} drills</span></div>
-                        </div>
-                    </div>
-                    <div class="item-content">
-                        <div class="item-content-section">
-                            <p>${sec.detail}</p>
-                        </div>
-                        <div class="item-content-section">
-                            <div class="label-small">DRILLS</div>
-                            <div class="nested-list">${drillsHtml}</div>
-                        </div>
-                        <div class="item-callout" style="margin-top: var(--sp-4);">
-                            ${icons.technical} <span>Focus on mechanics and form over power.</span>
-                        </div>
-                    </div>
-                </div>
-            `;
+            let normalizedItem = {
+                id: sec.id,
+                badge: idx + 1,
+                title: sec.name,
+                stats: [
+                    { value: sec.duration },
+                    { label: `· ${sec.rounds ? sec.rounds.length : 'Multiple'} drills` }
+                ],
+                callout: { icon: icons.technical, text: "Focus on mechanics and form over power." },
+                sections: [
+                    { title: "DETAILS", content: `<p>${sec.detail}</p>` },
+                    { title: "DRILLS", content: `<div class="nested-list">${drillsHtml}</div>` }
+                ]
+            };
+            html += renderItemCard(normalizedItem, day.type);
         });
     } else if (day.type === 'bag') {
         day.exercises.forEach((ex, idx) => {
-            html += `
-                <div class="item-card type-${day.type}">
-                    <div class="item-header" onclick="this.parentElement.classList.toggle('expanded')">
-                        <div class="item-header-top">
-                            <div class="item-title-wrap">
-                                <div class="num-badge">R${idx + 1}</div>
-                                <div class="title-card">${ex.name}</div>
-                            </div>
-                            <div class="item-chevron">${icons.chevron}</div>
-                        </div>
-                        <div class="item-stats">
-                            <div class="stat-item">${icons.clock} <span class="text-mono">${ex.setsReps}</span></div>
-                            <div class="stat-item">${icons.flame} <span class="text-mono">85-95%</span></div>
-                        </div>
-                    </div>
-                    <div class="item-content">
-                        <div class="item-content-section">
-                            <div class="label-small">COMBINATIONS</div>
-                            <div class="nested-list">
-                                ${ex.rounds ? ex.rounds.map((r, i) => `
-                                    <div class="nested-row">
-                                        <div class="nested-icon">${i + 1}</div>
-                                        <div>${r.combo}</div>
-                                    </div>
-                                `).join('') : `<div class="nested-row"><div class="nested-icon">1</div><div>${ex.notes}</div></div>`}
-                            </div>
-                        </div>
-                        <div class="item-callout" style="margin-top: var(--sp-4);">
-                            ${icons.flame} <span>${ex.benefits}</span>
-                        </div>
-                    </div>
+            let roundsHtml = ex.rounds ? ex.rounds.map((r, i) => `
+                <div class="nested-row">
+                    <div class="nested-icon" aria-hidden="true">${i + 1}</div>
+                    <div>${r.combo}</div>
                 </div>
-            `;
+            `).join('') : `<div class="nested-row"><div class="nested-icon" aria-hidden="true">1</div><div>${ex.notes}</div></div>`;
+
+            let normalizedItem = {
+                id: ex.id,
+                badge: `R${idx + 1}`,
+                title: ex.name,
+                stats: [
+                    { icon: icons.clock, value: ex.setsReps },
+                    { icon: icons.flame, value: "85-95%" }
+                ],
+                callout: { icon: icons.flame, text: ex.benefits },
+                sections: [
+                    { title: "COMBINATIONS", content: `<div class="nested-list">${roundsHtml}</div>` }
+                ]
+            };
+            html += renderItemCard(normalizedItem, day.type);
         });
     } else {
         // Strength
         day.exercises.forEach((ex, idx) => {
             let musclesHtml = ex.muscles ? ex.muscles.split(',').map(m => `<div class="muscle-tag">${m.trim()}</div>`).join('') : '';
-            html += `
-                <div class="item-card type-${day.type}">
-                    <div class="item-header" onclick="this.parentElement.classList.toggle('expanded')">
-                        <div class="item-header-top">
-                            <div class="item-title-wrap">
-                                <div class="num-badge">${idx + 1}</div>
-                                <div class="title-card">${ex.name}</div>
-                            </div>
-                            <div class="item-chevron">${icons.chevron}</div>
-                        </div>
-                        <div class="item-stats">
-                            <div class="stat-item">${icons.repeat} <span class="text-mono">${ex.setsReps}</span> <span class="stat-item-label">sets × reps</span></div>
-                            <div class="stat-divider"></div>
-                            <div class="stat-item">${icons.weight} <span class="text-mono">${ex.weight}</span></div>
-                            ${ex.restSeconds ? `<div class="stat-divider"></div><div class="stat-item">${icons.clock} <span class="text-mono">${Math.floor(ex.restSeconds/60)} min rest</span></div>` : ''}
-                        </div>
-                    </div>
-                    <div class="item-content">
-                        <div class="item-callout" style="margin-bottom: var(--sp-4);">
-                            ${icons.strength} <span>Drive through the floor explosively — speed matters over weight.</span>
-                        </div>
-                        <div class="item-content-section">
-                            <div class="label-small">EXECUTION NOTES</div>
-                            <p>${ex.notes}</p>
-                        </div>
-                        <div class="item-content-section">
-                            <div class="label-small">WHY THIS EXERCISE</div>
-                            <p>${ex.benefits}</p>
-                        </div>
-                        <div class="item-content-section">
-                            <div class="label-small">MUSCLES WORKED</div>
-                            <div class="muscle-tags">${musclesHtml}</div>
-                        </div>
-                    </div>
-                </div>
-            `;
+            
+            let stats = [
+                { icon: icons.repeat, value: ex.setsReps, label: "sets × reps" },
+                "divider",
+                { icon: icons.weight, value: ex.weight }
+            ];
+            if (ex.restSeconds) {
+                stats.push("divider");
+                stats.push({ icon: icons.clock, value: `${Math.floor(ex.restSeconds/60)} min rest` });
+            }
+
+            let normalizedItem = {
+                id: ex.id,
+                badge: idx + 1,
+                title: ex.name,
+                stats: stats,
+                callout: { icon: icons.strength, text: "Drive through the floor explosively — speed matters over weight." },
+                sections: [
+                    { title: "EXECUTION NOTES", content: `<p>${ex.notes}</p>` },
+                    { title: "WHY THIS EXERCISE", content: `<p>${ex.benefits}</p>` },
+                    { title: "MUSCLES WORKED", content: `<div class="muscle-tags">${musclesHtml}</div>` }
+                ]
+            };
+            html += renderItemCard(normalizedItem, day.type);
         });
     }
     html += `</div>`; // .item-list
