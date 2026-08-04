@@ -19,8 +19,9 @@ const icons = {
 
 const appContainer = document.getElementById('app-container');
 // PHASE 2 HOOK: This should read from persistence (e.g., localStorage).
-// For now, defaulting to Day 1 (index 0).
-let currentDayIndex = 0; 
+// For now, mapping calendar day of week to program day (Monday = Day 1 ... Sunday = Day 7).
+const jsDay = new Date().getDay();
+let currentDayIndex = jsDay === 0 ? 6 : jsDay - 1; 
 let expandedCardIds = new Set();
 
 function toggleCard(id) {
