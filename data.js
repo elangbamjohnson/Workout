@@ -13,8 +13,9 @@ const workoutData = {
   "days": [
     {
       "id": 1,
-      "title": "Strength & Power A",
-      "subtitle": "Lower Body, Hip & Rotational Power",
+      "title": "Lower Body Power",
+      "subtitle": "Posterior Chain Foundation",
+      "note": "Heavy hip-hinge and glute work to build the ground-force engine behind every punch.",
       "type": "strength",
       "exercises": [
         {
@@ -102,10 +103,10 @@ const workoutData = {
     },
     {
       "id": 2,
-      "title": "Heavy Bag Power Day 1",
-      "subtitle": "Fresh Nervous System",
+      "title": "Bag Power Day",
+      "subtitle": "Maximum Force Output",
       "type": "bag",
-      "note": "No lifting beforehand — this day exists specifically so your bag work gets full output. Just warm-up, then straight into power work.",
+      "note": "Pure power application on the heavy bag — every punch thrown with maximum intent.",
       "exercises": [
         {
           "name": "Skipping rope (warm-up)",
@@ -143,10 +144,10 @@ const workoutData = {
     },
     {
       "id": 3,
-      "title": "Rest or Technical Boxing Only",
-      "subtitle": "No strength/power work, no bag power work",
+      "title": "Technical Skills Day",
+      "subtitle": "Mechanics & Efficiency",
       "type": "technical",
-      "note": "If training, here's a structured technical session (~35-40 min). Keep every round at technical pace — 60-70% speed, full focus on correct sequencing, weight transfer, and returning to guard. This day is about grooving the pathways your power days are trying to load.",
+      "note": "Shadowboxing, footwork, and technique drills to refine punch mechanics and movement.",
       "sections": [
         { "name": "Warm-up", "duration": "5 min", "detail": "Easy skipping, arm circles, hip openers, shadowboxing at 50% pace" },
         { "name": "Footwork & movement", "duration": "8 min", "detail": "Forward/back and lateral steps maintaining stance, pivot drills off the front and rear foot, in-and-out range stepping (step in behind a jab, step out behind nothing)" },
@@ -171,8 +172,9 @@ const workoutData = {
     },
     {
       "id": 4,
-      "title": "Strength & Power B",
-      "subtitle": "Upper Body Explosive + Core/Anti-Rotation",
+      "title": "Upper Body Power",
+      "subtitle": "Shoulder, Rotational & Pressing Strength",
+      "note": "Explosive upper body pressing and rotational power — the shoulder and core engine.",
       "type": "strength",
       "exercises": [
         {
@@ -251,10 +253,10 @@ const workoutData = {
     },
     {
       "id": 5,
-      "title": "Heavy Bag Power Day 2",
-      "subtitle": "Fresh Nervous System",
+      "title": "Conditioning Bag Day",
+      "subtitle": "Power Under Fatigue",
       "type": "bag",
-      "note": "Same principle as Day 2 — no lifting today, straight into bag work while fresh. This session leans slightly more toward combos and speed than Day 2's pure power rounds.",
+      "note": "Higher-volume bag work building power endurance — maintaining punch quality under accumulated fatigue.",
       "exercises": [
         {
           "name": "Skipping rope (max speed intervals)",
@@ -290,14 +292,25 @@ const workoutData = {
       ]
     },
     {
-      "id": "6-7",
-      "title": "Rest / Recovery",
+      "id": 6,
+      "title": "Active Recovery",
+      "subtitle": "Restore & Prepare",
       "type": "rest",
+      "note": "Light movement, mobility, and recovery work — no training load.",
       "notes": [
         "Light walk, stretching, foam rolling",
-        "Optional: easy swim or bike, 20-30 min, low intensity",
+        "Optional: easy swim or bike, 20-30 min, low intensity"
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Rest Day",
+      "subtitle": "Full Recovery",
+      "type": "rest",
+      "note": "Complete rest — no training. Let the week's adaptations consolidate.",
+      "notes": [
         "Sleep and nutrition focus — power gains happen during recovery, not the workout itself",
-        "If you want extra boxing time, keep it technical-only (footwork, defense, light pads) — no power work"
+        "Complete rest — no training"
       ]
     }
   ],

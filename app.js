@@ -82,7 +82,7 @@ function renderHome() {
                 <div>
                     <div class="label-small" style="color: var(--strength-accent); margin-bottom: 4px;">TODAY</div>
                     <div style="font-size: 18px; font-weight: 700; color: #fff;">Day ${today.id} — ${today.title}</div>
-                    <div class="text-sec" style="font-size: 13px; margin-top: 2px;">${today.subtitle || today.note || "Pure power application"}</div>
+                    <div class="text-sec" style="font-size: 13px; margin-top: 2px;">${today.note || "Pure power application"}</div>
                 </div>
             </div>
             <button class="btn-primary" onclick="renderDay(${today.id})">Start ${icons.forward}</button>
@@ -113,7 +113,7 @@ function renderHome() {
                 </div>
                 <div class="title-card" style="margin-bottom: 4px;">${day.title}</div>
                 <div class="text-sec" style="font-size: 12px; margin-bottom: var(--sp-3); min-height: 18px;">${day.subtitle || ''}</div>
-                <div class="text-sec" style="font-size: 13px; line-height: 1.5; margin-bottom: var(--sp-4);">${day.note ? day.note.substring(0, 80) + '...' : ''}</div>
+                <div class="text-sec" style="font-size: 13px; line-height: 1.5; margin-bottom: var(--sp-4);">${day.note || ''}</div>
                 <div class="card-footer">
                     <span>${countLabel}</span>
                     <span style="color: var(--text-primary); font-weight: 500;">View ${icons.forward}</span>
