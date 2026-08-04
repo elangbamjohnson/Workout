@@ -28,29 +28,33 @@ function clearApp() {
     appContainer.innerHTML = '';
 }
 
-function renderGlobalHeader() {
-    return `
-        <div class="global-header">
-            <div class="flex items-center">
-                <div class="header-logo-box">${icons.strength}</div>
-                <div class="flex-col">
-                    <span class="header-brand">PunchPower</span>
-                    <span class="header-subtitle">Explosive Power · Phase 1</span>
+function updateGlobalHeader(isHome) {
+    const headerHtml = `
+        <div class="global-header-inner ${isHome ? 'is-home' : ''}">
+            <div class="flex items-center gap-3">
+                <div class="header-logo-box" style="margin:0;">
+                    ${icons.strength}
+                </div>
+                <div>
+                    <div style="font-weight: 700; font-size: 16px; color: #fff;">PunchPower</div>
+                    <div class="text-sec" style="font-size: 12px; margin-top: 2px;">Explosive Power · Phase 1</div>
                 </div>
             </div>
-            <div class="header-pills">
-                <div class="pill pill-accent"><div class="dot"></div>Phase 1 of 3</div>
-                <div class="pill">Week 1</div>
-                <div class="pill" onclick="renderAbout()">${icons.info} About</div>
+            <div class="flex items-center gap-2">
+                <div class="header-pill pill-active"><div class="header-pill-dot"></div> Phase 1 of 3</div>
+                <div class="header-pill">Week 1</div>
+                <button class="header-pill" style="cursor:pointer;" onclick="renderAbout()">${icons.info} About</button>
             </div>
         </div>
     `;
+    document.getElementById('global-header').innerHTML = headerHtml;
 }
 
 function renderHome() {
     clearApp();
     appContainer.className = 'is-home';
-    let html = renderGlobalHeader();
+    updateGlobalHeader(true);
+    let html = '';
     
     // Top Row
     html += `
@@ -160,7 +164,8 @@ function renderDay(dayIdRaw) {
 
     clearApp();
     appContainer.className = '';
-    let html = renderGlobalHeader();
+    updateGlobalHeader(false);
+    let html = '';
 
     // Nav Row
     html += `
@@ -350,7 +355,8 @@ function renderDay(dayIdRaw) {
 function renderAbout() {
     clearApp();
     appContainer.className = '';
-    let html = renderGlobalHeader();
+    updateGlobalHeader(false);
+    let html = '';
     
     html += `<button class="btn-nav" style="margin-bottom: var(--sp-6);" onclick="renderHome()">${icons.back} Back to Week</button>`;
     
