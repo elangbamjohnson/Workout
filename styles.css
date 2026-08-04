@@ -216,14 +216,16 @@ body {
 .stat-pill {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 14px;
+    gap: 6px;
+    padding: 6px 16px;
     border-radius: var(--radius-pill);
-    background: var(--bg-card);
+    background: var(--bg-nested);
     border: 1px solid var(--border-card);
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 400;
+    white-space: nowrap;
 }
+.stat-pill svg { width: 14px; height: 14px; flex-shrink: 0; }
 .stat-pill.type-strength { color: var(--text-secondary); border-color: var(--border-card); }
 .stat-pill.type-strength svg { fill: var(--strength-accent); }
 .stat-pill.type-bag { color: var(--text-secondary); border-color: var(--border-card); }

@@ -40,10 +40,10 @@ function updateGlobalHeader(isHome) {
                     <div class="text-sec" style="font-size: 12px; margin-top: 2px;">Explosive Power · Phase 1</div>
                 </div>
             </div>
-            <div class="flex items-center gap-2">
-                <div class="header-pill pill-active"><div class="header-pill-dot"></div> Phase 1 of 3</div>
-                <div class="header-pill">Week 1</div>
-                <button class="header-pill" style="cursor:pointer;" onclick="renderAbout()">${icons.info} About</button>
+            <div class="header-pills">
+                <div class="pill pill-accent"><div class="dot"></div> Phase 1 of 3</div>
+                <div class="pill">Week 1</div>
+                <div class="pill" onclick="renderAbout()">${icons.info} About</div>
             </div>
         </div>
     `;
