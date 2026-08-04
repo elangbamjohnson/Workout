@@ -23,6 +23,7 @@ const appContainer = document.getElementById('app-container');
 const jsDay = new Date().getDay();
 let currentDayIndex = jsDay === 0 ? 6 : jsDay - 1; 
 let expandedCardIds = new Set();
+let viewingDayId = null;
 
 function toggleCard(id) {
     if (expandedCardIds.has(id)) {
@@ -30,30 +31,27 @@ function toggleCard(id) {
     } else {
         expandedCardIds.add(id);
     }
-    // Re-render the current day to reflect state
-    const currentDay = workoutData.days[currentDayIndex];
-    if (document.getElementById('app-container').className === '') {
-        // We are on a day detail page. Let's just toggle the DOM class to avoid full re-render, 
-        // or we can just re-render. Re-rendering is easiest.
-        renderDay(currentDay.id);
+    // Re-render the currently viewed day to reflect state
+    if (document.getElementById('app-container').className === '' && viewingDayId !== null) {
+        renderDay(viewingDayId);
     }
 }
 
 function expandAll() {
-    const currentDay = workoutData.days[currentDayIndex];
+    if (viewingDayId === null) return;
+    const currentDay = workoutData.days.find(d => d.id === viewingDayId);
     if (!currentDay) return;
     
     // Add all valid ids
     if (currentDay.exercises) currentDay.exercises.forEach(ex => expandedCardIds.add(ex.id));
     if (currentDay.sections) currentDay.sections.forEach(sec => expandedCardIds.add(sec.id));
     
-    renderDay(currentDay.id);
+    renderDay(viewingDayId);
 }
 
 function collapseAll() {
     expandedCardIds.clear();
-    const currentDay = workoutData.days[currentDayIndex];
-    if (currentDay) renderDay(currentDay.id);
+    if (viewingDayId !== null) renderDay(viewingDayId);
 }
 
 function renderItemCard(item, dayType) {
@@ -235,6 +233,8 @@ function renderDay(dayIdRaw) {
     const day = workoutData.days[dayIndex];
     if (!day) return;
     
+    viewingDayId = day.id;
+    
     let iconName = day.type === 'rest' ? 'rest' : (day.type === 'strength' ? 'strength' : (day.type === 'bag' ? 'bag' : 'technical'));
     const prevDay = dayIndex > 0 ? workoutData.days[dayIndex - 1] : null;
     const nextDay = dayIndex < workoutData.days.length - 1 ? workoutData.days[dayIndex + 1] : null;
@@ -265,16 +265,17 @@ function renderDay(dayIdRaw) {
             </div>
             <h1 class="title-page" style="margin-bottom: var(--sp-1);">${day.title}</h1>
             ${day.subtitle ? `<div class="text-sec" style="margin-bottom: var(--sp-4);">${day.subtitle}</div>` : ''}
-            <div class="text-sec" style="line-height: 1.6;">${day.note ? day.note.split('—')[0] : 'Pure power application on the heavy bag.'}</div>
+            <div class="text-sec" style="line-height: 1.6;">${day.description || (day.note ? day.note.split('—')[0] : 'Pure power application on the heavy bag.')}</div>
         </div>
     `;
 
     // Callout
-    if (day.note) {
+    const calloutText = day.callout || day.note;
+    if (calloutText) {
         html += `
             <div class="callout type-${day.type}">
                 ${icons.lightbulb}
-                <div class="callout-text">${day.note}</div>
+                <div class="callout-text">${calloutText}</div>
             </div>
         `;
     }
@@ -379,7 +380,7 @@ function renderDay(dayIdRaw) {
                 title: ex.name,
                 stats: [
                     { icon: icons.clock, value: ex.setsReps },
-                    { icon: icons.flame, value: "85-95%" }
+                    { icon: icons.flame, value: ex.intensity || "85-95%" }
                 ],
                 callout: { icon: icons.flame, text: ex.benefits },
                 sections: [
