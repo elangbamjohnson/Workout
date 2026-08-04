@@ -765,8 +765,8 @@ body {
 /* Persistent Viewport Frame */
 .viewport-frame {
     position: fixed;
-    inset: 4px;
-    border: 1px solid var(--border-card);
+    inset: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: var(--radius-card);
     pointer-events: none;
     z-index: 9999;
