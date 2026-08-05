@@ -391,7 +391,7 @@ function renderDay(dayIdRaw) {
                 const log = Store.getItemLog(day.id, r.id) || {};
                 const isChecked = log.completed ? 'checked' : '';
                 return `
-                <div class="nested-row interactive" onclick="startRoundTimer(${day.id}, '${r.id}', sec.workSeconds || 60, sec.restSeconds || 0, '${r.combo.replace(/'/g, "\'")}', '${sec.cue ? sec.cue.replace(/'/g, "\'") : ""}')">
+                <div class="nested-row interactive" onclick="startRoundTimer(${day.id}, '${r.id}', ${sec.workSeconds || 60}, ${sec.restSeconds || 0}, '${r.combo.replace(/'/g, "\\'")}', '${sec.cue ? sec.cue.replace(/'/g, "\\'") : ""}')">
                     <button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
                     <div style="flex: 1;">${r.round ? `Round ${r.round} — ` : ''}${r.combo}${r.focus ? ` : ${r.focus}` : ''}</div>
                     <div class="play-icon"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></div>
@@ -420,12 +420,12 @@ function renderDay(dayIdRaw) {
                 const log = Store.getItemLog(day.id, r.id) || {};
                 const isChecked = log.completed ? 'checked' : '';
                 return `
-                <div class="nested-row interactive" onclick="startRoundTimer(${day.id}, '${r.id}', ex.workSeconds || 60, ex.restSeconds || 0, '${r.combo.replace(/'/g, "\'")}', '${ex.benefits ? ex.benefits.replace(/'/g, "\'") : ""}')">
+                <div class="nested-row interactive" onclick="startRoundTimer(${day.id}, '${r.id}', ${ex.workSeconds || 60}, ${ex.restSeconds || 0}, '${r.combo.replace(/'/g, "\\'")}', '${ex.benefits ? ex.benefits.replace(/'/g, "\\'") : ""}')">
                     <button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
                     <div style="flex: 1;">${r.combo}</div>
                     <div class="play-icon"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></div>
                 </div>`;
-            }).join('') : `<div class="nested-row interactive" onclick="startRoundTimer(${day.id}, '${ex.id}', ex.workSeconds || 60, ex.restSeconds || 0, '${ex.name.replace(/'/g, "\'")}', '')"><button class="btn-check ${Store.getItemLog(day.id, ex.id)?.completed ? 'checked':''}" onclick="toggleRound(event, ${day.id}, '${ex.id}')">${icons.checkmark}</button><div style="flex:1;">${ex.notes}</div><div class="play-icon"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></div></div>`;
+            }).join('') : `<div class="nested-row interactive" onclick="startRoundTimer(${day.id}, '${ex.id}', ${ex.workSeconds || 60}, ${ex.restSeconds || 0}, '${ex.name.replace(/'/g, "\\'")}', '')"><button class="btn-check ${Store.getItemLog(day.id, ex.id)?.completed ? 'checked':''}" onclick="toggleRound(event, ${day.id}, '${ex.id}')">${icons.checkmark}</button><div style="flex:1;">${ex.notes}</div><div class="play-icon"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></div></div>`;
 
             let normalizedItem = {
                 id: ex.id,

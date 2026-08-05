@@ -15,6 +15,7 @@ const Timer = {
     mode: null, // 'rest' | 'round'
     phase: null, // 'work' | 'rest'
     remainingSeconds: 0,
+    keydownListener: null,
     
     // Round specific config
     roundData: null, // { workSec, restSec, roundId, title, cue, nextCallback }
@@ -77,6 +78,7 @@ const Timer = {
         this.endTime = Date.now() + seconds * 1000;
         this.createDOM();
         this.modal.classList.remove('hidden');
+        this.attachListener();
         this.tick();
         this.intervalId = setInterval(() => this.tick(), 100);
     },
@@ -90,6 +92,7 @@ const Timer = {
         this.endTime = Date.now() + workSec * 1000;
         this.createDOM();
         this.modal.classList.remove('hidden');
+        this.attachListener();
         this.tick();
         this.intervalId = setInterval(() => this.tick(), 100);
     },
@@ -144,8 +147,22 @@ const Timer = {
         this.tick();
     },
 
+    attachListener() {
+        if (!this.keydownListener) {
+            this.keydownListener = (e) => {
+                if (e.key === 'Escape') {
+                    this.close();
+                }
+            };
+        }
+        document.addEventListener('keydown', this.keydownListener);
+    },
+
     close() {
         clearInterval(this.intervalId);
+        if (this.keydownListener) {
+            document.removeEventListener('keydown', this.keydownListener);
+        }
         if (this.modal) {
             this.modal.classList.add('hidden');
         }
@@ -162,7 +179,7 @@ const Timer = {
                 <div class="timer-card rest-mode">
                     <div class="timer-header">
                         <h3>Rest</h3>
-                        <button class="btn-icon" onclick="Timer.close()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+                        <button class="btn-cancel" onclick="Timer.close()">Cancel</button>
                     </div>
                     <div class="timer-display">${this.formatTime(this.remainingSeconds)}</div>
                     <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: ${progressPct}%"></div></div>
@@ -180,7 +197,7 @@ const Timer = {
                 <div class="timer-card round-mode ${colorClass}">
                     <div class="timer-header">
                         <h3>${isWork ? 'WORK' : 'REST'}</h3>
-                        <button class="btn-icon" onclick="Timer.close()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+                        <button class="btn-cancel" onclick="Timer.close()">Cancel</button>
                     </div>
                     <div class="round-title">${this.roundData.title}</div>
                     <div class="timer-display giant ${colorClass}">${this.formatTime(this.remainingSeconds)}</div>

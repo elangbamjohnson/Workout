@@ -824,6 +824,23 @@ body {
     font-weight: 700;
     letter-spacing: 0.1em;
 }
+.btn-cancel {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+    border: none;
+    border-radius: var(--radius-card);
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--text);
+}
+
 .timer-display {
     font-family: monospace;
     font-size: 64px;
