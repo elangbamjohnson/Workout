@@ -4,7 +4,7 @@
  * Uses timestamp-based countdown to prevent drift.
  */
 
-const Timer = {
+window.Timer = {
     modal: null,
     intervalId: null,
     endTime: null,
@@ -71,9 +71,10 @@ const Timer = {
         return `${m}:${s.toString().padStart(2, '0')}`;
     },
 
-    startRest(seconds) {
+    startRest(seconds, title, cue) {
         this.initAudio();
         this.mode = 'rest';
+        this.roundData = { title: title || 'Rest Period', cue: cue || '' };
         this.totalDuration = seconds;
         this.endTime = Date.now() + seconds * 1000;
         this.createDOM();
@@ -159,9 +160,13 @@ const Timer = {
     },
 
     close() {
-        clearInterval(this.intervalId);
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+            this.intervalId = null;
+        }
         if (this.keydownListener) {
             document.removeEventListener('keydown', this.keydownListener);
+            this.keydownListener = null;
         }
         if (this.modal) {
             this.modal.classList.add('hidden');
@@ -172,43 +177,38 @@ const Timer = {
         const progress = Math.max(0, Math.min(1, this.remainingSeconds / this.totalDuration));
         const progressPct = progress * 100;
         
-        let html = '';
+        const isRestMode = this.mode === 'rest';
+        const isWork = !isRestMode && this.phase === 'work';
+        const colorClass = isWork ? 'work-color' : 'rest-color';
         
-        if (this.mode === 'rest') {
-            html = `
-                <div class="timer-card rest-mode">
-                    <div class="timer-header">
-                        <h3>Rest</h3>
-                        <button class="btn-cancel" onclick="Timer.close()">Cancel</button>
-                    </div>
-                    <div class="timer-display">${this.formatTime(this.remainingSeconds)}</div>
-                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: ${progressPct}%"></div></div>
-                    <div class="timer-actions">
-                        <button class="btn-secondary" onclick="Timer.addTime(15)">+15s</button>
-                        <button class="btn-primary" onclick="Timer.handleExpire()">Skip Rest</button>
-                    </div>
-                </div>
-            `;
-        } else if (this.mode === 'round') {
-            const isWork = this.phase === 'work';
-            const colorClass = isWork ? 'work-color' : 'rest-color';
-            
-            html = `
-                <div class="timer-card round-mode ${colorClass}">
-                    <div class="timer-header">
-                        <h3>${isWork ? 'WORK' : 'REST'}</h3>
-                        <button class="btn-cancel" onclick="Timer.close()">Cancel</button>
-                    </div>
-                    <div class="round-title">${this.roundData.title}</div>
-                    <div class="timer-display giant ${colorClass}">${this.formatTime(this.remainingSeconds)}</div>
-                    <div class="progress-bar-bg"><div class="progress-bar-fill ${colorClass}" style="width: ${progressPct}%"></div></div>
-                    ${this.roundData.cue && isWork ? `<div class="timer-cue">${this.roundData.cue}</div>` : ''}
-                    <div class="timer-actions" style="margin-top: 24px;">
-                        ${isWork ? `<button class="btn-primary" onclick="Timer.handleExpire()">End Round Early</button>` : `<button class="btn-primary" onclick="Timer.handleExpire()">Skip Rest</button>`}
-                    </div>
-                </div>
-            `;
+        const headerTitle = isRestMode ? 'REST' : (isWork ? 'WORK' : 'REST');
+        const mainTitle = this.roundData ? this.roundData.title : 'Rest Period';
+        const cueText = this.roundData && this.roundData.cue ? this.roundData.cue : '';
+        
+        let actionsHtml = '';
+        if (isRestMode) {
+            actionsHtml = `<button class="btn-primary" onclick="Timer.handleExpire()">Skip Rest</button>`;
+        } else if (isWork) {
+            actionsHtml = `<button class="btn-primary" onclick="Timer.handleExpire()">End Round Early</button>`;
+        } else {
+            actionsHtml = `<button class="btn-primary" onclick="Timer.handleExpire()">Skip Rest</button>`;
         }
+        
+        const html = `
+            <div class="timer-card round-mode ${colorClass}">
+                <div class="timer-header">
+                    <h3>${headerTitle}</h3>
+                    <button class="btn-cancel" onclick="Timer.close()">Cancel</button>
+                </div>
+                <div class="round-title">${mainTitle}</div>
+                <div class="timer-display giant ${colorClass}">${this.formatTime(this.remainingSeconds)}</div>
+                <div class="progress-bar-bg"><div class="progress-bar-fill ${colorClass}" style="width: ${progressPct}%"></div></div>
+                ${cueText ? `<div class="timer-cue">${cueText}</div>` : ''}
+                <div class="timer-actions" style="margin-top: 24px;">
+                    ${actionsHtml}
+                </div>
+            </div>
+        `;
         
         this.modal.innerHTML = `<div class="timer-backdrop" onclick="Timer.close()"></div>` + html;
     }

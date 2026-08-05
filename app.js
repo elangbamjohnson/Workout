@@ -19,7 +19,7 @@ const icons = {
 
 
 // Phase 2 bindings
-window.logSet = function(dayId, itemId, setIndex, restSec, btn) {
+window.logSet = function(dayId, itemId, setIndex, restSec, title, cue, btn) {
     const row = btn.closest('.set-row');
     const repInput = row.querySelector('.input-rep').value;
     const weightInput = row.querySelector('.input-weight').value;
@@ -38,7 +38,7 @@ window.logSet = function(dayId, itemId, setIndex, restSec, btn) {
     renderDay(viewingDayId); // Re-render to update UI
     
     if (!isCompleted && restSec > 0) {
-        Timer.startRest(restSec);
+        Timer.startRest(restSec, title, cue);
     }
 };
 
@@ -479,7 +479,7 @@ function renderDay(dayIdRaw) {
                         <input type="number" class="input-val input-rep" value="${repsVal}" />
                         <span class="input-label">reps</span>
                     </div>
-                    <button class="btn-check ${isChecked}" onclick="logSet(${day.id}, '${ex.id}', ${s}, ${ex.restSeconds || 90}, this)">${icons.checkmark}</button>
+                    <button class="btn-check ${isChecked}" onclick="logSet(${day.id}, '${ex.id}', ${s}, ${ex.restSeconds || 90}, '${ex.name.replace(/'/g, "\\'")}', 'Drive through the floor explosively — speed matters over weight.', this)">${icons.checkmark}</button>
                 </div>
                 `;
             }
