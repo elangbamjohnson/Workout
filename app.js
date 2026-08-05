@@ -139,6 +139,174 @@ function renderItemCard(item, dayType) {
 }
 
 
+function generateDashboardHTML() {
+    const totalSessions = Store.getTotalSessions();
+    const streak = Store.getStreak();
+    
+    // Days since last
+    let daysSinceLast = 0;
+    if (Store.state.history.length > 0) {
+        const sortedDates = Store.state.history.map(h => h.date).sort().reverse();
+        const lastDate = new Date(sortedDates[0]);
+        const now = new Date();
+        now.setHours(0,0,0,0);
+        lastDate.setHours(0,0,0,0);
+        daysSinceLast = Math.floor((now - lastDate) / (1000 * 60 * 60 * 24));
+    }
+
+    // 14-day grid
+    let gridHtml = '';
+    const uniqueDates = new Set(Store.state.history.map(h => h.date));
+    for (let i = 13; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const dStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        const hasSession = uniqueDates.has(dStr);
+        gridHtml += `<div class="adherence-box ${hasSession ? 'active' : ''}" title="${dStr}"></div>`;
+    }
+
+    // Progression Rule Banner
+    let bannerHtml = '';
+    const weeksElapsed = Store.getWeeksElapsed();
+    if (totalSessions >= 2 || weeksElapsed >= 2) {
+        // Read dismissed state
+        const dismissed = localStorage.getItem('punchpower_banner_dismissed') === 'true';
+        if (!dismissed) {
+            bannerHtml = `
+            <div class="progression-banner" id="progressionBanner">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="label-small" style="color: var(--strength-accent); margin-bottom: 4px;">PROGRESSION UNLOCKED</div>
+                        <div style="font-size: 13px; line-height: 1.4;">${workoutData.progression.rules[0]}</div>
+                    </div>
+                    <button class="btn-close" onclick="document.getElementById('progressionBanner').style.display='none'; localStorage.setItem('punchpower_banner_dismissed', 'true');" style="background: none; border: none; color: var(--text-muted); padding: 4px;">✕</button>
+                </div>
+            </div>`;
+        }
+    }
+
+    // Chart SVG Generation
+    // Look for weights in barbell-deadlift (day 1), explosive-db-floor-press (day 1), kettlebell-swings (day 4)
+    const trackExercises = ['barbell-deadlift', 'explosive-db-floor-press', 'kettlebell-swings'];
+    const exLabels = {
+        'barbell-deadlift': 'Deadlift',
+        'explosive-db-floor-press': 'DB Press',
+        'kettlebell-swings': 'KB Swings'
+    };
+    const colors = {
+        'barbell-deadlift': '#3b82f6',
+        'explosive-db-floor-press': '#10b981',
+        'kettlebell-swings': '#f59e0b'
+    };
+    
+    let pointsByEx = { 'barbell-deadlift': [], 'explosive-db-floor-press': [], 'kettlebell-swings': [] };
+    let hasChartData = false;
+    let minWeight = Infinity;
+    let maxWeight = 0;
+
+    Store.state.history.forEach(session => {
+        trackExercises.forEach(exId => {
+            if (session.logs && session.logs[exId] && session.logs[exId].sets) {
+                // Find max weight logged in this session for this exercise
+                let sessionMax = 0;
+                Object.values(session.logs[exId].sets).forEach(set => {
+                    if (set.weight && !isNaN(set.weight)) {
+                        let w = parseFloat(set.weight);
+                        if (w > sessionMax) sessionMax = w;
+                    }
+                });
+                if (sessionMax > 0) {
+                    pointsByEx[exId].push({ date: session.date, weight: sessionMax });
+                    if (sessionMax < minWeight) minWeight = sessionMax;
+                    if (sessionMax > maxWeight) maxWeight = sessionMax;
+                    hasChartData = true;
+                }
+            }
+        });
+    });
+
+    let chartHtml = '';
+    if (!hasChartData) {
+        chartHtml = `<div class="chart-empty">Log your weights in Strength days to track progression.</div>`;
+    } else {
+        // Build simple SVG chart
+        // Normalize min/max for padding
+        minWeight = Math.max(0, minWeight - 10);
+        maxWeight = maxWeight + 10;
+        const range = maxWeight - minWeight;
+        
+        let pathsHtml = '';
+        let pointsHtml = '';
+        const width = 300;
+        const height = 120;
+        
+        trackExercises.forEach(exId => {
+            let pts = pointsByEx[exId];
+            if (pts.length === 0) return;
+            
+            // Sort by date just in case
+            pts.sort((a,b) => new Date(a.date) - new Date(b.date));
+            
+            let d = '';
+            pts.forEach((pt, i) => {
+                let cx = 10 + (pts.length === 1 ? width/2 : (i / (pts.length - 1)) * (width - 20));
+                let cy = height - 10 - ((pt.weight - minWeight) / range) * (height - 20);
+                if (i === 0) d += `M ${cx} ${cy} `;
+                else d += `L ${cx} ${cy} `;
+                
+                pointsHtml += `<circle cx="${cx}" cy="${cy}" r="4" fill="${colors[exId]}" />
+                               <text x="${cx}" y="${cy - 10}" fill="var(--text-secondary)" font-size="10" text-anchor="middle">${pt.weight}</text>`;
+            });
+            pathsHtml += `<path d="${d}" fill="none" stroke="${colors[exId]}" stroke-width="2" />`;
+        });
+        
+        chartHtml = `
+        <div class="chart-wrapper">
+            <svg viewBox="0 0 ${width} ${height}" style="width: 100%; height: 100%; overflow: visible;">
+                ${pathsHtml}
+                ${pointsHtml}
+            </svg>
+            <div class="chart-legend">
+                ${trackExercises.map(exId => pointsByEx[exId].length > 0 ? `<div class="legend-item"><div class="legend-color" style="background: ${colors[exId]}"></div> ${exLabels[exId]}</div>` : '').join('')}
+            </div>
+        </div>`;
+    }
+
+    return `
+        <div class="dashboard">
+            <h2 class="section-header">Progress</h2>
+            ${bannerHtml}
+            
+            <div class="dashboard-stats-row">
+                <div class="card stat-card">
+                    <div class="stat-value">${totalSessions}</div>
+                    <div class="label-small">SESSIONS</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-value">${streak} <span style="font-size: 14px;">days</span></div>
+                    <div class="label-small">STREAK</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-value">${daysSinceLast} <span style="font-size: 14px;">days</span></div>
+                    <div class="label-small">SINCE LAST</div>
+                </div>
+            </div>
+
+            <div class="card dashboard-card">
+                <div class="label-small" style="margin-bottom: var(--sp-4);">WEIGHT PROGRESSION</div>
+                ${chartHtml}
+            </div>
+
+            <div class="card dashboard-card">
+                <div class="label-small" style="margin-bottom: var(--sp-2);">LAST 14 DAYS</div>
+                <div class="adherence-grid">
+                    ${gridHtml}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
 function init() {
     renderHome();
 }
@@ -245,6 +413,9 @@ function renderHome() {
         `;
     });
     html += `</div>`;
+    
+    // Inject Dashboard
+    html += generateDashboardHTML();
 
     // Locked Phase
     if (workoutData.lockedPhase) {
@@ -393,7 +564,7 @@ function renderDay(dayIdRaw) {
                 const log = Store.getItemLog(day.id, r.id) || {};
                 const isChecked = log.completed ? 'checked' : '';
                 return `
-                <div class="nested-row interactive">
+                <div class="nested-row interactive" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}">
                     <button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
                     <div style="flex: 1;">${r.round ? `Round ${r.round} — ` : ''}${r.combo}${r.focus ? ` : ${r.focus}` : ''}</div>
                 </div>`;
@@ -424,12 +595,12 @@ function renderDay(dayIdRaw) {
                 const log = Store.getItemLog(day.id, r.id) || {};
                 const isChecked = log.completed ? 'checked' : '';
                 return `
-                <div class="nested-row interactive" onclick="startRoundTimer(${day.id}, '${r.id}', ${ex.workSeconds}, ${ex.restSeconds}, '${r.combo.replace(/'/g, "\\'")}', '${ex.benefits ? ex.benefits.replace(/'/g, "\\'") : ""}')">
+                <div class="nested-row interactive" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}" onclick="startRoundTimer(${day.id}, '${r.id}', ${ex.workSeconds}, ${ex.restSeconds}, '${r.combo.replace(/'/g, "\\'")}', '${ex.benefits ? ex.benefits.replace(/'/g, "\\'") : ""}')">
                     <button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
                     <div style="flex: 1;">${r.combo}</div>
                     <div class="play-icon"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></div>
                 </div>`;
-            }).join('') : `<div class="nested-row interactive" onclick="startRoundTimer(${day.id}, '${ex.id}', ${ex.workSeconds}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', '')"><button class="btn-check ${Store.getItemLog(day.id, ex.id)?.completed ? 'checked':''}" onclick="toggleRound(event, ${day.id}, '${ex.id}')">${icons.checkmark}</button><div style="flex:1;">${ex.notes}</div><div class="play-icon"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></div></div>`;
+            }).join('') : `<div class="nested-row interactive" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}" onclick="startRoundTimer(${day.id}, '${ex.id}', ${ex.workSeconds}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', '')"><button class="btn-check ${Store.getItemLog(day.id, ex.id)?.completed ? 'checked':''}" onclick="toggleRound(event, ${day.id}, '${ex.id}')">${icons.checkmark}</button><div style="flex:1;">${ex.notes}</div><div class="play-icon"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></div></div>`;
 
             let normalizedItem = {
                 id: ex.id,

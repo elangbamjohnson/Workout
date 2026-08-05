@@ -1012,3 +1012,22 @@ body {
     color: var(--accent);
 }
 
+
+/* Dashboard & Progress */
+.dashboard { margin-top: var(--sp-6); margin-bottom: var(--sp-6); }
+.dashboard-stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); margin-bottom: var(--sp-4); }
+.stat-card { padding: var(--sp-4); text-align: center; }
+.stat-value { font-size: 24px; font-weight: 700; font-family: var(--font-mono); margin-bottom: 4px; color: var(--text-primary); }
+.dashboard-card { padding: var(--sp-4); margin-bottom: var(--sp-4); }
+
+.adherence-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.adherence-box { aspect-ratio: 1; border-radius: 4px; background: var(--bg-nested); }
+.adherence-box.active { background: var(--strength-accent); }
+
+.chart-wrapper { position: relative; height: 120px; width: 100%; margin-top: var(--sp-4); }
+.chart-empty { padding: var(--sp-6); text-align: center; color: var(--text-muted); font-size: 13px; font-style: italic; background: var(--bg-nested); border-radius: 8px; }
+.chart-legend { display: flex; justify-content: center; gap: var(--sp-4); margin-top: var(--sp-4); }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-secondary); text-transform: uppercase; }
+.legend-color { width: 8px; height: 8px; border-radius: 50%; }
+
+.progression-banner { background: var(--bg-card); border-left: 4px solid var(--strength-accent); padding: var(--sp-4); border-radius: 8px; margin-bottom: var(--sp-4); }
