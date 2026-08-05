@@ -38,7 +38,8 @@ window.logSet = function(dayId, itemId, setIndex, restSec, title, cue, btn) {
     renderDay(viewingDayId); // Re-render to update UI
     
     if (!isCompleted && restSec > 0) {
-        Timer.startRest(restSec, title, cue);
+        const day = workoutData.days.find(d => d.id === dayId);
+        Timer.startRest(restSec, title, cue, day ? day.type : 'strength');
     }
 };
 
@@ -50,7 +51,8 @@ window.toggleRound = function(e, dayId, roundId) {
 };
 
 window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue) {
-    Timer.startRound(workSec, restSec, title, cue, () => {
+    const day = workoutData.days.find(d => d.id === dayId);
+    Timer.startRound(workSec, restSec, title, cue, day ? day.type : 'bag', () => {
         Store.logItem(dayId, roundId, { completed: true });
         renderDay(viewingDayId);
     });

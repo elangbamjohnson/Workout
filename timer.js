@@ -4,6 +4,62 @@
  * Uses timestamp-based countdown to prevent drift.
  */
 
+// ==========================================
+// GLOBAL AUDIO CONFIGURATION
+// Centralized voice and playback settings for all app alerts
+// ==========================================
+window.audioConfig = {
+    rate: 1.0,
+    pitch: 1.0,
+    volume: 0.8,
+    voice: null,
+
+    initVoice() {
+        if (this.voice) return;
+        const voices = window.speechSynthesis.getVoices();
+        if (!voices || voices.length === 0) return;
+        
+        const preferredVoices = ['Google US English Female', 'Google UK English Female', 'Samantha', 'Victoria', 'Karen', 'Tessa', 'Moira'];
+        for (let name of preferredVoices) {
+            const match = voices.find(v => v.name.includes(name));
+            if (match) {
+                this.voice = match;
+                return;
+            }
+        }
+        
+        this.voice = voices.find(v => v.name.toLowerCase().includes('female') && v.lang.startsWith('en')) || 
+                     voices.find(v => v.lang === 'en-US' || v.lang === 'en-GB');
+    }
+};
+
+// Eagerly initialize voices to prevent fallback to default male voice on first play
+if (window.speechSynthesis) {
+    window.audioConfig.initVoice();
+    window.speechSynthesis.onvoiceschanged = () => window.audioConfig.initVoice();
+}
+
+window.speakAlert = function(text) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel(); // clear queue
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    // Fallback load if the voices array was empty at load time
+    if (!window.audioConfig.voice) {
+        window.audioConfig.initVoice();
+    }
+    
+    if (window.audioConfig.voice) {
+        utterance.voice = window.audioConfig.voice;
+    }
+    
+    utterance.rate = window.audioConfig.rate;
+    utterance.pitch = window.audioConfig.pitch;
+    utterance.volume = window.audioConfig.volume;
+    window.speechSynthesis.speak(utterance);
+};
+// ==========================================
+
 window.Timer = {
     modal: null,
     intervalId: null,
@@ -16,6 +72,9 @@ window.Timer = {
     phase: null, // 'work' | 'rest'
     remainingSeconds: 0,
     keydownListener: null,
+    hasPlayed10Sec: false,
+    lastSpokenSecond: null,
+    workoutType: null,
     
     // Round specific config
     roundData: null, // { workSec, restSec, roundId, title, cue, nextCallback }
@@ -71,31 +130,43 @@ window.Timer = {
         return `${m}:${s.toString().padStart(2, '0')}`;
     },
 
-    startRest(seconds, title, cue) {
+    startRest(seconds, title, cue, workoutType = 'strength') {
         this.initAudio();
         this.mode = 'rest';
+        this.workoutType = workoutType;
         this.roundData = { title: title || 'Rest Period', cue: cue || '' };
         this.totalDuration = seconds;
         this.endTime = Date.now() + seconds * 1000;
+        this.hasPlayed10Sec = false;
+        this.lastSpokenSecond = seconds;
         this.createDOM();
         this.render();
         this.modal.classList.remove('hidden');
         this.attachListener();
+        window.speakAlert("Rest time started");
         this.tick();
         this.intervalId = setInterval(() => this.tick(), 100);
     },
 
-    startRound(workSec, restSec, title, cue, onComplete) {
+    startRound(workSec, restSec, title, cue, workoutType = 'bag', onComplete) {
         this.initAudio();
         this.mode = 'round';
         this.phase = 'work';
+        this.workoutType = workoutType;
         this.roundData = { workSec, restSec, title, cue, onComplete };
         this.totalDuration = workSec;
         this.endTime = Date.now() + workSec * 1000;
+        this.hasPlayed10Sec = false;
+        this.lastSpokenSecond = workSec;
         this.createDOM();
         this.render();
         this.modal.classList.remove('hidden');
         this.attachListener();
+        if (this.workoutType === 'technical') {
+            window.speakAlert(`${this.roundData.title} started`);
+        } else {
+            window.speakAlert("Round started, go");
+        }
         this.tick();
         this.intervalId = setInterval(() => this.tick(), 100);
     },
@@ -107,6 +178,20 @@ window.Timer = {
         if (diff <= 0) {
             diff = 0;
             this.handleExpire();
+        } else if (diff > 0 && diff !== this.lastSpokenSecond) {
+            this.lastSpokenSecond = diff;
+            const isResting = this.mode === 'rest' || this.phase === 'rest';
+            
+            if (diff === 10) {
+                window.speakAlert("Ten seconds");
+            } else if (diff < 10) {
+                window.speakAlert(diff.toString());
+            } else if (isResting && diff % 5 === 0) {
+                window.speakAlert(diff.toString() + " seconds");
+            } else if (!isResting && (this.totalDuration - diff) > 0 && (this.totalDuration - diff) % 60 === 0) {
+                const elapsedMins = (this.totalDuration - diff) / 60;
+                window.speakAlert(`${elapsedMins} minute${elapsedMins > 1 ? 's' : ''} complete`);
+            }
         }
         
         this.remainingSeconds = diff;
@@ -117,21 +202,35 @@ window.Timer = {
         clearInterval(this.intervalId);
         
         if (this.mode === 'rest') {
+            window.speakAlert("Rest time ended, get ready");
             this.playDoubleBeep();
             this.close();
         } else if (this.mode === 'round') {
             if (this.phase === 'work') {
                 this.playDoubleBeep();
                 if (this.roundData.restSec > 0) {
+                    window.speakAlert("Workout ended, rest starting");
                     this.phase = 'rest';
                     this.totalDuration = this.roundData.restSec;
                     this.endTime = Date.now() + this.roundData.restSec * 1000;
+                    this.hasPlayed10Sec = false;
+                    this.lastSpokenSecond = this.roundData.restSec;
                     this.render(); // Re-render once to update phase colors/text
                     this.intervalId = setInterval(() => this.tick(), 100);
                 } else {
+                    if (this.workoutType === 'technical') {
+                        window.speakAlert(`${this.roundData.title} ended, take a breath`);
+                    } else {
+                        window.speakAlert("Workout ended, take a breath");
+                    }
                     this.completeRound();
                 }
             } else {
+                if (this.workoutType === 'bag') {
+                    window.speakAlert("Rest time ended, get ready for next round");
+                } else {
+                    window.speakAlert("Rest time ended, get ready");
+                }
                 this.playDoubleBeep();
                 this.completeRound();
             }
