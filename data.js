@@ -25,7 +25,7 @@ const workoutData = {
           "notes": "Lighter than 50kg working weight on purpose \u2014 power work needs speed, not grinding. Feet hip-width, bar over mid-foot, flat back. Grip, brace core, then drive through the floor explosively on every rep \u2014 pull like you're trying to launch the bar up. Lower under control (2-3 sec), reset fully between reps.",
           "benefits": "Builds the raw ground-force production that every punch is ultimately launched from \u2014 the \"engine\" lift of the whole program.",
           "muscles": "Glutes, hamstrings, lower back (erector spinae), traps, forearm grip.",
-          "restSeconds": 150,
+          "restSeconds": 120,
           "id": "day1-ex1"
         },
         {
@@ -45,7 +45,7 @@ const workoutData = {
           "notes": "Feet shoulder-width. Drop into a quarter-to-half squat, then explode straight up, reaching full hip extension in the air. Land soft (bend knees), pause 2-3 sec, reset before next rep \u2014 don't rebound straight into the next jump.",
           "benefits": "Builds leg power and rate of force development \u2014 how fast you can push off the ground, which drives forward weight transfer on a punch.",
           "muscles": "Quads, glutes, calves.",
-          "restSeconds": 105,
+          "restSeconds": 90,
           "id": "day1-ex3"
         },
         {
@@ -75,7 +75,7 @@ const workoutData = {
           "notes": "Swing arms back, bend hips/knees, then jump forward as far as possible, swinging arms up and forward for momentum. Land with knees bent, stick it, fully reset (walk back, breathe) before the next rep.",
           "benefits": "Trains total-body explosive power and forward drive \u2014 similar to stepping into a power punch.",
           "muscles": "Glutes, hamstrings, quads, calves, core.",
-          "restSeconds": 105,
+          "restSeconds": 90,
           "id": "day1-ex6"
         },
         {
@@ -489,7 +489,7 @@ const workoutData = {
           "notes": "Standard push-up position, lower under control, then push up explosively so your hands leave the ground (or on rings, so the rings drop and you catch the instability). Land soft, reset your position before the next rep.",
           "benefits": "Builds explosive pushing power and shoulder stability \u2014 trains your chest and arms to fire fast, not just strong.",
           "muscles": "Chest, triceps, front shoulders, core.",
-          "restSeconds": 105,
+          "restSeconds": 90,
           "id": "day4-ex1"
         },
         {
@@ -499,7 +499,7 @@ const workoutData = {
           "notes": "Lie on floor, knees bent, dumbbells at chest level, elbows resting lightly on the floor at the bottom. Press up as explosively as possible, stopping just short of locking out hard, lower under control back to the floor pause position.",
           "benefits": "Builds pressing power in a shorter, joint-friendly range of motion \u2014 directly transfers to punch extension speed.",
           "muscles": "Chest, triceps, front shoulders.",
-          "restSeconds": 120,
+          "restSeconds": 90,
           "id": "day4-ex2"
         },
         {
@@ -509,7 +509,7 @@ const workoutData = {
           "notes": "Set rings around chest height, lean back with body straight, feet on floor. Pull yourself up explosively toward the rings, chest driving to hands, then lower slowly (2-3 sec) under control. More horizontal body position = harder; start closer to upright and work toward horizontal over time.",
           "benefits": "Builds the \"pull back\" side of punching \u2014 the retraction speed that lets you snap your hand back to guard after a punch, and balances out all the pressing work.",
           "muscles": "Upper back (lats, rhomboids), biceps, rear shoulders.",
-          "restSeconds": 105,
+          "restSeconds": 90,
           "id": "day4-ex3"
         },
         {
@@ -549,7 +549,7 @@ const workoutData = {
           "notes": "Hold it with both hands. Start high on one side (shoulder height), rotate and chop down and across your body to the opposite hip, driving the motion from your hips and trunk rotation, not just your arms. Reset at the top each rep.",
           "benefits": "Trains rotational power through a diagonal plane, which overlaps with hook and uppercut mechanics more than straight-line exercises do.",
           "muscles": "Obliques, core, shoulders, hips.",
-          "restSeconds": 90,
+          "restSeconds": 75,
           "id": "day4-ex7"
         },
         {
@@ -559,7 +559,7 @@ const workoutData = {
           "notes": "Hang from the power stand with straight or slightly bent arms. Raise your legs (straight or knees tucked) up toward your chest using your lower abs, avoid swinging \u2014 control both the raise and the lower.",
           "benefits": "Builds lower ab and hip flexor strength, which supports overall core stiffness needed to transfer power without your midsection collapsing.",
           "muscles": "Lower abs, hip flexors, grip.",
-          "restSeconds": 75,
+          "restSeconds": 60,
           "id": "day4-ex8"
         }
       ]
