@@ -289,16 +289,58 @@ const workoutData = {
       "note": "Shadowboxing, footwork, and technique drills to refine punch mechanics and movement.",
       "sections": [
         {
-          "name": "Warm-up",
-          "duration": "5 min",
-          "detail": "Easy skipping, arm circles, hip openers, shadowboxing at 50% pace",
-          "id": "day3-sec1"
+          "name": "Dynamic Warm-Up",
+          "duration": "8 min",
+          "detail": "Prepare joints and activate the movement patterns you will be training.",
+          "cue": "Do not rush this. Cold joints and tight hip flexors are the #1 cause of mechanical breakdown in the first round.",
+          "id": "day3-sec1",
+          "rounds": [
+            {
+              "id": "day3-sec1-r1",
+              "combo": "Leg swings (front-back, lateral) \u2014 15 each direction, each leg"
+            },
+            {
+              "id": "day3-sec1-r2",
+              "combo": "Hip circles \u2014 10 each direction"
+            },
+            {
+              "id": "day3-sec1-r3",
+              "combo": "Shoulder circles \u2014 10 each direction"
+            },
+            {
+              "id": "day3-sec1-r4",
+              "combo": "Neck rolls \u2014 5 each direction, slow"
+            },
+            {
+              "id": "day3-sec1-r5",
+              "combo": "Squat to stand \u2014 10 reps, pause at bottom"
+            },
+            {
+              "id": "day3-sec1-r6",
+              "combo": "Lateral lunge to hip flexor stretch \u2014 5 each side"
+            }
+          ]
         },
         {
-          "name": "Footwork & movement",
-          "duration": "8 min",
-          "detail": "Forward/back and lateral steps maintaining stance, pivot drills off the front and rear foot, in-and-out range stepping (step in behind a jab, step out behind nothing)",
-          "id": "day3-sec2"
+          "name": "Footwork Patterns",
+          "duration": "12 min",
+          "detail": "Boxing footwork is the foundation of power \u2014 you cannot punch hard from bad position.",
+          "cue": "Stay on the balls of your feet. Heels should barely touch the floor. Move like you are standing on hot coals \u2014 light and ready.",
+          "id": "day3-sec2",
+          "rounds": [
+            {
+              "id": "day3-sec2-r1",
+              "combo": "Box step pattern \u2014 forward, back, lateral \u00d7 5 min"
+            },
+            {
+              "id": "day3-sec2-r2",
+              "combo": "Pivot drills \u2014 lead foot pivot (hook position) \u00d7 3 min"
+            },
+            {
+              "id": "day3-sec2-r3",
+              "combo": "Angle exits \u2014 step off-line after jab, after cross \u00d7 4 min"
+            }
+          ]
         },
         {
           "name": "Technical combos on bag or pads",
@@ -347,18 +389,75 @@ const workoutData = {
           "id": "day3-sec3"
         },
         {
-          "name": "Defense drills",
-          "duration": "5 min",
-          "detail": "Shadowboxing focused purely on slips, rolls, and guard resets \u2014 no offense, just movement and defensive shape",
-          "id": "day3-sec4"
+          "name": "Combination Drilling",
+          "duration": "10 min (2\u00d75 min rounds)",
+          "detail": "Link the mechanics from the previous section into combinations.",
+          "cue": "Each combination should feel smooth \u2014 not mechanical or choppy. If a transition feels awkward, slow down and isolate that transition.",
+          "id": "day3-sec4",
+          "rounds": [
+            {
+              "id": "day3-sec4-r1",
+              "combo": "Round 1 \u2014 1-2 only: Jab-Cross at 60% speed, focus on transition between the two"
+            },
+            {
+              "id": "day3-sec4-r2",
+              "combo": "Round 2 \u2014 1-2-3: Add the hook, feel the hip pivot sequence"
+            }
+          ]
         },
         {
-          "name": "Cool-down",
-          "duration": "2-3 min",
-          "detail": "Light stretching, breathing",
-          "id": "day3-sec5"
+          "name": "Defense & Head Movement",
+          "duration": "8 min",
+          "detail": "Slips, rolls, and parries integrated with offense.",
+          "cue": "Defense creates offense. Every defensive movement should end in a position to counter. Do not just evade \u2014 evade and return.",
+          "id": "day3-sec5",
+          "rounds": [
+            {
+              "id": "day3-sec5-r1",
+              "combo": "Slip jab, return cross \u2014 3 min"
+            },
+            {
+              "id": "day3-sec5-r2",
+              "combo": "Roll under hook, return hook \u2014 3 min"
+            },
+            {
+              "id": "day3-sec5-r3",
+              "combo": "Parry cross, jab return \u2014 2 min"
+            }
+          ]
+        },
+        {
+          "name": "Cool Down & Mobility",
+          "duration": "7 min",
+          "detail": "Restore range of motion and lower the nervous system.",
+          "cue": "Do not skip this. Hip flexor and shoulder mobility directly affect punch mechanics. Athletes who skip cool-downs develop compensatory patterns.",
+          "id": "day3-sec6",
+          "rounds": [
+            {
+              "id": "day3-sec6-r1",
+              "combo": "Pigeon pose \u2014 60 sec each side"
+            },
+            {
+              "id": "day3-sec6-r2",
+              "combo": "Hip flexor stretch (kneeling) \u2014 45 sec each side"
+            },
+            {
+              "id": "day3-sec6-r3",
+              "combo": "Chest opener \u2014 60 sec (arms back, open chest)"
+            },
+            {
+              "id": "day3-sec6-r4",
+              "combo": "Wrist and forearm stretch \u2014 30 sec each direction"
+            },
+            {
+              "id": "day3-sec6-r5",
+              "combo": "Slow neck rolls \u2014 5 each direction"
+            }
+          ]
         }
-      ]
+      ],
+      "description": "Shadowboxing, footwork, and technique drills to refine punch mechanics and movement.",
+      "callout": "Today is about quality of movement, not intensity. Work at 50\u201370% speed \u2014 fast enough to feel the mechanics, slow enough to correct errors in real time. Film yourself if possible. Use a mirror. You are programming motor patterns today."
     },
     {
       "id": 4,

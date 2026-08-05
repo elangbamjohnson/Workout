@@ -346,7 +346,7 @@ function renderDay(dayIdRaw) {
             let drillsHtml = sec.rounds ? sec.rounds.map(r => `
                 <div class="nested-row">
                     <div class="nested-icon" aria-hidden="true">${icons.checkmark}</div>
-                    <div>Round ${r.round} — ${r.combo} : ${r.focus}</div>
+                    <div>${r.round ? `Round ${r.round} — ` : ''}${r.combo}${r.focus ? ` : ${r.focus}` : ''}</div>
                 </div>`).join('') : '';
 
             let normalizedItem = {
@@ -357,7 +357,7 @@ function renderDay(dayIdRaw) {
                     { value: sec.duration },
                     { label: `· ${sec.rounds ? sec.rounds.length : 'Multiple'} drills` }
                 ],
-                callout: { icon: icons.technical, text: "Focus on mechanics and form over power." },
+                callout: { icon: icons.technical, text: sec.cue || "Focus on mechanics and form over power." },
                 sections: [
                     { title: "DETAILS", content: `<p>${sec.detail}</p>` },
                     { title: "DRILLS", content: `<div class="nested-list">${drillsHtml}</div>` }
