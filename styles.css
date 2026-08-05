@@ -772,3 +772,226 @@ body {
     z-index: 9999;
     box-sizing: border-box;
 }
+
+/* Phase 2 Timer UI */
+.timer-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--sp-4);
+}
+.timer-modal.hidden {
+    display: none;
+}
+.timer-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(4px);
+}
+.timer-card {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-card);
+    padding: var(--sp-6);
+    z-index: 10001;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+}
+.timer-card.rest-mode {
+    margin-top: auto;
+    margin-bottom: var(--sp-4);
+}
+.timer-card.round-mode {
+    border: 2px solid var(--accent);
+}
+.timer-card.round-mode.rest-color {
+    border-color: #6366f1; /* distinct rest color */
+}
+.timer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+}
+.timer-display {
+    font-family: monospace;
+    font-size: 64px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1;
+}
+.timer-display.giant {
+    font-size: 80px;
+}
+.work-color { color: var(--accent); }
+.rest-color { color: #6366f1; }
+
+.progress-bar-bg {
+    width: 100%;
+    height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+.progress-bar-fill {
+    height: 100%;
+    background: var(--text);
+    transition: width 0.1s linear;
+}
+.progress-bar-fill.work-color { background: var(--accent); }
+.progress-bar-fill.rest-color { background: #6366f1; }
+
+.timer-actions {
+    display: flex;
+    gap: var(--sp-3);
+}
+.timer-actions > button {
+    flex: 1;
+}
+.round-title {
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--text);
+}
+.timer-cue {
+    font-size: 14px;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.5;
+    background: rgba(255,255,255,0.05);
+    padding: var(--sp-3);
+    border-radius: var(--radius-card);
+}
+
+/* Phase 2 Logging & Dashboard UI */
+.dashboard {
+    margin-bottom: var(--sp-6);
+}
+.dash-stats {
+    display: flex;
+    gap: var(--sp-3);
+}
+.dash-stat {
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-card);
+    padding: var(--sp-4);
+    text-align: center;
+}
+.dash-stat .stat-val {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+.dash-stat .stat-lbl {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.set-row {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-3);
+    background: rgba(255,255,255,0.02);
+    border-radius: var(--radius-card);
+    margin-bottom: var(--sp-2);
+    border: 1px solid transparent;
+}
+.set-row.checked {
+    border-color: var(--success);
+    background: rgba(34,197,94,0.05);
+}
+.set-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+.set-input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.input-val {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border-card);
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 600;
+    padding: 4px 0;
+    font-family: inherit;
+    width: 100%;
+}
+.input-val:focus {
+    outline: none;
+    border-bottom-color: var(--accent);
+}
+.input-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.btn-check {
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    border: 2px solid var(--border-card);
+    background: transparent;
+    color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-check svg {
+    width: 16px;
+    height: 16px;
+}
+.btn-check.checked {
+    background: var(--success);
+    border-color: var(--success);
+    color: #000;
+}
+
+.nested-row.interactive {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-2);
+    border-radius: var(--radius-card);
+}
+.nested-row.interactive:hover {
+    background: rgba(255,255,255,0.05);
+}
+.play-icon {
+    color: var(--accent);
+}
+

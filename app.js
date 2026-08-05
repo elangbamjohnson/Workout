@@ -17,6 +17,50 @@ const icons = {
     repeat: `<svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>`
 };
 
+
+// Phase 2 bindings
+window.logSet = function(dayId, itemId, setIndex, restSec, btn) {
+    const row = btn.closest('.set-row');
+    const repInput = row.querySelector('.input-rep').value;
+    const weightInput = row.querySelector('.input-weight').value;
+    
+    const logData = Store.getItemLog(dayId, itemId) || { sets: {} };
+    if (!logData.sets) logData.sets = {};
+    
+    const isCompleted = logData.sets[setIndex] && logData.sets[setIndex].completed;
+    logData.sets[setIndex] = {
+        reps: repInput,
+        weight: weightInput,
+        completed: !isCompleted
+    };
+    
+    Store.logItem(dayId, itemId, logData);
+    renderDay(viewingDayId); // Re-render to update UI
+    
+    if (!isCompleted && restSec > 0) {
+        Timer.startRest(restSec);
+    }
+};
+
+window.toggleRound = function(e, dayId, roundId) {
+    e.stopPropagation();
+    const logData = Store.getItemLog(dayId, roundId) || {};
+    Store.logItem(dayId, roundId, { completed: !logData.completed });
+    renderDay(viewingDayId);
+};
+
+window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue) {
+    Timer.startRound(workSec, restSec, title, cue, () => {
+        Store.logItem(dayId, roundId, { completed: true });
+        renderDay(viewingDayId);
+    });
+};
+
+window.finishWorkout = function(dayId) {
+    Store.finishWorkout(dayId);
+    renderHome();
+};
+
 const appContainer = document.getElementById('app-container');
 // PHASE 2 HOOK: This should read from persistence (e.g., localStorage).
 // For now, mapping calendar day of week to program day (Monday = Day 1 ... Sunday = Day 7).
@@ -343,11 +387,16 @@ function renderDay(dayIdRaw) {
         `;
     } else if (day.type === 'technical') {
         day.sections.forEach((sec, idx) => {
-            let drillsHtml = sec.rounds ? sec.rounds.map(r => `
-                <div class="nested-row">
-                    <div class="nested-icon" aria-hidden="true">${icons.checkmark}</div>
-                    <div>${r.round ? `Round ${r.round} — ` : ''}${r.combo}${r.focus ? ` : ${r.focus}` : ''}</div>
-                </div>`).join('') : '';
+            let drillsHtml = sec.rounds ? sec.rounds.map((r, i) => {
+                const log = Store.getItemLog(day.id, r.id) || {};
+                const isChecked = log.completed ? 'checked' : '';
+                return `
+                <div class="nested-row interactive" onclick="startRoundTimer(${day.id}, '${r.id}', sec.workSeconds || 60, sec.restSeconds || 0, '${r.combo.replace(/'/g, "\'")}', '${sec.cue ? sec.cue.replace(/'/g, "\'") : ""}')">
+                    <button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
+                    <div style="flex: 1;">${r.round ? `Round ${r.round} — ` : ''}${r.combo}${r.focus ? ` : ${r.focus}` : ''}</div>
+                    <div class="play-icon"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></div>
+                </div>`;
+            }).join('') : '';
 
             let normalizedItem = {
                 id: sec.id,
@@ -367,12 +416,16 @@ function renderDay(dayIdRaw) {
         });
     } else if (day.type === 'bag') {
         day.exercises.forEach((ex, idx) => {
-            let roundsHtml = ex.rounds ? ex.rounds.map((r, i) => `
-                <div class="nested-row">
-                    <div class="nested-icon" aria-hidden="true">${i + 1}</div>
-                    <div>${r.combo}</div>
-                </div>
-            `).join('') : `<div class="nested-row"><div class="nested-icon" aria-hidden="true">1</div><div>${ex.notes}</div></div>`;
+            let roundsHtml = ex.rounds ? ex.rounds.map((r, i) => {
+                const log = Store.getItemLog(day.id, r.id) || {};
+                const isChecked = log.completed ? 'checked' : '';
+                return `
+                <div class="nested-row interactive" onclick="startRoundTimer(${day.id}, '${r.id}', ex.workSeconds || 60, ex.restSeconds || 0, '${r.combo.replace(/'/g, "\'")}', '${ex.benefits ? ex.benefits.replace(/'/g, "\'") : ""}')">
+                    <button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
+                    <div style="flex: 1;">${r.combo}</div>
+                    <div class="play-icon"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></div>
+                </div>`;
+            }).join('') : `<div class="nested-row interactive" onclick="startRoundTimer(${day.id}, '${ex.id}', ex.workSeconds || 60, ex.restSeconds || 0, '${ex.name.replace(/'/g, "\'")}', '')"><button class="btn-check ${Store.getItemLog(day.id, ex.id)?.completed ? 'checked':''}" onclick="toggleRound(event, ${day.id}, '${ex.id}')">${icons.checkmark}</button><div style="flex:1;">${ex.notes}</div><div class="play-icon"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></div></div>`;
 
             let normalizedItem = {
                 id: ex.id,
@@ -404,6 +457,33 @@ function renderDay(dayIdRaw) {
                 stats.push({ icon: icons.clock, value: `${Math.floor(ex.restSeconds/60)} min rest` });
             }
 
+            
+            // Generate Set Logging Rows
+            let setsCount = parseInt((ex.setsReps || "1").split(" ")[0]) || 1;
+            let logHtml = '';
+            const logData = Store.getItemLog(day.id, ex.id) || { sets: {} };
+            for(let s=1; s<=setsCount; s++) {
+                const setData = logData.sets[s] || {};
+                const isChecked = setData.completed ? 'checked' : '';
+                const repsVal = setData.reps || (ex.setsReps.includes('x') ? ex.setsReps.split('x')[1].trim() : '5');
+                const weightVal = setData.weight || ex.weight || '';
+                
+                logHtml += `
+                <div class="set-row ${isChecked}">
+                    <div class="set-num">${s}</div>
+                    <div class="set-input-group">
+                        <input type="text" class="input-val input-weight" value="${weightVal}" placeholder="lbs" />
+                        <span class="input-label">weight</span>
+                    </div>
+                    <div class="set-input-group">
+                        <input type="number" class="input-val input-rep" value="${repsVal}" />
+                        <span class="input-label">reps</span>
+                    </div>
+                    <button class="btn-check ${isChecked}" onclick="logSet(${day.id}, '${ex.id}', ${s}, ${ex.restSeconds || 90}, this)">${icons.checkmark}</button>
+                </div>
+                `;
+            }
+
             let normalizedItem = {
                 id: ex.id,
                 badge: idx + 1,
@@ -411,15 +491,25 @@ function renderDay(dayIdRaw) {
                 stats: stats,
                 callout: { icon: icons.strength, text: "Drive through the floor explosively — speed matters over weight." },
                 sections: [
+                    { title: "LOG SETS", content: logHtml },
                     { title: "EXECUTION NOTES", content: `<p>${ex.notes}</p>` },
                     { title: "WHY THIS EXERCISE", content: `<p>${ex.benefits}</p>` },
                     { title: "MUSCLES WORKED", content: `<div class="muscle-tags">${musclesHtml}</div>` }
                 ]
             };
+
             html += renderItemCard(normalizedItem, day.type);
         });
     }
+    
     html += `</div>`; // .item-list
+    
+    html += `
+        <div style="margin-top: 32px; margin-bottom: 64px;">
+            <button class="btn-primary" style="width: 100%; padding: 16px; font-size: 16px;" onclick="finishWorkout(${day.id})">Complete Session</button>
+        </div>
+    `;
+
 
     appContainer.innerHTML = html;
 }
