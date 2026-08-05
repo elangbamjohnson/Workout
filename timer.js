@@ -78,6 +78,7 @@ window.Timer = {
         this.totalDuration = seconds;
         this.endTime = Date.now() + seconds * 1000;
         this.createDOM();
+        this.render();
         this.modal.classList.remove('hidden');
         this.attachListener();
         this.tick();
@@ -92,6 +93,7 @@ window.Timer = {
         this.totalDuration = workSec;
         this.endTime = Date.now() + workSec * 1000;
         this.createDOM();
+        this.render();
         this.modal.classList.remove('hidden');
         this.attachListener();
         this.tick();
@@ -108,7 +110,7 @@ window.Timer = {
         }
         
         this.remainingSeconds = diff;
-        this.render();
+        this.updateUI();
     },
 
     handleExpire() {
@@ -124,6 +126,7 @@ window.Timer = {
                     this.phase = 'rest';
                     this.totalDuration = this.roundData.restSec;
                     this.endTime = Date.now() + this.roundData.restSec * 1000;
+                    this.render(); // Re-render once to update phase colors/text
                     this.intervalId = setInterval(() => this.tick(), 100);
                 } else {
                     this.completeRound();
@@ -160,6 +163,7 @@ window.Timer = {
     },
 
     close() {
+        console.log('END ROUND EARLY FIRED', Date.now());
         if (this.intervalId) {
             clearInterval(this.intervalId);
             this.intervalId = null;
@@ -171,6 +175,18 @@ window.Timer = {
         if (this.modal) {
             this.modal.classList.add('hidden');
         }
+    },
+
+    updateUI() {
+        if (!this.modal) return;
+        const progress = Math.max(0, Math.min(1, this.remainingSeconds / this.totalDuration));
+        const progressPct = progress * 100;
+        
+        const displayEl = this.modal.querySelector('.timer-display');
+        const progressEl = this.modal.querySelector('.progress-bar-fill');
+        
+        if (displayEl) displayEl.textContent = this.formatTime(this.remainingSeconds);
+        if (progressEl) progressEl.style.width = `${progressPct}%`;
     },
 
     render() {
@@ -185,14 +201,7 @@ window.Timer = {
         const mainTitle = this.roundData ? this.roundData.title : 'Rest Period';
         const cueText = this.roundData && this.roundData.cue ? this.roundData.cue : '';
         
-        let actionsHtml = '';
-        if (isRestMode) {
-            actionsHtml = `<button class="btn-primary" onclick="Timer.handleExpire()">Skip Rest</button>`;
-        } else if (isWork) {
-            actionsHtml = `<button class="btn-primary" onclick="Timer.handleExpire()">End Round Early</button>`;
-        } else {
-            actionsHtml = `<button class="btn-primary" onclick="Timer.handleExpire()">Skip Rest</button>`;
-        }
+        let actionsHtml = `<button class="btn-primary" onclick="Timer.close()">End Round Early</button>`;
         
         const html = `
             <div class="timer-card round-mode ${colorClass}">

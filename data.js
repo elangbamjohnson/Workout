@@ -25,7 +25,7 @@ const workoutData = {
           "notes": "Lighter than 50kg working weight on purpose \u2014 power work needs speed, not grinding. Feet hip-width, bar over mid-foot, flat back. Grip, brace core, then drive through the floor explosively on every rep \u2014 pull like you're trying to launch the bar up. Lower under control (2-3 sec), reset fully between reps.",
           "benefits": "Builds the raw ground-force production that every punch is ultimately launched from \u2014 the \"engine\" lift of the whole program.",
           "muscles": "Glutes, hamstrings, lower back (erector spinae), traps, forearm grip.",
-          "restSeconds": 105,
+          "restSeconds": 150,
           "id": "day1-ex1"
         },
         {
@@ -65,7 +65,7 @@ const workoutData = {
           "notes": "Push off one leg explosively sideways, land on the opposite leg, absorb the landing (soft knee bend), hold balance for a second, then bound back the other way. Mimics the weight shift you use in hooks/pivots.",
           "benefits": "Trains explosive lateral weight transfer and landing control \u2014 directly mirrors the foot pivot and weight shift used in hooks and slips.",
           "muscles": "Glutes (especially glute medius), quads, ankle stabilizers.",
-          "restSeconds": 105,
+          "restSeconds": 90,
           "id": "day1-ex5"
         },
         {
@@ -85,7 +85,7 @@ const workoutData = {
           "notes": "Stand side-on to a wall, med ball at hip height. Rotate hips first, then torso, then arms \u2014 throw the ball hard into the wall like you're throwing a hook. Catch on the rebound or pick it back up, reset stance each rep.",
           "benefits": "Trains the hip-to-shoulder rotational sequence that powers hooks and crosses \u2014 teaches your body to fire in the correct order (hips, then torso, then arms).",
           "muscles": "Obliques, core, glutes, shoulders.",
-          "restSeconds": 105,
+          "restSeconds": 90,
           "id": "day1-ex7"
         },
         {
@@ -95,7 +95,7 @@ const workoutData = {
           "notes": "Load barbell into landmine attachment, grip the top of the bar with both hands, arms extended. Rotate the bar from hip height on one side, sweeping it across your body to the other side, driving the movement from your hips and back foot pivot \u2014 not just your arms.",
           "benefits": "Builds loaded rotational power with back-foot pivot involved \u2014 closer to a real punch than bodyweight rotation drills.",
           "muscles": "Obliques, core, shoulders, glutes.",
-          "restSeconds": 105,
+          "restSeconds": 90,
           "id": "day1-ex8"
         },
         {
@@ -105,7 +105,7 @@ const workoutData = {
           "notes": "Sit with knees bent, lean back slightly to engage core, feet can be lifted off ground for more difficulty. Rotate the med ball from hip to hip, controlled \u2014 this is a core-control exercise, not a speed exercise, so don't rush it.",
           "benefits": "Builds rotational core control and endurance, which keeps your trunk stable and connected between your hips and shoulders during combinations.",
           "muscles": "Obliques, rectus abdominis.",
-          "restSeconds": 105,
+          "restSeconds": 60,
           "id": "day1-ex9"
         }
       ]
@@ -122,7 +122,8 @@ const workoutData = {
           "name": "Jab Power Development",
           "setsReps": "3 min",
           "intensity": "Build \u2014 60% \u2192 80%",
-          "workSeconds": 60,
+          "workSeconds": 180,
+          "restSeconds": 60,
           "benefits": "The jab is your range finder AND a weapon. Drive from the rear foot through the hip. Your shoulder should nearly touch your chin at full extension.",
           "rounds": [
             {
@@ -148,7 +149,8 @@ const workoutData = {
           "name": "Cross Power",
           "setsReps": "3 min",
           "intensity": "85-95%",
-          "workSeconds": 60,
+          "workSeconds": 180,
+          "restSeconds": 60,
           "benefits": "The cross is your power weapon. Hip rotation leads \u2014 your shoulder follows your hip, not the other way. You should feel this in your glute and hip, not just your shoulder.",
           "rounds": [
             {
@@ -174,7 +176,8 @@ const workoutData = {
           "name": "Lead Hook Power",
           "setsReps": "3 min",
           "intensity": "85-95%",
-          "workSeconds": 60,
+          "workSeconds": 180,
+          "restSeconds": 60,
           "benefits": "The hook generates power through hip pivot, not shoulder swing. Lead foot pivots inward as you throw. Your bodyweight transfers to the lead foot. Feel the hip snap.",
           "rounds": [
             {
@@ -200,7 +203,8 @@ const workoutData = {
           "name": "Rear Body Hook + Uppercut",
           "setsReps": "3 min",
           "intensity": "85-90%",
-          "workSeconds": 60,
+          "workSeconds": 180,
+          "restSeconds": 60,
           "benefits": "Uppercuts are leg-driven. Bend your knees slightly, then drive upward through the punch. The power comes from leg extension, not shoulder elevation.",
           "rounds": [
             {
@@ -226,7 +230,8 @@ const workoutData = {
           "name": "Power Combinations",
           "setsReps": "3 min",
           "intensity": "90-100%",
-          "workSeconds": 60,
+          "workSeconds": 180,
+          "restSeconds": 60,
           "benefits": "Maintain power through the full combination. Most fighters lose power after the 3rd punch. Train to keep it through punch 6.",
           "rounds": [
             {
@@ -252,7 +257,8 @@ const workoutData = {
           "name": "Power Endurance Finisher",
           "setsReps": "3 min",
           "intensity": "100% on work intervals",
-          "workSeconds": 60,
+          "workSeconds": 180,
+          "restSeconds": 0,
           "benefits": "This round tests power under fatigue. Your punch quality at the end of this round is your baseline \u2014 you will improve it over the program.",
           "rounds": [
             {
@@ -291,6 +297,8 @@ const workoutData = {
         {
           "name": "Dynamic Warm-Up",
           "duration": "8 min",
+          "workSeconds": 480,
+          "restSeconds": 0,
           "detail": "Prepare joints and activate the movement patterns you will be training.",
           "cue": "Do not rush this. Cold joints and tight hip flexors are the #1 cause of mechanical breakdown in the first round.",
           "id": "day3-sec1",
@@ -324,6 +332,8 @@ const workoutData = {
         {
           "name": "Footwork Patterns",
           "duration": "12 min",
+          "workSeconds": 720,
+          "restSeconds": 0,
           "detail": "Boxing footwork is the foundation of power \u2014 you cannot punch hard from bad position.",
           "cue": "Stay on the balls of your feet. Heels should barely touch the floor. Move like you are standing on hot coals \u2014 light and ready.",
           "id": "day3-sec2",
@@ -345,6 +355,8 @@ const workoutData = {
         {
           "name": "Technical combos on bag or pads",
           "duration": "15 min",
+          "workSeconds": 900,
+          "restSeconds": 0,
           "detail": "Light-moderate pace, focus on form not power. Roughly 1 min work / 30 sec rest per round.",
           "rounds": [
             {
@@ -384,13 +396,13 @@ const workoutData = {
               "id": "day3-sec3-r6"
             }
           ],
-          "workSeconds": 60,
-          "restSeconds": 30,
           "id": "day3-sec3"
         },
         {
           "name": "Combination Drilling",
-          "duration": "10 min (2\u00d75 min rounds)",
+          "duration": "10 min (2x5 min rounds)",
+          "workSeconds": 600,
+          "restSeconds": 0,
           "detail": "Link the mechanics from the previous section into combinations.",
           "cue": "Each combination should feel smooth \u2014 not mechanical or choppy. If a transition feels awkward, slow down and isolate that transition.",
           "id": "day3-sec4",
@@ -408,6 +420,8 @@ const workoutData = {
         {
           "name": "Defense & Head Movement",
           "duration": "8 min",
+          "workSeconds": 480,
+          "restSeconds": 0,
           "detail": "Slips, rolls, and parries integrated with offense.",
           "cue": "Defense creates offense. Every defensive movement should end in a position to counter. Do not just evade \u2014 evade and return.",
           "id": "day3-sec5",
@@ -429,6 +443,8 @@ const workoutData = {
         {
           "name": "Cool Down & Mobility",
           "duration": "7 min",
+          "workSeconds": 420,
+          "restSeconds": 0,
           "detail": "Restore range of motion and lower the nervous system.",
           "cue": "Do not skip this. Hip flexor and shoulder mobility directly affect punch mechanics. Athletes who skip cool-downs develop compensatory patterns.",
           "id": "day3-sec6",
@@ -483,7 +499,7 @@ const workoutData = {
           "notes": "Lie on floor, knees bent, dumbbells at chest level, elbows resting lightly on the floor at the bottom. Press up as explosively as possible, stopping just short of locking out hard, lower under control back to the floor pause position.",
           "benefits": "Builds pressing power in a shorter, joint-friendly range of motion \u2014 directly transfers to punch extension speed.",
           "muscles": "Chest, triceps, front shoulders.",
-          "restSeconds": 105,
+          "restSeconds": 120,
           "id": "day4-ex2"
         },
         {
@@ -503,7 +519,7 @@ const workoutData = {
           "notes": "Hold ball at chest, stand a few feet from wall. Push/throw the ball explosively straight out from your chest like a basketball chest pass, catch on rebound, reset and repeat immediately with full effort each rep.",
           "benefits": "Trains explosive arm extension speed with zero eccentric braking (you let go of the ball) \u2014 pure power output training.",
           "muscles": "Chest, triceps, front shoulders.",
-          "restSeconds": 105,
+          "restSeconds": 90,
           "id": "day4-ex4"
         },
         {
@@ -513,7 +529,7 @@ const workoutData = {
           "notes": "Load barbell into landmine attachment, hold the end at chest height with both hands (or one hand for more challenge), stand side-on to the anchor point. Press the bar straight out while resisting the urge to let your torso rotate \u2014 brace your core hard.",
           "benefits": "Builds anti-rotation core strength \u2014 keeps your torso stable so power from your hips doesn't leak before it reaches your fist.",
           "muscles": "Obliques, deep core, shoulders.",
-          "restSeconds": 105,
+          "restSeconds": 90,
           "id": "day4-ex5"
         },
         {
@@ -533,7 +549,7 @@ const workoutData = {
           "notes": "Hold it with both hands. Start high on one side (shoulder height), rotate and chop down and across your body to the opposite hip, driving the motion from your hips and trunk rotation, not just your arms. Reset at the top each rep.",
           "benefits": "Trains rotational power through a diagonal plane, which overlaps with hook and uppercut mechanics more than straight-line exercises do.",
           "muscles": "Obliques, core, shoulders, hips.",
-          "restSeconds": 105,
+          "restSeconds": 90,
           "id": "day4-ex7"
         },
         {
@@ -543,7 +559,7 @@ const workoutData = {
           "notes": "Hang from the power stand with straight or slightly bent arms. Raise your legs (straight or knees tucked) up toward your chest using your lower abs, avoid swinging \u2014 control both the raise and the lower.",
           "benefits": "Builds lower ab and hip flexor strength, which supports overall core stiffness needed to transfer power without your midsection collapsing.",
           "muscles": "Lower abs, hip flexors, grip.",
-          "restSeconds": 105,
+          "restSeconds": 75,
           "id": "day4-ex8"
         }
       ]
@@ -560,7 +576,8 @@ const workoutData = {
           "name": "Warm-Up Combinations",
           "setsReps": "3 min",
           "intensity": "70-80%",
-          "workSeconds": 60,
+          "workSeconds": 180,
+          "restSeconds": 60,
           "benefits": "Do not start cold. This round prepares your joints and motor patterns for the power work ahead.",
           "rounds": [
             {
@@ -582,7 +599,8 @@ const workoutData = {
           "name": "Power Singles",
           "setsReps": "3 min",
           "intensity": "90-95%",
-          "workSeconds": 60,
+          "workSeconds": 180,
+          "restSeconds": 60,
           "benefits": "Singles force you to commit fully to each punch. No combination rhythm to hide behind.",
           "rounds": [
             {
@@ -608,7 +626,8 @@ const workoutData = {
           "name": "Body Work",
           "setsReps": "3 min",
           "intensity": "85-90%",
-          "workSeconds": 60,
+          "workSeconds": 180,
+          "restSeconds": 60,
           "benefits": "Body shots require you to bend your knees and get your level down \u2014 do not just swing downward. Your punch trajectory should be horizontal to the body.",
           "rounds": [
             {
@@ -634,7 +653,8 @@ const workoutData = {
           "name": "Combination Power",
           "setsReps": "3 min",
           "intensity": "90%",
-          "workSeconds": 60,
+          "workSeconds": 180,
+          "restSeconds": 0,
           "benefits": "Move your feet between combinations. Set up each combination from a new angle.",
           "rounds": [
             {
@@ -660,7 +680,8 @@ const workoutData = {
           "name": "Pressure Round",
           "setsReps": "3 min",
           "intensity": "85%",
-          "workSeconds": 60,
+          "workSeconds": 180,
+          "restSeconds": 60,
           "benefits": "This simulates a real fight round. Constant movement with intermittent power output. Your power maintenance under movement is tested here.",
           "rounds": [
             {
@@ -686,7 +707,8 @@ const workoutData = {
           "name": "Power Endurance Test",
           "setsReps": "3 min",
           "intensity": "100% on work intervals",
-          "workSeconds": 60,
+          "workSeconds": 180,
+          "restSeconds": 60,
           "benefits": "Note your power level in the final 45-second interval. Compare to Round 1 of Day 2. This gap is your power endurance deficit \u2014 it narrows over the program.",
           "rounds": [
             {
@@ -716,7 +738,8 @@ const workoutData = {
           "name": "Cool-Down Shadowboxing",
           "setsReps": "2 min",
           "intensity": "40%",
-          "workSeconds": 60,
+          "workSeconds": 120,
+          "restSeconds": 0,
           "benefits": "Do not end on the bag. Cool down with shadowboxing to begin the recovery process.",
           "rounds": [
             {
