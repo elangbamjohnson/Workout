@@ -146,15 +146,18 @@ const workoutData = {
           "rounds": [
             {
               "id": "day2-ex1-r1",
-              "combo": "10x Power Jabs \u2014 full hip rotation, not just arm"
+              "combo": "10x Power Jabs \u2014 full hip rotation, not just arm",
+              "videoId": "mfvJPxQ0WGw"
             },
             {
               "id": "day2-ex1-r2",
-              "combo": "5x Jab-Cross \u2014 pause between each, reset stance fully"
+              "combo": "5x Jab-Cross \u2014 pause between each, reset stance fully",
+              "videoId": "jcbBBhaz2d8"
             },
             {
               "id": "day2-ex1-r3",
-              "combo": "10x Jab with Lead Hip Drive \u2014 focus on pushing off the rear foot to lead hip"
+              "combo": "10x Jab with Lead Hip Drive \u2014 focus on pushing off the rear foot to lead hip",
+              "videoId": "teBtAxi18GM"
             },
             {
               "id": "day2-ex1-r4",
@@ -173,15 +176,18 @@ const workoutData = {
           "rounds": [
             {
               "id": "day2-ex2-r1",
-              "combo": "10x Standing Crosses \u2014 no jab, full hip and shoulder rotation"
+              "combo": "10x Standing Crosses \u2014 no jab, full hip and shoulder rotation",
+              "videoId": "kBCxN4togYg"
             },
             {
               "id": "day2-ex2-r2",
-              "combo": "5x Cross with Rear Foot Push \u2014 consciously push the floor away with the rear foot"
+              "combo": "5x Cross with Rear Foot Push \u2014 consciously push the floor away with the rear foot",
+              "videoId": "T5nynt6hyQw"
             },
             {
               "id": "day2-ex2-r3",
-              "combo": "8x Jab-Cross \u2014 both punches at 90%+ power"
+              "combo": "8x Jab-Cross \u2014 both punches at 90%+ power",
+              "videoId": "jcbBBhaz2d8"
             },
             {
               "id": "day2-ex2-r4",
@@ -200,15 +206,18 @@ const workoutData = {
           "rounds": [
             {
               "id": "day2-ex3-r1",
-              "combo": "10x Lead Hooks \u2014 horizontal elbow path, pivot on lead foot"
+              "combo": "10x Lead Hooks \u2014 horizontal elbow path, pivot on lead foot",
+              "videoId": "-R383f95Lpc"
             },
             {
               "id": "day2-ex3-r2",
-              "combo": "5x Jab-Cross-Hook \u2014 power on the hook"
+              "combo": "5x Jab-Cross-Hook \u2014 power on the hook",
+              "videoId": "l3e3qeLwC6Q"
             },
             {
               "id": "day2-ex3-r3",
-              "combo": "8x Hook with Hip Pivot \u2014 exaggerate the lead foot pivot"
+              "combo": "8x Hook with Hip Pivot \u2014 exaggerate the lead foot pivot",
+              "videoId": "mF2HmMVH_DQ"
             },
             {
               "id": "day2-ex3-r4",
@@ -250,7 +259,7 @@ const workoutData = {
           "intensity": "90-100%",
           "workSeconds": 180,
           "restSeconds": 60,
-          "benefits": "Maintain power through the full combination. Most fighters lose power after the 3rd punch. Train to keep it through punch 6.",
+          "benefits": "Maintain power through the full combination. Most fighters lose power after the 3rd punch. Train to keep it explosive.",
           "rounds": [
             {
               "id": "day2-ex5-r1",
@@ -258,15 +267,15 @@ const workoutData = {
             },
             {
               "id": "day2-ex5-r2",
-              "combo": "5x Jab-Cross-Lead Hook-Rear Uppercut (1-2-3-4)"
+              "combo": "5x 3-Punch Power Combo: Cross - Lead Hook - Rear Overhand"
             },
             {
               "id": "day2-ex5-r3",
-              "combo": "3x Full 6-punch combo at maximum power"
+              "combo": "3x 4-Punch Power Combo: Jab - Cross - Lead Hook - Rear Hook"
             },
             {
               "id": "day2-ex5-r4",
-              "combo": "Finish each combo \u2014 do not trail off at the end"
+              "combo": "Finish each combo — do not trail off at the end"
             }
           ]
         },

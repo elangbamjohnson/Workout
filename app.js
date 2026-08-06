@@ -514,8 +514,8 @@ function renderDay(dayIdRaw) {
             let totalSeconds = day.exercises.reduce((sum, ex) => {
                 let w = ex.workSeconds || 0;
                 let r = ex.restSeconds || 0;
-                let sets = parseInt((ex.setsReps || "1").split(" ")[0]) || 1;
-                return sum + (w + r) * sets;
+                // Bag rounds are executed exactly once per round array element, do not multiply by setsReps
+                return sum + (w + r);
             }, 0);
             if (totalSeconds > 0) totalTime = `${Math.ceil(totalSeconds / 60)} min total`;
         } else if (day.type === 'technical') {
@@ -598,13 +598,18 @@ function renderDay(dayIdRaw) {
             let roundsHtml = ex.rounds ? ex.rounds.map((r, i) => {
                 const log = Store.getItemLog(day.id, r.id) || {};
                 const isChecked = log.completed ? 'checked' : '';
+                const demoBtn = r.videoId
+                    ? `<button class="btn-demo" onclick="openVideoModal('${r.videoId}', '${r.combo.replace(/'/g, "\\'")}', 'short')">
+                           <svg viewBox="0 0 24 24" width="12" height="12"><path fill="currentColor" d="M8 5v14l11-7z"/></svg> Demo
+                       </button>`
+                    : '';
                 return `
-                <div class="nested-row interactive" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}" onclick="startRoundTimer(${day.id}, '${r.id}', ${ex.workSeconds}, ${ex.restSeconds}, '${r.combo.replace(/'/g, "\\'")}', '${ex.benefits ? ex.benefits.replace(/'/g, "\\'") : ""}')">
+                <div class="nested-row">
                     <button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
                     <div style="flex: 1;">${r.combo}</div>
-                    <div class="play-icon"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></div>
+                    ${demoBtn}
                 </div>`;
-            }).join('') : `<div class="nested-row interactive" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}" onclick="startRoundTimer(${day.id}, '${ex.id}', ${ex.workSeconds}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', '')"><button class="btn-check ${Store.getItemLog(day.id, ex.id)?.completed ? 'checked':''}" onclick="toggleRound(event, ${day.id}, '${ex.id}')">${icons.checkmark}</button><div style="flex:1;">${ex.notes}</div><div class="play-icon"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></div></div>`;
+            }).join('') : `<div class="nested-row"><button class="btn-check ${Store.getItemLog(day.id, ex.id)?.completed ? 'checked':''}" onclick="toggleRound(event, ${day.id}, '${ex.id}')">${icons.checkmark}</button><div style="flex:1;">${ex.notes}</div></div>`;
 
             let normalizedItem = {
                 id: ex.id,
@@ -617,7 +622,8 @@ function renderDay(dayIdRaw) {
                 callout: { icon: icons.flame, text: ex.benefits },
                 sections: [
                     { title: "COMBINATIONS", content: `<div class="nested-list">${roundsHtml}</div>` }
-                ]
+                ],
+                actionHtml: `<button class="btn-primary" style="width: 100%; margin-top: var(--sp-4);" onclick="startRoundTimer(${day.id}, '${ex.id}', ${ex.workSeconds}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', '${ex.benefits ? ex.benefits.replace(/'/g, "\\'") : ""}')">Start Round Timer</button>`
             };
             html += renderItemCard(normalizedItem, day.type);
         });
