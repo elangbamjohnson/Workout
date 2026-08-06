@@ -111,7 +111,7 @@ const workoutData = {
           "muscles": "Obliques, core, shoulders, glutes.",
           "restSeconds": 90,
           "videoId": "e5DP6961WEk",
-          "videoFormat": "short",
+          "videoFormat": "regular",
           "id": "day1-ex8"
         },
         {
@@ -147,17 +147,20 @@ const workoutData = {
             {
               "id": "day2-ex1-r1",
               "combo": "10x Power Jabs \u2014 full hip rotation, not just arm",
-              "videoId": "mfvJPxQ0WGw"
+              "videoId": "mfvJPxQ0WGw",
+              "videoFormat": "short"
             },
             {
               "id": "day2-ex1-r2",
               "combo": "5x Jab-Cross \u2014 pause between each, reset stance fully",
-              "videoId": "jcbBBhaz2d8"
+              "videoId": "jcbBBhaz2d8",
+              "videoFormat": "short"
             },
             {
               "id": "day2-ex1-r3",
               "combo": "10x Jab with Lead Hip Drive \u2014 focus on pushing off the rear foot to lead hip",
-              "videoId": "teBtAxi18GM"
+              "videoId": "teBtAxi18GM",
+              "videoFormat": "short"
             },
             {
               "id": "day2-ex1-r4",
@@ -177,17 +180,20 @@ const workoutData = {
             {
               "id": "day2-ex2-r1",
               "combo": "10x Standing Crosses \u2014 no jab, full hip and shoulder rotation",
-              "videoId": "kBCxN4togYg"
+              "videoId": "kBCxN4togYg",
+              "videoFormat": "short"
             },
             {
               "id": "day2-ex2-r2",
               "combo": "5x Cross with Rear Foot Push \u2014 consciously push the floor away with the rear foot",
-              "videoId": "T5nynt6hyQw"
+              "videoId": "T5nynt6hyQw",
+              "videoFormat": "short"
             },
             {
               "id": "day2-ex2-r3",
               "combo": "8x Jab-Cross \u2014 both punches at 90%+ power",
-              "videoId": "jcbBBhaz2d8"
+              "videoId": "jcbBBhaz2d8",
+              "videoFormat": "short"
             },
             {
               "id": "day2-ex2-r4",
@@ -207,17 +213,20 @@ const workoutData = {
             {
               "id": "day2-ex3-r1",
               "combo": "10x Lead Hooks \u2014 horizontal elbow path, pivot on lead foot",
-              "videoId": "-R383f95Lpc"
+              "videoId": "-R383f95Lpc",
+              "videoFormat": "short"
             },
             {
               "id": "day2-ex3-r2",
               "combo": "5x Jab-Cross-Hook \u2014 power on the hook",
-              "videoId": "l3e3qeLwC6Q"
+              "videoId": "l3e3qeLwC6Q",
+              "videoFormat": "short"
             },
             {
               "id": "day2-ex3-r3",
               "combo": "8x Hook with Hip Pivot \u2014 exaggerate the lead foot pivot",
-              "videoId": "mF2HmMVH_DQ"
+              "videoId": "mF2HmMVH_DQ",
+              "videoFormat": "short"
             },
             {
               "id": "day2-ex3-r4",
@@ -237,17 +246,20 @@ const workoutData = {
             {
               "id": "day2-ex4-r1",
               "combo": "10x Rear Uppercuts \u2014 drive up from the legs, not just the arm",
-              "videoId": "RQQX-z11U5M"
+              "videoId": "RQQX-z11U5M",
+              "videoFormat": "short"
             },
             {
               "id": "day2-ex4-r2",
               "combo": "8x Rear Body Hook to Rear Uppercut \u2014 body then head",
-              "videoId": "BPB5hyY078Q"
+              "videoId": "BPB5hyY078Q",
+              "videoFormat": "short"
             },
             {
               "id": "day2-ex4-r3",
               "combo": "5x Full Combo: Jab-Cross-Lead Hook-Rear Uppercut",
-              "videoId": "7UnRLmstNMU"
+              "videoId": "7UnRLmstNMU",
+              "videoFormat": "short"
             }
           ]
         },
@@ -263,17 +275,20 @@ const workoutData = {
             {
               "id": "day2-ex5-r1",
               "combo": "5x Jab-Cross-Lead Hook (1-2-3)",
-              "videoId": "neS7wdvid6E"
+              "videoId": "neS7wdvid6E",
+              "videoFormat": "short"
             },
             {
               "id": "day2-ex5-r2",
               "combo": "5x 3-Punch Power Combo: Cross - Lead Hook - Rear Overhand",
-              "videoId": "jfrdknkhtJQ"
+              "videoId": "jfrdknkhtJQ",
+              "videoFormat": "short"
             },
             {
               "id": "day2-ex5-r3",
               "combo": "3x 4-Punch Power Combo: Jab - Cross - Lead Hook - Rear Hook",
-              "videoId": "AtRf876ShFk"
+              "videoId": "AtRf876ShFk",
+              "videoFormat": "short"
             },
             {
               "id": "day2-ex5-r4",
@@ -424,7 +439,7 @@ const workoutData = {
         },
         {
           "name": "Combination Drilling",
-          "duration": "15 min (3x5 min rounds)",
+          "duration": "15 min",
           "workSeconds": 900,
           "restSeconds": 0,
           "detail": "Link mechanics into combinations, building complexity each round.",
