@@ -25,9 +25,7 @@ const workoutData = {
           "notes": "Lighter than 50kg working weight on purpose \u2014 power work needs speed, not grinding. Feet hip-width, bar over mid-foot, flat back. Grip, brace core, then drive through the floor explosively on every rep \u2014 pull like you're trying to launch the bar up. Lower under control (2-3 sec), reset fully between reps.",
           "benefits": "Builds the raw ground-force production that every punch is ultimately launched from \u2014 the \"engine\" lift of the whole program.",
           "muscles": "Glutes, hamstrings, lower back (erector spinae), traps, forearm grip.",
-          "restSeconds": 120,
-          "videoId": "wpS6JYL94tM",
-          "videoFormat": "short",
+          "restSeconds": 150,
           "id": "day1-ex1"
         },
         {
@@ -38,8 +36,6 @@ const workoutData = {
           "benefits": "Trains explosive hip extension speed \u2014 the exact \"hip snap\" that generates power in a straight punch. Highest carryover exercise in the whole plan.",
           "muscles": "Glutes, hamstrings, lower back, core.",
           "restSeconds": 105,
-          "videoId": "TIy6s4O2bOY",
-          "videoFormat": "short",
           "id": "day1-ex2"
         },
         {
@@ -49,9 +45,7 @@ const workoutData = {
           "notes": "Feet shoulder-width. Drop into a quarter-to-half squat, then explode straight up, reaching full hip extension in the air. Land soft (bend knees), pause 2-3 sec, reset before next rep \u2014 don't rebound straight into the next jump.",
           "benefits": "Builds leg power and rate of force development \u2014 how fast you can push off the ground, which drives forward weight transfer on a punch.",
           "muscles": "Quads, glutes, calves.",
-          "restSeconds": 90,
-          "videoId": "36vnWAkL7ZQ",
-          "videoFormat": "short",
+          "restSeconds": 105,
           "id": "day1-ex3"
         },
         {
@@ -62,8 +56,6 @@ const workoutData = {
           "benefits": "Builds single-leg strength and stability \u2014 important because you're always on a staggered stance in boxing, never both feet even.",
           "muscles": "Quads, glutes, hamstrings, hip stabilizers.",
           "restSeconds": 105,
-          "videoId": "or1frhkjBDc",
-          "videoFormat": "short",
           "id": "day1-ex4"
         },
         {
@@ -74,8 +66,6 @@ const workoutData = {
           "benefits": "Trains explosive lateral weight transfer and landing control \u2014 directly mirrors the foot pivot and weight shift used in hooks and slips.",
           "muscles": "Glutes (especially glute medius), quads, ankle stabilizers.",
           "restSeconds": 90,
-          "videoId": "ZkYORFHgRTw",
-          "videoFormat": "short",
           "id": "day1-ex5"
         },
         {
@@ -85,9 +75,7 @@ const workoutData = {
           "notes": "Swing arms back, bend hips/knees, then jump forward as far as possible, swinging arms up and forward for momentum. Land with knees bent, stick it, fully reset (walk back, breathe) before the next rep.",
           "benefits": "Trains total-body explosive power and forward drive \u2014 similar to stepping into a power punch.",
           "muscles": "Glutes, hamstrings, quads, calves, core.",
-          "restSeconds": 90,
-          "videoId": "v0yrBWA3eEs",
-          "videoFormat": "short",
+          "restSeconds": 105,
           "id": "day1-ex6"
         },
         {
@@ -98,8 +86,6 @@ const workoutData = {
           "benefits": "Trains the hip-to-shoulder rotational sequence that powers hooks and crosses \u2014 teaches your body to fire in the correct order (hips, then torso, then arms).",
           "muscles": "Obliques, core, glutes, shoulders.",
           "restSeconds": 90,
-          "videoId": "02c2YLgF8iE",
-          "videoFormat": "short",
           "id": "day1-ex7"
         },
         {
@@ -110,8 +96,6 @@ const workoutData = {
           "benefits": "Builds loaded rotational power with back-foot pivot involved \u2014 closer to a real punch than bodyweight rotation drills.",
           "muscles": "Obliques, core, shoulders, glutes.",
           "restSeconds": 90,
-          "videoId": "e5DP6961WEk",
-          "videoFormat": "regular",
           "id": "day1-ex8"
         },
         {
@@ -122,8 +106,6 @@ const workoutData = {
           "benefits": "Builds rotational core control and endurance, which keeps your trunk stable and connected between your hips and shoulders during combinations.",
           "muscles": "Obliques, rectus abdominis.",
           "restSeconds": 60,
-          "videoId": "emS5bqrK2eQ",
-          "videoFormat": "short",
           "id": "day1-ex9"
         }
       ]
@@ -140,27 +122,20 @@ const workoutData = {
           "name": "Jab Power Development",
           "setsReps": "3 min",
           "intensity": "Build \u2014 60% \u2192 80%",
-          "workSeconds": 180,
-          "restSeconds": 60,
+          "workSeconds": 60,
           "benefits": "The jab is your range finder AND a weapon. Drive from the rear foot through the hip. Your shoulder should nearly touch your chin at full extension.",
           "rounds": [
             {
               "id": "day2-ex1-r1",
-              "combo": "10x Power Jabs \u2014 full hip rotation, not just arm",
-              "videoId": "mfvJPxQ0WGw",
-              "videoFormat": "short"
+              "combo": "10x Power Jabs \u2014 full hip rotation, not just arm"
             },
             {
               "id": "day2-ex1-r2",
-              "combo": "5x Jab-Cross \u2014 pause between each, reset stance fully",
-              "videoId": "jcbBBhaz2d8",
-              "videoFormat": "short"
+              "combo": "5x Jab-Cross \u2014 pause between each, reset stance fully"
             },
             {
               "id": "day2-ex1-r3",
-              "combo": "10x Jab with Lead Hip Drive \u2014 focus on pushing off the rear foot to lead hip",
-              "videoId": "teBtAxi18GM",
-              "videoFormat": "short"
+              "combo": "10x Jab with Lead Hip Drive \u2014 focus on pushing off the rear foot to lead hip"
             },
             {
               "id": "day2-ex1-r4",
@@ -173,27 +148,20 @@ const workoutData = {
           "name": "Cross Power",
           "setsReps": "3 min",
           "intensity": "85-95%",
-          "workSeconds": 180,
-          "restSeconds": 60,
+          "workSeconds": 60,
           "benefits": "The cross is your power weapon. Hip rotation leads \u2014 your shoulder follows your hip, not the other way. You should feel this in your glute and hip, not just your shoulder.",
           "rounds": [
             {
               "id": "day2-ex2-r1",
-              "combo": "10x Standing Crosses \u2014 no jab, full hip and shoulder rotation",
-              "videoId": "kBCxN4togYg",
-              "videoFormat": "short"
+              "combo": "10x Standing Crosses \u2014 no jab, full hip and shoulder rotation"
             },
             {
               "id": "day2-ex2-r2",
-              "combo": "5x Cross with Rear Foot Push \u2014 consciously push the floor away with the rear foot",
-              "videoId": "T5nynt6hyQw",
-              "videoFormat": "short"
+              "combo": "5x Cross with Rear Foot Push \u2014 consciously push the floor away with the rear foot"
             },
             {
               "id": "day2-ex2-r3",
-              "combo": "8x Jab-Cross \u2014 both punches at 90%+ power",
-              "videoId": "jcbBBhaz2d8",
-              "videoFormat": "short"
+              "combo": "8x Jab-Cross \u2014 both punches at 90%+ power"
             },
             {
               "id": "day2-ex2-r4",
@@ -206,27 +174,20 @@ const workoutData = {
           "name": "Lead Hook Power",
           "setsReps": "3 min",
           "intensity": "85-95%",
-          "workSeconds": 180,
-          "restSeconds": 60,
+          "workSeconds": 60,
           "benefits": "The hook generates power through hip pivot, not shoulder swing. Lead foot pivots inward as you throw. Your bodyweight transfers to the lead foot. Feel the hip snap.",
           "rounds": [
             {
               "id": "day2-ex3-r1",
-              "combo": "10x Lead Hooks \u2014 horizontal elbow path, pivot on lead foot",
-              "videoId": "-R383f95Lpc",
-              "videoFormat": "short"
+              "combo": "10x Lead Hooks \u2014 horizontal elbow path, pivot on lead foot"
             },
             {
               "id": "day2-ex3-r2",
-              "combo": "5x Jab-Cross-Hook \u2014 power on the hook",
-              "videoId": "l3e3qeLwC6Q",
-              "videoFormat": "short"
+              "combo": "5x Jab-Cross-Hook \u2014 power on the hook"
             },
             {
               "id": "day2-ex3-r3",
-              "combo": "8x Hook with Hip Pivot \u2014 exaggerate the lead foot pivot",
-              "videoId": "mF2HmMVH_DQ",
-              "videoFormat": "short"
+              "combo": "8x Hook with Hip Pivot \u2014 exaggerate the lead foot pivot"
             },
             {
               "id": "day2-ex3-r4",
@@ -239,27 +200,24 @@ const workoutData = {
           "name": "Rear Body Hook + Uppercut",
           "setsReps": "3 min",
           "intensity": "85-90%",
-          "workSeconds": 180,
-          "restSeconds": 60,
+          "workSeconds": 60,
           "benefits": "Uppercuts are leg-driven. Bend your knees slightly, then drive upward through the punch. The power comes from leg extension, not shoulder elevation.",
           "rounds": [
             {
               "id": "day2-ex4-r1",
-              "combo": "10x Rear Uppercuts \u2014 drive up from the legs, not just the arm",
-              "videoId": "RQQX-z11U5M",
-              "videoFormat": "short"
+              "combo": "10x Rear Uppercuts \u2014 drive up from the legs, not just the arm"
             },
             {
               "id": "day2-ex4-r2",
-              "combo": "8x Rear Body Hook to Rear Uppercut \u2014 body then head",
-              "videoId": "BPB5hyY078Q",
-              "videoFormat": "short"
+              "combo": "8x Rear Body Hook to Rear Uppercut \u2014 body then head"
             },
             {
               "id": "day2-ex4-r3",
-              "combo": "5x Full Combo: Jab-Cross-Lead Hook-Rear Uppercut",
-              "videoId": "7UnRLmstNMU",
-              "videoFormat": "short"
+              "combo": "5x Full Combo: Jab-Cross-Lead Hook-Rear Uppercut"
+            },
+            {
+              "id": "day2-ex4-r4",
+              "combo": "Repeat 2x through the sequence"
             }
           ]
         },
@@ -268,41 +226,33 @@ const workoutData = {
           "name": "Power Combinations",
           "setsReps": "3 min",
           "intensity": "90-100%",
-          "workSeconds": 180,
-          "restSeconds": 60,
-          "benefits": "Maintain power through the full combination. Most fighters lose power after the 3rd punch. Train to keep it explosive.",
+          "workSeconds": 60,
+          "benefits": "Maintain power through the full combination. Most fighters lose power after the 3rd punch. Train to keep it through punch 6.",
           "rounds": [
             {
               "id": "day2-ex5-r1",
-              "combo": "5x Jab-Cross-Lead Hook (1-2-3)",
-              "videoId": "neS7wdvid6E",
-              "videoFormat": "short"
+              "combo": "5x Jab-Cross-Lead Hook (1-2-3)"
             },
             {
               "id": "day2-ex5-r2",
-              "combo": "5x 3-Punch Power Combo: Cross - Lead Hook - Rear Overhand",
-              "videoId": "jfrdknkhtJQ",
-              "videoFormat": "short"
+              "combo": "5x Jab-Cross-Lead Hook-Rear Uppercut (1-2-3-4)"
             },
             {
               "id": "day2-ex5-r3",
-              "combo": "3x 4-Punch Power Combo: Jab - Cross - Lead Hook - Rear Hook",
-              "videoId": "AtRf876ShFk",
-              "videoFormat": "short"
+              "combo": "3x Full 6-punch combo at maximum power"
             },
             {
               "id": "day2-ex5-r4",
-              "combo": "Finish each combo — do not trail off at the end"
+              "combo": "Finish each combo \u2014 do not trail off at the end"
             }
           ]
         },
         {
           "id": "day2-ex6",
           "name": "Power Endurance Finisher",
-          "setsReps": "2 min 45 sec",
+          "setsReps": "3 min",
           "intensity": "100% on work intervals",
-          "workSeconds": 165,
-          "restSeconds": 0,
+          "workSeconds": 60,
           "benefits": "This round tests power under fatigue. Your punch quality at the end of this round is your baseline \u2014 you will improve it over the program.",
           "rounds": [
             {
@@ -323,7 +273,7 @@ const workoutData = {
             },
             {
               "id": "day2-ex6-r5",
-              "combo": "45 sec: Final push \u2014 best combinations, full power"
+              "combo": "60 sec: Final push \u2014 best combinations, full power"
             }
           ]
         }
@@ -341,169 +291,167 @@ const workoutData = {
         {
           "name": "Dynamic Warm-Up",
           "duration": "8 min",
-          "workSeconds": 480,
-          "restSeconds": 0,
           "detail": "Prepare joints and activate the movement patterns you will be training.",
           "cue": "Do not rush this. Cold joints and tight hip flexors are the #1 cause of mechanical breakdown in the first round.",
           "id": "day3-sec1",
           "rounds": [
             {
               "id": "day3-sec1-r1",
-              "combo": "Leg swings (front-back, lateral) \u2014 15 each direction, each leg",
-              "videoId": "DTXpjDJDoeI",
-              "videoFormat": "short"
+              "combo": "Leg swings (front-back, lateral) \u2014 15 each direction, each leg"
             },
             {
               "id": "day3-sec1-r2",
-              "combo": "Hip circles \u2014 10 each direction",
-              "videoId": "jUft857xWzw",
-              "videoFormat": "short"
+              "combo": "Hip circles \u2014 10 each direction"
             },
             {
               "id": "day3-sec1-r3",
-              "combo": "Shoulder circles \u2014 10 each direction",
-              "videoId": "rB0qSl1I-fc",
-              "videoFormat": "short"
+              "combo": "Shoulder circles \u2014 10 each direction"
             },
             {
               "id": "day3-sec1-r4",
-              "combo": "Neck rolls \u2014 5 each direction, slow",
-              "videoId": "DDt_ig6Iy6E",
-              "videoFormat": "short"
+              "combo": "Neck rolls \u2014 5 each direction, slow"
             },
             {
               "id": "day3-sec1-r5",
-              "combo": "Squat to stand \u2014 10 reps, pause at bottom",
-              "videoId": "B1mCETTy6WA",
-              "videoFormat": "short"
+              "combo": "Squat to stand \u2014 10 reps, pause at bottom"
             },
             {
               "id": "day3-sec1-r6",
-              "combo": "Lateral lunge to hip flexor stretch \u2014 5 each side",
-              "videoId": "lCrd5DSYRnw",
-              "videoFormat": "short"
+              "combo": "Lateral lunge to hip flexor stretch \u2014 5 each side"
             }
           ]
         },
         {
           "name": "Footwork Patterns",
-          "duration": "8 min",
-          "workSeconds": 480,
-          "restSeconds": 0,
-          "detail": "Boxing footwork is the foundation of power — you cannot punch hard from bad position.",
-          "cue": "Stay on the balls of your feet. Heels should barely touch the floor. Move like you are standing on hot coals — light and ready.",
+          "duration": "12 min",
+          "detail": "Boxing footwork is the foundation of power \u2014 you cannot punch hard from bad position.",
+          "cue": "Stay on the balls of your feet. Heels should barely touch the floor. Move like you are standing on hot coals \u2014 light and ready.",
           "id": "day3-sec2",
           "rounds": [
             {
               "id": "day3-sec2-r1",
-              "combo": "Box step pattern — forward, back, lateral × 5 min",
-              "videoId": "M2EN9AH7cDc",
-              "videoFormat": "short"
+              "combo": "Box step pattern \u2014 forward, back, lateral \u00d7 5 min"
             },
             {
               "id": "day3-sec2-r2",
-              "combo": "Pivot drills — lead foot pivot (hook position) × 3 min",
-              "videoId": "dN75QUuRI9A",
-              "videoFormat": "short"
+              "combo": "Pivot drills \u2014 lead foot pivot (hook position) \u00d7 3 min"
+            },
+            {
+              "id": "day3-sec2-r3",
+              "combo": "Angle exits \u2014 step off-line after jab, after cross \u00d7 4 min"
+            }
+          ]
+        },
+        {
+          "name": "Technical combos on bag or pads",
+          "duration": "15 min",
+          "detail": "Light-moderate pace, focus on form not power. Roughly 1 min work / 30 sec rest per round.",
+          "rounds": [
+            {
+              "round": 1,
+              "combo": "Jab, cross (1-2)",
+              "focus": "Snapping the jab back to guard",
+              "id": "day3-sec3-r1"
+            },
+            {
+              "round": 2,
+              "combo": "Jab, cross, hook (1-2-3)",
+              "focus": "Smooth hip rotation into the hook",
+              "id": "day3-sec3-r2"
+            },
+            {
+              "round": 3,
+              "combo": "Jab, cross, hook, rear uppercut (1-2-3-4)",
+              "focus": "Level change into the uppercut",
+              "id": "day3-sec3-r3"
+            },
+            {
+              "round": 4,
+              "combo": "Double jab, cross (1-1-2)",
+              "focus": "Rhythm and distance control",
+              "id": "day3-sec3-r4"
+            },
+            {
+              "round": 5,
+              "combo": "Jab, rear hook to body, cross (1-3body-2)",
+              "focus": "Bending knees to get downstairs, not just dropping the head",
+              "id": "day3-sec3-r5"
+            },
+            {
+              "round": 6,
+              "combo": "Slip-jab-cross (defensive entry, optional)",
+              "focus": "Slipping outside/inside before countering",
+              "id": "day3-sec3-r6"
+            }
+          ],
+          "workSeconds": 60,
+          "restSeconds": 30,
+          "id": "day3-sec3"
+        },
+        {
+          "name": "Combination Drilling",
+          "duration": "10 min (2\u00d75 min rounds)",
+          "detail": "Link the mechanics from the previous section into combinations.",
+          "cue": "Each combination should feel smooth \u2014 not mechanical or choppy. If a transition feels awkward, slow down and isolate that transition.",
+          "id": "day3-sec4",
+          "rounds": [
+            {
+              "id": "day3-sec4-r1",
+              "combo": "Round 1 \u2014 1-2 only: Jab-Cross at 60% speed, focus on transition between the two"
+            },
+            {
+              "id": "day3-sec4-r2",
+              "combo": "Round 2 \u2014 1-2-3: Add the hook, feel the hip pivot sequence"
             }
           ]
         },
         {
           "name": "Defense & Head Movement",
           "duration": "8 min",
-          "workSeconds": 480,
-          "restSeconds": 0,
           "detail": "Slips, rolls, and parries integrated with offense.",
-          "cue": "Defense creates offense. Every defensive movement should end in a position to counter. Do not just evade — evade and return.",
-          "id": "day3-sec3",
+          "cue": "Defense creates offense. Every defensive movement should end in a position to counter. Do not just evade \u2014 evade and return.",
+          "id": "day3-sec5",
           "rounds": [
             {
-              "id": "day3-sec3-r1",
-              "combo": "Slip jab, return cross — 3 min",
-              "videoId": "6wJu5xm8VXA",
-              "videoFormat": "short"
+              "id": "day3-sec5-r1",
+              "combo": "Slip jab, return cross \u2014 3 min"
             },
             {
-              "id": "day3-sec3-r2",
-              "combo": "Roll under hook, return hook — 3 min",
-              "videoId": "-WXGz0Mbcr0",
-              "videoFormat": "short"
+              "id": "day3-sec5-r2",
+              "combo": "Roll under hook, return hook \u2014 3 min"
             },
             {
-              "id": "day3-sec3-r3",
-              "combo": "Parry cross, jab return — 2 min",
-              "videoId": "OVdalU7Zd9M",
-              "videoFormat": "short"
-            }
-          ]
-        },
-        {
-          "name": "Combination Drilling",
-          "duration": "15 min",
-          "workSeconds": 900,
-          "restSeconds": 0,
-          "detail": "Link mechanics into combinations, building complexity each round.",
-          "cue": "Each combination should feel smooth — not mechanical or choppy. If a transition feels awkward, slow down and isolate that transition.",
-          "id": "day3-sec4",
-          "rounds": [
-            {
-              "id": "day3-sec4-r1",
-              "combo": "Round 1 — 1-2 only: Jab-Cross at 60% speed, focus on transition between the two",
-              "videoId": "3qSg2evfEQ8",
-              "videoFormat": "short"
-            },
-            {
-              "id": "day3-sec4-r2",
-              "combo": "Round 2 — 1-2-3: Add the hook, feel the hip pivot sequence",
-              "videoId": "REoImtOx--Q",
-              "videoFormat": "short"
-            },
-            {
-              "id": "day3-sec4-r3",
-              "combo": "Round 3 — 1-2-3-2: Add the rear cross return, flow through all four punches smoothly",
-              "videoId": "l3e3qeLwC6Q",
-              "videoFormat": "short"
+              "id": "day3-sec5-r3",
+              "combo": "Parry cross, jab return \u2014 2 min"
             }
           ]
         },
         {
           "name": "Cool Down & Mobility",
           "duration": "7 min",
-          "workSeconds": 420,
-          "restSeconds": 0,
           "detail": "Restore range of motion and lower the nervous system.",
           "cue": "Do not skip this. Hip flexor and shoulder mobility directly affect punch mechanics. Athletes who skip cool-downs develop compensatory patterns.",
-          "id": "day3-sec5",
+          "id": "day3-sec6",
           "rounds": [
             {
-              "id": "day3-sec5-r1",
-              "combo": "Pigeon pose — 60 sec each side",
-              "videoId": "UlyMK4MJ1v4",
-              "videoFormat": "short"
+              "id": "day3-sec6-r1",
+              "combo": "Pigeon pose \u2014 60 sec each side"
             },
             {
-              "id": "day3-sec5-r2",
-              "combo": "Hip flexor stretch (kneeling) — 45 sec each side",
-              "videoId": "41ReSOu0dh4",
-              "videoFormat": "short"
+              "id": "day3-sec6-r2",
+              "combo": "Hip flexor stretch (kneeling) \u2014 45 sec each side"
             },
             {
-              "id": "day3-sec5-r3",
-              "combo": "Chest opener — 60 sec (arms back, open chest)",
-              "videoId": "crnw1IKWNZY",
-              "videoFormat": "short"
+              "id": "day3-sec6-r3",
+              "combo": "Chest opener \u2014 60 sec (arms back, open chest)"
             },
             {
-              "id": "day3-sec5-r4",
-              "combo": "Wrist and forearm stretch — 30 sec each direction",
-              "videoId": "n2H09xUYiOQ",
-              "videoFormat": "short"
+              "id": "day3-sec6-r4",
+              "combo": "Wrist and forearm stretch \u2014 30 sec each direction"
             },
             {
-              "id": "day3-sec5-r5",
-              "combo": "Slow neck rolls — 5 each direction",
-              "videoId": "DGwTMgAapxU",
-              "videoFormat": "short"
+              "id": "day3-sec6-r5",
+              "combo": "Slow neck rolls \u2014 5 each direction"
             }
           ]
         }
@@ -525,9 +473,7 @@ const workoutData = {
           "notes": "Standard push-up position, lower under control, then push up explosively so your hands leave the ground (or on rings, so the rings drop and you catch the instability). Land soft, reset your position before the next rep.",
           "benefits": "Builds explosive pushing power and shoulder stability \u2014 trains your chest and arms to fire fast, not just strong.",
           "muscles": "Chest, triceps, front shoulders, core.",
-          "restSeconds": 90,
-          "videoId": "iO0sT5FDgj4",
-          "videoFormat": "short",
+          "restSeconds": 105,
           "id": "day4-ex1"
         },
         {
@@ -537,9 +483,7 @@ const workoutData = {
           "notes": "Lie on floor, knees bent, dumbbells at chest level, elbows resting lightly on the floor at the bottom. Press up as explosively as possible, stopping just short of locking out hard, lower under control back to the floor pause position.",
           "benefits": "Builds pressing power in a shorter, joint-friendly range of motion \u2014 directly transfers to punch extension speed.",
           "muscles": "Chest, triceps, front shoulders.",
-          "restSeconds": 90,
-          "videoId": "TvPviMnKg6s",
-          "videoFormat": "short",
+          "restSeconds": 120,
           "id": "day4-ex2"
         },
         {
@@ -549,9 +493,7 @@ const workoutData = {
           "notes": "Set rings around chest height, lean back with body straight, feet on floor. Pull yourself up explosively toward the rings, chest driving to hands, then lower slowly (2-3 sec) under control. More horizontal body position = harder; start closer to upright and work toward horizontal over time.",
           "benefits": "Builds the \"pull back\" side of punching \u2014 the retraction speed that lets you snap your hand back to guard after a punch, and balances out all the pressing work.",
           "muscles": "Upper back (lats, rhomboids), biceps, rear shoulders.",
-          "restSeconds": 90,
-          "videoId": "pyhQJuxxskk",
-          "videoFormat": "short",
+          "restSeconds": 105,
           "id": "day4-ex3"
         },
         {
@@ -562,8 +504,6 @@ const workoutData = {
           "benefits": "Trains explosive arm extension speed with zero eccentric braking (you let go of the ball) \u2014 pure power output training.",
           "muscles": "Chest, triceps, front shoulders.",
           "restSeconds": 90,
-          "videoId": "gEov6cxDswM",
-          "videoFormat": "short",
           "id": "day4-ex4"
         },
         {
@@ -574,8 +514,6 @@ const workoutData = {
           "benefits": "Builds anti-rotation core strength \u2014 keeps your torso stable so power from your hips doesn't leak before it reaches your fist.",
           "muscles": "Obliques, deep core, shoulders.",
           "restSeconds": 90,
-          "videoId": "e5DP6961WEk",
-          "videoFormat": "regular",
           "id": "day4-ex5"
         },
         {
@@ -585,9 +523,7 @@ const workoutData = {
           "notes": "Same hip-hinge and hip-snap as the two-hand swing on Day 1, but with one hand on the bell \u2014 this forces your core and obliques to resist rotation while your hips still drive the power, very close to the anti-rotation demand of throwing a straight punch off your rear hand. Switch hands mid-set by letting the bell float briefly in front of you at the top. If 18kg feels too heavy single-arm to control cleanly, drop reps to 5-6/side rather than losing form.",
           "benefits": "Combines hip-snap power with anti-rotation core demand in one movement \u2014 very close to the physical demand of a rear-hand punch.",
           "muscles": "Glutes, hamstrings, obliques, grip, forearms.",
-          "restSeconds": 90,
-          "videoId": "N9iGxOKl38A",
-          "videoFormat": "short",
+          "restSeconds": 105,
           "id": "day4-ex6"
         },
         {
@@ -597,9 +533,7 @@ const workoutData = {
           "notes": "Hold it with both hands. Start high on one side (shoulder height), rotate and chop down and across your body to the opposite hip, driving the motion from your hips and trunk rotation, not just your arms. Reset at the top each rep.",
           "benefits": "Trains rotational power through a diagonal plane, which overlaps with hook and uppercut mechanics more than straight-line exercises do.",
           "muscles": "Obliques, core, shoulders, hips.",
-          "restSeconds": 75,
-          "videoId": "rgjHOnCgkuk",
-          "videoFormat": "short",
+          "restSeconds": 90,
           "id": "day4-ex7"
         },
         {
@@ -609,9 +543,7 @@ const workoutData = {
           "notes": "Hang from the power stand with straight or slightly bent arms. Raise your legs (straight or knees tucked) up toward your chest using your lower abs, avoid swinging \u2014 control both the raise and the lower.",
           "benefits": "Builds lower ab and hip flexor strength, which supports overall core stiffness needed to transfer power without your midsection collapsing.",
           "muscles": "Lower abs, hip flexors, grip.",
-          "restSeconds": 60,
-          "videoId": "XgTlyPzuKmQ",
-          "videoFormat": "short",
+          "restSeconds": 75,
           "id": "day4-ex8"
         }
       ]
@@ -628,8 +560,7 @@ const workoutData = {
           "name": "Warm-Up Combinations",
           "setsReps": "3 min",
           "intensity": "70-80%",
-          "workSeconds": 180,
-          "restSeconds": 60,
+          "workSeconds": 60,
           "benefits": "Do not start cold. This round prepares your joints and motor patterns for the power work ahead.",
           "rounds": [
             {
@@ -651,8 +582,7 @@ const workoutData = {
           "name": "Power Singles",
           "setsReps": "3 min",
           "intensity": "90-95%",
-          "workSeconds": 180,
-          "restSeconds": 60,
+          "workSeconds": 60,
           "benefits": "Singles force you to commit fully to each punch. No combination rhythm to hide behind.",
           "rounds": [
             {
@@ -678,8 +608,7 @@ const workoutData = {
           "name": "Body Work",
           "setsReps": "3 min",
           "intensity": "85-90%",
-          "workSeconds": 180,
-          "restSeconds": 60,
+          "workSeconds": 60,
           "benefits": "Body shots require you to bend your knees and get your level down \u2014 do not just swing downward. Your punch trajectory should be horizontal to the body.",
           "rounds": [
             {
@@ -705,8 +634,7 @@ const workoutData = {
           "name": "Combination Power",
           "setsReps": "3 min",
           "intensity": "90%",
-          "workSeconds": 180,
-          "restSeconds": 0,
+          "workSeconds": 60,
           "benefits": "Move your feet between combinations. Set up each combination from a new angle.",
           "rounds": [
             {
@@ -732,8 +660,7 @@ const workoutData = {
           "name": "Pressure Round",
           "setsReps": "3 min",
           "intensity": "85%",
-          "workSeconds": 180,
-          "restSeconds": 60,
+          "workSeconds": 60,
           "benefits": "This simulates a real fight round. Constant movement with intermittent power output. Your power maintenance under movement is tested here.",
           "rounds": [
             {
@@ -759,8 +686,7 @@ const workoutData = {
           "name": "Power Endurance Test",
           "setsReps": "3 min",
           "intensity": "100% on work intervals",
-          "workSeconds": 180,
-          "restSeconds": 60,
+          "workSeconds": 60,
           "benefits": "Note your power level in the final 45-second interval. Compare to Round 1 of Day 2. This gap is your power endurance deficit \u2014 it narrows over the program.",
           "rounds": [
             {
@@ -790,8 +716,7 @@ const workoutData = {
           "name": "Cool-Down Shadowboxing",
           "setsReps": "2 min",
           "intensity": "40%",
-          "workSeconds": 120,
-          "restSeconds": 0,
+          "workSeconds": 60,
           "benefits": "Do not end on the bag. Cool down with shadowboxing to begin the recovery process.",
           "rounds": [
             {

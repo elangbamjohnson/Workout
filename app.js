@@ -17,6 +17,52 @@ const icons = {
     repeat: `<svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>`
 };
 
+
+// Phase 2 bindings
+window.logSet = function(dayId, itemId, setIndex, restSec, title, cue, btn) {
+    const row = btn.closest('.set-row');
+    const repInput = row.querySelector('.input-rep').value;
+    const weightInput = row.querySelector('.input-weight').value;
+    
+    const logData = Store.getItemLog(dayId, itemId) || { sets: {} };
+    if (!logData.sets) logData.sets = {};
+    
+    const isCompleted = logData.sets[setIndex] && logData.sets[setIndex].completed;
+    logData.sets[setIndex] = {
+        reps: repInput,
+        weight: weightInput,
+        completed: !isCompleted
+    };
+    
+    Store.logItem(dayId, itemId, logData);
+    renderDay(viewingDayId); // Re-render to update UI
+    
+    if (!isCompleted && restSec > 0) {
+        const day = workoutData.days.find(d => d.id === dayId);
+        Timer.startRest(restSec, title, cue, day ? day.type : 'strength');
+    }
+};
+
+window.toggleRound = function(e, dayId, roundId) {
+    e.stopPropagation();
+    const logData = Store.getItemLog(dayId, roundId) || {};
+    Store.logItem(dayId, roundId, { completed: !logData.completed });
+    renderDay(viewingDayId);
+};
+
+window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue) {
+    const day = workoutData.days.find(d => d.id === dayId);
+    Timer.startRound(workSec, restSec, title, cue, day ? day.type : 'bag', () => {
+        Store.logItem(dayId, roundId, { completed: true });
+        renderDay(viewingDayId);
+    });
+};
+
+window.finishWorkout = function(dayId) {
+    Store.finishWorkout(dayId);
+    renderHome();
+};
+
 const appContainer = document.getElementById('app-container');
 // PHASE 2 HOOK: This should read from persistence (e.g., localStorage).
 // For now, mapping calendar day of week to program day (Monday = Day 1 ... Sunday = Day 7).
@@ -86,12 +132,185 @@ function renderItemCard(item, dayType) {
                     ${sec.content}
                 </div>
                 `).join('')}
+                ${item.actionHtml ? `
+                <div class="item-action" style="margin-top: var(--sp-4);">
+                    ${item.actionHtml}
+                </div>
+                ` : ''}
             </div>
         </div>
     `;
     return html;
 }
 
+
+function generateDashboardHTML() {
+    const totalSessions = Store.getTotalSessions();
+    const streak = Store.getStreak();
+    
+    // Days since last
+    let daysSinceLast = 0;
+    if (Store.state.history.length > 0) {
+        const sortedDates = Store.state.history.map(h => h.date).sort().reverse();
+        const lastDate = new Date(sortedDates[0]);
+        const now = new Date();
+        now.setHours(0,0,0,0);
+        lastDate.setHours(0,0,0,0);
+        daysSinceLast = Math.floor((now - lastDate) / (1000 * 60 * 60 * 24));
+    }
+
+    // 14-day grid
+    let gridHtml = '';
+    const uniqueDates = new Set(Store.state.history.map(h => h.date));
+    for (let i = 13; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const dStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        const hasSession = uniqueDates.has(dStr);
+        gridHtml += `<div class="adherence-box ${hasSession ? 'active' : ''}" title="${dStr}"></div>`;
+    }
+
+    // Progression Rule Banner
+    let bannerHtml = '';
+    const weeksElapsed = Store.getWeeksElapsed();
+    if (totalSessions >= 2 || weeksElapsed >= 2) {
+        // Read dismissed state
+        const dismissed = localStorage.getItem('punchpower_banner_dismissed') === 'true';
+        if (!dismissed) {
+            bannerHtml = `
+            <div class="progression-banner" id="progressionBanner">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="label-small" style="color: var(--strength-accent); margin-bottom: 4px;">PROGRESSION UNLOCKED</div>
+                        <div style="font-size: 13px; line-height: 1.4;">${workoutData.progression.rules[0]}</div>
+                    </div>
+                    <button class="btn-close" onclick="document.getElementById('progressionBanner').style.display='none'; localStorage.setItem('punchpower_banner_dismissed', 'true');" style="background: none; border: none; color: var(--text-muted); padding: 4px;">✕</button>
+                </div>
+            </div>`;
+        }
+    }
+
+    // Chart SVG Generation
+    // Look for weights in barbell-deadlift (day 1), explosive-db-floor-press (day 1), kettlebell-swings (day 4)
+    const trackExercises = ['barbell-deadlift', 'explosive-db-floor-press', 'kettlebell-swings'];
+    const exLabels = {
+        'barbell-deadlift': 'Deadlift',
+        'explosive-db-floor-press': 'DB Press',
+        'kettlebell-swings': 'KB Swings'
+    };
+    const colors = {
+        'barbell-deadlift': '#3b82f6',
+        'explosive-db-floor-press': '#10b981',
+        'kettlebell-swings': '#f59e0b'
+    };
+    
+    let pointsByEx = { 'barbell-deadlift': [], 'explosive-db-floor-press': [], 'kettlebell-swings': [] };
+    let hasChartData = false;
+    let minWeight = Infinity;
+    let maxWeight = 0;
+
+    Store.state.history.forEach(session => {
+        trackExercises.forEach(exId => {
+            if (session.logs && session.logs[exId] && session.logs[exId].sets) {
+                // Find max weight logged in this session for this exercise
+                let sessionMax = 0;
+                Object.values(session.logs[exId].sets).forEach(set => {
+                    if (set.weight && !isNaN(set.weight)) {
+                        let w = parseFloat(set.weight);
+                        if (w > sessionMax) sessionMax = w;
+                    }
+                });
+                if (sessionMax > 0) {
+                    pointsByEx[exId].push({ date: session.date, weight: sessionMax });
+                    if (sessionMax < minWeight) minWeight = sessionMax;
+                    if (sessionMax > maxWeight) maxWeight = sessionMax;
+                    hasChartData = true;
+                }
+            }
+        });
+    });
+
+    let chartHtml = '';
+    if (!hasChartData) {
+        chartHtml = `<div class="chart-empty">Log your weights in Strength days to track progression.</div>`;
+    } else {
+        // Build simple SVG chart
+        // Normalize min/max for padding
+        minWeight = Math.max(0, minWeight - 10);
+        maxWeight = maxWeight + 10;
+        const range = maxWeight - minWeight;
+        
+        let pathsHtml = '';
+        let pointsHtml = '';
+        const width = 300;
+        const height = 120;
+        
+        trackExercises.forEach(exId => {
+            let pts = pointsByEx[exId];
+            if (pts.length === 0) return;
+            
+            // Sort by date just in case
+            pts.sort((a,b) => new Date(a.date) - new Date(b.date));
+            
+            let d = '';
+            pts.forEach((pt, i) => {
+                let cx = 10 + (pts.length === 1 ? width/2 : (i / (pts.length - 1)) * (width - 20));
+                let cy = height - 10 - ((pt.weight - minWeight) / range) * (height - 20);
+                if (i === 0) d += `M ${cx} ${cy} `;
+                else d += `L ${cx} ${cy} `;
+                
+                pointsHtml += `<circle cx="${cx}" cy="${cy}" r="4" fill="${colors[exId]}" />
+                               <text x="${cx}" y="${cy - 10}" fill="var(--text-secondary)" font-size="10" text-anchor="middle">${pt.weight}</text>`;
+            });
+            pathsHtml += `<path d="${d}" fill="none" stroke="${colors[exId]}" stroke-width="2" />`;
+        });
+        
+        chartHtml = `
+        <div class="chart-wrapper">
+            <svg viewBox="0 0 ${width} ${height}" style="width: 100%; height: 100%; overflow: visible;">
+                ${pathsHtml}
+                ${pointsHtml}
+            </svg>
+            <div class="chart-legend">
+                ${trackExercises.map(exId => pointsByEx[exId].length > 0 ? `<div class="legend-item"><div class="legend-color" style="background: ${colors[exId]}"></div> ${exLabels[exId]}</div>` : '').join('')}
+            </div>
+        </div>`;
+    }
+
+    return `
+        <div class="dashboard">
+            <h2 class="section-header">Progress</h2>
+            ${bannerHtml}
+            
+            <div class="dashboard-stats-row">
+                <div class="card stat-card">
+                    <div class="stat-value">${totalSessions}</div>
+                    <div class="label-small">SESSIONS</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-value">${streak} <span style="font-size: 14px;">days</span></div>
+                    <div class="label-small">STREAK</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-value">${daysSinceLast} <span style="font-size: 14px;">days</span></div>
+                    <div class="label-small">SINCE LAST</div>
+                </div>
+            </div>
+
+            <div class="card dashboard-card">
+                <div class="label-small" style="margin-bottom: var(--sp-4);">WEIGHT PROGRESSION</div>
+                ${chartHtml}
+            </div>
+
+            <div class="card dashboard-card">
+                <div class="label-small" style="margin-bottom: var(--sp-2);">LAST 14 DAYS</div>
+                <div class="adherence-grid">
+                    ${gridHtml}
+                </div>
+            </div>
+        </div>
+    `;
+}
 
 function init() {
     renderHome();
@@ -199,6 +418,9 @@ function renderHome() {
         `;
     });
     html += `</div>`;
+    
+    // Inject Dashboard
+    html += generateDashboardHTML();
 
     // Locked Phase
     if (workoutData.lockedPhase) {
@@ -292,8 +514,8 @@ function renderDay(dayIdRaw) {
             let totalSeconds = day.exercises.reduce((sum, ex) => {
                 let w = ex.workSeconds || 0;
                 let r = ex.restSeconds || 0;
-                let sets = parseInt((ex.setsReps || "1").split(" ")[0]) || 1;
-                return sum + (w + r) * sets;
+                // Bag rounds are executed exactly once per round array element, do not multiply by setsReps
+                return sum + (w + r);
             }, 0);
             if (totalSeconds > 0) totalTime = `${Math.ceil(totalSeconds / 60)} min total`;
         } else if (day.type === 'technical') {
@@ -343,11 +565,21 @@ function renderDay(dayIdRaw) {
         `;
     } else if (day.type === 'technical') {
         day.sections.forEach((sec, idx) => {
-            let drillsHtml = sec.rounds ? sec.rounds.map(r => `
-                <div class="nested-row">
-                    <div class="nested-icon" aria-hidden="true">${icons.checkmark}</div>
-                    <div>${r.round ? `Round ${r.round} — ` : ''}${r.combo}${r.focus ? ` : ${r.focus}` : ''}</div>
-                </div>`).join('') : '';
+            let drillsHtml = sec.rounds ? sec.rounds.map((r, i) => {
+                const log = Store.getItemLog(day.id, r.id) || {};
+                const isChecked = log.completed ? 'checked' : '';
+                const demoBtn = r.videoId
+                    ? `<button class="btn-demo" onclick="openVideoModal('${r.videoId}', '${r.combo.replace(/'/g, "\\'")}', '${r.videoFormat || 'short'}')">
+                           <svg viewBox="0 0 24 24" width="12" height="12"><path fill="currentColor" d="M8 5v14l11-7z"/></svg> Demo
+                       </button>`
+                    : '';
+                return `
+                <div class="nested-row interactive" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}">
+                    <button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
+                    <div style="flex: 1;">${r.round ? `Round ${r.round} — ` : ''}${r.combo}${r.focus ? ` : ${r.focus}` : ''}</div>
+                    ${demoBtn}
+                </div>`;
+            }).join('') : '';
 
             let normalizedItem = {
                 id: sec.id,
@@ -361,18 +593,29 @@ function renderDay(dayIdRaw) {
                 sections: [
                     { title: "DETAILS", content: `<p>${sec.detail}</p>` },
                     { title: "DRILLS", content: `<div class="nested-list">${drillsHtml}</div>` }
-                ]
+                ],
+                actionHtml: `<button class="btn-primary" style="width: 100%;" onclick="startRoundTimer(${day.id}, '${sec.id}', ${sec.workSeconds}, ${sec.restSeconds}, '${sec.name.replace(/'/g, "\\'")}', '')">Start Section Timer</button>`
             };
+            
             html += renderItemCard(normalizedItem, day.type);
         });
     } else if (day.type === 'bag') {
         day.exercises.forEach((ex, idx) => {
-            let roundsHtml = ex.rounds ? ex.rounds.map((r, i) => `
+            let roundsHtml = ex.rounds ? ex.rounds.map((r, i) => {
+                const log = Store.getItemLog(day.id, r.id) || {};
+                const isChecked = log.completed ? 'checked' : '';
+                const demoBtn = r.videoId
+                    ? `<button class="btn-demo" onclick="openVideoModal('${r.videoId}', '${r.combo.replace(/'/g, "\\'")}', 'short')">
+                           <svg viewBox="0 0 24 24" width="12" height="12"><path fill="currentColor" d="M8 5v14l11-7z"/></svg> Demo
+                       </button>`
+                    : '';
+                return `
                 <div class="nested-row">
-                    <div class="nested-icon" aria-hidden="true">${i + 1}</div>
-                    <div>${r.combo}</div>
-                </div>
-            `).join('') : `<div class="nested-row"><div class="nested-icon" aria-hidden="true">1</div><div>${ex.notes}</div></div>`;
+                    <button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
+                    <div style="flex: 1;">${r.combo}</div>
+                    ${demoBtn}
+                </div>`;
+            }).join('') : `<div class="nested-row"><button class="btn-check ${Store.getItemLog(day.id, ex.id)?.completed ? 'checked':''}" onclick="toggleRound(event, ${day.id}, '${ex.id}')">${icons.checkmark}</button><div style="flex:1;">${ex.notes}</div></div>`;
 
             let normalizedItem = {
                 id: ex.id,
@@ -385,7 +628,8 @@ function renderDay(dayIdRaw) {
                 callout: { icon: icons.flame, text: ex.benefits },
                 sections: [
                     { title: "COMBINATIONS", content: `<div class="nested-list">${roundsHtml}</div>` }
-                ]
+                ],
+                actionHtml: `<button class="btn-primary" style="width: 100%; margin-top: var(--sp-4);" onclick="startRoundTimer(${day.id}, '${ex.id}', ${ex.workSeconds}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', '${ex.benefits ? ex.benefits.replace(/'/g, "\\'") : ""}')">Start Round Timer</button>`
             };
             html += renderItemCard(normalizedItem, day.type);
         });
@@ -400,8 +644,38 @@ function renderDay(dayIdRaw) {
                 { icon: icons.weight, value: ex.weight }
             ];
             if (ex.restSeconds) {
+                let m = Math.floor(ex.restSeconds / 60);
+                let s = ex.restSeconds % 60;
+                let text = m > 0 && s > 0 ? `${m} min ${s} sec rest` : m > 0 ? `${m} min rest` : `${s} sec rest`;
                 stats.push("divider");
-                stats.push({ icon: icons.clock, value: `${Math.floor(ex.restSeconds/60)} min rest` });
+                stats.push({ icon: icons.rest, value: text });
+            }
+
+            
+            // Generate Set Logging Rows
+            let setsCount = parseInt((ex.setsReps || "1").split(" ")[0]) || 1;
+            let logHtml = '';
+            const logData = Store.getItemLog(day.id, ex.id) || { sets: {} };
+            for(let s=1; s<=setsCount; s++) {
+                const setData = logData.sets[s] || {};
+                const isChecked = setData.completed ? 'checked' : '';
+                const repsVal = setData.reps || (ex.setsReps.includes('x') ? ex.setsReps.split('x')[1].trim() : '5');
+                const weightVal = setData.weight || ex.weight || '';
+                
+                logHtml += `
+                <div class="set-row ${isChecked}">
+                    <div class="set-num">${s}</div>
+                    <div class="set-input-group">
+                        <input type="text" class="input-val input-weight" value="${weightVal}" placeholder="lbs" />
+                        <span class="input-label">weight</span>
+                    </div>
+                    <div class="set-input-group">
+                        <input type="number" class="input-val input-rep" value="${repsVal}" />
+                        <span class="input-label">reps</span>
+                    </div>
+                    <button class="btn-check ${isChecked}" onclick="logSet(${day.id}, '${ex.id}', ${s}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', 'Drive through the floor explosively — speed matters over weight.', this)">${icons.checkmark}</button>
+                </div>
+                `;
             }
 
             let normalizedItem = {
@@ -411,15 +685,31 @@ function renderDay(dayIdRaw) {
                 stats: stats,
                 callout: { icon: icons.strength, text: "Drive through the floor explosively — speed matters over weight." },
                 sections: [
+                    { title: "LOG SETS", content: logHtml },
                     { title: "EXECUTION NOTES", content: `<p>${ex.notes}</p>` },
                     { title: "WHY THIS EXERCISE", content: `<p>${ex.benefits}</p>` },
                     { title: "MUSCLES WORKED", content: `<div class="muscle-tags">${musclesHtml}</div>` }
                 ]
             };
+            
+            if (ex.videoId) {
+                normalizedItem.actionHtml = `<button class="btn-ghost" style="width: 100%; margin-top: var(--sp-4);" onclick="openVideoModal('${ex.videoId}', '${ex.name.replace(/'/g, "\\'")}', '${ex.videoFormat || 'short'}')">
+                    <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M8 5v14l11-7z"/></svg> Watch Video
+                </button>`;
+            }
+
             html += renderItemCard(normalizedItem, day.type);
         });
     }
+    
     html += `</div>`; // .item-list
+    
+    html += `
+        <div style="margin-top: 32px; margin-bottom: 64px;">
+            <button class="btn-primary" style="width: 100%; padding: 16px; font-size: 16px;" onclick="finishWorkout(${day.id})">Complete Session</button>
+        </div>
+    `;
+
 
     appContainer.innerHTML = html;
 }
@@ -537,5 +827,91 @@ function renderAbout() {
     
     appContainer.innerHTML = html;
 }
+
+// --- YouTube Video Modal Logic ---
+
+function showToast(msg) {
+    let toast = document.getElementById('global-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'global-toast';
+        toast.className = 'toast-notification';
+        document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+let activeVideoReturnFocus = null;
+
+window.openVideoModal = function(videoId, title, format = 'short') {
+    if (!navigator.onLine) {
+        showToast("Video unavailable — connect to the internet to watch");
+        return;
+    }
+    
+    activeVideoReturnFocus = document.activeElement;
+    
+    const overlay = document.createElement('div');
+    overlay.className = 'video-modal-overlay';
+    overlay.id = 'videoModalOverlay';
+    overlay.onclick = function(e) {
+        if (e.target === overlay) closeVideoModal();
+    };
+    
+    // Fallback URL for footer link
+    const fbUrl = `https://www.youtube.com/shorts/${videoId}`;
+    
+    const html = `
+        <div class="video-modal-card">
+            <div class="video-modal-header">
+                <div>
+                    <div class="video-modal-title">${title}</div>
+                    <div class="video-modal-subtitle">EXERCISE DEMO</div>
+                </div>
+                <button class="btn-close-modal" onclick="closeVideoModal()" aria-label="Close video">
+                    <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </button>
+            </div>
+            <div class="video-container format-${format}">
+                <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&loop=1&playlist=${videoId}" 
+                    title="${title} video" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <div class="video-modal-footer">
+                <div style="margin-bottom: 12px;">Video opens on YouTube if embed is blocked. <a href="${fbUrl}" target="_blank" style="color: var(--strength-accent); text-decoration: none;">Watch on YouTube</a></div>
+                <button class="btn-ghost" onclick="closeVideoModal()">Close</button>
+            </div>
+        </div>
+    `;
+    
+    overlay.innerHTML = html;
+    document.body.appendChild(overlay);
+    
+    // Close on Escape key
+    const onEsc = function(e) {
+        if (e.key === 'Escape') {
+            closeVideoModal();
+            document.removeEventListener('keydown', onEsc);
+        }
+    };
+    document.addEventListener('keydown', onEsc);
+};
+
+window.closeVideoModal = function() {
+    const overlay = document.getElementById('videoModalOverlay');
+    if (overlay) {
+        overlay.remove(); // This instantly destroys the iframe and stops the audio
+    }
+    if (activeVideoReturnFocus && typeof activeVideoReturnFocus.focus === 'function') {
+        activeVideoReturnFocus.focus();
+        activeVideoReturnFocus = null;
+    }
+};
 
 document.addEventListener('DOMContentLoaded', init);

@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html><body>
+<script src="timer.js"></script>
+<script>
+    window.Timer.startRest(10, 'Test', 'Cue');
+    console.log("Modal classes before:", window.Timer.modal.className);
+    window.Timer.close();
+    console.log("Modal classes after:", window.Timer.modal.className);
+    console.log("Interval cleared:", window.Timer.intervalId === null);
+</script>
+</body></html>
