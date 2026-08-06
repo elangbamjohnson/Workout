@@ -132,6 +132,11 @@ function renderItemCard(item, dayType) {
                     ${sec.content}
                 </div>
                 `).join('')}
+                ${item.actionHtml ? `
+                <div class="item-action" style="margin-top: var(--sp-4);">
+                    ${item.actionHtml}
+                </div>
+                ` : ''}
             </div>
         </div>
     `;
@@ -583,11 +588,10 @@ function renderDay(dayIdRaw) {
                     { title: "DETAILS", content: `<p>${sec.detail}</p>` },
                     { title: "DRILLS", content: `<div class="nested-list">${drillsHtml}</div>` }
                 ],
-                action: `<button class="btn-primary" style="margin-top: var(--sp-4);" onclick="startRoundTimer(${day.id}, '${sec.id}', ${sec.workSeconds}, ${sec.restSeconds}, '${sec.name.replace(/'/g, "\\'")}', '')">Start Section Timer</button>`
+                actionHtml: `<button class="btn-primary" style="width: 100%;" onclick="startRoundTimer(${day.id}, '${sec.id}', ${sec.workSeconds}, ${sec.restSeconds}, '${sec.name.replace(/'/g, "\\'")}', '')">Start Section Timer</button>`
             };
             
-            // Append action button to the bottom of the card content
-            html += renderItemCard(normalizedItem, day.type).replace('</div>\n        </div>', `    ${normalizedItem.action}\n            </div>\n        </div>`);
+            html += renderItemCard(normalizedItem, day.type);
         });
     } else if (day.type === 'bag') {
         day.exercises.forEach((ex, idx) => {
@@ -675,6 +679,12 @@ function renderDay(dayIdRaw) {
                     { title: "MUSCLES WORKED", content: `<div class="muscle-tags">${musclesHtml}</div>` }
                 ]
             };
+            
+            if (ex.videoId) {
+                normalizedItem.actionHtml = `<button class="btn-ghost" style="width: 100%; margin-top: var(--sp-4);" onclick="openVideoModal('${ex.videoId}', '${ex.name.replace(/'/g, "\\'")}', '${ex.videoFormat || 'short'}')">
+                    <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M8 5v14l11-7z"/></svg> Watch Video
+                </button>`;
+            }
 
             html += renderItemCard(normalizedItem, day.type);
         });
@@ -805,5 +815,91 @@ function renderAbout() {
     
     appContainer.innerHTML = html;
 }
+
+// --- YouTube Video Modal Logic ---
+
+function showToast(msg) {
+    let toast = document.getElementById('global-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'global-toast';
+        toast.className = 'toast-notification';
+        document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+let activeVideoReturnFocus = null;
+
+window.openVideoModal = function(videoId, title, format = 'short') {
+    if (!navigator.onLine) {
+        showToast("Video unavailable — connect to the internet to watch");
+        return;
+    }
+    
+    activeVideoReturnFocus = document.activeElement;
+    
+    const overlay = document.createElement('div');
+    overlay.className = 'video-modal-overlay';
+    overlay.id = 'videoModalOverlay';
+    overlay.onclick = function(e) {
+        if (e.target === overlay) closeVideoModal();
+    };
+    
+    // Fallback URL for footer link
+    const fbUrl = `https://www.youtube.com/shorts/${videoId}`;
+    
+    const html = `
+        <div class="video-modal-card">
+            <div class="video-modal-header">
+                <div>
+                    <div class="video-modal-title">${title}</div>
+                    <div class="video-modal-subtitle">EXERCISE DEMO</div>
+                </div>
+                <button class="btn-close-modal" onclick="closeVideoModal()" aria-label="Close video">
+                    <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </button>
+            </div>
+            <div class="video-container format-${format}">
+                <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&loop=1&playlist=${videoId}" 
+                    title="${title} video" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <div class="video-modal-footer">
+                <div style="margin-bottom: 12px;">Video opens on YouTube if embed is blocked. <a href="${fbUrl}" target="_blank" style="color: var(--strength-accent); text-decoration: none;">Watch on YouTube</a></div>
+                <button class="btn-ghost" onclick="closeVideoModal()">Close</button>
+            </div>
+        </div>
+    `;
+    
+    overlay.innerHTML = html;
+    document.body.appendChild(overlay);
+    
+    // Close on Escape key
+    const onEsc = function(e) {
+        if (e.key === 'Escape') {
+            closeVideoModal();
+            document.removeEventListener('keydown', onEsc);
+        }
+    };
+    document.addEventListener('keydown', onEsc);
+};
+
+window.closeVideoModal = function() {
+    const overlay = document.getElementById('videoModalOverlay');
+    if (overlay) {
+        overlay.remove(); // This instantly destroys the iframe and stops the audio
+    }
+    if (activeVideoReturnFocus && typeof activeVideoReturnFocus.focus === 'function') {
+        activeVideoReturnFocus.focus();
+        activeVideoReturnFocus = null;
+    }
+};
 
 document.addEventListener('DOMContentLoaded', init);

@@ -26,6 +26,8 @@ const workoutData = {
           "benefits": "Builds the raw ground-force production that every punch is ultimately launched from \u2014 the \"engine\" lift of the whole program.",
           "muscles": "Glutes, hamstrings, lower back (erector spinae), traps, forearm grip.",
           "restSeconds": 120,
+          "videoId": "wpS6JYL94tM",
+          "videoFormat": "short",
           "id": "day1-ex1"
         },
         {
@@ -36,6 +38,8 @@ const workoutData = {
           "benefits": "Trains explosive hip extension speed \u2014 the exact \"hip snap\" that generates power in a straight punch. Highest carryover exercise in the whole plan.",
           "muscles": "Glutes, hamstrings, lower back, core.",
           "restSeconds": 105,
+          "videoId": "TIy6s4O2bOY",
+          "videoFormat": "short",
           "id": "day1-ex2"
         },
         {
@@ -46,6 +50,8 @@ const workoutData = {
           "benefits": "Builds leg power and rate of force development \u2014 how fast you can push off the ground, which drives forward weight transfer on a punch.",
           "muscles": "Quads, glutes, calves.",
           "restSeconds": 90,
+          "videoId": "36vnWAkL7ZQ",
+          "videoFormat": "short",
           "id": "day1-ex3"
         },
         {
@@ -56,6 +62,8 @@ const workoutData = {
           "benefits": "Builds single-leg strength and stability \u2014 important because you're always on a staggered stance in boxing, never both feet even.",
           "muscles": "Quads, glutes, hamstrings, hip stabilizers.",
           "restSeconds": 105,
+          "videoId": "or1frhkjBDc",
+          "videoFormat": "short",
           "id": "day1-ex4"
         },
         {
@@ -66,6 +74,8 @@ const workoutData = {
           "benefits": "Trains explosive lateral weight transfer and landing control \u2014 directly mirrors the foot pivot and weight shift used in hooks and slips.",
           "muscles": "Glutes (especially glute medius), quads, ankle stabilizers.",
           "restSeconds": 90,
+          "videoId": "ZkYORFHgRTw",
+          "videoFormat": "short",
           "id": "day1-ex5"
         },
         {
@@ -76,6 +86,8 @@ const workoutData = {
           "benefits": "Trains total-body explosive power and forward drive \u2014 similar to stepping into a power punch.",
           "muscles": "Glutes, hamstrings, quads, calves, core.",
           "restSeconds": 90,
+          "videoId": "v0yrBWA3eEs",
+          "videoFormat": "short",
           "id": "day1-ex6"
         },
         {
@@ -86,6 +98,8 @@ const workoutData = {
           "benefits": "Trains the hip-to-shoulder rotational sequence that powers hooks and crosses \u2014 teaches your body to fire in the correct order (hips, then torso, then arms).",
           "muscles": "Obliques, core, glutes, shoulders.",
           "restSeconds": 90,
+          "videoId": "02c2YLgF8iE",
+          "videoFormat": "short",
           "id": "day1-ex7"
         },
         {
@@ -96,6 +110,8 @@ const workoutData = {
           "benefits": "Builds loaded rotational power with back-foot pivot involved \u2014 closer to a real punch than bodyweight rotation drills.",
           "muscles": "Obliques, core, shoulders, glutes.",
           "restSeconds": 90,
+          "videoId": "e5DP6961WEk",
+          "videoFormat": "short",
           "id": "day1-ex8"
         },
         {
@@ -106,6 +122,8 @@ const workoutData = {
           "benefits": "Builds rotational core control and endurance, which keeps your trunk stable and connected between your hips and shoulders during combinations.",
           "muscles": "Obliques, rectus abdominis.",
           "restSeconds": 60,
+          "videoId": "emS5bqrK2eQ",
+          "videoFormat": "short",
           "id": "day1-ex9"
         }
       ]
@@ -490,6 +508,8 @@ const workoutData = {
           "benefits": "Builds explosive pushing power and shoulder stability \u2014 trains your chest and arms to fire fast, not just strong.",
           "muscles": "Chest, triceps, front shoulders, core.",
           "restSeconds": 90,
+          "videoId": "iO0sT5FDgj4",
+          "videoFormat": "short",
           "id": "day4-ex1"
         },
         {
@@ -500,6 +520,8 @@ const workoutData = {
           "benefits": "Builds pressing power in a shorter, joint-friendly range of motion \u2014 directly transfers to punch extension speed.",
           "muscles": "Chest, triceps, front shoulders.",
           "restSeconds": 90,
+          "videoId": "TvPviMnKg6s",
+          "videoFormat": "short",
           "id": "day4-ex2"
         },
         {
@@ -510,6 +532,8 @@ const workoutData = {
           "benefits": "Builds the \"pull back\" side of punching \u2014 the retraction speed that lets you snap your hand back to guard after a punch, and balances out all the pressing work.",
           "muscles": "Upper back (lats, rhomboids), biceps, rear shoulders.",
           "restSeconds": 90,
+          "videoId": "pyhQJuxxskk",
+          "videoFormat": "short",
           "id": "day4-ex3"
         },
         {
@@ -520,6 +544,8 @@ const workoutData = {
           "benefits": "Trains explosive arm extension speed with zero eccentric braking (you let go of the ball) \u2014 pure power output training.",
           "muscles": "Chest, triceps, front shoulders.",
           "restSeconds": 90,
+          "videoId": "gEov6cxDswM",
+          "videoFormat": "short",
           "id": "day4-ex4"
         },
         {
@@ -530,6 +556,8 @@ const workoutData = {
           "benefits": "Builds anti-rotation core strength \u2014 keeps your torso stable so power from your hips doesn't leak before it reaches your fist.",
           "muscles": "Obliques, deep core, shoulders.",
           "restSeconds": 90,
+          "videoId": "e5DP6961WEk",
+          "videoFormat": "regular",
           "id": "day4-ex5"
         },
         {
@@ -539,7 +567,9 @@ const workoutData = {
           "notes": "Same hip-hinge and hip-snap as the two-hand swing on Day 1, but with one hand on the bell \u2014 this forces your core and obliques to resist rotation while your hips still drive the power, very close to the anti-rotation demand of throwing a straight punch off your rear hand. Switch hands mid-set by letting the bell float briefly in front of you at the top. If 18kg feels too heavy single-arm to control cleanly, drop reps to 5-6/side rather than losing form.",
           "benefits": "Combines hip-snap power with anti-rotation core demand in one movement \u2014 very close to the physical demand of a rear-hand punch.",
           "muscles": "Glutes, hamstrings, obliques, grip, forearms.",
-          "restSeconds": 105,
+          "restSeconds": 90,
+          "videoId": "N9iGxOKl38A",
+          "videoFormat": "short",
           "id": "day4-ex6"
         },
         {
@@ -550,6 +580,8 @@ const workoutData = {
           "benefits": "Trains rotational power through a diagonal plane, which overlaps with hook and uppercut mechanics more than straight-line exercises do.",
           "muscles": "Obliques, core, shoulders, hips.",
           "restSeconds": 75,
+          "videoId": "rgjHOnCgkuk",
+          "videoFormat": "short",
           "id": "day4-ex7"
         },
         {
@@ -560,6 +592,8 @@ const workoutData = {
           "benefits": "Builds lower ab and hip flexor strength, which supports overall core stiffness needed to transfer power without your midsection collapsing.",
           "muscles": "Lower abs, hip flexors, grip.",
           "restSeconds": 60,
+          "videoId": "XgTlyPzuKmQ",
+          "videoFormat": "short",
           "id": "day4-ex8"
         }
       ]
