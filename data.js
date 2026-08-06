@@ -334,27 +334,39 @@ const workoutData = {
           "rounds": [
             {
               "id": "day3-sec1-r1",
-              "combo": "Leg swings (front-back, lateral) \u2014 15 each direction, each leg"
+              "combo": "Leg swings (front-back, lateral) \u2014 15 each direction, each leg",
+              "videoId": "DTXpjDJDoeI",
+              "videoFormat": "short"
             },
             {
               "id": "day3-sec1-r2",
-              "combo": "Hip circles \u2014 10 each direction"
+              "combo": "Hip circles \u2014 10 each direction",
+              "videoId": "jUft857xWzw",
+              "videoFormat": "short"
             },
             {
               "id": "day3-sec1-r3",
-              "combo": "Shoulder circles \u2014 10 each direction"
+              "combo": "Shoulder circles \u2014 10 each direction",
+              "videoId": "rB0qSl1I-fc",
+              "videoFormat": "short"
             },
             {
               "id": "day3-sec1-r4",
-              "combo": "Neck rolls \u2014 5 each direction, slow"
+              "combo": "Neck rolls \u2014 5 each direction, slow",
+              "videoId": "DDt_ig6Iy6E",
+              "videoFormat": "short"
             },
             {
               "id": "day3-sec1-r5",
-              "combo": "Squat to stand \u2014 10 reps, pause at bottom"
+              "combo": "Squat to stand \u2014 10 reps, pause at bottom",
+              "videoId": "B1mCETTy6WA",
+              "videoFormat": "short"
             },
             {
               "id": "day3-sec1-r6",
-              "combo": "Lateral lunge to hip flexor stretch \u2014 5 each side"
+              "combo": "Lateral lunge to hip flexor stretch \u2014 5 each side",
+              "videoId": "lCrd5DSYRnw",
+              "videoFormat": "short"
             }
           ]
         },
@@ -369,11 +381,15 @@ const workoutData = {
           "rounds": [
             {
               "id": "day3-sec2-r1",
-              "combo": "Box step pattern — forward, back, lateral × 5 min"
+              "combo": "Box step pattern — forward, back, lateral × 5 min",
+              "videoId": "M2EN9AH7cDc",
+              "videoFormat": "short"
             },
             {
               "id": "day3-sec2-r2",
-              "combo": "Pivot drills — lead foot pivot (hook position) × 3 min"
+              "combo": "Pivot drills — lead foot pivot (hook position) × 3 min",
+              "videoId": "dN75QUuRI9A",
+              "videoFormat": "short"
             }
           ]
         },
@@ -388,15 +404,21 @@ const workoutData = {
           "rounds": [
             {
               "id": "day3-sec3-r1",
-              "combo": "Slip jab, return cross — 3 min"
+              "combo": "Slip jab, return cross — 3 min",
+              "videoId": "6wJu5xm8VXA",
+              "videoFormat": "short"
             },
             {
               "id": "day3-sec3-r2",
-              "combo": "Roll under hook, return hook — 3 min"
+              "combo": "Roll under hook, return hook — 3 min",
+              "videoId": "-WXGz0Mbcr0",
+              "videoFormat": "short"
             },
             {
               "id": "day3-sec3-r3",
-              "combo": "Parry cross, jab return — 2 min"
+              "combo": "Parry cross, jab return — 2 min",
+              "videoId": "OVdalU7Zd9M",
+              "videoFormat": "short"
             }
           ]
         },
@@ -411,15 +433,21 @@ const workoutData = {
           "rounds": [
             {
               "id": "day3-sec4-r1",
-              "combo": "Round 1 — 1-2 only: Jab-Cross at 60% speed, focus on transition between the two"
+              "combo": "Round 1 — 1-2 only: Jab-Cross at 60% speed, focus on transition between the two",
+              "videoId": "3qSg2evfEQ8",
+              "videoFormat": "short"
             },
             {
               "id": "day3-sec4-r2",
-              "combo": "Round 2 — 1-2-3: Add the hook, feel the hip pivot sequence"
+              "combo": "Round 2 — 1-2-3: Add the hook, feel the hip pivot sequence",
+              "videoId": "REoImtOx--Q",
+              "videoFormat": "short"
             },
             {
               "id": "day3-sec4-r3",
-              "combo": "Round 3 — 1-2-3-2: Add the rear cross return, flow through all four punches smoothly"
+              "combo": "Round 3 — 1-2-3-2: Add the rear cross return, flow through all four punches smoothly",
+              "videoId": "l3e3qeLwC6Q",
+              "videoFormat": "short"
             }
           ]
         },
@@ -434,23 +462,33 @@ const workoutData = {
           "rounds": [
             {
               "id": "day3-sec5-r1",
-              "combo": "Pigeon pose — 60 sec each side"
+              "combo": "Pigeon pose — 60 sec each side",
+              "videoId": "UlyMK4MJ1v4",
+              "videoFormat": "short"
             },
             {
               "id": "day3-sec5-r2",
-              "combo": "Hip flexor stretch (kneeling) — 45 sec each side"
+              "combo": "Hip flexor stretch (kneeling) — 45 sec each side",
+              "videoId": "41ReSOu0dh4",
+              "videoFormat": "short"
             },
             {
               "id": "day3-sec5-r3",
-              "combo": "Chest opener — 60 sec (arms back, open chest)"
+              "combo": "Chest opener — 60 sec (arms back, open chest)",
+              "videoId": "crnw1IKWNZY",
+              "videoFormat": "short"
             },
             {
               "id": "day3-sec5-r4",
-              "combo": "Wrist and forearm stretch — 30 sec each direction"
+              "combo": "Wrist and forearm stretch — 30 sec each direction",
+              "videoId": "n2H09xUYiOQ",
+              "videoFormat": "short"
             },
             {
               "id": "day3-sec5-r5",
-              "combo": "Slow neck rolls — 5 each direction"
+              "combo": "Slow neck rolls — 5 each direction",
+              "videoId": "DGwTMgAapxU",
+              "videoFormat": "short"
             }
           ]
         }

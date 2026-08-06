@@ -568,10 +568,16 @@ function renderDay(dayIdRaw) {
             let drillsHtml = sec.rounds ? sec.rounds.map((r, i) => {
                 const log = Store.getItemLog(day.id, r.id) || {};
                 const isChecked = log.completed ? 'checked' : '';
+                const demoBtn = r.videoId
+                    ? `<button class="btn-demo" onclick="openVideoModal('${r.videoId}', '${r.combo.replace(/'/g, "\\'")}', '${r.videoFormat || 'short'}')">
+                           <svg viewBox="0 0 24 24" width="12" height="12"><path fill="currentColor" d="M8 5v14l11-7z"/></svg> Demo
+                       </button>`
+                    : '';
                 return `
                 <div class="nested-row interactive" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}">
                     <button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
                     <div style="flex: 1;">${r.round ? `Round ${r.round} — ` : ''}${r.combo}${r.focus ? ` : ${r.focus}` : ''}</div>
+                    ${demoBtn}
                 </div>`;
             }).join('') : '';
 
