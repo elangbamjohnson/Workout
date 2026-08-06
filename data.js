@@ -236,19 +236,18 @@ const workoutData = {
           "rounds": [
             {
               "id": "day2-ex4-r1",
-              "combo": "10x Rear Uppercuts \u2014 drive up from the legs, not just the arm"
+              "combo": "10x Rear Uppercuts \u2014 drive up from the legs, not just the arm",
+              "videoId": "RQQX-z11U5M"
             },
             {
               "id": "day2-ex4-r2",
-              "combo": "8x Rear Body Hook to Rear Uppercut \u2014 body then head"
+              "combo": "8x Rear Body Hook to Rear Uppercut \u2014 body then head",
+              "videoId": "BPB5hyY078Q"
             },
             {
               "id": "day2-ex4-r3",
-              "combo": "5x Full Combo: Jab-Cross-Lead Hook-Rear Uppercut"
-            },
-            {
-              "id": "day2-ex4-r4",
-              "combo": "Repeat 2x through the sequence"
+              "combo": "5x Full Combo: Jab-Cross-Lead Hook-Rear Uppercut",
+              "videoId": "7UnRLmstNMU"
             }
           ]
         },
@@ -263,15 +262,18 @@ const workoutData = {
           "rounds": [
             {
               "id": "day2-ex5-r1",
-              "combo": "5x Jab-Cross-Lead Hook (1-2-3)"
+              "combo": "5x Jab-Cross-Lead Hook (1-2-3)",
+              "videoId": "neS7wdvid6E"
             },
             {
               "id": "day2-ex5-r2",
-              "combo": "5x 3-Punch Power Combo: Cross - Lead Hook - Rear Overhand"
+              "combo": "5x 3-Punch Power Combo: Cross - Lead Hook - Rear Overhand",
+              "videoId": "jfrdknkhtJQ"
             },
             {
               "id": "day2-ex5-r3",
-              "combo": "3x 4-Punch Power Combo: Jab - Cross - Lead Hook - Rear Hook"
+              "combo": "3x 4-Punch Power Combo: Jab - Cross - Lead Hook - Rear Hook",
+              "videoId": "AtRf876ShFk"
             },
             {
               "id": "day2-ex5-r4",
@@ -282,9 +284,9 @@ const workoutData = {
         {
           "id": "day2-ex6",
           "name": "Power Endurance Finisher",
-          "setsReps": "3 min",
+          "setsReps": "2 min 45 sec",
           "intensity": "100% on work intervals",
-          "workSeconds": 180,
+          "workSeconds": 165,
           "restSeconds": 0,
           "benefits": "This round tests power under fatigue. Your punch quality at the end of this round is your baseline \u2014 you will improve it over the program.",
           "rounds": [
@@ -306,7 +308,7 @@ const workoutData = {
             },
             {
               "id": "day2-ex6-r5",
-              "combo": "60 sec: Final push \u2014 best combinations, full power"
+              "combo": "45 sec: Final push \u2014 best combinations, full power"
             }
           ]
         }
@@ -358,89 +360,20 @@ const workoutData = {
         },
         {
           "name": "Footwork Patterns",
-          "duration": "12 min",
-          "workSeconds": 720,
+          "duration": "8 min",
+          "workSeconds": 480,
           "restSeconds": 0,
-          "detail": "Boxing footwork is the foundation of power \u2014 you cannot punch hard from bad position.",
-          "cue": "Stay on the balls of your feet. Heels should barely touch the floor. Move like you are standing on hot coals \u2014 light and ready.",
+          "detail": "Boxing footwork is the foundation of power — you cannot punch hard from bad position.",
+          "cue": "Stay on the balls of your feet. Heels should barely touch the floor. Move like you are standing on hot coals — light and ready.",
           "id": "day3-sec2",
           "rounds": [
             {
               "id": "day3-sec2-r1",
-              "combo": "Box step pattern \u2014 forward, back, lateral \u00d7 5 min"
+              "combo": "Box step pattern — forward, back, lateral × 5 min"
             },
             {
               "id": "day3-sec2-r2",
-              "combo": "Pivot drills \u2014 lead foot pivot (hook position) \u00d7 3 min"
-            },
-            {
-              "id": "day3-sec2-r3",
-              "combo": "Angle exits \u2014 step off-line after jab, after cross \u00d7 4 min"
-            }
-          ]
-        },
-        {
-          "name": "Technical combos on bag or pads",
-          "duration": "15 min",
-          "workSeconds": 900,
-          "restSeconds": 0,
-          "detail": "Light-moderate pace, focus on form not power. Roughly 1 min work / 30 sec rest per round.",
-          "rounds": [
-            {
-              "round": 1,
-              "combo": "Jab, cross (1-2)",
-              "focus": "Snapping the jab back to guard",
-              "id": "day3-sec3-r1"
-            },
-            {
-              "round": 2,
-              "combo": "Jab, cross, hook (1-2-3)",
-              "focus": "Smooth hip rotation into the hook",
-              "id": "day3-sec3-r2"
-            },
-            {
-              "round": 3,
-              "combo": "Jab, cross, hook, rear uppercut (1-2-3-4)",
-              "focus": "Level change into the uppercut",
-              "id": "day3-sec3-r3"
-            },
-            {
-              "round": 4,
-              "combo": "Double jab, cross (1-1-2)",
-              "focus": "Rhythm and distance control",
-              "id": "day3-sec3-r4"
-            },
-            {
-              "round": 5,
-              "combo": "Jab, rear hook to body, cross (1-3body-2)",
-              "focus": "Bending knees to get downstairs, not just dropping the head",
-              "id": "day3-sec3-r5"
-            },
-            {
-              "round": 6,
-              "combo": "Slip-jab-cross (defensive entry, optional)",
-              "focus": "Slipping outside/inside before countering",
-              "id": "day3-sec3-r6"
-            }
-          ],
-          "id": "day3-sec3"
-        },
-        {
-          "name": "Combination Drilling",
-          "duration": "10 min (2x5 min rounds)",
-          "workSeconds": 600,
-          "restSeconds": 0,
-          "detail": "Link the mechanics from the previous section into combinations.",
-          "cue": "Each combination should feel smooth \u2014 not mechanical or choppy. If a transition feels awkward, slow down and isolate that transition.",
-          "id": "day3-sec4",
-          "rounds": [
-            {
-              "id": "day3-sec4-r1",
-              "combo": "Round 1 \u2014 1-2 only: Jab-Cross at 60% speed, focus on transition between the two"
-            },
-            {
-              "id": "day3-sec4-r2",
-              "combo": "Round 2 \u2014 1-2-3: Add the hook, feel the hip pivot sequence"
+              "combo": "Pivot drills — lead foot pivot (hook position) × 3 min"
             }
           ]
         },
@@ -450,20 +383,43 @@ const workoutData = {
           "workSeconds": 480,
           "restSeconds": 0,
           "detail": "Slips, rolls, and parries integrated with offense.",
-          "cue": "Defense creates offense. Every defensive movement should end in a position to counter. Do not just evade \u2014 evade and return.",
-          "id": "day3-sec5",
+          "cue": "Defense creates offense. Every defensive movement should end in a position to counter. Do not just evade — evade and return.",
+          "id": "day3-sec3",
           "rounds": [
             {
-              "id": "day3-sec5-r1",
-              "combo": "Slip jab, return cross \u2014 3 min"
+              "id": "day3-sec3-r1",
+              "combo": "Slip jab, return cross — 3 min"
             },
             {
-              "id": "day3-sec5-r2",
-              "combo": "Roll under hook, return hook \u2014 3 min"
+              "id": "day3-sec3-r2",
+              "combo": "Roll under hook, return hook — 3 min"
             },
             {
-              "id": "day3-sec5-r3",
-              "combo": "Parry cross, jab return \u2014 2 min"
+              "id": "day3-sec3-r3",
+              "combo": "Parry cross, jab return — 2 min"
+            }
+          ]
+        },
+        {
+          "name": "Combination Drilling",
+          "duration": "15 min (3x5 min rounds)",
+          "workSeconds": 900,
+          "restSeconds": 0,
+          "detail": "Link mechanics into combinations, building complexity each round.",
+          "cue": "Each combination should feel smooth — not mechanical or choppy. If a transition feels awkward, slow down and isolate that transition.",
+          "id": "day3-sec4",
+          "rounds": [
+            {
+              "id": "day3-sec4-r1",
+              "combo": "Round 1 — 1-2 only: Jab-Cross at 60% speed, focus on transition between the two"
+            },
+            {
+              "id": "day3-sec4-r2",
+              "combo": "Round 2 — 1-2-3: Add the hook, feel the hip pivot sequence"
+            },
+            {
+              "id": "day3-sec4-r3",
+              "combo": "Round 3 — 1-2-3-2: Add the rear cross return, flow through all four punches smoothly"
             }
           ]
         },
@@ -474,27 +430,27 @@ const workoutData = {
           "restSeconds": 0,
           "detail": "Restore range of motion and lower the nervous system.",
           "cue": "Do not skip this. Hip flexor and shoulder mobility directly affect punch mechanics. Athletes who skip cool-downs develop compensatory patterns.",
-          "id": "day3-sec6",
+          "id": "day3-sec5",
           "rounds": [
             {
-              "id": "day3-sec6-r1",
-              "combo": "Pigeon pose \u2014 60 sec each side"
+              "id": "day3-sec5-r1",
+              "combo": "Pigeon pose — 60 sec each side"
             },
             {
-              "id": "day3-sec6-r2",
-              "combo": "Hip flexor stretch (kneeling) \u2014 45 sec each side"
+              "id": "day3-sec5-r2",
+              "combo": "Hip flexor stretch (kneeling) — 45 sec each side"
             },
             {
-              "id": "day3-sec6-r3",
-              "combo": "Chest opener \u2014 60 sec (arms back, open chest)"
+              "id": "day3-sec5-r3",
+              "combo": "Chest opener — 60 sec (arms back, open chest)"
             },
             {
-              "id": "day3-sec6-r4",
-              "combo": "Wrist and forearm stretch \u2014 30 sec each direction"
+              "id": "day3-sec5-r4",
+              "combo": "Wrist and forearm stretch — 30 sec each direction"
             },
             {
-              "id": "day3-sec6-r5",
-              "combo": "Slow neck rolls \u2014 5 each direction"
+              "id": "day3-sec5-r5",
+              "combo": "Slow neck rolls — 5 each direction"
             }
           ]
         }
