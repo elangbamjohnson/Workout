@@ -867,14 +867,14 @@ window.openVideoModal = function(videoId, title, format = 'short') {
     
     const html = `
         <div class="video-modal-card">
-            <div class="video-modal-header">
-                <div>
-                    <div class="video-modal-title">${title}</div>
-                    <div class="video-modal-subtitle">EXERCISE DEMO</div>
-                </div>
-                <button class="btn-close-modal" onclick="closeVideoModal()" aria-label="Close video">
-                    <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-                </button>
+            <!-- Close button: always visible, overlaid top-right -->
+            <button class="btn-close-modal" onclick="closeVideoModal()" aria-label="Close video">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            </button>
+            <!-- Title block — padded right so text clears the X button -->
+            <div style="padding: 12px 60px 8px 16px; flex-shrink: 0;">
+                <div class="video-modal-title">${title}</div>
+                <div class="video-modal-subtitle">EXERCISE DEMO</div>
             </div>
             <div class="video-container format-${format}">
                 <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&loop=1&playlist=${videoId}" 
@@ -884,8 +884,7 @@ window.openVideoModal = function(videoId, title, format = 'short') {
                 </iframe>
             </div>
             <div class="video-modal-footer">
-                <div style="margin-bottom: 12px;">Video opens on YouTube if embed is blocked. <a href="${fbUrl}" target="_blank" style="color: var(--strength-accent); text-decoration: none;">Watch on YouTube</a></div>
-                <button class="btn-ghost" onclick="closeVideoModal()">Close</button>
+                <a href="${fbUrl}" target="_blank" style="color: var(--strength-accent); text-decoration: none; font-size: 12px;">Watch on YouTube ↗</a>
             </div>
         </div>
     `;
