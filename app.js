@@ -58,6 +58,105 @@ window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue) 
     });
 };
 
+
+window.startWarmupTimer = function(dayId, itemId, duration, title, cue, switchSides) {
+    const day = workoutData.days.find(d => d.id === dayId);
+    Timer.startWarmup(duration, title, cue, switchSides, day ? day.type : 'strength', () => {
+        Store.logItem(dayId, itemId, { completed: true });
+        renderDay(viewingDayId);
+    });
+};
+
+window.toggleWarmupExpanded = function() {
+    const isExpanded = sessionStorage.getItem('warmupExpanded') === 'true';
+    if (isExpanded) {
+        sessionStorage.removeItem('warmupExpanded');
+    } else {
+        sessionStorage.setItem('warmupExpanded', 'true');
+    }
+    renderDay(viewingDayId);
+};
+
+function renderWarmup(day) {
+    if (!day.warmup || day.warmup.length === 0) return '';
+    
+    // Auto-expand if any item is completed
+    const hasCompletedItem = day.warmup.some(item => {
+        const logData = Store.getItemLog(day.id, item.id) || {};
+        return logData.completed;
+    });
+    
+    // Explicit user toggle overrides default collapsed state
+    const userExpanded = sessionStorage.getItem('warmupExpanded');
+    
+    let isExpanded = false;
+    if (userExpanded === 'true') {
+        isExpanded = true;
+    } else if (userExpanded === null && hasCompletedItem) {
+        isExpanded = true; // Auto-expand
+    }
+
+    const totalDurationSec = day.warmup.filter(w => w.type === 'timed').reduce((s, w) => s + w.duration, 0);
+    const mins = Math.ceil(totalDurationSec / 60);
+    
+    let html = `
+        <div class="card warmup-card">
+            <div class="warmup-header" onclick="toggleWarmupExpanded()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleWarmupExpanded();}" aria-expanded="${isExpanded}" role="button" tabindex="0">
+                <div class="flex items-center gap-2">
+                    <span class="warmup-label">WARM-UP</span>
+                    <span class="warmup-header-duration">· ~${mins} min</span>
+                </div>
+                <div class="warmup-chevron ${isExpanded ? 'expanded' : ''}" aria-hidden="true">${icons.chevron}</div>
+            </div>
+    `;
+    
+    if (isExpanded) {
+        html += `<div class="warmup-list">`;
+        day.warmup.forEach((item, idx) => {
+            const logData = Store.getItemLog(day.id, item.id) || {};
+            const isCompleted = logData.completed;
+            const isRepBased = item.type === 'reps';
+            
+            let timeOrRepsStr = '';
+            if (isRepBased) {
+                timeOrRepsStr = item.reps;
+            } else {
+                timeOrRepsStr = item.duration >= 60 ? `${Math.floor(item.duration / 60)} min` : `${item.duration} sec`;
+            }
+            
+            html += `
+                <div class="warmup-row">
+                    <div class="warmup-info">
+                        <div class="warmup-title-row">
+                            <h3 class="warmup-name">${item.name}</h3>
+                            ${isRepBased ? `<span class="warmup-reps">${timeOrRepsStr}</span>` : `<span class="warmup-duration">${timeOrRepsStr}</span>`}
+                        </div>
+                        <div class="warmup-cue">${item.cue}</div>
+                    </div>
+                    <div class="warmup-actions">
+                        ${!isRepBased && !isCompleted ? `
+                            <button class="btn-play type-${day.type}" onclick="startWarmupTimer(${day.id}, '${item.id}', ${item.duration}, '${item.name.replace(/'/g, "\\'")}', '${item.cue.replace(/'/g, "\\'")}', ${item.switchSides})">
+                                ▶ Start
+                            </button>
+                        ` : ''}
+                        ${isCompleted ? `
+                            <div class="check-indicator done" onclick="toggleRound(event, ${day.id}, '${item.id}')">${icons.checkmark}</div>
+                        ` : (isRepBased ? `
+                            <div class="check-indicator empty" onclick="toggleRound(event, ${day.id}, '${item.id}')"></div>
+                        ` : `
+                            <div class="check-indicator empty" onclick="toggleRound(event, ${day.id}, '${item.id}')"></div>
+                        `)}
+                    </div>
+                </div>
+            `;
+        });
+        html += `</div>`;
+    }
+    
+    html += `</div>`;
+    return html;
+}
+
 window.finishWorkout = function(dayId) {
     Store.finishWorkout(dayId);
     renderHome();
@@ -74,22 +173,29 @@ let viewingDayId = null;
 function calculateSessionDuration(day) {
     if (day.type === 'rest') return null;
 
+    let warmupSec = 0;
+    if (day.warmup) {
+        warmupSec = day.warmup
+            .filter(w => w.type === 'timed')
+            .reduce((s, w) => s + w.duration, 0);
+    }
+
     if (day.type === 'strength') {
-        // Sum of (sets × restSeconds) per exercise + 10 min warm-up
+        // Sum of (sets × restSeconds) per exercise + warm-up
         let totalSec = day.exercises.reduce((sum, ex) => {
             const sets = parseInt(ex.setsReps) || 0;
             return sum + (sets * (ex.restSeconds || 0));
         }, 0);
-        const mins = Math.ceil(totalSec / 60) + 10;
+        const mins = Math.ceil((totalSec + warmupSec) / 60);
         return `~${mins} min with warm-up`;
     }
 
     if (day.type === 'bag') {
-        // Sum of (workSeconds + restSeconds) per round + 5 min warm-up
+        // Sum of (workSeconds + restSeconds) per round + warm-up
         let totalSec = day.exercises.reduce((sum, ex) => {
             return sum + (ex.workSeconds || 0) + (ex.restSeconds || 0);
         }, 0);
-        const mins = Math.ceil(totalSec / 60) + 5;
+        const mins = Math.ceil((totalSec + warmupSec) / 60);
         return `~${mins} min with warm-up`;
     }
 
@@ -503,14 +609,14 @@ function renderDay(dayIdRaw) {
     // Nav Row
     html += `
         <div class="nav-row">
-            <button class="btn-nav" onclick="renderHome()">${icons.back} Week</button>
-            <div class="flex items-center gap-2">
-                ${prevDay ? `<button class="btn-nav" onclick="renderDay('${prevDay.id}')">${icons.back} Day ${prevDay.id}</button>` : ''}
-                <span class="btn-nav" style="background: transparent; border: none; cursor: default;">${dayIndex + 1} / ${workoutData.days.length}</span>
-                ${nextDay ? `<button class="btn-nav" onclick="renderDay('${nextDay.id}')">Day ${nextDay.id} ${icons.forward}</button>` : ''}
-            </div>
+            <button class="btn-nav" onclick="renderHome()">← Week</button>
+            ${prevDay ? `<button class="btn-nav" onclick="renderDay('${prevDay.id}')">‹ Day ${prevDay.id}</button>` : ''}
+            <span class="nav-indicator">${dayIndex + 1} / ${workoutData.days.length}</span>
+            ${nextDay ? `<button class="btn-nav" onclick="renderDay('${nextDay.id}')">Day ${nextDay.id} ›</button>` : ''}
         </div>
     `;
+    
+    html += renderWarmup(day);
 
     // Header Card
     html += `

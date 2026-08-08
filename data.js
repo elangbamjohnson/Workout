@@ -126,6 +126,72 @@ const workoutData = {
           "videoFormat": "short",
           "id": "day1-ex9"
         }
+      ],
+      "warmup": [
+        {
+          "id": "day1-wu1",
+          "name": "Jump Rope",
+          "type": "timed",
+          "duration": 180,
+          "switchSides": false,
+          "cue": "Easy pace \u2014 this is activation, not cardio"
+        },
+        {
+          "id": "day1-wu2",
+          "name": "Jumping Jacks",
+          "type": "timed",
+          "duration": 30,
+          "switchSides": false,
+          "cue": "Full arm extension overhead on every rep"
+        },
+        {
+          "id": "day1-wu3",
+          "name": "Mountain Climbers",
+          "type": "timed",
+          "duration": 30,
+          "switchSides": false,
+          "cue": "Hips level, drive each knee toward your chest"
+        },
+        {
+          "id": "day1-wu4",
+          "name": "Hip 90/90 Stretch",
+          "type": "timed",
+          "duration": 180,
+          "switchSides": true,
+          "cue": "Sit tall, press the front shin down, feel the hip open"
+        },
+        {
+          "id": "day1-wu5",
+          "name": "Glute Bridges",
+          "type": "reps",
+          "reps": "2 \u00d7 10",
+          "switchSides": false,
+          "cue": "Squeeze glutes hard at the top, hold 1 second"
+        },
+        {
+          "id": "day1-wu6",
+          "name": "Arm Circles",
+          "type": "timed",
+          "duration": 30,
+          "switchSides": false,
+          "cue": "Full range \u2014 front and back, gradually increasing size"
+        },
+        {
+          "id": "day1-wu7",
+          "name": "Bodyweight Squat",
+          "type": "reps",
+          "reps": "10 reps slow",
+          "switchSides": false,
+          "cue": "Pause 2 seconds at the bottom, drive through heels"
+        },
+        {
+          "id": "day1-wu8",
+          "name": "Inchworm",
+          "type": "reps",
+          "reps": "5 reps",
+          "switchSides": false,
+          "cue": "Walk hands out to full plank, walk feet back in \u2014 slow"
+        }
       ]
     },
     {
@@ -292,7 +358,7 @@ const workoutData = {
             },
             {
               "id": "day2-ex5-r4",
-              "combo": "Finish each combo — do not trail off at the end"
+              "combo": "Finish each combo \u2014 do not trail off at the end"
             }
           ]
         },
@@ -329,7 +395,57 @@ const workoutData = {
         }
       ],
       "description": "Pure power application on the heavy bag \u2014 every punch thrown with maximum intent.",
-      "callout": "This is not a cardio session. Every single punch must be thrown with maximum power intent. If you are not slightly winded after each combination, you are not punching hard enough. Quality over quantity \u2014 6 rounds of focused power beats 12 rounds of casual work."
+      "callout": "This is not a cardio session. Every single punch must be thrown with maximum power intent. If you are not slightly winded after each combination, you are not punching hard enough. Quality over quantity \u2014 6 rounds of focused power beats 12 rounds of casual work.",
+      "warmup": [
+        {
+          "id": "day2-wu1",
+          "name": "Jump Rope",
+          "type": "timed",
+          "duration": 120,
+          "switchSides": false,
+          "cue": "Moderate pace \u2014 get your feet and rhythm ready"
+        },
+        {
+          "id": "day2-wu2",
+          "name": "Jumping Jacks",
+          "type": "timed",
+          "duration": 30,
+          "switchSides": false,
+          "cue": "Full arm extension overhead on every rep"
+        },
+        {
+          "id": "day2-wu3",
+          "name": "Mountain Climbers",
+          "type": "timed",
+          "duration": 30,
+          "switchSides": false,
+          "cue": "Hips level, drive each knee toward your chest"
+        },
+        {
+          "id": "day2-wu4",
+          "name": "Arm Circles & Shoulder Rolls",
+          "type": "timed",
+          "duration": 30,
+          "switchSides": false,
+          "cue": "Loosen the shoulder joint \u2014 full range in both directions"
+        },
+        {
+          "id": "day2-wu5",
+          "name": "Hip Rotations",
+          "type": "timed",
+          "duration": 60,
+          "switchSides": true,
+          "cue": "Stand tall, rotate from the hip \u2014 not just the knee"
+        },
+        {
+          "id": "day2-wu6",
+          "name": "Shadowboxing",
+          "type": "timed",
+          "duration": 120,
+          "switchSides": false,
+          "cue": "50% speed \u2014 focus on form and weight transfer, no power"
+        }
+      ]
     },
     {
       "id": 3,
@@ -390,19 +506,19 @@ const workoutData = {
           "duration": "8 min",
           "workSeconds": 480,
           "restSeconds": 0,
-          "detail": "Boxing footwork is the foundation of power — you cannot punch hard from bad position.",
-          "cue": "Stay on the balls of your feet. Heels should barely touch the floor. Move like you are standing on hot coals — light and ready.",
+          "detail": "Boxing footwork is the foundation of power \u2014 you cannot punch hard from bad position.",
+          "cue": "Stay on the balls of your feet. Heels should barely touch the floor. Move like you are standing on hot coals \u2014 light and ready.",
           "id": "day3-sec2",
           "rounds": [
             {
               "id": "day3-sec2-r1",
-              "combo": "Box step pattern — forward, back, lateral × 5 min",
+              "combo": "Box step pattern \u2014 forward, back, lateral \u00d7 5 min",
               "videoId": "M2EN9AH7cDc",
               "videoFormat": "short"
             },
             {
               "id": "day3-sec2-r2",
-              "combo": "Pivot drills — lead foot pivot (hook position) × 3 min",
+              "combo": "Pivot drills \u2014 lead foot pivot (hook position) \u00d7 3 min",
               "videoId": "dN75QUuRI9A",
               "videoFormat": "short"
             }
@@ -414,24 +530,24 @@ const workoutData = {
           "workSeconds": 480,
           "restSeconds": 0,
           "detail": "Slips, rolls, and parries integrated with offense.",
-          "cue": "Defense creates offense. Every defensive movement should end in a position to counter. Do not just evade — evade and return.",
+          "cue": "Defense creates offense. Every defensive movement should end in a position to counter. Do not just evade \u2014 evade and return.",
           "id": "day3-sec3",
           "rounds": [
             {
               "id": "day3-sec3-r1",
-              "combo": "Slip jab, return cross — 3 min",
+              "combo": "Slip jab, return cross \u2014 3 min",
               "videoId": "6wJu5xm8VXA",
               "videoFormat": "short"
             },
             {
               "id": "day3-sec3-r2",
-              "combo": "Roll under hook, return hook — 3 min",
+              "combo": "Roll under hook, return hook \u2014 3 min",
               "videoId": "-WXGz0Mbcr0",
               "videoFormat": "short"
             },
             {
               "id": "day3-sec3-r3",
-              "combo": "Parry cross, jab return — 2 min",
+              "combo": "Parry cross, jab return \u2014 2 min",
               "videoId": "OVdalU7Zd9M",
               "videoFormat": "short"
             }
@@ -443,24 +559,24 @@ const workoutData = {
           "workSeconds": 900,
           "restSeconds": 0,
           "detail": "Link mechanics into combinations, building complexity each round.",
-          "cue": "Each combination should feel smooth — not mechanical or choppy. If a transition feels awkward, slow down and isolate that transition.",
+          "cue": "Each combination should feel smooth \u2014 not mechanical or choppy. If a transition feels awkward, slow down and isolate that transition.",
           "id": "day3-sec4",
           "rounds": [
             {
               "id": "day3-sec4-r1",
-              "combo": "Round 1 — 1-2 only: Jab-Cross at 60% speed, focus on transition between the two",
+              "combo": "Round 1 \u2014 1-2 only: Jab-Cross at 60% speed, focus on transition between the two",
               "videoId": "3qSg2evfEQ8",
               "videoFormat": "short"
             },
             {
               "id": "day3-sec4-r2",
-              "combo": "Round 2 — 1-2-3: Add the hook, feel the hip pivot sequence",
+              "combo": "Round 2 \u2014 1-2-3: Add the hook, feel the hip pivot sequence",
               "videoId": "REoImtOx--Q",
               "videoFormat": "short"
             },
             {
               "id": "day3-sec4-r3",
-              "combo": "Round 3 — 1-2-3-2: Add the rear cross return, flow through all four punches smoothly",
+              "combo": "Round 3 \u2014 1-2-3-2: Add the rear cross return, flow through all four punches smoothly",
               "videoId": "l3e3qeLwC6Q",
               "videoFormat": "short"
             }
@@ -477,31 +593,31 @@ const workoutData = {
           "rounds": [
             {
               "id": "day3-sec5-r1",
-              "combo": "Pigeon pose — 60 sec each side",
+              "combo": "Pigeon pose \u2014 60 sec each side",
               "videoId": "UlyMK4MJ1v4",
               "videoFormat": "short"
             },
             {
               "id": "day3-sec5-r2",
-              "combo": "Hip flexor stretch (kneeling) — 45 sec each side",
+              "combo": "Hip flexor stretch (kneeling) \u2014 45 sec each side",
               "videoId": "41ReSOu0dh4",
               "videoFormat": "short"
             },
             {
               "id": "day3-sec5-r3",
-              "combo": "Chest opener — 60 sec (arms back, open chest)",
+              "combo": "Chest opener \u2014 60 sec (arms back, open chest)",
               "videoId": "crnw1IKWNZY",
               "videoFormat": "short"
             },
             {
               "id": "day3-sec5-r4",
-              "combo": "Wrist and forearm stretch — 30 sec each direction",
+              "combo": "Wrist and forearm stretch \u2014 30 sec each direction",
               "videoId": "n2H09xUYiOQ",
               "videoFormat": "short"
             },
             {
               "id": "day3-sec5-r5",
-              "combo": "Slow neck rolls — 5 each direction",
+              "combo": "Slow neck rolls \u2014 5 each direction",
               "videoId": "DGwTMgAapxU",
               "videoFormat": "short"
             }
@@ -592,10 +708,10 @@ const workoutData = {
         },
         {
           "name": "Landmine Rotational Clean and Press",
-          "setsReps": "3 × 5 each side",
-          "weight": "Bar only (20kg) to start — add 5kg once form is clean and movement is fluid end-to-end",
-          "notes": "Stand side-on to the landmine anchor. Hinge at the hips and grip the top of the bar with the hand furthest from the anchor. Drive through the hips explosively to clean the bar up to shoulder height, rotating your torso as it rises, then press it overhead at full extension. Lower under control back to the hip-hinge start position — do not drop the bar. The movement is one continuous fluid sequence: hinge, clean, rotate, press. If any phase breaks down, stop the set.",
-          "benefits": "The single exercise in this program that trains the full punching kinetic chain in one movement — hip drive, rotational power, and overhead pressing stability combined. The clean component trains the same explosive hip-to-shoulder transfer as a cross or hook, while the press overhead builds shoulder stability under rotational load. Directly transfers to punching power and punch recovery speed.",
+          "setsReps": "3 \u00d7 5 each side",
+          "weight": "Bar only (20kg) to start \u2014 add 5kg once form is clean and movement is fluid end-to-end",
+          "notes": "Stand side-on to the landmine anchor. Hinge at the hips and grip the top of the bar with the hand furthest from the anchor. Drive through the hips explosively to clean the bar up to shoulder height, rotating your torso as it rises, then press it overhead at full extension. Lower under control back to the hip-hinge start position \u2014 do not drop the bar. The movement is one continuous fluid sequence: hinge, clean, rotate, press. If any phase breaks down, stop the set.",
+          "benefits": "The single exercise in this program that trains the full punching kinetic chain in one movement \u2014 hip drive, rotational power, and overhead pressing stability combined. The clean component trains the same explosive hip-to-shoulder transfer as a cross or hook, while the press overhead builds shoulder stability under rotational load. Directly transfers to punching power and punch recovery speed.",
           "muscles": "Glutes, hamstrings, obliques, lats, anterior deltoid, triceps, core.",
           "restSeconds": 105,
           "videoFormat": "short",
@@ -618,13 +734,79 @@ const workoutData = {
           "name": "Hanging leg raises (power stand)",
           "setsReps": "3 x 10",
           "weight": "Bodyweight",
-          "notes": "Hang from the power stand with straight or slightly bent arms. Raise your legs (straight or knees tucked) up toward your chest using your lower abs, avoid swinging — control both the raise and the lower.",
+          "notes": "Hang from the power stand with straight or slightly bent arms. Raise your legs (straight or knees tucked) up toward your chest using your lower abs, avoid swinging \u2014 control both the raise and the lower.",
           "benefits": "Builds lower ab and hip flexor strength, which supports overall core stiffness needed to transfer power without your midsection collapsing.",
           "muscles": "Lower abs, hip flexors, grip.",
           "restSeconds": 60,
           "videoId": "XgTlyPzuKmQ",
           "videoFormat": "short",
           "id": "day4-ex9"
+        }
+      ],
+      "warmup": [
+        {
+          "id": "day4-wu1",
+          "name": "Jump Rope",
+          "type": "timed",
+          "duration": 180,
+          "switchSides": false,
+          "cue": "Easy pace \u2014 this is activation, not cardio"
+        },
+        {
+          "id": "day4-wu2",
+          "name": "Jumping Jacks",
+          "type": "timed",
+          "duration": 30,
+          "switchSides": false,
+          "cue": "Full arm extension overhead on every rep"
+        },
+        {
+          "id": "day4-wu3",
+          "name": "Mountain Climbers",
+          "type": "timed",
+          "duration": 30,
+          "switchSides": false,
+          "cue": "Hips level, drive each knee toward your chest"
+        },
+        {
+          "id": "day4-wu4",
+          "name": "Hip 90/90 Stretch",
+          "type": "timed",
+          "duration": 180,
+          "switchSides": true,
+          "cue": "Sit tall, press the front shin down, feel the hip open"
+        },
+        {
+          "id": "day4-wu5",
+          "name": "Glute Bridges",
+          "type": "reps",
+          "reps": "2 \u00d7 10",
+          "switchSides": false,
+          "cue": "Squeeze glutes hard at the top, hold 1 second"
+        },
+        {
+          "id": "day4-wu6",
+          "name": "Arm Circles",
+          "type": "timed",
+          "duration": 30,
+          "switchSides": false,
+          "cue": "Full range \u2014 front and back, gradually increasing size"
+        },
+        {
+          "id": "day4-wu7",
+          "name": "Bodyweight Squat",
+          "type": "reps",
+          "reps": "10 reps slow",
+          "switchSides": false,
+          "cue": "Pause 2 seconds at the bottom, drive through heels"
+        },
+        {
+          "id": "day4-wu8",
+          "name": "Inchworm",
+          "type": "reps",
+          "reps": "5 reps",
+          "switchSides": false,
+          "cue": "Walk hands out to full plank, walk feet back in \u2014 slow"
         }
       ]
     },
@@ -822,7 +1004,65 @@ const workoutData = {
         }
       ],
       "description": "Higher-volume bag work building power endurance \u2014 maintaining punch quality under accumulated fatigue.",
-      "callout": "Today tests whether your power holds up as you fatigue. The goal is to maintain punch quality through more rounds than Day 2. If your combinations deteriorate significantly in round 5-6, you have found your current power endurance limit \u2014 that is the number to push next week."
+      "callout": "Today tests whether your power holds up as you fatigue. The goal is to maintain punch quality through more rounds than Day 2. If your combinations deteriorate significantly in round 5-6, you have found your current power endurance limit \u2014 that is the number to push next week.",
+      "warmup": [
+        {
+          "id": "day5-wu1",
+          "name": "Jump Rope",
+          "type": "timed",
+          "duration": 120,
+          "switchSides": false,
+          "cue": "Easy pace \u2014 today is about endurance, start fresh"
+        },
+        {
+          "id": "day5-wu2",
+          "name": "Jumping Jacks",
+          "type": "timed",
+          "duration": 30,
+          "switchSides": false,
+          "cue": "Full arm extension overhead on every rep"
+        },
+        {
+          "id": "day5-wu3",
+          "name": "Mountain Climbers",
+          "type": "timed",
+          "duration": 30,
+          "switchSides": false,
+          "cue": "Hips level, drive each knee toward your chest"
+        },
+        {
+          "id": "day5-wu4",
+          "name": "Neck Rolls",
+          "type": "timed",
+          "duration": 30,
+          "switchSides": false,
+          "cue": "Slow and controlled \u2014 5 each direction"
+        },
+        {
+          "id": "day5-wu5",
+          "name": "Shoulder Circles",
+          "type": "timed",
+          "duration": 30,
+          "switchSides": false,
+          "cue": "Full range \u2014 front and back"
+        },
+        {
+          "id": "day5-wu6",
+          "name": "Hip Circles",
+          "type": "timed",
+          "duration": 30,
+          "switchSides": false,
+          "cue": "Wide circles \u2014 loosen the hip joint before bag work"
+        },
+        {
+          "id": "day5-wu7",
+          "name": "Shadowboxing",
+          "type": "timed",
+          "duration": 60,
+          "switchSides": false,
+          "cue": "40% speed \u2014 easy movement, just breathe into the session"
+        }
+      ]
     },
     {
       "id": 6,

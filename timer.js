@@ -148,6 +148,32 @@ window.Timer = {
         this.intervalId = setInterval(() => this.tick(), 100);
     },
 
+
+    startWarmup(duration, title, cue, switchSides, workoutType, onComplete) {
+        this.initAudio();
+        this.mode = 'warmup';
+        this.phase = 'work';
+        this.workoutType = workoutType;
+        this.roundData = { title, cue, switchSides, onComplete };
+        this.totalDuration = duration;
+        this.endTime = Date.now() + duration * 1000;
+        this.hasPlayed10Sec = false;
+        this.lastSpokenSecond = duration;
+        this.createDOM();
+        this.render();
+        this.modal.classList.remove('hidden');
+        this.attachListener();
+        
+        if (switchSides) {
+            window.speakAlert(`${this.roundData.title} — first side, start now`);
+        } else {
+            window.speakAlert(`${this.roundData.title} started`);
+        }
+        
+        this.tick();
+        this.intervalId = setInterval(() => this.tick(), 100);
+    },
+
     startRound(workSec, restSec, title, cue, workoutType = 'bag', onComplete) {
         this.initAudio();
         this.mode = 'round';
@@ -182,13 +208,21 @@ window.Timer = {
             this.lastSpokenSecond = diff;
             const isResting = this.mode === 'rest' || this.phase === 'rest';
             
-            if (diff === 10) {
+            if (this.mode === 'warmup' && this.roundData.switchSides && diff === Math.floor(this.totalDuration / 2)) {
+                window.speakAlert("Switch sides");
+                const timerDisplay = this.modal.querySelector('.timer-display');
+                if (timerDisplay) {
+                    timerDisplay.setAttribute('data-flash', 'SWITCH SIDES');
+                    timerDisplay.classList.add('flash-overlay');
+                    setTimeout(() => timerDisplay.classList.remove('flash-overlay'), 2000);
+                }
+            } else if (diff === 10) {
                 window.speakAlert("Ten seconds");
             } else if (diff < 10) {
                 window.speakAlert(diff.toString());
             } else if (isResting && diff % 5 === 0) {
                 window.speakAlert(diff.toString() + " seconds");
-            } else if (!isResting && (this.totalDuration - diff) > 0 && (this.totalDuration - diff) % 60 === 0) {
+            } else if (!isResting && this.mode !== 'warmup' && (this.totalDuration - diff) > 0 && (this.totalDuration - diff) % 60 === 0) {
                 const elapsedMins = (this.totalDuration - diff) / 60;
                 window.speakAlert(`${elapsedMins} minute${elapsedMins > 1 ? 's' : ''} complete`);
             }
@@ -201,7 +235,15 @@ window.Timer = {
     handleExpire() {
         clearInterval(this.intervalId);
         
-        if (this.mode === 'rest') {
+        if (this.mode === 'warmup') {
+            if (this.roundData.switchSides) {
+                window.speakAlert(`${this.roundData.title} done`);
+            } else {
+                window.speakAlert(`${this.roundData.title} done, move to the next`);
+            }
+            this.playDoubleBeep();
+            this.completeRound();
+        } else if (this.mode === 'rest') {
             window.speakAlert("Rest time ended, get ready");
             this.playDoubleBeep();
             this.close();
