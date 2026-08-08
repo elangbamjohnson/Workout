@@ -468,7 +468,9 @@ body {
 }
 .time-pill.type-technical { color: var(--technical-accent); }
 .time-pill.type-bag { color: var(--bag-accent); }
+.time-pill.type-strength { color: var(--strength-accent); }
 .time-pill svg { width: 12px; height: 12px; fill: currentColor; }
+.session-duration-stat { margin-bottom: var(--sp-3); }
 
 /* Expandable Content Cards */
 .item-list {
