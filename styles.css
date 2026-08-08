@@ -144,13 +144,9 @@ body {
 
 /* Global Header */
 .app-header {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 16px;
   background: var(--bg-page);
   border-bottom: none;
+  width: 100%;
 }
 .header-left {
   display: flex;

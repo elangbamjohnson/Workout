@@ -463,23 +463,25 @@ function clearApp() {
 function updateGlobalHeader(isHome) {
     const headerHtml = `
         <header class="app-header">
-          <div class="header-left">
-            <div class="header-icon">
-              <img src="./assets/boxer-icon.png" alt="Strike First" class="header-icon-img"/>
+          <div class="global-header-inner ${isHome ? 'is-home' : ''}">
+            <div class="header-left">
+              <div class="header-icon">
+                <img src="./assets/boxer-icon.png" alt="Strike First" class="header-icon-img"/>
+              </div>
+              <div class="header-text">
+                <span class="header-title">Strike First</span>
+                <span class="header-subtitle">Strike Hard. No Mercy.</span>
+              </div>
             </div>
-            <div class="header-text">
-              <span class="header-title">Strike First</span>
-              <span class="header-subtitle">Strike Hard. No Mercy.</span>
-            </div>
-          </div>
 
-          <button class="header-info-btn" onclick="renderAbout()" aria-label="About Strike First">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <circle cx="10" cy="10" r="9" stroke="#6b7280" stroke-width="1.4"/>
-              <circle cx="10" cy="6.5" r="1.1" fill="#6b7280"/>
-              <rect x="9.2" y="9" width="1.6" height="5" rx="0.8" fill="#6b7280"/>
-            </svg>
-          </button>
+            <button class="header-info-btn" onclick="renderAbout()" aria-label="About Strike First">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="9" stroke="#6b7280" stroke-width="1.4"/>
+                <circle cx="10" cy="6.5" r="1.1" fill="#6b7280"/>
+                <rect x="9.2" y="9" width="1.6" height="5" rx="0.8" fill="#6b7280"/>
+              </svg>
+            </button>
+          </div>
         </header>
     `;
     document.getElementById('global-header').innerHTML = headerHtml;
