@@ -261,13 +261,22 @@ body {
     background: var(--bg-card);
     border: 1px solid var(--border-card);
     color: var(--text-secondary);
-    padding: 6px 12px;
-    border-radius: var(--radius-pill);
-    font-size: 13px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    min-height: 44px;
+    min-width: 80px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+.btn-nav:hover {
+    color: var(--text-primary);
+    border-color: rgba(255,255,255,0.15);
 }
 
 /* Today Banner */
@@ -404,13 +413,21 @@ body {
 /* Detail Pages */
 .nav-row {
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
     align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    width: 100%;
+    box-sizing: border-box;
     margin-bottom: var(--sp-6);
 }
-.nav-center {
-    font-size: 13px;
-    color: var(--text-secondary);
+.nav-indicator {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    min-width: 36px;
+    text-align: center;
 }
 
 .day-header-card {
@@ -1135,3 +1152,107 @@ body {
     z-index: 3000; opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
 }
 .toast-notification.show { opacity: 1; pointer-events: auto; }
+
+
+/* Warm-up Block Styles */
+.warmup-card {
+    border-top: 2px solid rgba(255,255,255,0.10);
+    margin-bottom: var(--sp-4);
+}
+.warmup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 44px;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 0;
+}
+.warmup-label {
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+.warmup-header-duration {
+    font-size: 13px;
+    font-family: monospace;
+    color: #a3a3ad;
+}
+.warmup-chevron {
+    transition: transform 0.2s ease;
+}
+.warmup-chevron.expanded {
+    transform: rotate(180deg);
+}
+.warmup-list {
+    display: flex;
+    flex-direction: column;
+}
+.warmup-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.warmup-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+.warmup-info {
+    flex: 1;
+    padding-right: var(--sp-3);
+}
+.warmup-title-row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--sp-2);
+    margin-bottom: 4px;
+}
+.warmup-name {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+.warmup-duration, .warmup-reps {
+    font-family: monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+.warmup-cue {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+.warmup-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+}
+
+/* Timer Flash Overlay for Switch Sides */
+.timer-display.flash-overlay {
+    position: relative;
+    color: transparent !important;
+}
+.timer-display.flash-overlay::after {
+    content: attr(data-flash);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--text-primary);
+    font-size: clamp(32px, 8vw, 48px);
+    font-weight: 800;
+    white-space: nowrap;
+    animation: flashScale 0.5s ease-out;
+}
+@keyframes flashScale {
+    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+    50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
