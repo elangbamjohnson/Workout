@@ -71,6 +71,40 @@ let currentDayIndex = jsDay === 0 ? 6 : jsDay - 1;
 let expandedCardIds = new Set();
 let viewingDayId = null;
 
+function calculateSessionDuration(day) {
+    if (day.type === 'rest') return null;
+
+    if (day.type === 'strength') {
+        // Sum of (sets × restSeconds) per exercise + 10 min warm-up
+        let totalSec = day.exercises.reduce((sum, ex) => {
+            const sets = parseInt(ex.setsReps) || 0;
+            return sum + (sets * (ex.restSeconds || 0));
+        }, 0);
+        const mins = Math.ceil(totalSec / 60) + 10;
+        return `~${mins} min with warm-up`;
+    }
+
+    if (day.type === 'bag') {
+        // Sum of (workSeconds + restSeconds) per round + 5 min warm-up
+        let totalSec = day.exercises.reduce((sum, ex) => {
+            return sum + (ex.workSeconds || 0) + (ex.restSeconds || 0);
+        }, 0);
+        const mins = Math.ceil(totalSec / 60) + 5;
+        return `~${mins} min with warm-up`;
+    }
+
+    if (day.type === 'technical') {
+        // Sum of all section workSeconds (warm-up is already Section 1)
+        let totalSec = day.sections.reduce((sum, sec) => {
+            return sum + (sec.workSeconds || 0);
+        }, 0);
+        const mins = Math.ceil(totalSec / 60);
+        return `~${mins} min total`;
+    }
+
+    return null;
+}
+
 function toggleCard(id) {
     if (expandedCardIds.has(id)) {
         expandedCardIds.delete(id);
@@ -486,7 +520,8 @@ function renderDay(dayIdRaw) {
                 <span class="type-badge" aria-hidden="true">${icons[iconName]} ${day.type}</span>
             </div>
             <h1 class="title-page" style="margin-bottom: var(--sp-1);">${day.title}</h1>
-            ${day.subtitle ? `<div class="text-sec" style="margin-bottom: var(--sp-4);">${day.subtitle}</div>` : ''}
+            ${day.subtitle ? `<div class="text-sec" style="margin-bottom: var(--sp-2);">${day.subtitle}</div>` : ''}
+            ${(() => { const dur = calculateSessionDuration(day); return dur ? `<div class="session-duration-stat"><span class="time-pill type-${day.type}">⏱ ${dur}</span></div>` : ''; })()}
             <div class="text-sec" style="line-height: 1.6;">${day.description || (day.note ? day.note.split('—')[0] : 'Pure power application on the heavy bag.')}</div>
         </div>
     `;

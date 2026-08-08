@@ -531,14 +531,14 @@ const workoutData = {
           "id": "day4-ex1"
         },
         {
-          "name": "Explosive DB floor press",
-          "setsReps": "4 x 5",
-          "weight": "5-6kg per dumbbell to start",
-          "notes": "Lie on floor, knees bent, dumbbells at chest level, elbows resting lightly on the floor at the bottom. Press up as explosively as possible, stopping just short of locking out hard, lower under control back to the floor pause position.",
-          "benefits": "Builds pressing power in a shorter, joint-friendly range of motion \u2014 directly transfers to punch extension speed.",
-          "muscles": "Chest, triceps, front shoulders.",
+          "name": "Landmine Single-Arm Push Press",
+          "setsReps": "4 \u00d7 5 each side",
+          "weight": "Bar only (20kg) to start \u2014 add 5kg once the leg drive and lockout are crisp on every rep",
+          "notes": "Stand facing the landmine anchor, feet shoulder-width, bar at shoulder height in one hand. Dip slightly at the knees (not a full squat \u2014 just a quarter dip), then drive explosively through the legs, using that momentum to press the bar forward and upward to full arm extension. Lower under control back to shoulder height, reset your stance, then go again. The power comes from the legs first \u2014 if you're pressing with just your arm, the weight is too heavy. Keep your core braced throughout to prevent excessive trunk lean.",
+          "benefits": "Trains explosive single-arm pressing power with leg drive \u2014 closely mirrors the forward pressing angle and full-body sequencing of throwing a cross or jab. The unilateral nature also trains anti-rotation core stability on the non-pressing side, similar to the demand of punching from a boxing stance.",
+          "muscles": "Anterior deltoid, triceps, glutes, quads, core (anti-rotation).",
           "restSeconds": 90,
-          "videoId": "TvPviMnKg6s",
+          "videoId": "eXD70Z14c34",
           "videoFormat": "short",
           "id": "day4-ex2"
         },
@@ -591,6 +591,18 @@ const workoutData = {
           "id": "day4-ex6"
         },
         {
+          "name": "Landmine Rotational Clean and Press",
+          "setsReps": "3 × 5 each side",
+          "weight": "Bar only (20kg) to start — add 5kg once form is clean and movement is fluid end-to-end",
+          "notes": "Stand side-on to the landmine anchor. Hinge at the hips and grip the top of the bar with the hand furthest from the anchor. Drive through the hips explosively to clean the bar up to shoulder height, rotating your torso as it rises, then press it overhead at full extension. Lower under control back to the hip-hinge start position — do not drop the bar. The movement is one continuous fluid sequence: hinge, clean, rotate, press. If any phase breaks down, stop the set.",
+          "benefits": "The single exercise in this program that trains the full punching kinetic chain in one movement — hip drive, rotational power, and overhead pressing stability combined. The clean component trains the same explosive hip-to-shoulder transfer as a cross or hook, while the press overhead builds shoulder stability under rotational load. Directly transfers to punching power and punch recovery speed.",
+          "muscles": "Glutes, hamstrings, obliques, lats, anterior deltoid, triceps, core.",
+          "restSeconds": 105,
+          "videoFormat": "short",
+          "videoId": "kYj_kuUCla4",
+          "id": "day4-ex7"
+        },
+        {
           "name": "Dumbbell woodchoppers (explosive)",
           "setsReps": "3 x 8/side",
           "weight": "One dumbbell, 5-6kg",
@@ -600,19 +612,19 @@ const workoutData = {
           "restSeconds": 75,
           "videoId": "rgjHOnCgkuk",
           "videoFormat": "short",
-          "id": "day4-ex7"
+          "id": "day4-ex8"
         },
         {
           "name": "Hanging leg raises (power stand)",
           "setsReps": "3 x 10",
           "weight": "Bodyweight",
-          "notes": "Hang from the power stand with straight or slightly bent arms. Raise your legs (straight or knees tucked) up toward your chest using your lower abs, avoid swinging \u2014 control both the raise and the lower.",
+          "notes": "Hang from the power stand with straight or slightly bent arms. Raise your legs (straight or knees tucked) up toward your chest using your lower abs, avoid swinging — control both the raise and the lower.",
           "benefits": "Builds lower ab and hip flexor strength, which supports overall core stiffness needed to transfer power without your midsection collapsing.",
           "muscles": "Lower abs, hip flexors, grip.",
           "restSeconds": 60,
           "videoId": "XgTlyPzuKmQ",
           "videoFormat": "short",
-          "id": "day4-ex8"
+          "id": "day4-ex9"
         }
       ]
     },
