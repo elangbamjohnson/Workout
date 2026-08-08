@@ -462,22 +462,25 @@ function clearApp() {
 
 function updateGlobalHeader(isHome) {
     const headerHtml = `
-        <div class="global-header-inner ${isHome ? 'is-home' : ''}">
-            <div class="flex items-center gap-3">
-                <div class="header-logo-box" style="margin:0;">
-                    ${icons.strength}
-                </div>
-                <div>
-                    <div style="font-weight: 700; font-size: 16px; color: #fff;">PunchPower</div>
-                    <div class="text-sec" style="font-size: 12px; margin-top: 2px;">Explosive Power · Phase 1</div>
-                </div>
+        <header class="app-header">
+          <div class="header-left">
+            <div class="header-icon">
+              <img src="./assets/boxer-icon.png" alt="Strike First" class="header-icon-img"/>
             </div>
-            <div class="header-pills">
-                <div class="pill pill-accent"><div class="dot"></div> Phase 1 of 3</div>
-                <div class="pill">Week 1</div>
-                <button class="pill" onclick="renderAbout()">${icons.info} About</button>
+            <div class="header-text">
+              <span class="header-title">Strike First</span>
+              <span class="header-subtitle">Strike Hard. No Mercy.</span>
             </div>
-        </div>
+          </div>
+
+          <button class="header-info-btn" onclick="renderAbout()" aria-label="About Strike First">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="10" r="9" stroke="#6b7280" stroke-width="1.4"/>
+              <circle cx="10" cy="6.5" r="1.1" fill="#6b7280"/>
+              <rect x="9.2" y="9" width="1.6" height="5" rx="0.8" fill="#6b7280"/>
+            </svg>
+          </button>
+        </header>
     `;
     document.getElementById('global-header').innerHTML = headerHtml;
 }
@@ -866,13 +869,12 @@ function renderAbout() {
     html += `
         <div class="card about-card" style="padding: var(--sp-6);">
             <div class="flex items-center gap-4">
-                <div class="header-logo-box" style="width: 48px; height: 48px; border-radius: 12px; margin: 0; flex-shrink: 0;">
-                    <svg viewBox="0 0 24 24" style="fill: #fff; width: 24px; height: 24px;"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>
+                <div class="header-icon" style="width: 48px; height: 48px; border-radius: 12px; margin: 0; flex-shrink: 0; background: #E8643A; display: flex; align-items: center; justify-content: center;">
+                    <img src="./assets/boxer-icon.png" style="width: 32px; height: 32px; object-fit: contain; filter: brightness(0) invert(1);"/>
                 </div>
                 <div style="text-align: left;">
-                    <div class="label-small" style="margin-bottom: 4px;">PHASE 1 OF 3</div>
-                    <h1 class="title-page" style="margin-bottom: 2px; font-size: 24px;">Explosive Punching Power</h1>
-                    <div class="text-sec">7 Days · Foundation Phase</div>
+                    <h1 class="title-page" style="margin-bottom: 2px; font-size: 24px;">Strike First</h1>
+                    <div class="text-sec">Strike Hard. No Mercy.</div>
                 </div>
             </div>
         </div>
@@ -960,8 +962,11 @@ function renderAbout() {
     
     html += `
         <div style="display: flex; justify-content: center; margin-top: var(--sp-6);">
-            <button class="btn-primary" style="padding: 12px 24px;" onclick="renderHome()">
-                ${icons.back} Back to This Week
+            <button class="back-to-week-btn" onclick="renderHome()">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                    <path d="M10 3L5 8L10 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Back to This Week
             </button>
         </div>
     `;
