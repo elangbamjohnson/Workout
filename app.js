@@ -506,10 +506,12 @@ function clearApp() {
     appContainer.innerHTML = '';
 }
 
-function updateGlobalHeader(isHome) {
-    const headerHtml = `
-        <header class="app-header">
-          <div class="global-header-inner ${isHome ? 'is-home' : ''}">
+function updateGlobalHeader(isHome, day = null, dayIndex = 0, totalDays = 7) {
+    let innerHtml = '';
+    
+    if (isHome || !day) {
+        innerHtml = `
+          <div class="global-header-inner is-home">
             <div class="header-left">
               <div class="header-icon">
                 <img src="./assets/boxer-icon.png" alt="Strike First" class="header-icon-img"/>
@@ -528,6 +530,45 @@ function updateGlobalHeader(isHome) {
               </svg>
             </button>
           </div>
+        `;
+    } else {
+        const hasPrev = dayIndex > 0;
+        const hasNext = dayIndex < totalDays - 1;
+        const prevId = hasPrev ? 'day' + (dayIndex) : '';
+        const nextId = hasNext ? 'day' + (dayIndex + 2) : '';
+        
+        innerHtml = `
+          <div class="nav-day">
+            <button class="nav-back-btn" onclick="renderHome()" aria-label="Back to Week">
+              <svg width="10" height="16" viewBox="0 0 10 16" fill="none">
+                <path d="M8 2L2 8L8 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Week
+            </button>
+
+            <span class="nav-day-title">
+              ${day.title}
+            </span>
+
+            <div class="nav-day-arrows">
+              <button class="nav-arrow-btn" onclick="renderDay('${prevId}')" aria-label="Previous day" ${hasPrev ? '' : 'disabled'}>
+                <svg width="10" height="16" viewBox="0 0 10 16" fill="none">
+                  <path d="M8 2L2 8L8 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <button class="nav-arrow-btn" onclick="renderDay('${nextId}')" aria-label="Next day" ${hasNext ? '' : 'disabled'}>
+                <svg width="10" height="16" viewBox="0 0 10 16" fill="none">
+                  <path d="M2 2L8 8L2 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        `;
+    }
+
+    const headerHtml = `
+        <header class="app-header">
+            ${innerHtml}
         </header>
     `;
     document.getElementById('global-header').innerHTML = headerHtml;
@@ -654,7 +695,7 @@ function renderDay(dayIdRaw) {
 
     clearApp();
     appContainer.className = '';
-    updateGlobalHeader(false);
+    updateGlobalHeader(false, day, dayIndex, workoutData.days.length);
     let html = '';
 
     // Nav Row

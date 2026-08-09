@@ -1317,3 +1317,89 @@ body {
     transform: scale(0.96);
     filter: brightness(0.9);
 }
+
+
+/* ── Day nav (day view) ── */
+.nav-day {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 8px;
+  padding: 14px 16px;
+}
+
+/* Back button — ‹ Week */
+.nav-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #E8643A;
+  font-size: 16px;
+  font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 0;
+  min-width: 64px;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-back-btn:active {
+  opacity: 0.6;
+}
+
+/* Center day title */
+.nav-day-title {
+  flex: 1;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 8px;
+}
+
+/* Prev/Next arrow buttons */
+.nav-day-arrows {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.nav-arrow-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.15s ease;
+}
+
+.nav-arrow-btn:active {
+  opacity: 0.6;
+  transform: scale(0.94);
+}
+
+.nav-arrow-btn:disabled {
+  opacity: 0.25;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* Hide old inline nav bar */
+.nav-row {
+  display: none !important;
+}
