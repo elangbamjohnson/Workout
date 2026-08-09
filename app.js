@@ -115,25 +115,12 @@ window.startWarmupTimer = function(dayId, itemId, duration, title, cue, switchSi
 
 window.toggleWarmupExpanded = function() {
     const isExpanded = sessionStorage.getItem('warmupExpanded') === 'true';
-    const card = document.querySelector('.warmup-card');
-    const chevron = document.querySelector('.warmup-chevron');
-    const content = document.querySelector('.collapsible-content');
-    
     if (isExpanded) {
         sessionStorage.removeItem('warmupExpanded');
-        if (card) {
-            chevron.classList.remove('expanded');
-            content.classList.remove('expanded');
-            document.querySelector('.warmup-header').setAttribute('aria-expanded', 'false');
-        }
     } else {
         sessionStorage.setItem('warmupExpanded', 'true');
-        if (card) {
-            chevron.classList.add('expanded');
-            content.classList.add('expanded');
-            document.querySelector('.warmup-header').setAttribute('aria-expanded', 'true');
-        }
     }
+    renderDay(viewingDayId);
 };
 
 function renderWarmup(day) {
@@ -169,8 +156,8 @@ function renderWarmup(day) {
             </div>
     `;
     
-    html += `<div class="collapsible-content ${isExpanded ? 'expanded' : ''}">`;
-    html += `<div class="warmup-list">`;
+    if (isExpanded) {
+        html += `<div class="warmup-list">`;
         day.warmup.forEach((item, idx) => {
             const logData = Store.getItemLog(day.id, item.id) || {};
             const isCompleted = logData.completed;
@@ -210,7 +197,7 @@ function renderWarmup(day) {
             `;
         });
         html += `</div>`;
-    html += `</div>`; // .collapsible-content
+    }
     
     html += `</div>`;
     return html;
@@ -271,19 +258,14 @@ function calculateSessionDuration(day) {
 }
 
 function toggleCard(id) {
-    const card = document.querySelector(`.item-card[data-id="${id}"]`);
     if (expandedCardIds.has(id)) {
         expandedCardIds.delete(id);
-        if (card) {
-            card.classList.remove('expanded');
-            card.querySelector('.item-header').setAttribute('aria-expanded', 'false');
-        }
     } else {
         expandedCardIds.add(id);
-        if (card) {
-            card.classList.add('expanded');
-            card.querySelector('.item-header').setAttribute('aria-expanded', 'true');
-        }
+    }
+    // Re-render the currently viewed day to reflect state
+    if (document.getElementById('app-container').className === '' && viewingDayId !== null) {
+        renderDay(viewingDayId);
     }
 }
 
@@ -324,7 +306,6 @@ function renderItemCard(item, dayType) {
                     }).join('')}
                 </div>
             </button>
-            <div class="collapsible-content ${isExpanded ? 'expanded' : ''}">
             <div class="item-content">
                 ${item.callout ? `
                 <div class="item-callout" style="margin-bottom: var(--sp-4);">
@@ -342,7 +323,6 @@ function renderItemCard(item, dayType) {
                     ${item.actionHtml}
                 </div>
                 ` : ''}
-            </div>
             </div>
         </div>
     `;
@@ -555,7 +535,7 @@ function updateGlobalHeader(isHome) {
 
 function renderHome() {
     clearApp();
-    appContainer.className = 'is-home page-view';
+    appContainer.className = 'is-home';
     updateGlobalHeader(true);
     let html = '';
     
@@ -592,7 +572,7 @@ function renderHome() {
                     <div class="text-sec" style="font-size: 13px; margin-top: 2px;">${today.note || "Pure power application"}</div>
                 </div>
             </div>
-            <button class="btn-primary" onclick="navigateToDay()">Start ${icons.forward}</button>
+            <button class="btn-primary" onclick="renderDay(${today.id})">Start ${icons.forward}</button>
         </div>
     `;
 
@@ -673,17 +653,17 @@ function renderDay(dayIdRaw) {
     const nextDay = dayIndex < workoutData.days.length - 1 ? workoutData.days[dayIndex + 1] : null;
 
     clearApp();
-    appContainer.className = 'page-view';
+    appContainer.className = '';
     updateGlobalHeader(false);
     let html = '';
 
     // Nav Row
     html += `
         <div class="nav-row">
-            <button class="btn-nav" onclick="navigateToHome()">← Week</button>
-            ${prevDay ? `<button class="btn-nav" onclick="navigateToDay()">‹ Day ${prevDay.id}</button>` : ''}
+            <button class="btn-nav" onclick="renderHome()">← Week</button>
+            ${prevDay ? `<button class="btn-nav" onclick="renderDay('${prevDay.id}')">‹ Day ${prevDay.id}</button>` : ''}
             <span class="nav-indicator">${dayIndex + 1} / ${workoutData.days.length}</span>
-            ${nextDay ? `<button class="btn-nav" onclick="navigateToDay()">Day ${nextDay.id} ›</button>` : ''}
+            ${nextDay ? `<button class="btn-nav" onclick="renderDay('${nextDay.id}')">Day ${nextDay.id} ›</button>` : ''}
         </div>
     `;
     
@@ -928,11 +908,11 @@ function renderDay(dayIdRaw) {
 
 function renderAbout() {
     clearApp();
-    appContainer.className = 'page-view';
+    appContainer.className = '';
     updateGlobalHeader(false);
     let html = '';
     
-    html += `<button class="btn-nav" style="margin-bottom: var(--sp-6);" onclick="navigateToHome()">${icons.back} Back to Week</button>`;
+    html += `<button class="btn-nav" style="margin-bottom: var(--sp-6);" onclick="renderHome()">${icons.back} Back to Week</button>`;
     
     html += `
         <div class="card about-card" style="padding: var(--sp-6);">
@@ -1030,7 +1010,7 @@ function renderAbout() {
     
     html += `
         <div style="display: flex; justify-content: center; margin-top: var(--sp-6);">
-            <button class="back-to-week-btn" onclick="navigateToHome()">
+            <button class="back-to-week-btn" onclick="renderHome()">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
                     <path d="M10 3L5 8L10 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -1128,27 +1108,3 @@ window.closeVideoModal = function() {
 };
 
 document.addEventListener('DOMContentLoaded', init);
-
-window.navigateToHome = function() {
-    const currentView = document.getElementById('app-container');
-    currentView.classList.add('transitioning');
-    setTimeout(() => {
-        renderHome();
-        currentView.classList.add('transitioning');
-        requestAnimationFrame(() => {
-            currentView.classList.remove('transitioning');
-        });
-    }, 200);
-};
-
-window.navigateToDay = function(dayIdRaw) {
-    const currentView = document.getElementById('app-container');
-    currentView.classList.add('transitioning');
-    setTimeout(() => {
-        renderDay(dayIdRaw);
-        currentView.classList.add('transitioning');
-        requestAnimationFrame(() => {
-            currentView.classList.remove('transitioning');
-        });
-    }, 200);
-};
