@@ -44,8 +44,40 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body { background-color: #0a0a0a; margin: 0; }
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #0a0a0a;
+            z-index: 999999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s ease-out;
+        }
+        #splash-screen img {
+            width: 80px;
+            height: 80px;
+            border-radius: 18px;
+            margin-bottom: 16px;
+        }
+        #splash-screen h1 {
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+    </style>
 </head>
 <body>
+    <div id="splash-screen">
+        <img src="./assets/icon-192.png" alt="Strike First Logo">
+        <h1>Strike First</h1>
+    </div>
     <div id="global-header" class="global-header-wrapper"></div>
     <div id="app-container">
         <!-- Views will be dynamically injected here -->

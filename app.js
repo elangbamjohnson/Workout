@@ -1149,3 +1149,18 @@ window.closeVideoModal = function() {
 };
 
 document.addEventListener('DOMContentLoaded', init);
+
+
+// Splash Screen Logic
+window.addEventListener('load', () => {
+    const splash = document.getElementById('splash-screen');
+    if (splash) {
+        // Add a slight delay so it feels like a real app loading
+        setTimeout(() => {
+            splash.style.opacity = '0';
+            setTimeout(() => {
+                splash.remove();
+            }, 400); // Matches the CSS transition duration
+        }, 600);
+    }
+});
