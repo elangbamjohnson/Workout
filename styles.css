@@ -1403,3 +1403,8 @@ body {
 }
 
 
+
+/* Hide old inline nav bar */
+.nav-row {
+  display: none !important;
+}
