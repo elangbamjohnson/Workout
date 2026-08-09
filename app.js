@@ -17,6 +17,52 @@ const icons = {
     repeat: `<svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>`
 };
 
+const WakeLock = {
+  _sentinel: null,
+
+  async acquire() {
+    if (!('wakeLock' in navigator)) {
+      console.log('[WakeLock] Not supported on this browser');
+      return;
+    }
+    try {
+      this._sentinel = await navigator.wakeLock.request('screen');
+      console.log('[WakeLock] Acquired');
+
+      this._sentinel.addEventListener('release', () => {
+        console.log('[WakeLock] Released by system');
+      });
+    } catch (err) {
+      console.warn('[WakeLock] Could not acquire:', err.message);
+    }
+  },
+
+  async release() {
+    if (this._sentinel) {
+      await this._sentinel.release();
+      this._sentinel = null;
+      console.log('[WakeLock] Released');
+    }
+  },
+
+  handleVisibilityChange() {
+    if (document.visibilityState === 'visible' && this._sentinel === null) {
+      if (window.Timer && window.Timer.intervalId !== null) {
+        this.acquire();
+      }
+    }
+  }
+};
+
+window.WakeLock = WakeLock;
+
+document.addEventListener('visibilitychange', () => {
+  WakeLock.handleVisibilityChange();
+});
+
+window.addEventListener('pagehide', () => {
+  WakeLock.release();
+});
 
 // Phase 2 bindings
 window.logSet = function(dayId, itemId, setIndex, restSec, title, cue, btn) {

@@ -146,6 +146,7 @@ window.Timer = {
         window.speakAlert("Rest time started");
         this.tick();
         this.intervalId = setInterval(() => this.tick(), 100);
+        if (window.WakeLock) window.WakeLock.acquire();
     },
 
 
@@ -172,6 +173,7 @@ window.Timer = {
         
         this.tick();
         this.intervalId = setInterval(() => this.tick(), 100);
+        if (window.WakeLock) window.WakeLock.acquire();
     },
 
     startRound(workSec, restSec, title, cue, workoutType = 'bag', onComplete) {
@@ -195,6 +197,7 @@ window.Timer = {
         }
         this.tick();
         this.intervalId = setInterval(() => this.tick(), 100);
+        if (window.WakeLock) window.WakeLock.acquire();
     },
 
     tick() {
@@ -305,6 +308,7 @@ window.Timer = {
 
     close() {
         console.log('END ROUND EARLY FIRED', Date.now());
+        if (window.WakeLock) window.WakeLock.release();
         if (this.intervalId) {
             clearInterval(this.intervalId);
             this.intervalId = null;
