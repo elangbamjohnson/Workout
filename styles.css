@@ -71,9 +71,10 @@ body {
     left: 0;
     right: 0;
     z-index: 9999;
-    background: rgba(10, 10, 10, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(10, 10, 10, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     padding-top: env(safe-area-inset-top);
     box-sizing: border-box;
 }
@@ -149,7 +150,7 @@ body {
 
 /* Global Header */
 .app-header {
-  background: var(--bg-page);
+  background: transparent;
   border-bottom: none;
   width: 100%;
 }
