@@ -66,11 +66,14 @@ body {
 }
 
 .global-header-wrapper {
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 100;
-    background: var(--bg-page);
-    border-bottom: none;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 .global-header-inner {
     max-width: 1000px;
@@ -90,9 +93,9 @@ body {
 }
 
 #app-container {
-    max-width: 1000px; /* Default max-width for detail and about pages */
+    max-width: 1000px;
     margin: 0 auto;
-    padding: var(--sp-8) var(--sp-4) var(--sp-12) var(--sp-4);
+    padding: 70px var(--sp-4) var(--sp-12) var(--sp-4);
 }
 
 #app-container.is-home {
