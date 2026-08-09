@@ -1,4 +1,5 @@
-const sharp = require('sharp');
+const { createCanvas, loadImage } = require('canvas');
+const fs = require('fs');
 
 async function generateIcons() {
   const sizes = [192, 512];
@@ -7,40 +8,35 @@ async function generateIcons() {
     const iconSize = Math.round(size * 0.62);
     const padding = Math.floor((size - iconSize) / 2);
 
-    // Create orange background canvas at EXACT size
-    const background = {
-      create: {
-        width: size,
-        height: size,
-        channels: 4,
-        background: { r: 232, g: 100, b: 58, alpha: 255 }
-      }
-    };
+    const canvas = createCanvas(size, size);
+    const ctx = canvas.getContext('2d');
 
-    // Resize boxer icon to fit inside with padding
-    const boxerResized = await sharp('./assets/boxer-icon.png')
-      .resize(iconSize, iconSize, {
-        fit: 'contain',
-        background: { r: 0, g: 0, b: 0, alpha: 0 }
-      })
-      // Make it white
-      .flatten({ background: { r: 255, g: 255, b: 255 } })
-      .toBuffer();
+    // Orange background
+    ctx.fillStyle = '#E8643A';
+    ctx.fillRect(0, 0, size, size);
 
-    // Composite onto orange background at exact size
-    await sharp(background)
-      .composite([{
-        input: boxerResized,
-        top: padding,
-        left: padding
-      }])
-      .resize(size, size)   // force exact output size
-      .png()
-      .toFile(`./assets/icon-${size}.png`);
+    // Boxer icon (white)
+    const img = await loadImage('./assets/boxer-icon.png');
+    
+    // Draw icon into an offscreen canvas to tint it white
+    const offscreen = createCanvas(iconSize, iconSize);
+    const off = offscreen.getContext('2d');
 
-    // Verify
-    const meta = await sharp(`./assets/icon-${size}.png`).metadata();
-    console.log(`icon-${size}.png → ${meta.width}×${meta.height}px ✅`);
+    // Fill white, then use destination-in to cut out icon shape
+    off.fillStyle = '#ffffff';
+    off.fillRect(0, 0, iconSize, iconSize);
+    off.globalCompositeOperation = 'destination-in';
+    off.drawImage(img, 0, 0, iconSize, iconSize);
+
+    // Composite white icon onto orange square
+    ctx.drawImage(offscreen, padding, padding);
+
+    // Save
+    const buffer = canvas.toBuffer('image/png');
+    fs.writeFileSync(`./assets/icon-${size}.png`, buffer);
+    fs.writeFileSync(`./assets/icon-${size}-maskable.png`, buffer);
+    
+    console.log(`icon-${size}.png & icon-${size}-maskable.png generated`);
   }
 }
 
