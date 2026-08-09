@@ -534,8 +534,8 @@ function updateGlobalHeader(isHome, day = null, dayIndex = 0, totalDays = 7) {
     } else {
         const hasPrev = dayIndex > 0;
         const hasNext = dayIndex < totalDays - 1;
-        const prevId = hasPrev ? 'day' + (dayIndex) : '';
-        const nextId = hasNext ? 'day' + (dayIndex + 2) : '';
+        const prevId = hasPrev ? workoutData.days[dayIndex - 1].id : null;
+        const nextId = hasNext ? workoutData.days[dayIndex + 1].id : null;
         
         innerHtml = `
           <div class="nav-day">
@@ -551,12 +551,12 @@ function updateGlobalHeader(isHome, day = null, dayIndex = 0, totalDays = 7) {
             </span>
 
             <div class="nav-day-arrows">
-              <button class="nav-arrow-btn" onclick="renderDay('${prevId}')" aria-label="Previous day" ${hasPrev ? '' : 'disabled'}>
+              <button class="nav-arrow-btn" onclick="${hasPrev ? `renderDay(${prevId})` : ''}" aria-label="Previous day" ${hasPrev ? '' : 'disabled'}>
                 <svg width="10" height="16" viewBox="0 0 10 16" fill="none">
                   <path d="M8 2L2 8L8 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </button>
-              <button class="nav-arrow-btn" onclick="renderDay('${nextId}')" aria-label="Next day" ${hasNext ? '' : 'disabled'}>
+              <button class="nav-arrow-btn" onclick="${hasNext ? `renderDay(${nextId})` : ''}" aria-label="Next day" ${hasNext ? '' : 'disabled'}>
                 <svg width="10" height="16" viewBox="0 0 10 16" fill="none">
                   <path d="M2 2L8 8L2 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -698,15 +698,6 @@ function renderDay(dayIdRaw) {
     updateGlobalHeader(false, day, dayIndex, workoutData.days.length);
     let html = '';
 
-    // Nav Row
-    html += `
-        <div class="nav-row">
-            <button class="btn-nav" onclick="renderHome()">← Week</button>
-            ${prevDay ? `<button class="btn-nav" onclick="renderDay('${prevDay.id}')">‹ Day ${prevDay.id}</button>` : ''}
-            <span class="nav-indicator">${dayIndex + 1} / ${workoutData.days.length}</span>
-            ${nextDay ? `<button class="btn-nav" onclick="renderDay('${nextDay.id}')">Day ${nextDay.id} ›</button>` : ''}
-        </div>
-    `;
     
     html += renderWarmup(day);
 
