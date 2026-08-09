@@ -71,9 +71,11 @@ body {
     left: 0;
     right: 0;
     z-index: 9999;
-    background: rgba(10, 10, 10, 0.95);
+    background: rgba(10, 10, 10, 0.85);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    padding-top: env(safe-area-inset-top);
+    box-sizing: border-box;
 }
 .global-header-inner {
     max-width: 1000px;
@@ -95,7 +97,7 @@ body {
 #app-container {
     max-width: 1000px;
     margin: 0 auto;
-    padding: 70px var(--sp-4) var(--sp-12) var(--sp-4);
+    padding: calc(70px + env(safe-area-inset-top)) var(--sp-4) var(--sp-12) var(--sp-4);
 }
 
 #app-container.is-home {
@@ -1328,6 +1330,7 @@ body {
   width: 100%;
   gap: 8px;
   padding: 14px 16px;
+  box-sizing: border-box;
 }
 
 /* Back button — ‹ Week */
