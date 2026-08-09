@@ -547,7 +547,7 @@ function updateGlobalHeader(isHome, day = null, dayIndex = 0, totalDays = 7) {
             </button>
 
             <span class="nav-day-title">
-              Day ${day.id} - ${day.title}
+              ${day.title}
             </span>
 
             <div class="nav-day-arrows">
