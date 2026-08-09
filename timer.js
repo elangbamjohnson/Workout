@@ -118,9 +118,15 @@ window.Timer = {
 
     createDOM() {
         if (this.modal) return;
+        this.overlay = document.createElement('div');
+        this.overlay.className = 'timer-modal-overlay';
+        this.overlay.onclick = () => this.close();
+        
         this.modal = document.createElement('div');
         this.modal.id = 'timer-modal';
-        this.modal.className = 'timer-modal hidden';
+        this.modal.className = 'timer-modal';
+        
+        document.body.appendChild(this.overlay);
         document.body.appendChild(this.modal);
     },
 
@@ -141,7 +147,11 @@ window.Timer = {
         this.lastSpokenSecond = seconds;
         this.createDOM();
         this.render();
-        this.modal.classList.remove('hidden');
+        this.render();
+        requestAnimationFrame(() => {
+            this.overlay.classList.add('visible');
+            this.modal.classList.add('visible');
+        });
         this.attachListener();
         window.speakAlert("Rest time started");
         this.tick();
@@ -162,7 +172,10 @@ window.Timer = {
         this.lastSpokenSecond = duration;
         this.createDOM();
         this.render();
-        this.modal.classList.remove('hidden');
+        requestAnimationFrame(() => {
+            this.overlay.classList.add('visible');
+            this.modal.classList.add('visible');
+        });
         this.attachListener();
         
         if (switchSides) {
@@ -188,7 +201,11 @@ window.Timer = {
         this.lastSpokenSecond = workSec;
         this.createDOM();
         this.render();
-        this.modal.classList.remove('hidden');
+        this.render();
+        requestAnimationFrame(() => {
+            this.overlay.classList.add('visible');
+            this.modal.classList.add('visible');
+        });
         this.attachListener();
         if (this.workoutType === 'technical') {
             window.speakAlert(`${this.roundData.title} started`);
@@ -318,7 +335,11 @@ window.Timer = {
             this.keydownListener = null;
         }
         if (this.modal) {
-            this.modal.classList.add('hidden');
+            this.modal.classList.add('dismissing');
+            if (this.overlay) this.overlay.classList.remove('visible');
+            setTimeout(() => {
+                this.modal.classList.remove('visible', 'dismissing');
+            }, 250);
         }
     },
 
@@ -364,6 +385,6 @@ window.Timer = {
             </div>
         `;
         
-        this.modal.innerHTML = `<div class="timer-backdrop" onclick="Timer.close()"></div>` + html;
+        this.modal.innerHTML = html;
     }
 };
