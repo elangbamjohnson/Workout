@@ -698,6 +698,15 @@ function renderDay(dayIdRaw) {
     updateGlobalHeader(false, day, dayIndex, workoutData.days.length);
     let html = '';
 
+    // Nav Row
+    html += `
+        <div class="nav-row">
+            <button class="btn-nav" onclick="renderHome()">← Week</button>
+            ${prevDay ? `<button class="btn-nav" onclick="renderDay('${prevDay.id}')">‹ Day ${prevDay.id}</button>` : ''}
+            <span class="nav-indicator">${dayIndex + 1} / ${workoutData.days.length}</span>
+            ${nextDay ? `<button class="btn-nav" onclick="renderDay('${nextDay.id}')">Day ${nextDay.id} ›</button>` : ''}
+        </div>
+    `;
     
     html += renderWarmup(day);
 
