@@ -1402,7 +1402,4 @@ body {
   pointer-events: none;
 }
 
-/* Hide old inline nav bar */
-.nav-row {
-  display: none !important;
-}
+
