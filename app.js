@@ -1148,6 +1148,9 @@ window.closeVideoModal = function() {
     }
 };
 
+// Fix for iOS Safari :active state
+document.addEventListener('touchstart', function() {}, {passive: true});
+
 document.addEventListener('DOMContentLoaded', init);
 
 
