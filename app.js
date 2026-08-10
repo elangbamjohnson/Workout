@@ -578,6 +578,14 @@ function renderHome() {
     clearApp();
     appContainer.className = 'is-home';
     updateGlobalHeader(true);
+    
+    // GA4 Manual Pageview Tracking for SPA
+    if (typeof gtag === 'function') {
+        gtag('event', 'page_view', {
+            page_title: 'Strike First - Home',
+            page_location: location.href
+        });
+    }
     let html = '';
     
     // Top Row
@@ -680,12 +688,23 @@ function renderHome() {
     appContainer.innerHTML = html;
 }
 
-function renderDay(dayIdRaw) {
+window.renderDay = function(dayIdRaw) {
+    clearApp();
+    appContainer.className = 'is-day-view';
+
     let dayId = dayIdRaw;
     if (!isNaN(dayIdRaw)) dayId = parseInt(dayIdRaw);
     const dayIndex = workoutData.days.findIndex(d => d.id === dayId);
     const day = workoutData.days[dayIndex];
     if (!day) return;
+
+    // GA4 Manual Pageview Tracking for SPA
+    if (typeof gtag === 'function') {
+        gtag('event', 'page_view', {
+            page_title: `Strike First - Day ${day.id}`,
+            page_location: location.href
+        });
+    }
     
     viewingDayId = day.id;
     
