@@ -631,7 +631,7 @@ function renderHome() {
         let dayLabelStr = typeof day.id === 'string' ? day.id : `Day ${day.id}`;
         
         html += `
-            <a href="#" class="card day-card type-${day.type} ${isCurrent ? 'is-current' : ''}" onclick="event.preventDefault(); renderDay('${day.id}')" style="text-decoration: none;">
+            <a href="#" class="card day-card type-${day.type} ${isCurrent ? 'is-current' : ''}" onclick="event.preventDefault(); renderDay('${day.id}')" style="text-decoration: none; animation-delay: ${index * 0.06}s;">
                 <div class="flex justify-between items-start" style="margin-bottom: var(--sp-4);">
                     <div class="flex items-center gap-2">
                         <div class="card-icon-box" aria-hidden="true">${icons[iconName]}</div>
