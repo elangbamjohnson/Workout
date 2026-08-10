@@ -708,7 +708,7 @@ function renderDay(dayIdRaw) {
         </div>
     `;
     
-    html += renderWarmup(day);
+
 
     // Header Card
     html += `
@@ -734,6 +734,8 @@ function renderDay(dayIdRaw) {
             </div>
         `;
     }
+
+    html += renderWarmup(day);
 
     // Content Section Header
     if (day.type !== 'rest') {
