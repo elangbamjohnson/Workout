@@ -107,7 +107,7 @@ body {
 
 @media (min-width: 768px) {
     #app-container.is-home {
-        padding: var(--sp-8) var(--sp-8) var(--sp-12) var(--sp-8);
+        padding: calc(70px + var(--sp-8) + env(safe-area-inset-top)) var(--sp-8) var(--sp-12) var(--sp-8);
     }
 }
 
