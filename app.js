@@ -706,7 +706,7 @@ function updateGlobalHeader(isHome, day = null, dayIndex = 0, totalDays = 7) {
 const quickSessionCards = [
     { id: 'quick-hybrid', emoji: '🥊', name: 'Hybrid Boxing',       duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-hybrid')), tag: 'Box + Conditioning', pill: 'qs-pill-amber',  type: 'bag'       },
     { id: 'quick-upper-power', emoji: '💪', name: 'Upper Body Power',     duration: '~45 min', tag: 'Strength',            pill: 'qs-pill-orange', type: 'strength'  },
-    { emoji: '🦵', name: 'Lower Body Power',     duration: '~50 min', tag: 'Strength',            pill: 'qs-pill-orange', type: 'strength'  },
+    { id: 'quick-lower-power', emoji: '🦵', name: 'Lower Body Power',     duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-lower-power')) || '~50 min', tag: 'Strength',            pill: 'qs-pill-orange', type: 'strength'  },
     { emoji: '👤', name: 'Shadow Boxing',        duration: '~30 min', tag: 'Technical',           pill: 'qs-pill-cyan',   type: 'technical' },
     { emoji: '🔥', name: 'HIIT Boxing',          duration: '~25 min', tag: 'Conditioning',        pill: 'qs-pill-red',    type: 'hiit'      },
     { emoji: '🧘', name: 'Active Recovery',      duration: '~20 min', tag: 'Recovery',            pill: 'qs-pill-teal',   type: 'rest'      },
