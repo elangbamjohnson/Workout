@@ -1344,7 +1344,7 @@ body {
     font-size: 16px;
     font-weight: 700;
     letter-spacing: 0.05em;
-    color: var(--bg);
+    color: #111;
     background: var(--text-primary);
     border: none;
     border-radius: var(--radius-inner);
