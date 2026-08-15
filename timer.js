@@ -515,7 +515,7 @@ window.Timer = {
         if (isRestMode || (this.mode === 'round' && this.phase === 'rest')) {
             btnText = "Skip Rest";
         }
-        let actionsHtml = `<button class="btn-primary" onclick="Timer.skipPhase()">${btnText}</button>`;
+        let actionsHtml = `<button class="btn-large" onclick="Timer.skipPhase()">${btnText}</button>`;
         
         const html = `
             <div class="timer-card round-mode ${colorClass}">

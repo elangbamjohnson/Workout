@@ -14,7 +14,8 @@ const icons = {
     trend: `<svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>`,
     clock: `<svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-.25-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>`,
     weight: `<svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>`,
-    repeat: `<svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>`
+    repeat: `<svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>`,
+    play: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`
 };
 
 const WakeLock = {
@@ -216,7 +217,7 @@ function renderWarmup(day) {
                     <div class="warmup-actions">
                         ${!isRepBased && !isCompleted ? `
                             <button class="btn-play type-${day.type}" onclick="startWarmupTimer(${dayIdStr}, '${item.id}', ${item.duration}, '${item.name.replace(/'/g, "\\'")}', '${item.cue.replace(/'/g, "\\'")}', ${item.switchSides})">
-                                ▶ Start
+                                <span class="play-icon">${icons.play}</span> Start
                             </button>
                         ` : ''}
                     </div>
@@ -976,7 +977,7 @@ window.renderDay = function(dayIdRaw) {
                     { title: "DETAILS", content: `<p>${sec.detail}</p>` },
                     { title: "DRILLS", content: `<div class="nested-list">${drillsHtml}</div>` }
                 ],
-                actionHtml: `<button class="btn-primary" style="width: 100%;" onclick="startRoundTimer(${day.id}, '${sec.id}', ${sec.workSeconds}, ${sec.restSeconds}, '${sec.name.replace(/'/g, "\\'")}', '')">Start Section Timer</button>`
+                actionHtml: `<button class="btn-large" onclick="startRoundTimer(${day.id}, '${sec.id}', ${sec.workSeconds}, ${sec.restSeconds}, '${sec.name.replace(/'/g, "\\'")}', '')">Start Section Timer</button>`
             };
             
             html += renderItemCard(normalizedItem, day.type);
@@ -1011,7 +1012,7 @@ window.renderDay = function(dayIdRaw) {
                 sections: [
                     { title: "COMBINATIONS", content: `<div class="nested-list">${roundsHtml}</div>` }
                 ],
-                actionHtml: `<button class="btn-primary" style="width: 100%; margin-top: var(--sp-4);" onclick="startRoundTimer(${day.id}, '${ex.id}', ${ex.workSeconds}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', '${(ex.rounds ? ex.rounds.map(r => r.combo).join('<br>') : '').replace(/'/g, "\\'")}')">Start Round Timer</button>`
+                actionHtml: `<button class="btn-large" style="margin-top: var(--sp-4);" onclick="startRoundTimer(${day.id}, '${ex.id}', ${ex.workSeconds}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', '${(ex.rounds ? ex.rounds.map(r => r.combo).join('<br>') : '').replace(/'/g, "\\'")}')">Start Round Timer</button>`
             };
             html += renderItemCard(normalizedItem, day.type);
         });
@@ -1088,7 +1089,7 @@ window.renderDay = function(dayIdRaw) {
     
     html += `
         <div style="margin-top: 32px; margin-bottom: 64px;">
-            <button class="btn-primary" style="width: 100%; padding: 16px; font-size: 16px;" onclick="finishWorkout(${day.id})">Complete Session</button>
+            <button class="btn-large" onclick="finishWorkout(${day.id})">Complete Session</button>
         </div>
     `;
 
@@ -1483,7 +1484,7 @@ window.renderQuickSession = function(quickId) {
                 <button class="btn-check ${isChecked}" onclick="Store.logItem('${quickId}', '${r.id}', { completed: !${isCompleted} }); renderQuickSession('${quickId}')">${icons.checkmark}</button>
                 <div style="flex: 1;">${r.combo}</div>
                 ${!isCompleted ? `
-                <button class="btn-play type-bag" onclick="startQuickRound('${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, ${i+1}, '${r.name.replace(/'/g, "\\'")}', '${r.combo.replace(/'/g, "\\'")}', ${isLast}, '${timedCuesArg}')">▶ Start</button>
+                <button class="btn-play type-bag" onclick="startQuickRound('${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, ${i+1}, '${r.name.replace(/'/g, "\\'")}', '${r.combo.replace(/'/g, "\\'")}', ${isLast}, '${timedCuesArg}')"><span class="play-icon">${icons.play}</span> Start</button>
                 ` : ''}
             </div>`;
         }).join('');
@@ -1571,7 +1572,7 @@ window.renderQuickSession = function(quickId) {
             🥊 Session Complete — Great work today!
         </div>
         <div style="margin-bottom: 64px;">
-            <button class="btn-primary" style="width: 100%; padding: 16px; font-size: 16px;" onclick="finishQuickHybrid('${quickId}', '${session.title}')">Finish & Save</button>
+            <button class="btn-large" onclick="finishQuickHybrid('${quickId}', '${session.title}')">Finish & Save</button>
         </div>
     `;
 

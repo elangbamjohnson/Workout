@@ -291,6 +291,11 @@ body {
     transform: scale(0.96);
     opacity: 0.8;
 }
+.btn-primary svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
 .btn-text {
     background: none;
     border: none;
@@ -1327,6 +1332,79 @@ body {
     font-weight: 700;
     color: var(--text-secondary);
 }
+
+/* Common action button styles */
+.btn-large {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--bg);
+    background: var(--text-primary);
+    border: none;
+    border-radius: var(--radius-inner);
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+}
+.btn-large:hover {
+    background: #e2e8f0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255,255,255,0.2);
+}
+
+.btn-play {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 6px 14px;
+    border-radius: 24px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    backdrop-filter: blur(8px);
+}
+.btn-play:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.btn-play:active {
+    transform: translateY(1px);
+}
+.btn-play .play-icon svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+}
+
+/* Type specific hover accents for play button */
+.btn-play.type-bag:hover {
+    border-color: var(--bag-accent, #ff4757);
+    color: var(--bag-accent, #ff4757);
+    background: rgba(255, 71, 87, 0.1);
+}
+.btn-play.type-strength:hover {
+    border-color: var(--strength-accent, #2ed573);
+    color: var(--strength-accent, #2ed573);
+    background: rgba(46, 213, 115, 0.1);
+}
+
+.btn-icon { color: var(--text-secondary); }
+
 .warmup-cue {
     font-size: 13px;
     color: var(--text-muted);
