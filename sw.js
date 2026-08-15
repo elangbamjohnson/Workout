@@ -1,4 +1,4 @@
-const CACHE_NAME = 'strikefirst-v2';
+const CACHE_NAME = 'strikefirst-v3';
 
 // All files to cache for offline use
 const ASSETS_TO_CACHE = [

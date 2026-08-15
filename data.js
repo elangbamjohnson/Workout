@@ -1126,3 +1126,130 @@ const workoutData = {
     "subtitle": "Unlocks after 3 complete cycles of Phase 1"
   }
 };
+
+// ── Phase 2 Quick Sessions Data ────────────────────────────────────────────
+window.quickWorkouts = [
+  {
+    id: 'quick-hybrid',
+    title: 'Hybrid Boxing',
+    type: 'bag',
+    duration: '~35 min',
+    focus: 'Box + Conditioning',
+    warmup: [
+      { id: 'hybrid-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Moderate pace — get your feet and rhythm ready' },
+      { id: 'hybrid-wu2', name: 'Jumping Jacks', type: 'timed', duration: 60, cue: 'Full arm extension overhead on every rep' },
+      { id: 'hybrid-wu3', name: 'Arm Circles + Shoulder Rolls', type: 'timed', duration: 60, cue: 'Loosen the shoulder joint — full range in both directions' },
+      { id: 'hybrid-wu4', name: 'Hip Rotations', type: 'timed', duration: 60, cue: 'Stand tall, rotate from the hip — not just the knee' }
+    ],
+    bagRounds: {
+      id: 'hybrid-bag',
+      name: 'Bag Work',
+      benefits: 'Focus on clean technique and power.',
+      rounds: [
+        {
+          id: 'hybrid-bag-r1',
+          name: 'Basic Power Combinations',
+          workSeconds: 180,
+          restSeconds: 60,
+          combo: '1-2 (Jab-Cross) × 5 reps<br>1-2-3 (Jab-Cross-Lead Hook) × 5 reps<br>1-2-3-2 (Jab-Cross-Lead Hook-Cross) × 5 reps<br>Freestyle 1-2 for remaining time',
+          timedCues: [
+            { time: 0, text: "Hands up! Jab, Cross — One Two! Let's go!", uiIndex: 0 },
+            { time: 18, text: "Good! Jab, Cross, Lead Hook — One Two Three!", uiIndex: 1 },
+            { time: 42, text: "Nice! Jab, Cross, Lead Hook, Cross — One Two Three Two!", uiIndex: 2 },
+            { time: 72, text: "Beautiful! Freestyle — Jab Cross, keep moving, stay sharp!", uiIndex: 3 },
+            { time: 100, text: "Push the pace — don't stop!", uiIndex: 3 },
+            { time: 130, text: "Last minute — dig deep!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — everything you've got!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'hybrid-bag-r2',
+          name: 'Body + Head Combinations',
+          workSeconds: 180,
+          restSeconds: 60,
+          combo: '1-2 to the body, 1-2 to the head × 5 reps<br>1-2-3b (Jab-Cross-Lead Body Hook) × 5 reps<br>1-6-3-2 (Jab-Rear Body Hook-Lead Hook-Cross) × 5 reps<br>Freestyle movement + 1-2 for remaining time',
+          timedCues: [
+            { time: 0, text: "Body then head — Jab Cross to the body, Jab Cross to the head! One Two down, One Two up!", uiIndex: 0 },
+            { time: 25, text: "Jab, Cross, Lead Body Hook — One Two Three to the body!", uiIndex: 1 },
+            { time: 52, text: "Jab, Rear Body Hook, Lead Hook, Cross — One Six Three Two!", uiIndex: 2 },
+            { time: 85, text: "Good work! Freestyle — move your head, Jab Cross!", uiIndex: 3 },
+            { time: 110, text: "Stay on your toes — keep that jab working!", uiIndex: 3 },
+            { time: 140, text: "Last minute — head movement!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — finish strong!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'hybrid-bag-r3',
+          name: 'Power Finishing Combinations',
+          workSeconds: 180,
+          restSeconds: 0,
+          combo: '2-3-2 (Cross-Lead Hook-Cross) × 5 reps<br>1-2-5-2 (Jab-Cross-Lead Uppercut-Cross) × 5 reps<br>1-2-3-4 (Jab-Cross-Lead Hook-Rear Hook) × 5 reps<br>All-out freestyle last 30 seconds',
+          timedCues: [
+            { time: 0, text: "Power round! Cross, Lead Hook, Cross — Two Three Two! Put your weight into it!", uiIndex: 0 },
+            { time: 22, text: "Jab, Cross, Uppercut, Cross — One Two Five Two! Drive that uppercut!", uiIndex: 1 },
+            { time: 50, text: "Jab, Cross, Lead Hook, Rear Hook — One Two Three Four! Full combo!", uiIndex: 2 },
+            { time: 82, text: "Last 30 seconds coming — stay with me!", uiIndex: 2 },
+            { time: 105, text: "ALL OUT — freestyle, everything, GO!", uiIndex: 3 },
+            { time: 135, text: "Don't slow down — this is where champions are made!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — FINISH!", uiIndex: 3 }
+          ]
+        }
+      ]
+    },
+    circuit: {
+      id: 'hybrid-circuit',
+      name: 'Conditioning Circuit',
+      benefits: 'Perform back to back with NO rest. Rest 45 seconds after all 3 are complete.',
+      rounds: 2,
+      restSeconds: 45,
+      exercises: [
+        { id: 'hybrid-circ-1', name: 'Kettlebell Swings', reps: '15 reps', restSeconds: 20 },
+        { id: 'hybrid-circ-2', name: 'Burpees', reps: '10 reps', restSeconds: 20 },
+        { id: 'hybrid-circ-3', name: 'Squat Jumps', reps: '10 reps', restSeconds: 20 }
+      ]
+    },
+    finisher: {
+      id: 'hybrid-finish',
+      name: 'Bag Finisher',
+      benefits: 'Test power under fatigue. Maximum intent.',
+      rounds: [
+        {
+          id: 'hybrid-finish-r1',
+          name: 'Speed Round',
+          workSeconds: 180,
+          restSeconds: 60,
+          combo: '1-2 fast × 10 reps<br>1-2-3-2 fast × 5 reps<br>Freestyle — maximum output for remaining time',
+          timedCues: [
+            { time: 0, text: "Speed round! Fast Jab Cross — One Two, rapid fire!", uiIndex: 0 },
+            { time: 20, text: "Jab, Cross, Lead Hook, Cross — One Two Three Two, fast!", uiIndex: 1 },
+            { time: 48, text: "Freestyle — maximum speed, don't think, just throw!", uiIndex: 2 },
+            { time: 90, text: "Keep the pace up — faster!", uiIndex: 2 },
+            { time: 130, text: "Last minute — speed speed speed!", uiIndex: 2 },
+            { time: 170, text: "Ten seconds — sprint to the finish!", uiIndex: 2 }
+          ]
+        },
+        {
+          id: 'hybrid-finish-r2',
+          name: 'Power Round',
+          workSeconds: 180,
+          restSeconds: 0,
+          combo: '2-3-2 with power × 5 reps<br>1-2-5-2 with power × 5 reps<br>End with 10 hard crosses (2) — maximum power',
+          timedCues: [
+            { time: 0, text: "Power round! Cross, Lead Hook, Cross — Two Three Two, put your body into it!", uiIndex: 0 },
+            { time: 22, text: "Jab, Cross, Uppercut, Cross — One Two Five Two! Mean it!", uiIndex: 1 },
+            { time: 52, text: "Ten hard crosses — Two, Two, Two — maximum power!", uiIndex: 2 },
+            { time: 85, text: "This is your last round — leave everything on the bag!", uiIndex: 2 },
+            { time: 120, text: "Push through — don't slow down!", uiIndex: 2 },
+            { time: 155, text: "Last 25 seconds — EVERYTHING!", uiIndex: 2 },
+            { time: 170, text: "Ten seconds — finish like a champion!", uiIndex: 2 }
+          ]
+        }
+      ]
+    },
+    cooldown: [
+      { id: 'hybrid-cd1', name: 'Slow shadowboxing 50% effort', duration: '1 min' },
+      { id: 'hybrid-cd2', name: 'Chest opener stretch', duration: '1 min' },
+      { id: 'hybrid-cd3', name: 'Wrist + shoulder stretch', duration: '1 min' }
+    ]
+  }
+];

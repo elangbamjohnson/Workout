@@ -64,7 +64,22 @@ window.addEventListener('pagehide', () => {
   WakeLock.release();
 });
 
-// Phase 2 bindings
+// Phase 2 helpers for shared UI elements
+function getDayData(dayId) {
+    if (typeof dayId === 'string' && dayId.startsWith('quick-')) {
+        return window.quickWorkouts.find(q => q.id === dayId);
+    }
+    return workoutData.days.find(d => d.id === dayId);
+}
+
+function reRenderViewingDay() {
+    if (typeof viewingDayId === 'string' && viewingDayId.startsWith('quick-')) {
+        window.renderQuickSession(viewingDayId);
+    } else {
+        window.renderDay(viewingDayId);
+    }
+}
+
 window.logSet = function(dayId, itemId, setIndex, restSec, title, cue, btn) {
     const row = btn.closest('.set-row');
     const repInput = row.querySelector('.input-rep').value;
@@ -81,10 +96,10 @@ window.logSet = function(dayId, itemId, setIndex, restSec, title, cue, btn) {
     };
     
     Store.logItem(dayId, itemId, logData);
-    renderDay(viewingDayId); // Re-render to update UI
+    reRenderViewingDay(); // Re-render to update UI
     
     if (!isCompleted && restSec > 0) {
-        const day = workoutData.days.find(d => d.id === dayId);
+        const day = getDayData(dayId);
         Timer.startRest(restSec, title, cue, day ? day.type : 'strength');
     }
 };
@@ -93,34 +108,45 @@ window.toggleRound = function(e, dayId, roundId) {
     e.stopPropagation();
     const logData = Store.getItemLog(dayId, roundId) || {};
     Store.logItem(dayId, roundId, { completed: !logData.completed });
-    renderDay(viewingDayId);
+    reRenderViewingDay();
 };
 
 window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue) {
-    const day = workoutData.days.find(d => d.id === dayId);
+    const day = getDayData(dayId);
     Timer.startRound(workSec, restSec, title, cue, day ? day.type : 'bag', () => {
         Store.logItem(dayId, roundId, { completed: true });
-        renderDay(viewingDayId);
+        reRenderViewingDay();
     });
 };
 
 
 window.startWarmupTimer = function(dayId, itemId, duration, title, cue, switchSides) {
-    const day = workoutData.days.find(d => d.id === dayId);
-    Timer.startWarmup(duration, title, cue, switchSides, day ? day.type : 'strength', () => {
-        Store.logItem(dayId, itemId, { completed: true });
-        renderDay(viewingDayId);
+    const day = getDayData(dayId);
+    Timer.startCountdown(5, title, () => {
+        Timer.startWarmup(duration, title, cue, switchSides, day ? day.type : 'strength', () => {
+            Store.logItem(dayId, itemId, { completed: true });
+            reRenderViewingDay();
+        });
     });
 };
 
 window.toggleWarmupExpanded = function() {
-    const isExpanded = sessionStorage.getItem('warmupExpanded') === 'true';
-    if (isExpanded) {
-        sessionStorage.removeItem('warmupExpanded');
+    const userExpanded = sessionStorage.getItem('warmupExpanded');
+    let currentlyExpanded = false;
+    
+    if (userExpanded === 'true') {
+        currentlyExpanded = true;
+    } else if (userExpanded === 'false') {
+        currentlyExpanded = false;
     } else {
-        sessionStorage.setItem('warmupExpanded', 'true');
+        const day = window.programData.days.find(d => d.id === viewingDayId) || window.quickWorkouts.find(q => q.id === viewingDayId);
+        if (day && day.warmup) {
+            currentlyExpanded = day.warmup.some(item => (Store.getItemLog(day.id, item.id) || {}).completed);
+        }
     }
-    renderDay(viewingDayId);
+    
+    sessionStorage.setItem('warmupExpanded', currentlyExpanded ? 'false' : 'true');
+    reRenderViewingDay();
 };
 
 function renderWarmup(day) {
@@ -138,7 +164,9 @@ function renderWarmup(day) {
     let isExpanded = false;
     if (userExpanded === 'true') {
         isExpanded = true;
-    } else if (userExpanded === null && hasCompletedItem) {
+    } else if (userExpanded === 'false') {
+        isExpanded = false;
+    } else if (hasCompletedItem) {
         isExpanded = true; // Auto-expand
     }
 
@@ -170,9 +198,13 @@ function renderWarmup(day) {
                 timeOrRepsStr = item.duration >= 60 ? `${Math.floor(item.duration / 60)} min` : `${item.duration} sec`;
             }
             
+            const dayIdStr = typeof day.id === 'string' ? `'${day.id}'` : day.id;
+            
+            const isCheckedStr = isCompleted ? 'checked' : '';
             html += `
-                <div class="warmup-row">
-                    <div class="warmup-info">
+                <div class="warmup-row ${isCheckedStr}">
+                    <button class="btn-check ${isCheckedStr}" onclick="toggleRound(event, ${dayIdStr}, '${item.id}')">${icons.checkmark}</button>
+                    <div class="warmup-info" style="flex: 1; margin-left: 12px;">
                         <div class="warmup-title-row">
                             <h3 class="warmup-name">${item.name}</h3>
                             ${isRepBased ? `<span class="warmup-reps">${timeOrRepsStr}</span>` : `<span class="warmup-duration">${timeOrRepsStr}</span>`}
@@ -181,17 +213,10 @@ function renderWarmup(day) {
                     </div>
                     <div class="warmup-actions">
                         ${!isRepBased && !isCompleted ? `
-                            <button class="btn-play type-${day.type}" onclick="startWarmupTimer(${day.id}, '${item.id}', ${item.duration}, '${item.name.replace(/'/g, "\\'")}', '${item.cue.replace(/'/g, "\\'")}', ${item.switchSides})">
+                            <button class="btn-play type-${day.type}" onclick="startWarmupTimer(${dayIdStr}, '${item.id}', ${item.duration}, '${item.name.replace(/'/g, "\\'")}', '${item.cue.replace(/'/g, "\\'")}', ${item.switchSides})">
                                 ▶ Start
                             </button>
                         ` : ''}
-                        ${isCompleted ? `
-                            <div class="check-indicator done" onclick="toggleRound(event, ${day.id}, '${item.id}')">${icons.checkmark}</div>
-                        ` : (isRepBased ? `
-                            <div class="check-indicator empty" onclick="toggleRound(event, ${day.id}, '${item.id}')"></div>
-                        ` : `
-                            <div class="check-indicator empty" onclick="toggleRound(event, ${day.id}, '${item.id}')"></div>
-                        `)}
                     </div>
                 </div>
             `;
@@ -257,6 +282,50 @@ function calculateSessionDuration(day) {
     return null;
 }
 
+function calculateQuickSessionDuration(qs) {
+    if (!qs) return null;
+    let totalSec = 0;
+    
+    // Warm-up
+    if (qs.warmup) {
+        totalSec += qs.warmup.filter(w => w.type === 'timed').reduce((s, w) => s + (w.duration || 0), 0);
+    }
+    
+    // Bag Rounds
+    let bagCount = 0;
+    if (qs.bagRounds && qs.bagRounds.rounds) {
+        totalSec += qs.bagRounds.rounds.reduce((s, r) => s + (r.workSeconds || 0) + (r.restSeconds || 0), 0);
+        bagCount = qs.bagRounds.rounds.length;
+    }
+    
+    // Circuit
+    if (qs.circuit) {
+        totalSec += (qs.circuit.rounds || 0) * 180;
+        if (qs.circuit.rounds > 1) {
+            totalSec += (qs.circuit.rounds - 1) * (qs.circuit.restSeconds || 0);
+        }
+    }
+    
+    // Finisher
+    let finisherCount = 0;
+    if (qs.finisher && qs.finisher.rounds) {
+        totalSec += qs.finisher.rounds.reduce((s, r) => s + (r.workSeconds || 0) + (r.restSeconds || 0), 0);
+        finisherCount = qs.finisher.rounds.length;
+    }
+    
+    // Cool down (fixed 3 min)
+    if (qs.cooldown) {
+        totalSec += 180;
+    }
+    
+    // GET READY countdowns
+    totalSec += (bagCount + finisherCount) * 5;
+    
+    const mins = Math.ceil(totalSec / 60);
+    return `~${mins} min`;
+}
+
+
 function toggleCard(id) {
     if (expandedCardIds.has(id)) {
         expandedCardIds.delete(id);
@@ -264,13 +333,29 @@ function toggleCard(id) {
         expandedCardIds.add(id);
     }
     // Re-render the currently viewed day to reflect state
-    if (document.getElementById('app-container').className === '' && viewingDayId !== null) {
-        renderDay(viewingDayId);
+    if (viewingDayId !== null) {
+        if (typeof viewingDayId === 'string' && viewingDayId.startsWith('quick-')) {
+            renderQuickSession(viewingDayId);
+        } else if (document.getElementById('app-container').className === '') {
+            renderDay(viewingDayId);
+        }
     }
 }
 
 function expandAll() {
     if (viewingDayId === null) return;
+    
+    if (typeof viewingDayId === 'string' && viewingDayId.startsWith('quick-')) {
+        const session = window.quickWorkouts.find(q => q.id === viewingDayId);
+        if (session) {
+            if (session.bagRounds) expandedCardIds.add(session.bagRounds.id);
+            if (session.circuit) expandedCardIds.add(session.circuit.id);
+            if (session.finisher) expandedCardIds.add(session.finisher.id);
+            renderQuickSession(viewingDayId);
+        }
+        return;
+    }
+    
     const currentDay = workoutData.days.find(d => d.id === viewingDayId);
     if (!currentDay) return;
     
@@ -283,7 +368,13 @@ function expandAll() {
 
 function collapseAll() {
     expandedCardIds.clear();
-    if (viewingDayId !== null) renderDay(viewingDayId);
+    if (viewingDayId !== null) {
+        if (typeof viewingDayId === 'string' && viewingDayId.startsWith('quick-')) {
+            renderQuickSession(viewingDayId);
+        } else {
+            renderDay(viewingDayId);
+        }
+    }
 }
 
 function renderItemCard(item, dayType) {
@@ -574,6 +665,17 @@ function updateGlobalHeader(isHome, day = null, dayIndex = 0, totalDays = 7) {
     document.getElementById('global-header').innerHTML = headerHtml;
 }
 
+// ── Quick Sessions: Phase-1 static data ────────────────────────────────────
+const quickSessionCards = [
+    { id: 'quick-hybrid', emoji: '🥊', name: 'Hybrid Boxing',       duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-hybrid')), tag: 'Box + Conditioning', pill: 'qs-pill-amber'  },
+    { emoji: '💪', name: 'Upper Body Power',     duration: '~45 min', tag: 'Strength',            pill: 'qs-pill-orange' },
+    { emoji: '🦵', name: 'Lower Body Power',     duration: '~50 min', tag: 'Strength',            pill: 'qs-pill-orange' },
+    { emoji: '👤', name: 'Shadow Boxing',        duration: '~30 min', tag: 'Technical',           pill: 'qs-pill-cyan'   },
+    { emoji: '🔥', name: 'HIIT Boxing',          duration: '~25 min', tag: 'Conditioning',        pill: 'qs-pill-red'    },
+    { emoji: '🧘', name: 'Active Recovery',      duration: '~20 min', tag: 'Recovery',            pill: 'qs-pill-teal'   },
+    { emoji: '💥', name: 'Full Body Explosive',  duration: '~55 min', tag: 'Full Body',           pill: 'qs-pill-orange' },
+];
+
 function renderHome() {
     clearApp();
     appContainer.className = 'is-home';
@@ -658,7 +760,31 @@ function renderHome() {
         `;
     });
     html += `</div>`;
-    
+
+    // ── Quick Sessions ────────────────────────────────────────────────────────
+    html += `
+        <div class="qs-section">
+            <div class="qs-header">
+                <div class="qs-header-title">Quick Sessions</div>
+                <div class="qs-header-subtitle">Pick a style. Start training.</div>
+            </div>
+            <div class="qs-scroll-container">
+                ${quickSessionCards.map(card => {
+                    const action = card.id ? `renderQuickSession('${card.id}')` : `showQuickSessionComingSoon('${card.name.replace(/'/g, "\\'")}')`;
+                    return `
+                    <div class="qs-card" role="button" tabindex="0"
+                         onclick="${action};"
+                         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();${action};}">
+                        <span class="qs-card-emoji">${card.emoji}</span>
+                        <div class="qs-card-title">${card.name}</div>
+                        <div class="qs-card-duration">${card.duration}</div>
+                        <span class="qs-pill ${card.pill}">${card.tag}</span>
+                    </div>
+                `}).join('')}
+            </div>
+        </div>
+    `;
+
     // Inject Dashboard
     html += generateDashboardHTML();
 
@@ -883,7 +1009,7 @@ window.renderDay = function(dayIdRaw) {
                 sections: [
                     { title: "COMBINATIONS", content: `<div class="nested-list">${roundsHtml}</div>` }
                 ],
-                actionHtml: `<button class="btn-primary" style="width: 100%; margin-top: var(--sp-4);" onclick="startRoundTimer(${day.id}, '${ex.id}', ${ex.workSeconds}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', '${ex.benefits ? ex.benefits.replace(/'/g, "\\'") : ""}')">Start Round Timer</button>`
+                actionHtml: `<button class="btn-primary" style="width: 100%; margin-top: var(--sp-4);" onclick="startRoundTimer(${day.id}, '${ex.id}', ${ex.workSeconds}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', '${(ex.rounds ? ex.rounds.map(r => r.combo).join('<br>') : '').replace(/'/g, "\\'")}')">Start Round Timer</button>`
             };
             html += renderItemCard(normalizedItem, day.type);
         });
@@ -1086,6 +1212,8 @@ function renderAbout() {
 
 // --- YouTube Video Modal Logic ---
 
+let toastTimeout;
+
 function showToast(msg) {
     let toast = document.getElementById('global-toast');
     if (!toast) {
@@ -1095,11 +1223,24 @@ function showToast(msg) {
         document.body.appendChild(toast);
     }
     toast.textContent = msg;
+    
+    toast.classList.remove('show');
+    clearTimeout(toastTimeout);
+    
+    // Force reflow to restart animation
+    void toast.offsetWidth;
+    
     toast.classList.add('show');
-    setTimeout(() => {
+    toastTimeout = setTimeout(() => {
         toast.classList.remove('show');
-    }, 3000);
+    }, 2500);
 }
+
+// Phase-1 placeholder handler for Quick Session cards
+window.showQuickSessionComingSoon = function(name) {
+    showToast('🥊 Coming soon — ' + name);
+};
+
 
 let activeVideoReturnFocus = null;
 
@@ -1188,3 +1329,249 @@ window.addEventListener('load', () => {
         }, 600);
     }
 });
+
+// =====================================================================
+// Phase 2 — Quick Sessions Renderer
+// =====================================================================
+
+window.startQuickRound = function(quickId, exId, workSec, restSec, roundNum, title, cue, isLast, timedCuesArg) {
+    const timedCues = timedCuesArg ? JSON.parse(decodeURIComponent(timedCuesArg)) : null;
+    Timer.startCountdown(5, title, () => {
+        Timer.startRound(workSec, restSec, title, cue, 'bag', () => {
+            Store.logItem(quickId, exId, { completed: true });
+            if (isLast) {
+                setTimeout(() => {
+                    window.speakAlert("Finisher complete — outstanding work!");
+                }, 500);
+            }
+            if (viewingDayId === quickId) renderQuickSession(quickId);
+        }, timedCues);
+    });
+};
+
+window.toggleQuickCircuitItem = function(quickId, itemId) {
+    const logData = Store.getItemLog(quickId, itemId) || {};
+    const isCompleted = !!logData.completed;
+    
+    Store.logItem(quickId, itemId, { completed: !isCompleted });
+    
+    // Check if circuit is complete
+    const session = window.quickWorkouts.find(q => q.id === quickId);
+    if (session && session.circuit) {
+        const allDone = session.circuit.exercises.every(ex => {
+            const l = Store.getItemLog(quickId, ex.id);
+            return l && l.completed;
+        });
+        
+        if (!isCompleted) {
+            if (allDone) {
+                // Track completions to know if it's the final round
+                const completionsLog = Store.getItemLog(quickId, 'circuit_completions') || { count: 0 };
+                completionsLog.count += 1;
+                Store.logItem(quickId, 'circuit_completions', completionsLog);
+                
+                // Only rest if there are more rounds to do
+                if (completionsLog.count < session.circuit.rounds) {
+                    // Auto start rest immediately without countdown
+                    Timer.startRest(session.circuit.restSeconds, "Circuit Rest", "", "strength");
+                }
+            } else {
+                const ex = session.circuit.exercises.find(e => e.id === itemId);
+                if (ex && ex.restSeconds) {
+                    Timer.startRest(ex.restSeconds, ex.name + " Rest", "", "strength");
+                }
+            }
+        }
+    }
+    
+    if (viewingDayId === quickId) renderQuickSession(quickId);
+};
+
+window.finishQuickHybrid = function(quickId, title) {
+    Store.logQuickSession(quickId, title);
+    renderHome();
+};
+
+window.renderQuickSession = function(quickId) {
+    clearApp();
+    appContainer.className = 'is-day-view'; // reuse styles
+    viewingDayId = quickId;
+    
+    const session = window.quickWorkouts.find(q => q.id === quickId);
+    if (!session) return;
+    
+    // GA4 Tracking
+    if (typeof gtag === 'function') {
+        gtag('event', 'page_view', {
+            page_title: `Strike First - ${session.title}`,
+            page_location: location.href
+        });
+    }
+    
+    const headerHtml = `
+        <header class="app-header">
+            <div class="nav-day">
+                <button class="nav-back-btn" onclick="renderHome()">
+                  <svg width="10" height="16" viewBox="0 0 10 16" fill="none">
+                    <path d="M8 2L2 8L8 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  Back
+                </button>
+                <span class="nav-day-title">${session.title}</span>
+                <div class="nav-day-arrows"></div>
+            </div>
+        </header>
+    `;
+    document.getElementById('global-header').innerHTML = headerHtml;
+    
+    let html = '';
+    
+    // Header Card
+    html += `
+        <div class="card day-header-card type-${session.type}">
+            <div class="flex justify-between items-start" style="margin-bottom: var(--sp-2);">
+                <span class="label-small">${session.focus.toUpperCase()}</span>
+                <span class="type-badge" aria-hidden="true">${icons[session.type]} QUICK SESSION</span>
+            </div>
+            <h1 class="title-page" style="margin-bottom: var(--sp-1);">${session.title}</h1>
+            <div class="session-duration-stat"><span class="time-pill type-${session.type}">⏱ ${calculateQuickSessionDuration(session)}</span></div>
+        </div>
+    `;
+    
+    // 1. Warm-Up
+    html += renderWarmup(session);
+    
+    // Expand/Collapse All Logic for Quick Sessions
+    let totalExpandable = 0;
+    let totalExpanded = 0;
+    if (session.bagRounds) { totalExpandable++; if (expandedCardIds.has(session.bagRounds.id)) totalExpanded++; }
+    if (session.circuit) { totalExpandable++; if (expandedCardIds.has(session.circuit.id)) totalExpanded++; }
+    if (session.finisher) { totalExpandable++; if (expandedCardIds.has(session.finisher.id)) totalExpanded++; }
+    
+    let toggleAction = "expandAll()";
+    let toggleText = "Expand all";
+    if (totalExpandable > 0 && totalExpanded === totalExpandable) {
+        toggleAction = "collapseAll()";
+        toggleText = "Collapse all";
+    }
+
+    html += `
+        <div class="content-header-row">
+            <h2 class="label-small">SECTIONS · ${totalExpandable}</h2>
+            <div class="right-actions">
+                <button class="btn-nav" style="font-size: 11px;" onclick="${toggleAction}">${toggleText}</button>
+            </div>
+        </div>
+    `;
+    
+    html += `<div class="item-list">`;
+    
+    // Helper to render bag/finisher rounds
+    const renderBagSection = (sectionObj, isFinisher) => {
+        const isExpanded = expandedCardIds.has(sectionObj.id);
+        const roundsHtml = sectionObj.rounds.map((r, i) => {
+            const log = Store.getItemLog(quickId, r.id) || {};
+            const isCompleted = !!log.completed;
+            const isChecked = isCompleted ? 'checked' : '';
+            const isLast = isFinisher && i === sectionObj.rounds.length - 1;
+            const timedCuesArg = r.timedCues ? encodeURIComponent(JSON.stringify(r.timedCues)).replace(/'/g, "%27") : '';
+            
+            return `
+            <div class="nested-row ${isChecked}">
+                <button class="btn-check ${isChecked}" onclick="Store.logItem('${quickId}', '${r.id}', { completed: !${isCompleted} }); renderQuickSession('${quickId}')">${icons.checkmark}</button>
+                <div style="flex: 1;">${r.combo}</div>
+                ${!isCompleted ? `
+                <button class="btn-play type-bag" onclick="startQuickRound('${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, ${i+1}, '${r.name.replace(/'/g, "\\'")}', '${r.combo.replace(/'/g, "\\'")}', ${isLast}, '${timedCuesArg}')">▶ Start</button>
+                ` : ''}
+            </div>`;
+        }).join('');
+        
+        const totalSec = sectionObj.rounds.reduce((sum, r) => sum + (r.workSeconds || 0) + (r.restSeconds || 0), 0);
+        const mins = Math.ceil(totalSec / 60);
+        
+        let normalizedItem = {
+            id: sectionObj.id,
+            badge: sectionObj.name.substring(0,2).toUpperCase(),
+            title: sectionObj.name,
+            stats: [
+                { icon: icons.clock, value: `~${mins} min` },
+                'divider',
+                { icon: icons.repeat, value: `${sectionObj.rounds.length} rounds` }
+            ],
+            callout: { icon: icons.flame, text: sectionObj.benefits },
+            sections: [
+                { title: "COMBINATIONS", content: `<div class="nested-list">${roundsHtml}</div>` }
+            ]
+        };
+        
+        return renderItemCard(normalizedItem, session.type);
+    };
+    
+    // 2. Bag Work
+    if (session.bagRounds) html += renderBagSection(session.bagRounds, false);
+    
+    // 3. Conditioning Circuit
+    if (session.circuit) {
+        const c = session.circuit;
+        
+        let drillsHtml = c.exercises.map((ex, i) => {
+            const log = Store.getItemLog(quickId, ex.id) || {};
+            const isChecked = log.completed ? 'checked' : '';
+            return `
+            <div class="nested-row interactive ${isChecked}" role="button" tabindex="0" onclick="toggleQuickCircuitItem('${quickId}', '${ex.id}')">
+                <button class="btn-check ${isChecked}">${icons.checkmark}</button>
+                <div style="flex: 1;">${ex.name} — ${ex.reps}</div>
+            </div>`;
+        }).join('');
+        
+        const totalSec = c.rounds * 180 + (c.rounds > 1 ? (c.rounds - 1) * (c.restSeconds || 0) : 0);
+        const mins = Math.ceil(totalSec / 60);
+        
+        let normalizedItem = {
+            id: c.id,
+            badge: 'CC',
+            title: c.name,
+            stats: [
+                { icon: icons.clock, value: `~${mins} min` },
+                'divider',
+                { icon: icons.repeat, value: `${c.rounds} rounds` },
+                'divider',
+                { icon: icons.rest, value: 'No rest between exercises' }
+            ],
+            callout: { icon: icons.strength, text: c.benefits },
+            sections: [
+                { title: "CIRCUIT CHECKLIST", content: `<div class="nested-list">${drillsHtml}</div>` }
+            ]
+        };
+        
+        html += renderItemCard(normalizedItem, 'strength');
+    }
+    
+    // 4. Finisher
+    if (session.finisher) html += renderBagSection(session.finisher, true);
+    
+    // 5. Cooldown
+    if (session.cooldown) {
+        html += `
+            <div class="card type-rest" style="margin-top: 16px;">
+                <h4 class="label-small" style="margin-bottom: 8px;">COOL DOWN</h4>
+                <ul class="rest-list">
+                    ${session.cooldown.map(n => `<li>${n.name} — ${n.duration}</li>`).join('')}
+                </ul>
+            </div>
+        `;
+    }
+    
+    html += `</div>`; // .item-list
+    
+    html += `
+        <div class="qs-cooldown-complete">
+            🥊 Session Complete — Great work today!
+        </div>
+        <div style="margin-bottom: 64px;">
+            <button class="btn-primary" style="width: 100%; padding: 16px; font-size: 16px;" onclick="finishQuickHybrid('${quickId}', '${session.title}')">Finish & Save</button>
+        </div>
+    `;
+
+    appContainer.innerHTML = html;
+};

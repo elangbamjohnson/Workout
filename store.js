@@ -76,6 +76,21 @@ const Store = {
         return session.logs[itemId];
     },
 
+    logQuickSession(quickId, title) {
+        const todayStr = this.getTodayStr();
+        if (!this.state.startDate) {
+            this.state.startDate = new Date().toISOString();
+        }
+        
+        let session = this.getTodaysSession(quickId);
+        if (!session) {
+            session = { date: todayStr, dayId: quickId, sessionType: 'quick', title: title, logs: {} };
+            this.state.history.push(session);
+        }
+        this.save();
+    },
+
+
     finishWorkout(dayId) {
         if (!this.state.startDate) {
             this.state.startDate = new Date().toISOString();
