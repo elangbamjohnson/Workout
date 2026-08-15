@@ -1157,7 +1157,7 @@ window.quickWorkouts = [
         name: 'Landmine Single-Arm Push Press',
         setsReps: '4 x 5/side',
         weight: 'Bar + Plates',
-        notes: 'Slight dip in the knees, then drive up violently. The power comes from the legs transferring through the core to the arm.',
+        notes: 'Suggested weight: 10-20 kg added to the bar. Keep it light enough to move fast. Slight dip in the knees, then drive up violently. The power comes from the legs transferring through the core to the arm.',
         benefits: 'Trains the kinetic chain sequence of a punch (ground to hand).',
         muscles: 'Shoulders, triceps, core, legs.',
         restSeconds: 90
@@ -1177,7 +1177,7 @@ window.quickWorkouts = [
         name: 'Med Ball Chest Pass (wall)',
         setsReps: '3 x 10',
         weight: 'Med Ball',
-        notes: 'Stand in athletic stance, throw the ball into the wall as hard as possible from the chest. Catch and immediately fire again.',
+        notes: 'Suggested weight: 5-7 kg medicine ball. Stand in athletic stance, throw the ball into the wall as hard as possible from the chest. Catch and immediately fire again.',
         benefits: 'Develops reactive upper body power and hand speed.',
         muscles: 'Chest, triceps, anterior delts.',
         restSeconds: 60
@@ -1187,7 +1187,7 @@ window.quickWorkouts = [
         name: 'Landmine Rotation',
         setsReps: '3 x 8/side',
         weight: 'Bar + Plates',
-        notes: 'Dynamic, hip-driven rotational movement. Rotate from the hips and pivot the back foot, sweeping the bar side to side.',
+        notes: 'Suggested weight: 5-10 kg added to the bar. Speed is more important than heavy weight. Dynamic, hip-driven rotational movement. Rotate from the hips and pivot the back foot, sweeping the bar side to side.',
         benefits: 'Builds explosive rotational power essential for hooks and crosses.',
         muscles: 'Obliques, core, shoulders, hips.',
         restSeconds: 90
@@ -1341,6 +1341,98 @@ window.quickWorkouts = [
       { id: 'hybrid-cd1', name: 'Slow shadowboxing 50% effort', duration: '1 min' },
       { id: 'hybrid-cd2', name: 'Chest opener stretch', duration: '1 min' },
       { id: 'hybrid-cd3', name: 'Wrist + shoulder stretch', duration: '1 min' }
+    ]
+  },
+  {
+    id: 'quick-lower-power',
+    title: 'Lower Body Power',
+    type: 'strength',
+    duration: '~50 min',
+    focus: 'Strength',
+    warmup: [
+      { id: 'lower-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Light pace, warm up the ankles and calves' },
+      { id: 'lower-wu2', name: 'Leg Swings (forward/back)', type: 'timed', duration: 60, cue: 'Open up the hips' },
+      { id: 'lower-wu3', name: 'Hip Circles', type: 'timed', duration: 60, cue: 'Full range of motion, both directions' },
+      { id: 'lower-wu4', name: 'Lateral Lunge', type: 'timed', duration: 60, cue: 'Shift weight side to side, stretch the groin' },
+      { id: 'lower-wu5', name: 'Squat to Stand', type: 'timed', duration: 60, cue: 'Grab toes, drop hips, pry hips open' }
+    ],
+    exercises: [
+      {
+        id: 'lower-ex1',
+        name: 'Barbell Deadlift',
+        setsReps: '4 x 5',
+        weight: 'Bar + Plates',
+        notes: 'Suggested weight: 60-75% of your 1RM. Move the bar as explosively as possible while maintaining perfect form. Keep the bar close, hinge at the hips, flat back. Drive through the floor.',
+        benefits: 'Builds foundational lower body strength and posterior chain power.',
+        muscles: 'Hamstrings, glutes, lower back, core.',
+        restSeconds: 120
+      },
+      {
+        id: 'lower-ex2',
+        name: 'Bulgarian Split Squat',
+        setsReps: '3 x 6/side',
+        weight: 'Dumbbells',
+        notes: 'Suggested weight: 10-20 kg per hand. Heavy enough to challenge, but light enough to drive up explosively. Keep torso slightly leaned forward to target glutes, drive up explosively.',
+        benefits: 'Develops unilateral leg strength, mimicking the power transfer from the rear leg in a cross.',
+        muscles: 'Quads, glutes, core stability.',
+        restSeconds: 105
+      },
+      {
+        id: 'lower-ex3',
+        name: 'Squat Jumps',
+        setsReps: '4 x 6',
+        weight: 'Bodyweight',
+        notes: 'Dip down and explode vertically as high as possible. Land soft.',
+        benefits: 'Translates raw strength into explosive rate of force development.',
+        muscles: 'Quads, calves, glutes.',
+        restSeconds: 90
+      },
+      {
+        id: 'lower-ex4',
+        name: 'Lateral Bounds',
+        setsReps: '3 x 8/side',
+        weight: 'Bodyweight',
+        notes: 'Jump side to side, sticking the landing on one leg before bounding back.',
+        benefits: 'Improves lateral power and agility, essential for footwork and pivoting.',
+        muscles: 'Glute medius, adductors, quads.',
+        restSeconds: 75
+      },
+      {
+        id: 'lower-ex5',
+        name: 'Broad Jumps',
+        setsReps: '3 x 5',
+        weight: 'Bodyweight',
+        notes: 'Jump forward as far as possible, landing softly on both feet. Reset between reps.',
+        benefits: 'Builds horizontal power for closing distance fast.',
+        muscles: 'Glutes, hamstrings, quads.',
+        restSeconds: 90
+      }
+    ],
+    powerCircuit: {
+      id: 'lower-finisher',
+      name: 'Explosive Leg Circuit',
+      benefits: 'Perform back to back with NO rest between exercises. 60s rest between rounds.',
+      rounds: [
+        {
+          id: 'lower-finisher-r1',
+          name: 'Round 1',
+          workSeconds: 90,
+          restSeconds: 60,
+          combo: 'Squat Jumps × 10 reps<br>Lateral Bounds × 8 reps each side<br>Broad Jumps × 5 reps'
+        },
+        {
+          id: 'lower-finisher-r2',
+          name: 'Round 2',
+          workSeconds: 90,
+          restSeconds: 0,
+          combo: 'Squat Jumps × 10 reps<br>Lateral Bounds × 8 reps each side<br>Broad Jumps × 5 reps'
+        }
+      ]
+    },
+    cooldown: [
+      { id: 'lower-cd1', name: 'Pigeon Pose', duration: '1 min each side', desc: 'Cross one leg in front of you, extending the other leg back. Lean forward to stretch the glute.' },
+      { id: 'lower-cd2', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' },
+      { id: 'lower-cd3', name: 'Hamstring Stretch', duration: '1 min', desc: 'Sit with legs extended, reach for toes while keeping a straight back.' }
     ]
   }
 ];
