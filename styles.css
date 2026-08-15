@@ -1619,11 +1619,11 @@ body {
 .qs-card {
     flex: 0 0 160px;          /* never grow or shrink */
     width: 160px;
-    height: 200px;
+    height: 160px;
     border-radius: 16px;
     background: var(--bg-card);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 16px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -1649,17 +1649,17 @@ body {
 
 /* Card content */
 .qs-card-emoji {
-    font-size: 36px;
+    font-size: 28px;
     line-height: 1;
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
 .qs-card-title {
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 700;
     color: var(--text-primary);
     line-height: 1.25;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 .qs-card-duration {
     font-size: 12px;
@@ -1669,20 +1669,20 @@ body {
 /* Focus pill — pinned to the bottom of the card */
 .qs-pill {
     position: absolute;
-    bottom: 12px;
-    left: 16px;
-    right: 16px;
+    bottom: 10px;
+    left: 12px;
+    right: 12px;
     display: inline-flex;
     align-items: center;
-    padding: 4px 8px;
+    padding: 3px 8px;
     border-radius: var(--radius-pill);
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
     text-transform: capitalize;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: calc(160px - 32px);
+    max-width: calc(160px - 24px);
 }
 /* Pill colour variants matching the accent system */
 .qs-pill-amber {
