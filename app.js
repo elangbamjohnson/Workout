@@ -670,13 +670,13 @@ function updateGlobalHeader(isHome, day = null, dayIndex = 0, totalDays = 7) {
 
 // ── Quick Sessions: Phase-1 static data ────────────────────────────────────
 const quickSessionCards = [
-    { id: 'quick-hybrid', emoji: '🥊', name: 'Hybrid Boxing',       duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-hybrid')), tag: 'Box + Conditioning', pill: 'qs-pill-amber'  },
-    { emoji: '💪', name: 'Upper Body Power',     duration: '~45 min', tag: 'Strength',            pill: 'qs-pill-orange' },
-    { emoji: '🦵', name: 'Lower Body Power',     duration: '~50 min', tag: 'Strength',            pill: 'qs-pill-orange' },
-    { emoji: '👤', name: 'Shadow Boxing',        duration: '~30 min', tag: 'Technical',           pill: 'qs-pill-cyan'   },
-    { emoji: '🔥', name: 'HIIT Boxing',          duration: '~25 min', tag: 'Conditioning',        pill: 'qs-pill-red'    },
-    { emoji: '🧘', name: 'Active Recovery',      duration: '~20 min', tag: 'Recovery',            pill: 'qs-pill-teal'   },
-    { emoji: '💥', name: 'Full Body Explosive',  duration: '~55 min', tag: 'Full Body',           pill: 'qs-pill-orange' },
+    { id: 'quick-hybrid', emoji: '🥊', name: 'Hybrid Boxing',       duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-hybrid')), tag: 'Box + Conditioning', pill: 'qs-pill-amber',  type: 'bag'       },
+    { emoji: '💪', name: 'Upper Body Power',     duration: '~45 min', tag: 'Strength',            pill: 'qs-pill-orange', type: 'strength'  },
+    { emoji: '🦵', name: 'Lower Body Power',     duration: '~50 min', tag: 'Strength',            pill: 'qs-pill-orange', type: 'strength'  },
+    { emoji: '👤', name: 'Shadow Boxing',        duration: '~30 min', tag: 'Technical',           pill: 'qs-pill-cyan',   type: 'technical' },
+    { emoji: '🔥', name: 'HIIT Boxing',          duration: '~25 min', tag: 'Conditioning',        pill: 'qs-pill-red',    type: 'hiit'      },
+    { emoji: '🧘', name: 'Active Recovery',      duration: '~20 min', tag: 'Recovery',            pill: 'qs-pill-teal',   type: 'rest'      },
+    { emoji: '💥', name: 'Full Body Explosive',  duration: '~55 min', tag: 'Full Body',           pill: 'qs-pill-orange', type: 'strength'  },
 ];
 
 function renderHome() {
@@ -741,7 +741,7 @@ function renderHome() {
                 ${quickSessionCards.map(card => {
                     const action = card.id ? `renderQuickSession('${card.id}')` : `showQuickSessionComingSoon('${card.name.replace(/'/g, "\\\\'")}')`;  
                     return `
-                    <div class="qs-card" role="button" tabindex="0"
+                    <div class="qs-card qs-type-${card.type}" role="button" tabindex="0"
                          onclick="${action};"
                          onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();${action};}">
                         <span class="qs-card-emoji">${card.emoji}</span>
