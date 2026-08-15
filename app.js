@@ -730,6 +730,30 @@ function renderHome() {
         </div>
     `;
 
+    // ── Quick Sessions (between TODAY and This Week) ──────────────────────────
+    html += `
+        <div class="qs-section">
+            <div class="qs-header">
+                <div class="qs-header-title">Quick Sessions</div>
+                <div class="qs-header-subtitle">Pick a style. Start training.</div>
+            </div>
+            <div class="qs-scroll-container">
+                ${quickSessionCards.map(card => {
+                    const action = card.id ? `renderQuickSession('${card.id}')` : `showQuickSessionComingSoon('${card.name.replace(/'/g, "\\\\'")}')`;  
+                    return `
+                    <div class="qs-card" role="button" tabindex="0"
+                         onclick="${action};"
+                         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();${action};}">
+                        <span class="qs-card-emoji">${card.emoji}</span>
+                        <div class="qs-card-title">${card.name}</div>
+                        <div class="qs-card-duration">${card.duration}</div>
+                        <span class="qs-pill ${card.pill}">${card.tag}</span>
+                    </div>
+                `}).join('')}
+            </div>
+        </div>
+    `;
+
     // Week Grid
     html += `<h2 class="section-header">This Week</h2><div class="days-grid">`;
     workoutData.days.forEach((day, index) => {
@@ -764,29 +788,7 @@ function renderHome() {
     });
     html += `</div>`;
 
-    // ── Quick Sessions ────────────────────────────────────────────────────────
-    html += `
-        <div class="qs-section">
-            <div class="qs-header">
-                <div class="qs-header-title">Quick Sessions</div>
-                <div class="qs-header-subtitle">Pick a style. Start training.</div>
-            </div>
-            <div class="qs-scroll-container">
-                ${quickSessionCards.map(card => {
-                    const action = card.id ? `renderQuickSession('${card.id}')` : `showQuickSessionComingSoon('${card.name.replace(/'/g, "\\'")}')`;
-                    return `
-                    <div class="qs-card" role="button" tabindex="0"
-                         onclick="${action};"
-                         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();${action};}">
-                        <span class="qs-card-emoji">${card.emoji}</span>
-                        <div class="qs-card-title">${card.name}</div>
-                        <div class="qs-card-duration">${card.duration}</div>
-                        <span class="qs-pill ${card.pill}">${card.tag}</span>
-                    </div>
-                `}).join('')}
-            </div>
-        </div>
-    `;
+
 
     // Inject Dashboard
     html += generateDashboardHTML();
