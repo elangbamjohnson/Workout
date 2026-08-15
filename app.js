@@ -2,7 +2,7 @@ const icons = {
     back: `<svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>`,
     forward: `<svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>`,
     info: `<svg viewBox="0 0 24 24"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>`,
-    chevron: `<svg viewBox="0 0 24 24"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>`,
+    chevron: `<svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>`,
     strength: `<svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>`,
     bag: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="6" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>`,
     technical: `<svg viewBox="0 0 24 24"><path d="M13 2.05v7.58h4.59L8.4 21.95v-7.58H3.81z"/></svg>`,
@@ -127,6 +127,19 @@ window.startWarmupTimer = function(dayId, itemId, duration, title, cue, switchSi
         Timer.startWarmup(duration, title, cue, switchSides, day ? day.type : 'strength', () => {
             Store.logItem(dayId, itemId, { completed: true });
             reRenderViewingDay();
+        });
+    });
+};
+
+window.startPowerCircuitRound = function(quickId, roundId, workSec, restSec, title) {
+    Timer.startCountdown(5, title, () => {
+        Timer.startRound(workSec, restSec, title, "Focus on explosive speed", 'strength', () => {
+            Store.logItem(quickId, roundId, { completed: true });
+            if (viewingDayId.startsWith('quick-')) {
+                renderQuickSession(viewingDayId);
+            } else {
+                reRenderViewingDay();
+            }
         });
     });
 };
@@ -316,13 +329,30 @@ function calculateQuickSessionDuration(qs) {
         finisherCount = qs.finisher.rounds.length;
     }
     
+    // Power Circuit
+    let pcCount = 0;
+    if (qs.powerCircuit && qs.powerCircuit.rounds) {
+        totalSec += qs.powerCircuit.rounds.reduce((s, r) => s + (r.workSeconds || 0) + (r.restSeconds || 0), 0);
+        pcCount = qs.powerCircuit.rounds.length;
+    }
+
+    // Exercises (Strength)
+    if (qs.exercises) {
+        qs.exercises.forEach(ex => {
+            let setsCount = parseInt((ex.setsReps || "1").split(" ")[0]) || 1;
+            // estimate 45s of work per set
+            totalSec += setsCount * 45;
+            totalSec += setsCount * (ex.restSeconds || 0);
+        });
+    }
+    
     // Cool down (fixed 3 min)
     if (qs.cooldown) {
         totalSec += 180;
     }
     
     // GET READY countdowns
-    totalSec += (bagCount + finisherCount) * 5;
+    totalSec += (bagCount + finisherCount + pcCount) * 5;
     
     const mins = Math.ceil(totalSec / 60);
     return `~${mins} min`;
@@ -354,6 +384,8 @@ function expandAll() {
             if (session.bagRounds) expandedCardIds.add(session.bagRounds.id);
             if (session.circuit) expandedCardIds.add(session.circuit.id);
             if (session.finisher) expandedCardIds.add(session.finisher.id);
+            if (session.powerCircuit) expandedCardIds.add(session.powerCircuit.id);
+            if (session.exercises) session.exercises.forEach(ex => expandedCardIds.add(ex.id));
             renderQuickSession(viewingDayId);
         }
         return;
@@ -386,19 +418,21 @@ function renderItemCard(item, dayType) {
     let html = `
         <div class="item-card type-${dayType} ${isExpanded ? 'expanded' : ''}" data-id="${item.id}">
             <button class="item-header" onclick="toggleCard('${item.id}')" aria-expanded="${isExpanded}">
-                <div class="item-header-top">
-                    <div class="item-title-wrap">
-                        <div class="num-badge" aria-hidden="true">${item.badge}</div>
-                        <h3 class="title-card">${item.title}</h3>
+                <div class="item-header-content">
+                    <div class="item-header-top">
+                        <div class="item-title-wrap">
+                            <div class="num-badge" aria-hidden="true">${item.badge}</div>
+                            <h3 class="title-card">${item.title}</h3>
+                        </div>
                     </div>
-                    <div class="item-chevron" aria-hidden="true">${icons.chevron}</div>
+                    <div class="item-stats">
+                        ${item.stats.map((s, idx) => {
+                            if (s === 'divider') return '<div class="stat-divider" aria-hidden="true"></div>';
+                            return `<div class="stat-item">${s.icon ? s.icon : ''} <span class="text-mono">${s.value}</span> ${s.label ? `<span class="stat-item-label">${s.label}</span>` : ''}</div>`;
+                        }).join('')}
+                    </div>
                 </div>
-                <div class="item-stats">
-                    ${item.stats.map((s, idx) => {
-                        if (s === 'divider') return '<div class="stat-divider" aria-hidden="true"></div>';
-                        return `<div class="stat-item">${s.icon ? s.icon : ''} <span class="text-mono">${s.value}</span> ${s.label ? `<span class="stat-item-label">${s.label}</span>` : ''}</div>`;
-                    }).join('')}
-                </div>
+                <div class="item-chevron" aria-hidden="true">${icons.chevron}</div>
             </button>
             <div class="item-content">
                 ${item.callout ? `
@@ -671,7 +705,7 @@ function updateGlobalHeader(isHome, day = null, dayIndex = 0, totalDays = 7) {
 // ── Quick Sessions: Phase-1 static data ────────────────────────────────────
 const quickSessionCards = [
     { id: 'quick-hybrid', emoji: '🥊', name: 'Hybrid Boxing',       duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-hybrid')), tag: 'Box + Conditioning', pill: 'qs-pill-amber',  type: 'bag'       },
-    { emoji: '💪', name: 'Upper Body Power',     duration: '~45 min', tag: 'Strength',            pill: 'qs-pill-orange', type: 'strength'  },
+    { id: 'quick-upper-power', emoji: '💪', name: 'Upper Body Power',     duration: '~45 min', tag: 'Strength',            pill: 'qs-pill-orange', type: 'strength'  },
     { emoji: '🦵', name: 'Lower Body Power',     duration: '~50 min', tag: 'Strength',            pill: 'qs-pill-orange', type: 'strength'  },
     { emoji: '👤', name: 'Shadow Boxing',        duration: '~30 min', tag: 'Technical',           pill: 'qs-pill-cyan',   type: 'technical' },
     { emoji: '🔥', name: 'HIIT Boxing',          duration: '~25 min', tag: 'Conditioning',        pill: 'qs-pill-red',    type: 'hiit'      },
@@ -1446,12 +1480,20 @@ window.renderQuickSession = function(quickId) {
     // 1. Warm-Up
     html += renderWarmup(session);
     
+    // Exercises moved to item-list below
     // Expand/Collapse All Logic for Quick Sessions
     let totalExpandable = 0;
     let totalExpanded = 0;
     if (session.bagRounds) { totalExpandable++; if (expandedCardIds.has(session.bagRounds.id)) totalExpanded++; }
     if (session.circuit) { totalExpandable++; if (expandedCardIds.has(session.circuit.id)) totalExpanded++; }
     if (session.finisher) { totalExpandable++; if (expandedCardIds.has(session.finisher.id)) totalExpanded++; }
+    if (session.powerCircuit) { totalExpandable++; if (expandedCardIds.has(session.powerCircuit.id)) totalExpanded++; }
+    if (session.exercises) { 
+        session.exercises.forEach(ex => {
+            totalExpandable++;
+            if (expandedCardIds.has(ex.id)) totalExpanded++;
+        });
+    }
     
     let toggleAction = "expandAll()";
     let toggleText = "Expand all";
@@ -1470,6 +1512,69 @@ window.renderQuickSession = function(quickId) {
     `;
     
     html += `<div class="item-list">`;
+    
+    // 1.5 Main Exercises (Strength)
+    if (session.exercises) {
+        session.exercises.forEach((ex, idx) => {
+            let musclesHtml = ex.muscles ? ex.muscles.split(',').map(m => `<div class="muscle-tag">${m.trim()}</div>`).join('') : '';
+            
+            let stats = [
+                { icon: icons.repeat, value: ex.setsReps, label: "sets × reps" },
+                "divider",
+                { icon: icons.weight, value: ex.weight }
+            ];
+            
+            if (ex.restSeconds) {
+                let m = Math.floor(ex.restSeconds / 60);
+                let s = ex.restSeconds % 60;
+                let text = m > 0 && s > 0 ? `${m} min ${s} sec rest` : m > 0 ? `${m} min rest` : `${s} sec rest`;
+                stats.push("divider");
+                stats.push({ icon: icons.rest, value: text });
+            }
+            
+            // Generate Set Logging Rows
+            let setsCount = parseInt((ex.setsReps || "1").split(" ")[0]) || 1;
+            let logHtml = '';
+            const logData = Store.getItemLog(quickId, ex.id) || { sets: {} };
+            for(let s=1; s<=setsCount; s++) {
+                const setData = logData.sets[s] || {};
+                const isChecked = setData.completed ? 'checked' : '';
+                const repsVal = setData.reps || (ex.setsReps.includes('x') ? ex.setsReps.split('x')[1].trim() : '5');
+                const weightVal = setData.weight || ex.weight || '';
+                
+                logHtml += `
+                <div class="set-row ${isChecked}">
+                    <div class="set-num">${s}</div>
+                    <div class="set-input-group">
+                        <input type="text" class="input-val input-weight" value="${weightVal}" placeholder="lbs" />
+                        <span class="input-label">weight</span>
+                    </div>
+                    <div class="set-input-group">
+                        <input type="number" class="input-val input-rep" value="${repsVal}" />
+                        <span class="input-label">reps</span>
+                    </div>
+                    <button class="btn-check ${isChecked}" onclick="logSet('${quickId}', '${ex.id}', ${s}, ${ex.restSeconds || 0}, '${ex.name.replace(/'/g, "\\'")}', 'Focus on form.', this)">${icons.checkmark}</button>
+                </div>
+                `;
+            }
+
+            let normalizedItem = {
+                id: ex.id,
+                badge: idx + 1,
+                title: ex.name,
+                stats: stats,
+                callout: { icon: icons.strength, text: "Focus on explosion and intent over weight." },
+                sections: [
+                    { title: "LOG SETS", content: logHtml },
+                    { title: "EXECUTION NOTES", content: `<p>${ex.notes}</p>` },
+                    { title: "WHY THIS EXERCISE", content: `<p>${ex.benefits}</p>` },
+                    { title: "MUSCLES WORKED", content: `<div class="muscle-tags">${musclesHtml}</div>` }
+                ]
+            };
+            
+            html += renderItemCard(normalizedItem, session.type);
+        });
+    }
     
     // Helper to render bag/finisher rounds
     const renderBagSection = (sectionObj, isFinisher) => {
@@ -1555,13 +1660,55 @@ window.renderQuickSession = function(quickId) {
     // 4. Finisher
     if (session.finisher) html += renderBagSection(session.finisher, true);
     
+    // 4.5 Power Circuit (Special Finisher)
+    if (session.powerCircuit) {
+        const pc = session.powerCircuit;
+        const isExpanded = expandedCardIds.has(pc.id);
+        
+        const roundsHtml = pc.rounds.map((r, i) => {
+            const log = Store.getItemLog(quickId, r.id) || {};
+            const isCompleted = !!log.completed;
+            const isChecked = isCompleted ? 'checked' : '';
+            
+            return `
+            <div class="nested-row ${isChecked}">
+                <button class="btn-check ${isChecked}" onclick="Store.logItem('${quickId}', '${r.id}', { completed: !${isCompleted} }); renderQuickSession('${quickId}')">${icons.checkmark}</button>
+                <div style="flex: 1;">${r.combo}</div>
+                ${!isCompleted ? `
+                <button class="btn-play type-strength" onclick="startPowerCircuitRound('${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, '${r.name}')"><span class="play-icon">${icons.play}</span> Start Round</button>
+                ` : ''}
+            </div>`;
+        }).join('');
+        
+        let normalizedItem = {
+            id: pc.id,
+            badge: 'PC',
+            title: pc.name,
+            stats: [
+                { icon: icons.clock, value: `~${Math.ceil((pc.rounds.length * 90 + 60) / 60)} min` },
+                'divider',
+                { icon: icons.repeat, value: `${pc.rounds.length} rounds` }
+            ],
+            callout: { icon: icons.flame, text: pc.benefits },
+            sections: [
+                { title: "ROUNDS", content: `<div class="nested-list">${roundsHtml}</div>` }
+            ]
+        };
+        html += renderItemCard(normalizedItem, 'strength');
+    }
+    
     // 5. Cooldown
     if (session.cooldown) {
         html += `
             <div class="card type-rest" style="margin-top: 16px;">
                 <h4 class="label-small" style="margin-bottom: 8px;">COOL DOWN</h4>
                 <ul class="rest-list">
-                    ${session.cooldown.map(n => `<li>${n.name} — ${n.duration}</li>`).join('')}
+                    ${session.cooldown.map(n => `
+                        <li>
+                            <div style="font-weight: 500;">${n.name} — ${n.duration}</div>
+                            ${n.desc ? `<div style="font-size: 13px; opacity: 0.8; margin-top: 4px;">${n.desc}</div>` : ''}
+                        </li>
+                    `).join('')}
                 </ul>
             </div>
         `;

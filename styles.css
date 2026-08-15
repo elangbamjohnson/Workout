@@ -582,13 +582,21 @@ body {
     padding: var(--sp-4);
     cursor: pointer;
     display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-4);
+}
+.item-header-content {
+    display: flex;
     flex-direction: column;
     gap: var(--sp-2);
+    flex: 1;
 }
 .item-header-top {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 .item-title-wrap {
     display: flex;
@@ -615,9 +623,17 @@ body {
 .item-chevron {
     color: var(--text-muted);
     transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.item-chevron svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
 }
 .item-card.expanded .item-chevron {
-    transform: rotate(180deg);
+    transform: rotate(90deg);
 }
 
 /* Stats Row inside Cards */
@@ -1287,9 +1303,18 @@ body {
 }
 .warmup-chevron {
     transition: transform 0.2s ease;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.warmup-chevron svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
 }
 .warmup-chevron.expanded {
-    transform: rotate(180deg);
+    transform: rotate(90deg);
 }
 .warmup-list {
     display: flex;
