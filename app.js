@@ -131,7 +131,10 @@ window.startWarmupTimer = function(dayId, itemId, duration, title, cue, switchSi
 };
 
 window.toggleWarmupExpanded = function() {
-    const userExpanded = sessionStorage.getItem('warmupExpanded');
+    const day = getDayData(viewingDayId);
+    if (!day) return;
+    
+    const userExpanded = sessionStorage.getItem(`warmupExpanded_${day.id}`);
     let currentlyExpanded = false;
     
     if (userExpanded === 'true') {
@@ -139,13 +142,12 @@ window.toggleWarmupExpanded = function() {
     } else if (userExpanded === 'false') {
         currentlyExpanded = false;
     } else {
-        const day = window.programData.days.find(d => d.id === viewingDayId) || window.quickWorkouts.find(q => q.id === viewingDayId);
-        if (day && day.warmup) {
+        if (day.warmup) {
             currentlyExpanded = day.warmup.some(item => (Store.getItemLog(day.id, item.id) || {}).completed);
         }
     }
     
-    sessionStorage.setItem('warmupExpanded', currentlyExpanded ? 'false' : 'true');
+    sessionStorage.setItem(`warmupExpanded_${day.id}`, currentlyExpanded ? 'false' : 'true');
     reRenderViewingDay();
 };
 
@@ -159,7 +161,7 @@ function renderWarmup(day) {
     });
     
     // Explicit user toggle overrides default collapsed state
-    const userExpanded = sessionStorage.getItem('warmupExpanded');
+    const userExpanded = sessionStorage.getItem(`warmupExpanded_${day.id}`);
     
     let isExpanded = false;
     if (userExpanded === 'true') {
