@@ -1130,6 +1130,97 @@ const workoutData = {
 // ── Phase 2 Quick Sessions Data ────────────────────────────────────────────
 window.quickWorkouts = [
   {
+    id: 'quick-upper-power',
+    title: 'Upper Body Power',
+    type: 'strength',
+    duration: '~45 min',
+    focus: 'Strength',
+    warmup: [
+      { id: 'upper-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Light pace, warm up the ankles and calves' },
+      { id: 'upper-wu2', name: 'Jumping Jacks', type: 'timed', duration: 60, cue: 'Full range of motion overhead' },
+      { id: 'upper-wu3', name: 'Arm Circles + Shoulder Rolls', type: 'timed', duration: 60, cue: 'Forward and back, big sweeping circles' },
+      { id: 'upper-wu4', name: 'Inchworm', type: 'timed', duration: 60, cue: 'Walk out to a full plank, stretch the hamstrings' }
+    ],
+    exercises: [
+      {
+        id: 'upper-ex1',
+        name: 'Plyometric Push-ups',
+        setsReps: '4 x 6',
+        weight: 'Bodyweight',
+        notes: 'Explode up so hands leave the floor. If too difficult, do them from the knees or incline, but maintain maximum explosion speed.',
+        benefits: 'Builds raw pushing power crucial for straight punches.',
+        muscles: 'Chest, triceps, shoulders, core.',
+        restSeconds: 90
+      },
+      {
+        id: 'upper-ex2',
+        name: 'Landmine Single-Arm Push Press',
+        setsReps: '4 x 5/side',
+        weight: 'Bar + Plates',
+        notes: 'Slight dip in the knees, then drive up violently. The power comes from the legs transferring through the core to the arm.',
+        benefits: 'Trains the kinetic chain sequence of a punch (ground to hand).',
+        muscles: 'Shoulders, triceps, core, legs.',
+        restSeconds: 90
+      },
+      {
+        id: 'upper-ex3',
+        name: 'Ring Row / Explosive Pull',
+        setsReps: '3 x 8',
+        weight: 'Bodyweight',
+        notes: 'Pull your chest to the rings/bar as fast as possible, lower under control.',
+        benefits: 'Balances the pushing muscles and builds the deceleration strength needed to snap punches back fast.',
+        muscles: 'Lats, rhomboids, biceps, rear delts.',
+        restSeconds: 75
+      },
+      {
+        id: 'upper-ex4',
+        name: 'Med Ball Chest Pass (wall)',
+        setsReps: '3 x 10',
+        weight: 'Med Ball',
+        notes: 'Stand in athletic stance, throw the ball into the wall as hard as possible from the chest. Catch and immediately fire again.',
+        benefits: 'Develops reactive upper body power and hand speed.',
+        muscles: 'Chest, triceps, anterior delts.',
+        restSeconds: 60
+      },
+      {
+        id: 'upper-ex5',
+        name: 'Landmine Rotation',
+        setsReps: '3 x 8/side',
+        weight: 'Bar + Plates',
+        notes: 'Dynamic, hip-driven rotational movement. Rotate from the hips and pivot the back foot, sweeping the bar side to side.',
+        benefits: 'Builds explosive rotational power essential for hooks and crosses.',
+        muscles: 'Obliques, core, shoulders, hips.',
+        restSeconds: 90
+      }
+    ],
+    powerCircuit: {
+      id: 'upper-finisher',
+      name: 'Punch Power Circuit',
+      benefits: 'Perform back to back with NO rest between exercises. 60s rest between rounds.',
+      rounds: [
+        {
+          id: 'upper-finisher-r1',
+          name: 'Round 1',
+          workSeconds: 90,
+          restSeconds: 60,
+          combo: 'Plyometric Push-ups × 8 reps<br>Med Ball Chest Pass × 10 reps<br>Shadow Box full-speed 1-2-3 combos for 30 seconds'
+        },
+        {
+          id: 'upper-finisher-r2',
+          name: 'Round 2',
+          workSeconds: 90,
+          restSeconds: 0,
+          combo: 'Plyometric Push-ups × 8 reps<br>Med Ball Chest Pass × 10 reps<br>Shadow Box full-speed 1-2-3 combos for 30 seconds'
+        }
+      ]
+    },
+    cooldown: [
+      { id: 'upper-cd1', name: 'Chest opener stretch', duration: '1 min', desc: 'Find a wall or doorway, place your forearm against it at a 90-degree angle, and gently turn your body away to stretch the pecs.' },
+      { id: 'upper-cd2', name: 'Shoulder cross-body stretch', duration: '1 min', desc: 'Pull one arm gently across your chest, keeping the shoulder blade down and back.' },
+      { id: 'upper-cd3', name: 'Wrist + forearm stretch', duration: '1 min', desc: 'Extend your arm in front of you, palm up, and gently pull your fingers down towards the floor.' }
+    ]
+  },
+  {
     id: 'quick-hybrid',
     title: 'Hybrid Boxing',
     type: 'bag',
