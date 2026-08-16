@@ -707,7 +707,7 @@ const quickSessionCards = [
     { id: 'quick-hybrid', emoji: '🥊', name: 'Hybrid Boxing',       duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-hybrid')), tag: 'Box + Conditioning', pill: 'qs-pill-amber',  type: 'bag'       },
     { id: 'quick-upper-power', emoji: '💪', name: 'Upper Body Power',     duration: '~45 min', tag: 'Strength',            pill: 'qs-pill-orange', type: 'strength'  },
     { id: 'quick-lower-power', emoji: '🦵', name: 'Lower Body Power',     duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-lower-power')) || '~50 min', tag: 'Strength',            pill: 'qs-pill-orange', type: 'strength'  },
-    { emoji: '👤', name: 'Shadow Boxing',        duration: '~30 min', tag: 'Technical',           pill: 'qs-pill-cyan',   type: 'technical' },
+    { id: 'quick-shadow-boxing', emoji: '👤', name: 'Shadow Boxing',        duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-shadow-boxing')) || '~30 min', tag: 'Technical',           pill: 'qs-pill-cyan',   type: 'technical' },
     { emoji: '🔥', name: 'HIIT Boxing',          duration: '~25 min', tag: 'Conditioning',        pill: 'qs-pill-red',    type: 'hiit'      },
     { emoji: '🧘', name: 'Active Recovery',      duration: '~20 min', tag: 'Recovery',            pill: 'qs-pill-teal',   type: 'rest'      },
     { emoji: '💥', name: 'Full Body Explosive',  duration: '~55 min', tag: 'Full Body',           pill: 'qs-pill-orange', type: 'strength'  },
@@ -1373,19 +1373,24 @@ window.addEventListener('load', () => {
 // Phase 2 — Quick Sessions Renderer
 // =====================================================================
 
-window.startQuickRound = function(quickId, exId, workSec, restSec, roundNum, title, cue, isLast, timedCuesArg) {
+window.startQuickRound = function(quickId, exId, workSec, restSec, roundNum, title, cue, isLast, timedCuesArg, skipCountdown) {
     const timedCues = timedCuesArg ? JSON.parse(decodeURIComponent(timedCuesArg)) : null;
-    Timer.startCountdown(5, title, () => {
+    const startRound = () => {
         Timer.startRound(workSec, restSec, title, cue, 'bag', () => {
             Store.logItem(quickId, exId, { completed: true });
             if (isLast) {
                 setTimeout(() => {
-                    window.speakAlert("Finisher complete — outstanding work!");
+                    window.speakAlert("Session complete — outstanding work!");
                 }, 500);
             }
             if (viewingDayId === quickId) renderQuickSession(quickId);
         }, timedCues);
-    });
+    };
+    if (skipCountdown) {
+        startRound();
+    } else {
+        Timer.startCountdown(5, title, startRound);
+    }
 };
 
 window.toggleQuickCircuitItem = function(quickId, itemId) {
@@ -1591,7 +1596,7 @@ window.renderQuickSession = function(quickId) {
                 <button class="btn-check ${isChecked}" onclick="Store.logItem('${quickId}', '${r.id}', { completed: !${isCompleted} }); renderQuickSession('${quickId}')">${icons.checkmark}</button>
                 <div style="flex: 1;">${r.combo}</div>
                 ${!isCompleted ? `
-                <button class="btn-play type-bag" onclick="startQuickRound('${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, ${i+1}, '${r.name.replace(/'/g, "\\'")}', '${r.combo.replace(/'/g, "\\'")}', ${isLast}, '${timedCuesArg}')"><span class="play-icon">${icons.play}</span> Start</button>
+                <button class="btn-play type-bag" onclick="startQuickRound('${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, ${i+1}, '${r.name.replace(/'/g, "\\'")}', '${r.combo.replace(/'/g, "\\'")}', ${isLast}, '${timedCuesArg}', ${!!r.skipCountdown})"><span class="play-icon">${icons.play}</span> Start</button>
                 ` : ''}
             </div>`;
         }).join('');

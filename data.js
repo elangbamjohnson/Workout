@@ -1435,4 +1435,108 @@ window.quickWorkouts = [
       { id: 'lower-cd3', name: 'Hamstring Stretch', duration: '1 min', desc: 'Sit with legs extended, reach for toes while keeping a straight back.' }
     ]
   }
+  },
+  {
+    id: 'quick-shadow-boxing',
+    title: 'Shadow Boxing',
+    type: 'technical',
+    duration: '~30 min',
+    focus: 'Technical',
+    warmup: [
+      { id: 'shadow-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Moderate pace — get rhythm and footwork ready' },
+      { id: 'shadow-wu2', name: 'Neck Rolls', type: 'timed', duration: 30, cue: 'Slow and controlled — full range of motion' },
+      { id: 'shadow-wu3', name: 'Shoulder Circles', type: 'timed', duration: 30, cue: 'Big circles, loosen the shoulder joint' },
+      { id: 'shadow-wu4', name: 'Hip Rotations', type: 'timed', duration: 60, cue: 'Stand tall, rotate from the hip — not just the knee' },
+      { id: 'shadow-wu5', name: 'Shadowboxing (40% effort)', type: 'timed', duration: 60, cue: 'Light movement only — just get your body moving' }
+    ],
+    bagRounds: {
+      id: 'shadow-main',
+      name: 'Shadow Boxing Rounds',
+      benefits: 'Focus on clean technique, footwork, and head movement. No bag — pure skill work.',
+      rounds: [
+        {
+          id: 'shadow-r1',
+          name: 'Round 1 — Footwork + Basic Combos',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Footwork + Basic Combos<br>Stay light on your feet — Jab, Cross, move!',
+          timedCues: [
+            { time: 0,   text: "Stay light on your feet — Jab, Cross, One Two! Move after every combo!", uiIndex: 0 },
+            { time: 20,  text: "Jab, Cross, Hook — One Two Three! Circle left after!", uiIndex: 1 },
+            { time: 45,  text: "Jab, Cross, Hook, Cross — One Two Three Two! Step back, reset!", uiIndex: 2 },
+            { time: 80,  text: "Pivot drill — throw One Two, pivot right, throw One Two!", uiIndex: 3 },
+            { time: 120, text: "Freestyle — keep moving, stay light!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — finish strong, stay on your toes!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r2',
+          name: 'Round 2 — Head Movement + Counters',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Head Movement + Counters<br>Slip, roll, and counter — never stand still!',
+          timedCues: [
+            { time: 0,   text: "Slip right, Jab Cross — slip left, Jab Cross! One Two each side!", uiIndex: 0 },
+            { time: 25,  text: "Roll under, come up with the Hook — Three! Roll and fire!", uiIndex: 1 },
+            { time: 55,  text: "Parry, Cross — parry that jab, fire the Two!", uiIndex: 2 },
+            { time: 90,  text: "Slip, slip, Cross Hook — move your head!", uiIndex: 3 },
+            { time: 130, text: "Freestyle head movement — never be a stationary target!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — last combinations!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r3',
+          name: 'Round 3 — Defense + Combos',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Defense + Combos<br>Guard up, absorb and counter every time!',
+          timedCues: [
+            { time: 0,   text: "Guard up — Jab Cross to the body, Jab Cross to the head! One Two down, One Two up!", uiIndex: 0 },
+            { time: 25,  text: "Block, Cross, Hook — absorb and counter!", uiIndex: 1 },
+            { time: 55,  text: "Slip right, body shot, head shot — One Six Two!", uiIndex: 2 },
+            { time: 90,  text: "Pull back counter — lean back, Cross, Hook Cross — Two Three Two!", uiIndex: 3 },
+            { time: 130, text: "Freestyle defense and counters!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — defensive combinations!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r4',
+          name: 'Round 4 — Full Speed Free Flow',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Full Speed Free Flow<br>Everything you\'ve got — max speed, max intent!',
+          timedCues: [
+            { time: 0,   text: "This is YOUR round — full speed, full power, everything you've got!", uiIndex: 0 },
+            { time: 40,  text: "Don't slow down — move and punch!", uiIndex: 0 },
+            { time: 80,  text: "Halfway — push the pace!", uiIndex: 0 },
+            { time: 120, text: "Last minute — dig deep!", uiIndex: 0 },
+            { time: 155, text: "Final 25 seconds — leave nothing in the tank!", uiIndex: 0 },
+            { time: 170, text: "Ten seconds — FINISH!", uiIndex: 0 }
+          ]
+        },
+        {
+          id: 'shadow-r5',
+          name: 'Round 5 — Cool Down Shadow',
+          workSeconds: 120,
+          restSeconds: 0,
+          skipCountdown: true,
+          combo: 'Cool Down Shadow (50% effort)<br>Breathe, move easy — let the heart rate come down.',
+          timedCues: [
+            { time: 0,  text: "Ease it down — 50% effort, breathe and move", uiIndex: 0 },
+            { time: 60, text: "Nice and easy — let the heart rate come down", uiIndex: 0 },
+            { time: 110, text: "Last ten seconds — finish clean", uiIndex: 0 }
+          ]
+        }
+      ]
+    },
+    cooldown: [
+      { id: 'shadow-cd1', name: 'Deep Breathing', duration: '1 min', desc: 'Inhale for 4 counts, hold for 4, exhale for 4. Slow the heart rate fully.' },
+      { id: 'shadow-cd2', name: 'Shoulder + Chest Stretch', duration: '1 min', desc: 'Clasp hands behind your back, open the chest, and hold.' },
+      { id: 'shadow-cd3', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' }
+    ]
+  }
 ];
