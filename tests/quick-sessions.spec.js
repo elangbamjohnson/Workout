@@ -87,7 +87,8 @@ test.describe('Quick Sessions Feature', () => {
     { id: 'quick-upper-power', name: 'Upper Body Power' },
     { id: 'quick-hybrid', name: 'Hybrid Boxing' },
     { id: 'quick-lower-power', name: 'Lower Body Power' },
-    { id: 'quick-shadow-boxing', name: 'Shadow Boxing' }
+    { id: 'quick-shadow-boxing', name: 'Shadow Boxing' },
+    { id: 'quick-hiit-boxing', name: 'HIIT Boxing' }
   ];
 
   for (const qs of quickSessions) {
@@ -127,7 +128,13 @@ test.describe('Quick Sessions Feature', () => {
       // Confirm
       await page.locator('#btn-confirm-swap').click();
       await expect(swapBanner).toBeHidden();
-      await expect(page.locator('.title-page')).toContainText(qs.name);
+      
+      try {
+        await expect(page.locator('.title-page')).toContainText(qs.name, { timeout: 2000 });
+      } catch (e) {
+        await page.screenshot({ path: `failure-${qs.id}.png`, fullPage: true });
+        throw e;
+      }
 
       // Force log completion
       await page.evaluate(({ id, name }) => {
@@ -172,5 +179,58 @@ test.describe('Quick Sessions Feature', () => {
       // Should go straight to Day 1
       await expect(page.locator('.day-header-card .label-small')).toHaveText('DAY 1');
       await expect(page.locator('.title-page')).toHaveText('Lower Body Power');
+  });
+  test('HIIT Boxing continuous session flow', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#splash-screen')).toBeHidden();
+
+    await page.locator('.qs-card').filter({ hasText: 'HIIT Boxing' }).click();
+    
+    // Swap banner confirmation
+    await page.locator('#btn-confirm-swap').click();
+    await expect(page.locator('.title-page')).toContainText('HIIT Boxing');
+
+    // Verify sections render correctly from the dynamic playlist
+    const tabataCard = page.locator('.item-card').filter({ hasText: 'Tabata Bag Rounds' });
+    await expect(tabataCard).toBeVisible();
+    
+    // Expand Tabata card to see rows
+    await tabataCard.locator('.item-header').click();
+    await expect(tabataCard.locator('.nested-row')).toHaveCount(8);
+
+    const circuitCard = page.locator('.item-card').filter({ hasText: 'Conditioning Circuit' });
+    await expect(circuitCard).toBeVisible();
+
+    // Expand Circuit card
+    await circuitCard.locator('.item-header').click();
+    await expect(circuitCard.locator('.nested-row')).toHaveCount(3); // 3 exercises in checklist
+
+    // Verify 'Start Full Session' button exists
+    const startFullBtn = page.locator('button', { hasText: 'Start Full Session' });
+    await expect(startFullBtn).toBeVisible();
+
+    // Click it to start the continuous sequence
+    await startFullBtn.click();
+
+    const timerModal = page.locator('#timer-modal');
+    await expect(timerModal).toBeVisible();
+
+    // Verify the first phase starts (Jump Rope)
+    const timerTitle = timerModal.locator('.timer-header h2');
+    await expect(timerTitle).toContainText('Jump Rope', { timeout: 2000 });
+
+    // Verify the timer ticks down
+    const timeDisplay = timerModal.locator('.timer-display');
+    await expect(timeDisplay).toBeVisible();
+    const initialTime = await timeDisplay.textContent();
+    
+    await page.waitForTimeout(1500);
+    const newTime = await timeDisplay.textContent();
+    expect(newTime).not.toEqual(initialTime);
+
+    // Clean up
+    await page.evaluate(() => {
+        if (typeof Timer !== 'undefined') Timer.close();
+    });
   });
 });

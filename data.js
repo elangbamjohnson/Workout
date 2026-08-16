@@ -1542,5 +1542,1674 @@ window.quickWorkouts = [
       { id: 'shadow-cd2', name: 'Shoulder + Chest Stretch', duration: '1 min', desc: 'Clasp hands behind your back, open the chest, and hold.' },
       { id: 'shadow-cd3', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' }
     ]
-  }
-];
+  },
+  {
+    id: 'quick-lower-power',
+    title: 'Lower Body Power',
+    type: 'strength',
+    duration: '~50 min',
+    focus: 'Strength',
+    warmup: [
+      { id: 'lower-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Light pace, warm up the ankles and calves' },
+      { id: 'lower-wu2', name: 'Leg Swings (forward/back)', type: 'timed', duration: 60, cue: 'Open up the hips' },
+      { id: 'lower-wu3', name: 'Hip Circles', type: 'timed', duration: 60, cue: 'Full range of motion, both directions' },
+      { id: 'lower-wu4', name: 'Lateral Lunge', type: 'timed', duration: 60, cue: 'Shift weight side to side, stretch the groin' },
+      { id: 'lower-wu5', name: 'Squat to Stand', type: 'timed', duration: 60, cue: 'Grab toes, drop hips, pry hips open' }
+    ],
+    exercises: [
+      {
+        id: 'lower-ex1',
+        name: 'Barbell Deadlift',
+        setsReps: '4 x 5',
+        weight: 'Bar + Plates',
+        notes: 'Suggested weight: 60-75% of your 1RM. Move the bar as explosively as possible while maintaining perfect form. Keep the bar close, hinge at the hips, flat back. Drive through the floor.',
+        benefits: 'Builds foundational lower body strength and posterior chain power.',
+        muscles: 'Hamstrings, glutes, lower back, core.',
+        restSeconds: 120
+      },
+      {
+        id: 'lower-ex2',
+        name: 'Bulgarian Split Squat',
+        setsReps: '3 x 6/side',
+        weight: 'Dumbbells',
+        notes: 'Suggested weight: 10-20 kg per hand. Heavy enough to challenge, but light enough to drive up explosively. Keep torso slightly leaned forward to target glutes, drive up explosively.',
+        benefits: 'Develops unilateral leg strength, mimicking the power transfer from the rear leg in a cross.',
+        muscles: 'Quads, glutes, core stability.',
+        restSeconds: 105
+      },
+      {
+        id: 'lower-ex3',
+        name: 'Squat Jumps',
+        setsReps: '4 x 6',
+        weight: 'Bodyweight',
+        notes: 'Dip down and explode vertically as high as possible. Land soft.',
+        benefits: 'Translates raw strength into explosive rate of force development.',
+        muscles: 'Quads, calves, glutes.',
+        restSeconds: 90
+      },
+      {
+        id: 'lower-ex4',
+        name: 'Lateral Bounds',
+        setsReps: '3 x 8/side',
+        weight: 'Bodyweight',
+        notes: 'Jump side to side, sticking the landing on one leg before bounding back.',
+        benefits: 'Improves lateral power and agility, essential for footwork and pivoting.',
+        muscles: 'Glute medius, adductors, quads.',
+        restSeconds: 75
+      },
+      {
+        id: 'lower-ex5',
+        name: 'Broad Jumps',
+        setsReps: '3 x 5',
+        weight: 'Bodyweight',
+        notes: 'Jump forward as far as possible, landing softly on both feet. Reset between reps.',
+        benefits: 'Builds horizontal power for closing distance fast.',
+        muscles: 'Glutes, hamstrings, quads.',
+        restSeconds: 90
+      }
+    ],
+    powerCircuit: {
+      id: 'lower-finisher',
+      name: 'Explosive Leg Circuit',
+      benefits: 'Perform back to back with NO rest between exercises. 60s rest between rounds.',
+      rounds: [
+        {
+          id: 'lower-finisher-r1',
+          name: 'Round 1',
+          workSeconds: 90,
+          restSeconds: 60,
+          combo: 'Squat Jumps × 10 reps<br>Lateral Bounds × 8 reps each side<br>Broad Jumps × 5 reps'
+        },
+        {
+          id: 'lower-finisher-r2',
+          name: 'Round 2',
+          workSeconds: 90,
+          restSeconds: 0,
+          combo: 'Squat Jumps × 10 reps<br>Lateral Bounds × 8 reps each side<br>Broad Jumps × 5 reps'
+        }
+      ]
+    },
+    cooldown: [
+      { id: 'lower-cd1', name: 'Pigeon Pose', duration: '1 min each side', desc: 'Cross one leg in front of you, extending the other leg back. Lean forward to stretch the glute.' },
+      { id: 'lower-cd2', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' },
+      { id: 'lower-cd3', name: 'Hamstring Stretch', duration: '1 min', desc: 'Sit with legs extended, reach for toes while keeping a straight back.' }
+    ]
+  },
+  {
+    id: 'quick-shadow-boxing',
+    title: 'Shadow Boxing',
+    type: 'technical',
+    duration: '~30 min',
+    focus: 'Technical',
+    warmup: [
+      { id: 'shadow-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Moderate pace — get rhythm and footwork ready' },
+      { id: 'shadow-wu2', name: 'Neck Rolls', type: 'timed', duration: 30, cue: 'Slow and controlled — full range of motion' },
+      { id: 'shadow-wu3', name: 'Shoulder Circles', type: 'timed', duration: 30, cue: 'Big circles, loosen the shoulder joint' },
+      { id: 'shadow-wu4', name: 'Hip Rotations', type: 'timed', duration: 60, cue: 'Stand tall, rotate from the hip — not just the knee' },
+      { id: 'shadow-wu5', name: 'Shadowboxing (40% effort)', type: 'timed', duration: 60, cue: 'Light movement only — just get your body moving' }
+    ],
+    bagRounds: {
+      id: 'shadow-main',
+      name: 'Shadow Boxing Rounds',
+      benefits: 'Focus on clean technique, footwork, and head movement. No bag — pure skill work.',
+      rounds: [
+        {
+          id: 'shadow-r1',
+          name: 'Round 1 — Footwork + Basic Combos',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Jab, Cross (1-2)<br>Jab, Cross, Hook (1-2-3)<br>Jab, Cross, Hook, Cross (1-2-3-2)<br>Freestyle: Mix & Move',
+          description: '🦶 <strong>Focus: Stay light, always moving</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Start in your boxing stance, weight on balls of feet<br>• After every combo — move! Step left, step right, circle out<br>• Combo 1: Jab, Cross (1-2) × 5 — step left after<br>• Combo 2: Jab, Cross, Hook (1-2-3) × 5 — circle right after<br>• Combo 3: Jab, Cross, Hook, Cross (1-2-3-2) × 5 — step back after<br>• Freestyle: mix the combos, never stop moving</div>',
+          timedCues: [
+            { time: 0,   text: "Stay light on your feet — Jab, Cross, One Two! Move after every combo!", uiIndex: 0 },
+            { time: 20,  text: "Jab, Cross, Hook — One Two Three! Circle left after!", uiIndex: 1 },
+            { time: 45,  text: "Jab, Cross, Hook, Cross — One Two Three Two! Step back, reset!", uiIndex: 2 },
+            { time: 80,  text: "Pivot drill — throw One Two, pivot right, throw One Two!", uiIndex: 3 },
+            { time: 120, text: "Freestyle — keep moving, stay light!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — finish strong, stay on your toes!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r2',
+          name: 'Round 2 — Head Movement + Counters',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Slip right/left → Jab Cross (1-2)<br>Roll under → Lead Hook (3)<br>Parry → Cross (2)<br>Slip, slip → Cross, Hook (2-3) / Freestyle',
+          description: '🧠 <strong>Focus: Make yourself a moving target</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Slip right → throw Jab Cross (1-2)<br>• Slip left → throw Jab Cross (1-2)<br>• Roll under → come up with Lead Hook (3)<br>• Parry → throw Cross (2)<br>• Slip, slip → Cross, Hook (2-3)<br>• Key rule: head must move BEFORE every counter</div>',
+          timedCues: [
+            { time: 0,   text: "Slip right, Jab Cross — slip left, Jab Cross! One Two each side!", uiIndex: 0 },
+            { time: 25,  text: "Roll under, come up with the Hook — Three! Roll and fire!", uiIndex: 1 },
+            { time: 55,  text: "Parry, Cross — parry that jab, fire the Two!", uiIndex: 2 },
+            { time: 90,  text: "Slip, slip, Cross Hook — move your head!", uiIndex: 3 },
+            { time: 130, text: "Freestyle head movement — never be a stationary target!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — last combinations!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r3',
+          name: 'Round 3 — Defense + Combos',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Body then head (1-2 body, 1-2 head)<br>Block → Cross, Hook (2-3)<br>Slip right → Body, Head (1-6-2)<br>Pull back → Cross, Hook, Cross (2-3-2)',
+          description: '🛡️ <strong>Focus: Absorb and fire back</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Guard up — block incoming, return fire<br>• Body then head: 1-2 body, 1-2 head<br>• Slip right → body shot → head shot (1-6-2)<br>• Pull back counter → Cross, Hook, Cross (2-3-2)<br>• Block → Cross, Hook (2-3)<br>• Think: defend first, THEN punch</div>',
+          timedCues: [
+            { time: 0,   text: "Guard up — Jab Cross to the body, Jab Cross to the head! One Two down, One Two up!", uiIndex: 0 },
+            { time: 25,  text: "Block, Cross, Hook — absorb and counter!", uiIndex: 1 },
+            { time: 55,  text: "Slip right, body shot, head shot — One Six Two!", uiIndex: 2 },
+            { time: 90,  text: "Pull back counter — lean back, Cross, Hook Cross — Two Three Two!", uiIndex: 3 },
+            { time: 130, text: "Freestyle defense and counters!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — defensive combinations!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r4',
+          name: 'Round 4 — Full Speed Free Flow',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Full Speed Free Flow<br>Mix everything from Rounds 1-3',
+          description: '⚡ <strong>Focus: No instructions — just fight</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Full speed, full power<br>• Mix everything from Rounds 1-3<br>• Move your feet, move your head<br>• Throw combinations in bursts of 3-5 punches<br>• Reset, breathe, go again<br>• This is YOUR round — trust your training</div>',
+          timedCues: [
+            { time: 0,   text: "This is YOUR round — full speed, full power, everything you've got!", uiIndex: 0 },
+            { time: 40,  text: "Don't slow down — move and punch!", uiIndex: 0 },
+            { time: 80,  text: "Halfway — push the pace!", uiIndex: 0 },
+            { time: 120, text: "Last minute — dig deep!", uiIndex: 0 },
+            { time: 155, text: "Final 25 seconds — leave nothing in the tank!", uiIndex: 0 },
+            { time: 170, text: "Ten seconds — FINISH!", uiIndex: 0 }
+          ]
+        },
+        {
+          id: 'shadow-r5',
+          name: 'Round 5 — Cool Down Shadow',
+          workSeconds: 120,
+          restSeconds: 0,
+          skipCountdown: true,
+          combo: 'Cool Down Shadow<br>50% effort — breathe and move',
+          description: '🌬️ <strong>Focus: Breathe and wind down</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Drop to 50% effort — no power, just flow<br>• Slow jab, slow cross — feel your breath<br>• Light footwork — small steps, relaxed shoulders<br>• No combos — just single shots and movement<br>• Let your heart rate come down naturally</div>',
+          timedCues: [
+            { time: 0,  text: "Ease it down — 50% effort, breathe and move", uiIndex: 0 },
+            { time: 60, text: "Nice and easy — let the heart rate come down", uiIndex: 0 },
+            { time: 110, text: "Last ten seconds — finish clean", uiIndex: 0 }
+          ]
+        }
+      ]
+    },
+    cooldown: [
+      { id: 'shadow-cd1', name: 'Deep Breathing', duration: '1 min', desc: 'Inhale for 4 counts, hold for 4, exhale for 4. Slow the heart rate fully.' },
+      { id: 'shadow-cd2', name: 'Shoulder + Chest Stretch', duration: '1 min', desc: 'Clasp hands behind your back, open the chest, and hold.' },
+      { id: 'shadow-cd3', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' }
+    ]
+  },
+  {
+    id: 'quick-lower-power',
+    title: 'Lower Body Power',
+    type: 'strength',
+    duration: '~50 min',
+    focus: 'Strength',
+    warmup: [
+      { id: 'lower-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Light pace, warm up the ankles and calves' },
+      { id: 'lower-wu2', name: 'Leg Swings (forward/back)', type: 'timed', duration: 60, cue: 'Open up the hips' },
+      { id: 'lower-wu3', name: 'Hip Circles', type: 'timed', duration: 60, cue: 'Full range of motion, both directions' },
+      { id: 'lower-wu4', name: 'Lateral Lunge', type: 'timed', duration: 60, cue: 'Shift weight side to side, stretch the groin' },
+      { id: 'lower-wu5', name: 'Squat to Stand', type: 'timed', duration: 60, cue: 'Grab toes, drop hips, pry hips open' }
+    ],
+    exercises: [
+      {
+        id: 'lower-ex1',
+        name: 'Barbell Deadlift',
+        setsReps: '4 x 5',
+        weight: 'Bar + Plates',
+        notes: 'Suggested weight: 60-75% of your 1RM. Move the bar as explosively as possible while maintaining perfect form. Keep the bar close, hinge at the hips, flat back. Drive through the floor.',
+        benefits: 'Builds foundational lower body strength and posterior chain power.',
+        muscles: 'Hamstrings, glutes, lower back, core.',
+        restSeconds: 120
+      },
+      {
+        id: 'lower-ex2',
+        name: 'Bulgarian Split Squat',
+        setsReps: '3 x 6/side',
+        weight: 'Dumbbells',
+        notes: 'Suggested weight: 10-20 kg per hand. Heavy enough to challenge, but light enough to drive up explosively. Keep torso slightly leaned forward to target glutes, drive up explosively.',
+        benefits: 'Develops unilateral leg strength, mimicking the power transfer from the rear leg in a cross.',
+        muscles: 'Quads, glutes, core stability.',
+        restSeconds: 105
+      },
+      {
+        id: 'lower-ex3',
+        name: 'Squat Jumps',
+        setsReps: '4 x 6',
+        weight: 'Bodyweight',
+        notes: 'Dip down and explode vertically as high as possible. Land soft.',
+        benefits: 'Translates raw strength into explosive rate of force development.',
+        muscles: 'Quads, calves, glutes.',
+        restSeconds: 90
+      },
+      {
+        id: 'lower-ex4',
+        name: 'Lateral Bounds',
+        setsReps: '3 x 8/side',
+        weight: 'Bodyweight',
+        notes: 'Jump side to side, sticking the landing on one leg before bounding back.',
+        benefits: 'Improves lateral power and agility, essential for footwork and pivoting.',
+        muscles: 'Glute medius, adductors, quads.',
+        restSeconds: 75
+      },
+      {
+        id: 'lower-ex5',
+        name: 'Broad Jumps',
+        setsReps: '3 x 5',
+        weight: 'Bodyweight',
+        notes: 'Jump forward as far as possible, landing softly on both feet. Reset between reps.',
+        benefits: 'Builds horizontal power for closing distance fast.',
+        muscles: 'Glutes, hamstrings, quads.',
+        restSeconds: 90
+      }
+    ],
+    powerCircuit: {
+      id: 'lower-finisher',
+      name: 'Explosive Leg Circuit',
+      benefits: 'Perform back to back with NO rest between exercises. 60s rest between rounds.',
+      rounds: [
+        {
+          id: 'lower-finisher-r1',
+          name: 'Round 1',
+          workSeconds: 90,
+          restSeconds: 60,
+          combo: 'Squat Jumps × 10 reps<br>Lateral Bounds × 8 reps each side<br>Broad Jumps × 5 reps'
+        },
+        {
+          id: 'lower-finisher-r2',
+          name: 'Round 2',
+          workSeconds: 90,
+          restSeconds: 0,
+          combo: 'Squat Jumps × 10 reps<br>Lateral Bounds × 8 reps each side<br>Broad Jumps × 5 reps'
+        }
+      ]
+    },
+    cooldown: [
+      { id: 'lower-cd1', name: 'Pigeon Pose', duration: '1 min each side', desc: 'Cross one leg in front of you, extending the other leg back. Lean forward to stretch the glute.' },
+      { id: 'lower-cd2', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' },
+      { id: 'lower-cd3', name: 'Hamstring Stretch', duration: '1 min', desc: 'Sit with legs extended, reach for toes while keeping a straight back.' }
+    ]
+  },
+  {
+    id: 'quick-shadow-boxing',
+    title: 'Shadow Boxing',
+    type: 'technical',
+    duration: '~30 min',
+    focus: 'Technical',
+    warmup: [
+      { id: 'shadow-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Moderate pace — get rhythm and footwork ready' },
+      { id: 'shadow-wu2', name: 'Neck Rolls', type: 'timed', duration: 30, cue: 'Slow and controlled — full range of motion' },
+      { id: 'shadow-wu3', name: 'Shoulder Circles', type: 'timed', duration: 30, cue: 'Big circles, loosen the shoulder joint' },
+      { id: 'shadow-wu4', name: 'Hip Rotations', type: 'timed', duration: 60, cue: 'Stand tall, rotate from the hip — not just the knee' },
+      { id: 'shadow-wu5', name: 'Shadowboxing (40% effort)', type: 'timed', duration: 60, cue: 'Light movement only — just get your body moving' }
+    ],
+    bagRounds: {
+      id: 'shadow-main',
+      name: 'Shadow Boxing Rounds',
+      benefits: 'Focus on clean technique, footwork, and head movement. No bag — pure skill work.',
+      rounds: [
+        {
+          id: 'shadow-r1',
+          name: 'Round 1 — Footwork + Basic Combos',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Jab, Cross (1-2)<br>Jab, Cross, Hook (1-2-3)<br>Jab, Cross, Hook, Cross (1-2-3-2)<br>Freestyle: Mix & Move',
+          description: '🦶 <strong>Focus: Stay light, always moving</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Start in your boxing stance, weight on balls of feet<br>• After every combo — move! Step left, step right, circle out<br>• Combo 1: Jab, Cross (1-2) × 5 — step left after<br>• Combo 2: Jab, Cross, Hook (1-2-3) × 5 — circle right after<br>• Combo 3: Jab, Cross, Hook, Cross (1-2-3-2) × 5 — step back after<br>• Freestyle: mix the combos, never stop moving</div>',
+          timedCues: [
+            { time: 0,   text: "Stay light on your feet — Jab, Cross, One Two! Move after every combo!", uiIndex: 0 },
+            { time: 20,  text: "Jab, Cross, Hook — One Two Three! Circle left after!", uiIndex: 1 },
+            { time: 45,  text: "Jab, Cross, Hook, Cross — One Two Three Two! Step back, reset!", uiIndex: 2 },
+            { time: 80,  text: "Pivot drill — throw One Two, pivot right, throw One Two!", uiIndex: 3 },
+            { time: 120, text: "Freestyle — keep moving, stay light!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — finish strong, stay on your toes!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r2',
+          name: 'Round 2 — Head Movement + Counters',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Slip right/left → Jab Cross (1-2)<br>Roll under → Lead Hook (3)<br>Parry → Cross (2)<br>Slip, slip → Cross, Hook (2-3) / Freestyle',
+          description: '🧠 <strong>Focus: Make yourself a moving target</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Slip right → throw Jab Cross (1-2)<br>• Slip left → throw Jab Cross (1-2)<br>• Roll under → come up with Lead Hook (3)<br>• Parry → throw Cross (2)<br>• Slip, slip → Cross, Hook (2-3)<br>• Key rule: head must move BEFORE every counter</div>',
+          timedCues: [
+            { time: 0,   text: "Slip right, Jab Cross — slip left, Jab Cross! One Two each side!", uiIndex: 0 },
+            { time: 25,  text: "Roll under, come up with the Hook — Three! Roll and fire!", uiIndex: 1 },
+            { time: 55,  text: "Parry, Cross — parry that jab, fire the Two!", uiIndex: 2 },
+            { time: 90,  text: "Slip, slip, Cross Hook — move your head!", uiIndex: 3 },
+            { time: 130, text: "Freestyle head movement — never be a stationary target!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — last combinations!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r3',
+          name: 'Round 3 — Defense + Combos',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Body then head (1-2 body, 1-2 head)<br>Block → Cross, Hook (2-3)<br>Slip right → Body, Head (1-6-2)<br>Pull back → Cross, Hook, Cross (2-3-2)',
+          description: '🛡️ <strong>Focus: Absorb and fire back</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Guard up — block incoming, return fire<br>• Body then head: 1-2 body, 1-2 head<br>• Slip right → body shot → head shot (1-6-2)<br>• Pull back counter → Cross, Hook, Cross (2-3-2)<br>• Block → Cross, Hook (2-3)<br>• Think: defend first, THEN punch</div>',
+          timedCues: [
+            { time: 0,   text: "Guard up — Jab Cross to the body, Jab Cross to the head! One Two down, One Two up!", uiIndex: 0 },
+            { time: 25,  text: "Block, Cross, Hook — absorb and counter!", uiIndex: 1 },
+            { time: 55,  text: "Slip right, body shot, head shot — One Six Two!", uiIndex: 2 },
+            { time: 90,  text: "Pull back counter — lean back, Cross, Hook Cross — Two Three Two!", uiIndex: 3 },
+            { time: 130, text: "Freestyle defense and counters!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — defensive combinations!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r4',
+          name: 'Round 4 — Full Speed Free Flow',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Full Speed Free Flow<br>Mix everything from Rounds 1-3',
+          description: '⚡ <strong>Focus: No instructions — just fight</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Full speed, full power<br>• Mix everything from Rounds 1-3<br>• Move your feet, move your head<br>• Throw combinations in bursts of 3-5 punches<br>• Reset, breathe, go again<br>• This is YOUR round — trust your training</div>',
+          timedCues: [
+            { time: 0,   text: "This is YOUR round — full speed, full power, everything you've got!", uiIndex: 0 },
+            { time: 40,  text: "Don't slow down — move and punch!", uiIndex: 0 },
+            { time: 80,  text: "Halfway — push the pace!", uiIndex: 0 },
+            { time: 120, text: "Last minute — dig deep!", uiIndex: 0 },
+            { time: 155, text: "Final 25 seconds — leave nothing in the tank!", uiIndex: 0 },
+            { time: 170, text: "Ten seconds — FINISH!", uiIndex: 0 }
+          ]
+        },
+        {
+          id: 'shadow-r5',
+          name: 'Round 5 — Cool Down Shadow',
+          workSeconds: 120,
+          restSeconds: 0,
+          skipCountdown: true,
+          combo: 'Cool Down Shadow<br>50% effort — breathe and move',
+          description: '🌬️ <strong>Focus: Breathe and wind down</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Drop to 50% effort — no power, just flow<br>• Slow jab, slow cross — feel your breath<br>• Light footwork — small steps, relaxed shoulders<br>• No combos — just single shots and movement<br>• Let your heart rate come down naturally</div>',
+          timedCues: [
+            { time: 0,  text: "Ease it down — 50% effort, breathe and move", uiIndex: 0 },
+            { time: 60, text: "Nice and easy — let the heart rate come down", uiIndex: 0 },
+            { time: 110, text: "Last ten seconds — finish clean", uiIndex: 0 }
+          ]
+        }
+      ]
+    },
+    cooldown: [
+      { id: 'shadow-cd1', name: 'Deep Breathing', duration: '1 min', desc: 'Inhale for 4 counts, hold for 4, exhale for 4. Slow the heart rate fully.' },
+      { id: 'shadow-cd2', name: 'Shoulder + Chest Stretch', duration: '1 min', desc: 'Clasp hands behind your back, open the chest, and hold.' },
+      { id: 'shadow-cd3', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' }
+    ]
+  },
+  {
+    id: 'quick-lower-power',
+    title: 'Lower Body Power',
+    type: 'strength',
+    duration: '~50 min',
+    focus: 'Strength',
+    warmup: [
+      { id: 'lower-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Light pace, warm up the ankles and calves' },
+      { id: 'lower-wu2', name: 'Leg Swings (forward/back)', type: 'timed', duration: 60, cue: 'Open up the hips' },
+      { id: 'lower-wu3', name: 'Hip Circles', type: 'timed', duration: 60, cue: 'Full range of motion, both directions' },
+      { id: 'lower-wu4', name: 'Lateral Lunge', type: 'timed', duration: 60, cue: 'Shift weight side to side, stretch the groin' },
+      { id: 'lower-wu5', name: 'Squat to Stand', type: 'timed', duration: 60, cue: 'Grab toes, drop hips, pry hips open' }
+    ],
+    exercises: [
+      {
+        id: 'lower-ex1',
+        name: 'Barbell Deadlift',
+        setsReps: '4 x 5',
+        weight: 'Bar + Plates',
+        notes: 'Suggested weight: 60-75% of your 1RM. Move the bar as explosively as possible while maintaining perfect form. Keep the bar close, hinge at the hips, flat back. Drive through the floor.',
+        benefits: 'Builds foundational lower body strength and posterior chain power.',
+        muscles: 'Hamstrings, glutes, lower back, core.',
+        restSeconds: 120
+      },
+      {
+        id: 'lower-ex2',
+        name: 'Bulgarian Split Squat',
+        setsReps: '3 x 6/side',
+        weight: 'Dumbbells',
+        notes: 'Suggested weight: 10-20 kg per hand. Heavy enough to challenge, but light enough to drive up explosively. Keep torso slightly leaned forward to target glutes, drive up explosively.',
+        benefits: 'Develops unilateral leg strength, mimicking the power transfer from the rear leg in a cross.',
+        muscles: 'Quads, glutes, core stability.',
+        restSeconds: 105
+      },
+      {
+        id: 'lower-ex3',
+        name: 'Squat Jumps',
+        setsReps: '4 x 6',
+        weight: 'Bodyweight',
+        notes: 'Dip down and explode vertically as high as possible. Land soft.',
+        benefits: 'Translates raw strength into explosive rate of force development.',
+        muscles: 'Quads, calves, glutes.',
+        restSeconds: 90
+      },
+      {
+        id: 'lower-ex4',
+        name: 'Lateral Bounds',
+        setsReps: '3 x 8/side',
+        weight: 'Bodyweight',
+        notes: 'Jump side to side, sticking the landing on one leg before bounding back.',
+        benefits: 'Improves lateral power and agility, essential for footwork and pivoting.',
+        muscles: 'Glute medius, adductors, quads.',
+        restSeconds: 75
+      },
+      {
+        id: 'lower-ex5',
+        name: 'Broad Jumps',
+        setsReps: '3 x 5',
+        weight: 'Bodyweight',
+        notes: 'Jump forward as far as possible, landing softly on both feet. Reset between reps.',
+        benefits: 'Builds horizontal power for closing distance fast.',
+        muscles: 'Glutes, hamstrings, quads.',
+        restSeconds: 90
+      }
+    ],
+    powerCircuit: {
+      id: 'lower-finisher',
+      name: 'Explosive Leg Circuit',
+      benefits: 'Perform back to back with NO rest between exercises. 60s rest between rounds.',
+      rounds: [
+        {
+          id: 'lower-finisher-r1',
+          name: 'Round 1',
+          workSeconds: 90,
+          restSeconds: 60,
+          combo: 'Squat Jumps × 10 reps<br>Lateral Bounds × 8 reps each side<br>Broad Jumps × 5 reps'
+        },
+        {
+          id: 'lower-finisher-r2',
+          name: 'Round 2',
+          workSeconds: 90,
+          restSeconds: 0,
+          combo: 'Squat Jumps × 10 reps<br>Lateral Bounds × 8 reps each side<br>Broad Jumps × 5 reps'
+        }
+      ]
+    },
+    cooldown: [
+      { id: 'lower-cd1', name: 'Pigeon Pose', duration: '1 min each side', desc: 'Cross one leg in front of you, extending the other leg back. Lean forward to stretch the glute.' },
+      { id: 'lower-cd2', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' },
+      { id: 'lower-cd3', name: 'Hamstring Stretch', duration: '1 min', desc: 'Sit with legs extended, reach for toes while keeping a straight back.' }
+    ]
+  },
+  {
+    id: 'quick-shadow-boxing',
+    title: 'Shadow Boxing',
+    type: 'technical',
+    duration: '~30 min',
+    focus: 'Technical',
+    warmup: [
+      { id: 'shadow-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Moderate pace — get rhythm and footwork ready' },
+      { id: 'shadow-wu2', name: 'Neck Rolls', type: 'timed', duration: 30, cue: 'Slow and controlled — full range of motion' },
+      { id: 'shadow-wu3', name: 'Shoulder Circles', type: 'timed', duration: 30, cue: 'Big circles, loosen the shoulder joint' },
+      { id: 'shadow-wu4', name: 'Hip Rotations', type: 'timed', duration: 60, cue: 'Stand tall, rotate from the hip — not just the knee' },
+      { id: 'shadow-wu5', name: 'Shadowboxing (40% effort)', type: 'timed', duration: 60, cue: 'Light movement only — just get your body moving' }
+    ],
+    bagRounds: {
+      id: 'shadow-main',
+      name: 'Shadow Boxing Rounds',
+      benefits: 'Focus on clean technique, footwork, and head movement. No bag — pure skill work.',
+      rounds: [
+        {
+          id: 'shadow-r1',
+          name: 'Round 1 — Footwork + Basic Combos',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Jab, Cross (1-2)<br>Jab, Cross, Hook (1-2-3)<br>Jab, Cross, Hook, Cross (1-2-3-2)<br>Freestyle: Mix & Move',
+          description: '🦶 <strong>Focus: Stay light, always moving</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Start in your boxing stance, weight on balls of feet<br>• After every combo — move! Step left, step right, circle out<br>• Combo 1: Jab, Cross (1-2) × 5 — step left after<br>• Combo 2: Jab, Cross, Hook (1-2-3) × 5 — circle right after<br>• Combo 3: Jab, Cross, Hook, Cross (1-2-3-2) × 5 — step back after<br>• Freestyle: mix the combos, never stop moving</div>',
+          timedCues: [
+            { time: 0,   text: "Stay light on your feet — Jab, Cross, One Two! Move after every combo!", uiIndex: 0 },
+            { time: 20,  text: "Jab, Cross, Hook — One Two Three! Circle left after!", uiIndex: 1 },
+            { time: 45,  text: "Jab, Cross, Hook, Cross — One Two Three Two! Step back, reset!", uiIndex: 2 },
+            { time: 80,  text: "Pivot drill — throw One Two, pivot right, throw One Two!", uiIndex: 3 },
+            { time: 120, text: "Freestyle — keep moving, stay light!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — finish strong, stay on your toes!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r2',
+          name: 'Round 2 — Head Movement + Counters',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Slip right/left → Jab Cross (1-2)<br>Roll under → Lead Hook (3)<br>Parry → Cross (2)<br>Slip, slip → Cross, Hook (2-3) / Freestyle',
+          description: '🧠 <strong>Focus: Make yourself a moving target</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Slip right → throw Jab Cross (1-2)<br>• Slip left → throw Jab Cross (1-2)<br>• Roll under → come up with Lead Hook (3)<br>• Parry → throw Cross (2)<br>• Slip, slip → Cross, Hook (2-3)<br>• Key rule: head must move BEFORE every counter</div>',
+          timedCues: [
+            { time: 0,   text: "Slip right, Jab Cross — slip left, Jab Cross! One Two each side!", uiIndex: 0 },
+            { time: 25,  text: "Roll under, come up with the Hook — Three! Roll and fire!", uiIndex: 1 },
+            { time: 55,  text: "Parry, Cross — parry that jab, fire the Two!", uiIndex: 2 },
+            { time: 90,  text: "Slip, slip, Cross Hook — move your head!", uiIndex: 3 },
+            { time: 130, text: "Freestyle head movement — never be a stationary target!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — last combinations!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r3',
+          name: 'Round 3 — Defense + Combos',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Body then head (1-2 body, 1-2 head)<br>Block → Cross, Hook (2-3)<br>Slip right → Body, Head (1-6-2)<br>Pull back → Cross, Hook, Cross (2-3-2)',
+          description: '🛡️ <strong>Focus: Absorb and fire back</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Guard up — block incoming, return fire<br>• Body then head: 1-2 body, 1-2 head<br>• Slip right → body shot → head shot (1-6-2)<br>• Pull back counter → Cross, Hook, Cross (2-3-2)<br>• Block → Cross, Hook (2-3)<br>• Think: defend first, THEN punch</div>',
+          timedCues: [
+            { time: 0,   text: "Guard up — Jab Cross to the body, Jab Cross to the head! One Two down, One Two up!", uiIndex: 0 },
+            { time: 25,  text: "Block, Cross, Hook — absorb and counter!", uiIndex: 1 },
+            { time: 55,  text: "Slip right, body shot, head shot — One Six Two!", uiIndex: 2 },
+            { time: 90,  text: "Pull back counter — lean back, Cross, Hook Cross — Two Three Two!", uiIndex: 3 },
+            { time: 130, text: "Freestyle defense and counters!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — defensive combinations!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r4',
+          name: 'Round 4 — Full Speed Free Flow',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Full Speed Free Flow<br>Mix everything from Rounds 1-3',
+          description: '⚡ <strong>Focus: No instructions — just fight</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Full speed, full power<br>• Mix everything from Rounds 1-3<br>• Move your feet, move your head<br>• Throw combinations in bursts of 3-5 punches<br>• Reset, breathe, go again<br>• This is YOUR round — trust your training</div>',
+          timedCues: [
+            { time: 0,   text: "This is YOUR round — full speed, full power, everything you've got!", uiIndex: 0 },
+            { time: 40,  text: "Don't slow down — move and punch!", uiIndex: 0 },
+            { time: 80,  text: "Halfway — push the pace!", uiIndex: 0 },
+            { time: 120, text: "Last minute — dig deep!", uiIndex: 0 },
+            { time: 155, text: "Final 25 seconds — leave nothing in the tank!", uiIndex: 0 },
+            { time: 170, text: "Ten seconds — FINISH!", uiIndex: 0 }
+          ]
+        },
+        {
+          id: 'shadow-r5',
+          name: 'Round 5 — Cool Down Shadow',
+          workSeconds: 120,
+          restSeconds: 0,
+          skipCountdown: true,
+          combo: 'Cool Down Shadow<br>50% effort — breathe and move',
+          description: '🌬️ <strong>Focus: Breathe and wind down</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Drop to 50% effort — no power, just flow<br>• Slow jab, slow cross — feel your breath<br>• Light footwork — small steps, relaxed shoulders<br>• No combos — just single shots and movement<br>• Let your heart rate come down naturally</div>',
+          timedCues: [
+            { time: 0,  text: "Ease it down — 50% effort, breathe and move", uiIndex: 0 },
+            { time: 60, text: "Nice and easy — let the heart rate come down", uiIndex: 0 },
+            { time: 110, text: "Last ten seconds — finish clean", uiIndex: 0 }
+          ]
+        }
+      ]
+    },
+    cooldown: [
+      { id: 'shadow-cd1', name: 'Deep Breathing', duration: '1 min', desc: 'Inhale for 4 counts, hold for 4, exhale for 4. Slow the heart rate fully.' },
+      { id: 'shadow-cd2', name: 'Shoulder + Chest Stretch', duration: '1 min', desc: 'Clasp hands behind your back, open the chest, and hold.' },
+      { id: 'shadow-cd3', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' }
+    ]
+  },
+  {
+    id: 'quick-lower-power',
+    title: 'Lower Body Power',
+    type: 'strength',
+    duration: '~50 min',
+    focus: 'Strength',
+    warmup: [
+      { id: 'lower-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Light pace, warm up the ankles and calves' },
+      { id: 'lower-wu2', name: 'Leg Swings (forward/back)', type: 'timed', duration: 60, cue: 'Open up the hips' },
+      { id: 'lower-wu3', name: 'Hip Circles', type: 'timed', duration: 60, cue: 'Full range of motion, both directions' },
+      { id: 'lower-wu4', name: 'Lateral Lunge', type: 'timed', duration: 60, cue: 'Shift weight side to side, stretch the groin' },
+      { id: 'lower-wu5', name: 'Squat to Stand', type: 'timed', duration: 60, cue: 'Grab toes, drop hips, pry hips open' }
+    ],
+    exercises: [
+      {
+        id: 'lower-ex1',
+        name: 'Barbell Deadlift',
+        setsReps: '4 x 5',
+        weight: 'Bar + Plates',
+        notes: 'Suggested weight: 60-75% of your 1RM. Move the bar as explosively as possible while maintaining perfect form. Keep the bar close, hinge at the hips, flat back. Drive through the floor.',
+        benefits: 'Builds foundational lower body strength and posterior chain power.',
+        muscles: 'Hamstrings, glutes, lower back, core.',
+        restSeconds: 120
+      },
+      {
+        id: 'lower-ex2',
+        name: 'Bulgarian Split Squat',
+        setsReps: '3 x 6/side',
+        weight: 'Dumbbells',
+        notes: 'Suggested weight: 10-20 kg per hand. Heavy enough to challenge, but light enough to drive up explosively. Keep torso slightly leaned forward to target glutes, drive up explosively.',
+        benefits: 'Develops unilateral leg strength, mimicking the power transfer from the rear leg in a cross.',
+        muscles: 'Quads, glutes, core stability.',
+        restSeconds: 105
+      },
+      {
+        id: 'lower-ex3',
+        name: 'Squat Jumps',
+        setsReps: '4 x 6',
+        weight: 'Bodyweight',
+        notes: 'Dip down and explode vertically as high as possible. Land soft.',
+        benefits: 'Translates raw strength into explosive rate of force development.',
+        muscles: 'Quads, calves, glutes.',
+        restSeconds: 90
+      },
+      {
+        id: 'lower-ex4',
+        name: 'Lateral Bounds',
+        setsReps: '3 x 8/side',
+        weight: 'Bodyweight',
+        notes: 'Jump side to side, sticking the landing on one leg before bounding back.',
+        benefits: 'Improves lateral power and agility, essential for footwork and pivoting.',
+        muscles: 'Glute medius, adductors, quads.',
+        restSeconds: 75
+      },
+      {
+        id: 'lower-ex5',
+        name: 'Broad Jumps',
+        setsReps: '3 x 5',
+        weight: 'Bodyweight',
+        notes: 'Jump forward as far as possible, landing softly on both feet. Reset between reps.',
+        benefits: 'Builds horizontal power for closing distance fast.',
+        muscles: 'Glutes, hamstrings, quads.',
+        restSeconds: 90
+      }
+    ],
+    powerCircuit: {
+      id: 'lower-finisher',
+      name: 'Explosive Leg Circuit',
+      benefits: 'Perform back to back with NO rest between exercises. 60s rest between rounds.',
+      rounds: [
+        {
+          id: 'lower-finisher-r1',
+          name: 'Round 1',
+          workSeconds: 90,
+          restSeconds: 60,
+          combo: 'Squat Jumps × 10 reps<br>Lateral Bounds × 8 reps each side<br>Broad Jumps × 5 reps'
+        },
+        {
+          id: 'lower-finisher-r2',
+          name: 'Round 2',
+          workSeconds: 90,
+          restSeconds: 0,
+          combo: 'Squat Jumps × 10 reps<br>Lateral Bounds × 8 reps each side<br>Broad Jumps × 5 reps'
+        }
+      ]
+    },
+    cooldown: [
+      { id: 'lower-cd1', name: 'Pigeon Pose', duration: '1 min each side', desc: 'Cross one leg in front of you, extending the other leg back. Lean forward to stretch the glute.' },
+      { id: 'lower-cd2', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' },
+      { id: 'lower-cd3', name: 'Hamstring Stretch', duration: '1 min', desc: 'Sit with legs extended, reach for toes while keeping a straight back.' }
+    ]
+  },
+  {
+    id: 'quick-shadow-boxing',
+    title: 'Shadow Boxing',
+    type: 'technical',
+    duration: '~30 min',
+    focus: 'Technical',
+    warmup: [
+      { id: 'shadow-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Moderate pace — get rhythm and footwork ready' },
+      { id: 'shadow-wu2', name: 'Neck Rolls', type: 'timed', duration: 30, cue: 'Slow and controlled — full range of motion' },
+      { id: 'shadow-wu3', name: 'Shoulder Circles', type: 'timed', duration: 30, cue: 'Big circles, loosen the shoulder joint' },
+      { id: 'shadow-wu4', name: 'Hip Rotations', type: 'timed', duration: 60, cue: 'Stand tall, rotate from the hip — not just the knee' },
+      { id: 'shadow-wu5', name: 'Shadowboxing (40% effort)', type: 'timed', duration: 60, cue: 'Light movement only — just get your body moving' }
+    ],
+    bagRounds: {
+      id: 'shadow-main',
+      name: 'Shadow Boxing Rounds',
+      benefits: 'Focus on clean technique, footwork, and head movement. No bag — pure skill work.',
+      rounds: [
+        {
+          id: 'shadow-r1',
+          name: 'Round 1 — Footwork + Basic Combos',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Jab, Cross (1-2)<br>Jab, Cross, Hook (1-2-3)<br>Jab, Cross, Hook, Cross (1-2-3-2)<br>Freestyle: Mix & Move',
+          description: '🦶 <strong>Focus: Stay light, always moving</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Start in your boxing stance, weight on balls of feet<br>• After every combo — move! Step left, step right, circle out<br>• Combo 1: Jab, Cross (1-2) × 5 — step left after<br>• Combo 2: Jab, Cross, Hook (1-2-3) × 5 — circle right after<br>• Combo 3: Jab, Cross, Hook, Cross (1-2-3-2) × 5 — step back after<br>• Freestyle: mix the combos, never stop moving</div>',
+          timedCues: [
+            { time: 0,   text: "Stay light on your feet — Jab, Cross, One Two! Move after every combo!", uiIndex: 0 },
+            { time: 20,  text: "Jab, Cross, Hook — One Two Three! Circle left after!", uiIndex: 1 },
+            { time: 45,  text: "Jab, Cross, Hook, Cross — One Two Three Two! Step back, reset!", uiIndex: 2 },
+            { time: 80,  text: "Pivot drill — throw One Two, pivot right, throw One Two!", uiIndex: 3 },
+            { time: 120, text: "Freestyle — keep moving, stay light!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — finish strong, stay on your toes!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r2',
+          name: 'Round 2 — Head Movement + Counters',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Slip right/left → Jab Cross (1-2)<br>Roll under → Lead Hook (3)<br>Parry → Cross (2)<br>Slip, slip → Cross, Hook (2-3) / Freestyle',
+          description: '🧠 <strong>Focus: Make yourself a moving target</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Slip right → throw Jab Cross (1-2)<br>• Slip left → throw Jab Cross (1-2)<br>• Roll under → come up with Lead Hook (3)<br>• Parry → throw Cross (2)<br>• Slip, slip → Cross, Hook (2-3)<br>• Key rule: head must move BEFORE every counter</div>',
+          timedCues: [
+            { time: 0,   text: "Slip right, Jab Cross — slip left, Jab Cross! One Two each side!", uiIndex: 0 },
+            { time: 25,  text: "Roll under, come up with the Hook — Three! Roll and fire!", uiIndex: 1 },
+            { time: 55,  text: "Parry, Cross — parry that jab, fire the Two!", uiIndex: 2 },
+            { time: 90,  text: "Slip, slip, Cross Hook — move your head!", uiIndex: 3 },
+            { time: 130, text: "Freestyle head movement — never be a stationary target!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — last combinations!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r3',
+          name: 'Round 3 — Defense + Combos',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Body then head (1-2 body, 1-2 head)<br>Block → Cross, Hook (2-3)<br>Slip right → Body, Head (1-6-2)<br>Pull back → Cross, Hook, Cross (2-3-2)',
+          description: '🛡️ <strong>Focus: Absorb and fire back</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Guard up — block incoming, return fire<br>• Body then head: 1-2 body, 1-2 head<br>• Slip right → body shot → head shot (1-6-2)<br>• Pull back counter → Cross, Hook, Cross (2-3-2)<br>• Block → Cross, Hook (2-3)<br>• Think: defend first, THEN punch</div>',
+          timedCues: [
+            { time: 0,   text: "Guard up — Jab Cross to the body, Jab Cross to the head! One Two down, One Two up!", uiIndex: 0 },
+            { time: 25,  text: "Block, Cross, Hook — absorb and counter!", uiIndex: 1 },
+            { time: 55,  text: "Slip right, body shot, head shot — One Six Two!", uiIndex: 2 },
+            { time: 90,  text: "Pull back counter — lean back, Cross, Hook Cross — Two Three Two!", uiIndex: 3 },
+            { time: 130, text: "Freestyle defense and counters!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — defensive combinations!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r4',
+          name: 'Round 4 — Full Speed Free Flow',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Full Speed Free Flow<br>Mix everything from Rounds 1-3',
+          description: '⚡ <strong>Focus: No instructions — just fight</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Full speed, full power<br>• Mix everything from Rounds 1-3<br>• Move your feet, move your head<br>• Throw combinations in bursts of 3-5 punches<br>• Reset, breathe, go again<br>• This is YOUR round — trust your training</div>',
+          timedCues: [
+            { time: 0,   text: "This is YOUR round — full speed, full power, everything you've got!", uiIndex: 0 },
+            { time: 40,  text: "Don't slow down — move and punch!", uiIndex: 0 },
+            { time: 80,  text: "Halfway — push the pace!", uiIndex: 0 },
+            { time: 120, text: "Last minute — dig deep!", uiIndex: 0 },
+            { time: 155, text: "Final 25 seconds — leave nothing in the tank!", uiIndex: 0 },
+            { time: 170, text: "Ten seconds — FINISH!", uiIndex: 0 }
+          ]
+        },
+        {
+          id: 'shadow-r5',
+          name: 'Round 5 — Cool Down Shadow',
+          workSeconds: 120,
+          restSeconds: 0,
+          skipCountdown: true,
+          combo: 'Cool Down Shadow<br>50% effort — breathe and move',
+          description: '🌬️ <strong>Focus: Breathe and wind down</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Drop to 50% effort — no power, just flow<br>• Slow jab, slow cross — feel your breath<br>• Light footwork — small steps, relaxed shoulders<br>• No combos — just single shots and movement<br>• Let your heart rate come down naturally</div>',
+          timedCues: [
+            { time: 0,  text: "Ease it down — 50% effort, breathe and move", uiIndex: 0 },
+            { time: 60, text: "Nice and easy — let the heart rate come down", uiIndex: 0 },
+            { time: 110, text: "Last ten seconds — finish clean", uiIndex: 0 }
+          ]
+        }
+      ]
+    },
+    cooldown: [
+      { id: 'shadow-cd1', name: 'Deep Breathing', duration: '1 min', desc: 'Inhale for 4 counts, hold for 4, exhale for 4. Slow the heart rate fully.' },
+      { id: 'shadow-cd2', name: 'Shoulder + Chest Stretch', duration: '1 min', desc: 'Clasp hands behind your back, open the chest, and hold.' },
+      { id: 'shadow-cd3', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' }
+    ]
+  },
+  {
+    id: 'quick-lower-power',
+    title: 'Lower Body Power',
+    type: 'strength',
+    duration: '~50 min',
+    focus: 'Strength',
+    warmup: [
+      { id: 'lower-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Light pace, warm up the ankles and calves' },
+      { id: 'lower-wu2', name: 'Leg Swings (forward/back)', type: 'timed', duration: 60, cue: 'Open up the hips' },
+      { id: 'lower-wu3', name: 'Hip Circles', type: 'timed', duration: 60, cue: 'Full range of motion, both directions' },
+      { id: 'lower-wu4', name: 'Lateral Lunge', type: 'timed', duration: 60, cue: 'Shift weight side to side, stretch the groin' },
+      { id: 'lower-wu5', name: 'Squat to Stand', type: 'timed', duration: 60, cue: 'Grab toes, drop hips, pry hips open' }
+    ],
+    exercises: [
+      {
+        id: 'lower-ex1',
+        name: 'Barbell Deadlift',
+        setsReps: '4 x 5',
+        weight: 'Bar + Plates',
+        notes: 'Suggested weight: 60-75% of your 1RM. Move the bar as explosively as possible while maintaining perfect form. Keep the bar close, hinge at the hips, flat back. Drive through the floor.',
+        benefits: 'Builds foundational lower body strength and posterior chain power.',
+        muscles: 'Hamstrings, glutes, lower back, core.',
+        restSeconds: 120
+      },
+      {
+        id: 'lower-ex2',
+        name: 'Bulgarian Split Squat',
+        setsReps: '3 x 6/side',
+        weight: 'Dumbbells',
+        notes: 'Suggested weight: 10-20 kg per hand. Heavy enough to challenge, but light enough to drive up explosively. Keep torso slightly leaned forward to target glutes, drive up explosively.',
+        benefits: 'Develops unilateral leg strength, mimicking the power transfer from the rear leg in a cross.',
+        muscles: 'Quads, glutes, core stability.',
+        restSeconds: 105
+      },
+      {
+        id: 'lower-ex3',
+        name: 'Squat Jumps',
+        setsReps: '4 x 6',
+        weight: 'Bodyweight',
+        notes: 'Dip down and explode vertically as high as possible. Land soft.',
+        benefits: 'Translates raw strength into explosive rate of force development.',
+        muscles: 'Quads, calves, glutes.',
+        restSeconds: 90
+      },
+      {
+        id: 'lower-ex4',
+        name: 'Lateral Bounds',
+        setsReps: '3 x 8/side',
+        weight: 'Bodyweight',
+        notes: 'Jump side to side, sticking the landing on one leg before bounding back.',
+        benefits: 'Improves lateral power and agility, essential for footwork and pivoting.',
+        muscles: 'Glute medius, adductors, quads.',
+        restSeconds: 75
+      },
+      {
+        id: 'lower-ex5',
+        name: 'Broad Jumps',
+        setsReps: '3 x 5',
+        weight: 'Bodyweight',
+        notes: 'Jump forward as far as possible, landing softly on both feet. Reset between reps.',
+        benefits: 'Builds horizontal power for closing distance fast.',
+        muscles: 'Glutes, hamstrings, quads.',
+        restSeconds: 90
+      }
+    ],
+    powerCircuit: {
+      id: 'lower-finisher',
+      name: 'Explosive Leg Circuit',
+      benefits: 'Perform back to back with NO rest between exercises. 60s rest between rounds.',
+      rounds: [
+        {
+          id: 'lower-finisher-r1',
+          name: 'Round 1',
+          workSeconds: 90,
+          restSeconds: 60,
+          combo: 'Squat Jumps × 10 reps<br>Lateral Bounds × 8 reps each side<br>Broad Jumps × 5 reps'
+        },
+        {
+          id: 'lower-finisher-r2',
+          name: 'Round 2',
+          workSeconds: 90,
+          restSeconds: 0,
+          combo: 'Squat Jumps × 10 reps<br>Lateral Bounds × 8 reps each side<br>Broad Jumps × 5 reps'
+        }
+      ]
+    },
+    cooldown: [
+      { id: 'lower-cd1', name: 'Pigeon Pose', duration: '1 min each side', desc: 'Cross one leg in front of you, extending the other leg back. Lean forward to stretch the glute.' },
+      { id: 'lower-cd2', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' },
+      { id: 'lower-cd3', name: 'Hamstring Stretch', duration: '1 min', desc: 'Sit with legs extended, reach for toes while keeping a straight back.' }
+    ]
+  },
+  {
+    id: 'quick-shadow-boxing',
+    title: 'Shadow Boxing',
+    type: 'technical',
+    duration: '~30 min',
+    focus: 'Technical',
+    warmup: [
+      { id: 'shadow-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Moderate pace — get rhythm and footwork ready' },
+      { id: 'shadow-wu2', name: 'Neck Rolls', type: 'timed', duration: 30, cue: 'Slow and controlled — full range of motion' },
+      { id: 'shadow-wu3', name: 'Shoulder Circles', type: 'timed', duration: 30, cue: 'Big circles, loosen the shoulder joint' },
+      { id: 'shadow-wu4', name: 'Hip Rotations', type: 'timed', duration: 60, cue: 'Stand tall, rotate from the hip — not just the knee' },
+      { id: 'shadow-wu5', name: 'Shadowboxing (40% effort)', type: 'timed', duration: 60, cue: 'Light movement only — just get your body moving' }
+    ],
+    bagRounds: {
+      id: 'shadow-main',
+      name: 'Shadow Boxing Rounds',
+      benefits: 'Focus on clean technique, footwork, and head movement. No bag — pure skill work.',
+      rounds: [
+        {
+          id: 'shadow-r1',
+          name: 'Round 1 — Footwork + Basic Combos',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Jab, Cross (1-2)<br>Jab, Cross, Hook (1-2-3)<br>Jab, Cross, Hook, Cross (1-2-3-2)<br>Freestyle: Mix & Move',
+          description: '🦶 <strong>Focus: Stay light, always moving</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Start in your boxing stance, weight on balls of feet<br>• After every combo — move! Step left, step right, circle out<br>• Combo 1: Jab, Cross (1-2) × 5 — step left after<br>• Combo 2: Jab, Cross, Hook (1-2-3) × 5 — circle right after<br>• Combo 3: Jab, Cross, Hook, Cross (1-2-3-2) × 5 — step back after<br>• Freestyle: mix the combos, never stop moving</div>',
+          timedCues: [
+            { time: 0,   text: "Stay light on your feet — Jab, Cross, One Two! Move after every combo!", uiIndex: 0 },
+            { time: 20,  text: "Jab, Cross, Hook — One Two Three! Circle left after!", uiIndex: 1 },
+            { time: 45,  text: "Jab, Cross, Hook, Cross — One Two Three Two! Step back, reset!", uiIndex: 2 },
+            { time: 80,  text: "Pivot drill — throw One Two, pivot right, throw One Two!", uiIndex: 3 },
+            { time: 120, text: "Freestyle — keep moving, stay light!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — finish strong, stay on your toes!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r2',
+          name: 'Round 2 — Head Movement + Counters',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Slip right/left → Jab Cross (1-2)<br>Roll under → Lead Hook (3)<br>Parry → Cross (2)<br>Slip, slip → Cross, Hook (2-3) / Freestyle',
+          description: '🧠 <strong>Focus: Make yourself a moving target</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Slip right → throw Jab Cross (1-2)<br>• Slip left → throw Jab Cross (1-2)<br>• Roll under → come up with Lead Hook (3)<br>• Parry → throw Cross (2)<br>• Slip, slip → Cross, Hook (2-3)<br>• Key rule: head must move BEFORE every counter</div>',
+          timedCues: [
+            { time: 0,   text: "Slip right, Jab Cross — slip left, Jab Cross! One Two each side!", uiIndex: 0 },
+            { time: 25,  text: "Roll under, come up with the Hook — Three! Roll and fire!", uiIndex: 1 },
+            { time: 55,  text: "Parry, Cross — parry that jab, fire the Two!", uiIndex: 2 },
+            { time: 90,  text: "Slip, slip, Cross Hook — move your head!", uiIndex: 3 },
+            { time: 130, text: "Freestyle head movement — never be a stationary target!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — last combinations!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r3',
+          name: 'Round 3 — Defense + Combos',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Body then head (1-2 body, 1-2 head)<br>Block → Cross, Hook (2-3)<br>Slip right → Body, Head (1-6-2)<br>Pull back → Cross, Hook, Cross (2-3-2)',
+          description: '🛡️ <strong>Focus: Absorb and fire back</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Guard up — block incoming, return fire<br>• Body then head: 1-2 body, 1-2 head<br>• Slip right → body shot → head shot (1-6-2)<br>• Pull back counter → Cross, Hook, Cross (2-3-2)<br>• Block → Cross, Hook (2-3)<br>• Think: defend first, THEN punch</div>',
+          timedCues: [
+            { time: 0,   text: "Guard up — Jab Cross to the body, Jab Cross to the head! One Two down, One Two up!", uiIndex: 0 },
+            { time: 25,  text: "Block, Cross, Hook — absorb and counter!", uiIndex: 1 },
+            { time: 55,  text: "Slip right, body shot, head shot — One Six Two!", uiIndex: 2 },
+            { time: 90,  text: "Pull back counter — lean back, Cross, Hook Cross — Two Three Two!", uiIndex: 3 },
+            { time: 130, text: "Freestyle defense and counters!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — defensive combinations!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r4',
+          name: 'Round 4 — Full Speed Free Flow',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Full Speed Free Flow<br>Mix everything from Rounds 1-3',
+          description: '⚡ <strong>Focus: No instructions — just fight</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Full speed, full power<br>• Mix everything from Rounds 1-3<br>• Move your feet, move your head<br>• Throw combinations in bursts of 3-5 punches<br>• Reset, breathe, go again<br>• This is YOUR round — trust your training</div>',
+          timedCues: [
+            { time: 0,   text: "This is YOUR round — full speed, full power, everything you've got!", uiIndex: 0 },
+            { time: 40,  text: "Don't slow down — move and punch!", uiIndex: 0 },
+            { time: 80,  text: "Halfway — push the pace!", uiIndex: 0 },
+            { time: 120, text: "Last minute — dig deep!", uiIndex: 0 },
+            { time: 155, text: "Final 25 seconds — leave nothing in the tank!", uiIndex: 0 },
+            { time: 170, text: "Ten seconds — FINISH!", uiIndex: 0 }
+          ]
+        },
+        {
+          id: 'shadow-r5',
+          name: 'Round 5 — Cool Down Shadow',
+          workSeconds: 120,
+          restSeconds: 0,
+          skipCountdown: true,
+          combo: 'Cool Down Shadow<br>50% effort — breathe and move',
+          description: '🌬️ <strong>Focus: Breathe and wind down</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Drop to 50% effort — no power, just flow<br>• Slow jab, slow cross — feel your breath<br>• Light footwork — small steps, relaxed shoulders<br>• No combos — just single shots and movement<br>• Let your heart rate come down naturally</div>',
+          timedCues: [
+            { time: 0,  text: "Ease it down — 50% effort, breathe and move", uiIndex: 0 },
+            { time: 60, text: "Nice and easy — let the heart rate come down", uiIndex: 0 },
+            { time: 110, text: "Last ten seconds — finish clean", uiIndex: 0 }
+          ]
+        }
+      ]
+    },
+    cooldown: [
+      { id: 'shadow-cd1', name: 'Deep Breathing', duration: '1 min', desc: 'Inhale for 4 counts, hold for 4, exhale for 4. Slow the heart rate fully.' },
+      { id: 'shadow-cd2', name: 'Shoulder + Chest Stretch', duration: '1 min', desc: 'Clasp hands behind your back, open the chest, and hold.' },
+      { id: 'shadow-cd3', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' }
+    ]
+  },
+  {
+    id: 'quick-lower-power',
+    title: 'Lower Body Power',
+    type: 'strength',
+    duration: '~50 min',
+    focus: 'Strength',
+    warmup: [
+      { id: 'lower-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Light pace, warm up the ankles and calves' },
+      { id: 'lower-wu2', name: 'Leg Swings (forward/back)', type: 'timed', duration: 60, cue: 'Open up the hips' },
+      { id: 'lower-wu3', name: 'Hip Circles', type: 'timed', duration: 60, cue: 'Full range of motion, both directions' },
+      { id: 'lower-wu4', name: 'Lateral Lunge', type: 'timed', duration: 60, cue: 'Shift weight side to side, stretch the groin' },
+      { id: 'lower-wu5', name: 'Squat to Stand', type: 'timed', duration: 60, cue: 'Grab toes, drop hips, pry hips open' }
+    ],
+    exercises: [
+      {
+        id: 'lower-ex1',
+        name: 'Barbell Deadlift',
+        setsReps: '4 x 5',
+        weight: 'Bar + Plates',
+        notes: 'Suggested weight: 60-75% of your 1RM. Move the bar as explosively as possible while maintaining perfect form. Keep the bar close, hinge at the hips, flat back. Drive through the floor.',
+        benefits: 'Builds foundational lower body strength and posterior chain power.',
+        muscles: 'Hamstrings, glutes, lower back, core.',
+        restSeconds: 120
+      },
+      {
+        id: 'lower-ex2',
+        name: 'Bulgarian Split Squat',
+        setsReps: '3 x 6/side',
+        weight: 'Dumbbells',
+        notes: 'Suggested weight: 10-20 kg per hand. Heavy enough to challenge, but light enough to drive up explosively. Keep torso slightly leaned forward to target glutes, drive up explosively.',
+        benefits: 'Develops unilateral leg strength, mimicking the power transfer from the rear leg in a cross.',
+        muscles: 'Quads, glutes, core stability.',
+        restSeconds: 105
+      },
+      {
+        id: 'lower-ex3',
+        name: 'Squat Jumps',
+        setsReps: '4 x 6',
+        weight: 'Bodyweight',
+        notes: 'Dip down and explode vertically as high as possible. Land soft.',
+        benefits: 'Translates raw strength into explosive rate of force development.',
+        muscles: 'Quads, calves, glutes.',
+        restSeconds: 90
+      },
+      {
+        id: 'lower-ex4',
+        name: 'Lateral Bounds',
+        setsReps: '3 x 8/side',
+        weight: 'Bodyweight',
+        notes: 'Jump side to side, sticking the landing on one leg before bounding back.',
+        benefits: 'Improves lateral power and agility, essential for footwork and pivoting.',
+        muscles: 'Glute medius, adductors, quads.',
+        restSeconds: 75
+      },
+      {
+        id: 'lower-ex5',
+        name: 'Broad Jumps',
+        setsReps: '3 x 5',
+        weight: 'Bodyweight',
+        notes: 'Jump forward as far as possible, landing softly on both feet. Reset between reps.',
+        benefits: 'Builds horizontal power for closing distance fast.',
+        muscles: 'Glutes, hamstrings, quads.',
+        restSeconds: 90
+      }
+    ],
+    powerCircuit: {
+      id: 'lower-finisher',
+      name: 'Explosive Leg Circuit',
+      benefits: 'Perform back to back with NO rest between exercises. 60s rest between rounds.',
+      rounds: [
+        {
+          id: 'lower-finisher-r1',
+          name: 'Round 1',
+          workSeconds: 90,
+          restSeconds: 60,
+          combo: 'Squat Jumps × 10 reps<br>Lateral Bounds × 8 reps each side<br>Broad Jumps × 5 reps'
+        },
+        {
+          id: 'lower-finisher-r2',
+          name: 'Round 2',
+          workSeconds: 90,
+          restSeconds: 0,
+          combo: 'Squat Jumps × 10 reps<br>Lateral Bounds × 8 reps each side<br>Broad Jumps × 5 reps'
+        }
+      ]
+    },
+    cooldown: [
+      { id: 'lower-cd1', name: 'Pigeon Pose', duration: '1 min each side', desc: 'Cross one leg in front of you, extending the other leg back. Lean forward to stretch the glute.' },
+      { id: 'lower-cd2', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' },
+      { id: 'lower-cd3', name: 'Hamstring Stretch', duration: '1 min', desc: 'Sit with legs extended, reach for toes while keeping a straight back.' }
+    ]
+  },
+  {
+    id: 'quick-shadow-boxing',
+    title: 'Shadow Boxing',
+    type: 'technical',
+    duration: '~30 min',
+    focus: 'Technical',
+    warmup: [
+      { id: 'shadow-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Moderate pace — get rhythm and footwork ready' },
+      { id: 'shadow-wu2', name: 'Neck Rolls', type: 'timed', duration: 30, cue: 'Slow and controlled — full range of motion' },
+      { id: 'shadow-wu3', name: 'Shoulder Circles', type: 'timed', duration: 30, cue: 'Big circles, loosen the shoulder joint' },
+      { id: 'shadow-wu4', name: 'Hip Rotations', type: 'timed', duration: 60, cue: 'Stand tall, rotate from the hip — not just the knee' },
+      { id: 'shadow-wu5', name: 'Shadowboxing (40% effort)', type: 'timed', duration: 60, cue: 'Light movement only — just get your body moving' }
+    ],
+    bagRounds: {
+      id: 'shadow-main',
+      name: 'Shadow Boxing Rounds',
+      benefits: 'Focus on clean technique, footwork, and head movement. No bag — pure skill work.',
+      rounds: [
+        {
+          id: 'shadow-r1',
+          name: 'Round 1 — Footwork + Basic Combos',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Jab, Cross (1-2)<br>Jab, Cross, Hook (1-2-3)<br>Jab, Cross, Hook, Cross (1-2-3-2)<br>Freestyle: Mix & Move',
+          description: '🦶 <strong>Focus: Stay light, always moving</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Start in your boxing stance, weight on balls of feet<br>• After every combo — move! Step left, step right, circle out<br>• Combo 1: Jab, Cross (1-2) × 5 — step left after<br>• Combo 2: Jab, Cross, Hook (1-2-3) × 5 — circle right after<br>• Combo 3: Jab, Cross, Hook, Cross (1-2-3-2) × 5 — step back after<br>• Freestyle: mix the combos, never stop moving</div>',
+          timedCues: [
+            { time: 0,   text: "Stay light on your feet — Jab, Cross, One Two! Move after every combo!", uiIndex: 0 },
+            { time: 20,  text: "Jab, Cross, Hook — One Two Three! Circle left after!", uiIndex: 1 },
+            { time: 45,  text: "Jab, Cross, Hook, Cross — One Two Three Two! Step back, reset!", uiIndex: 2 },
+            { time: 80,  text: "Pivot drill — throw One Two, pivot right, throw One Two!", uiIndex: 3 },
+            { time: 120, text: "Freestyle — keep moving, stay light!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — finish strong, stay on your toes!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r2',
+          name: 'Round 2 — Head Movement + Counters',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Slip right/left → Jab Cross (1-2)<br>Roll under → Lead Hook (3)<br>Parry → Cross (2)<br>Slip, slip → Cross, Hook (2-3) / Freestyle',
+          description: '🧠 <strong>Focus: Make yourself a moving target</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Slip right → throw Jab Cross (1-2)<br>• Slip left → throw Jab Cross (1-2)<br>• Roll under → come up with Lead Hook (3)<br>• Parry → throw Cross (2)<br>• Slip, slip → Cross, Hook (2-3)<br>• Key rule: head must move BEFORE every counter</div>',
+          timedCues: [
+            { time: 0,   text: "Slip right, Jab Cross — slip left, Jab Cross! One Two each side!", uiIndex: 0 },
+            { time: 25,  text: "Roll under, come up with the Hook — Three! Roll and fire!", uiIndex: 1 },
+            { time: 55,  text: "Parry, Cross — parry that jab, fire the Two!", uiIndex: 2 },
+            { time: 90,  text: "Slip, slip, Cross Hook — move your head!", uiIndex: 3 },
+            { time: 130, text: "Freestyle head movement — never be a stationary target!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — last combinations!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r3',
+          name: 'Round 3 — Defense + Combos',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Body then head (1-2 body, 1-2 head)<br>Block → Cross, Hook (2-3)<br>Slip right → Body, Head (1-6-2)<br>Pull back → Cross, Hook, Cross (2-3-2)',
+          description: '🛡️ <strong>Focus: Absorb and fire back</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Guard up — block incoming, return fire<br>• Body then head: 1-2 body, 1-2 head<br>• Slip right → body shot → head shot (1-6-2)<br>• Pull back counter → Cross, Hook, Cross (2-3-2)<br>• Block → Cross, Hook (2-3)<br>• Think: defend first, THEN punch</div>',
+          timedCues: [
+            { time: 0,   text: "Guard up — Jab Cross to the body, Jab Cross to the head! One Two down, One Two up!", uiIndex: 0 },
+            { time: 25,  text: "Block, Cross, Hook — absorb and counter!", uiIndex: 1 },
+            { time: 55,  text: "Slip right, body shot, head shot — One Six Two!", uiIndex: 2 },
+            { time: 90,  text: "Pull back counter — lean back, Cross, Hook Cross — Two Three Two!", uiIndex: 3 },
+            { time: 130, text: "Freestyle defense and counters!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — defensive combinations!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r4',
+          name: 'Round 4 — Full Speed Free Flow',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Full Speed Free Flow<br>Mix everything from Rounds 1-3',
+          description: '⚡ <strong>Focus: No instructions — just fight</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Full speed, full power<br>• Mix everything from Rounds 1-3<br>• Move your feet, move your head<br>• Throw combinations in bursts of 3-5 punches<br>• Reset, breathe, go again<br>• This is YOUR round — trust your training</div>',
+          timedCues: [
+            { time: 0,   text: "This is YOUR round — full speed, full power, everything you've got!", uiIndex: 0 },
+            { time: 40,  text: "Don't slow down — move and punch!", uiIndex: 0 },
+            { time: 80,  text: "Halfway — push the pace!", uiIndex: 0 },
+            { time: 120, text: "Last minute — dig deep!", uiIndex: 0 },
+            { time: 155, text: "Final 25 seconds — leave nothing in the tank!", uiIndex: 0 },
+            { time: 170, text: "Ten seconds — FINISH!", uiIndex: 0 }
+          ]
+        },
+        {
+          id: 'shadow-r5',
+          name: 'Round 5 — Cool Down Shadow',
+          workSeconds: 120,
+          restSeconds: 0,
+          skipCountdown: true,
+          combo: 'Cool Down Shadow<br>50% effort — breathe and move',
+          description: '🌬️ <strong>Focus: Breathe and wind down</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Drop to 50% effort — no power, just flow<br>• Slow jab, slow cross — feel your breath<br>• Light footwork — small steps, relaxed shoulders<br>• No combos — just single shots and movement<br>• Let your heart rate come down naturally</div>',
+          timedCues: [
+            { time: 0,  text: "Ease it down — 50% effort, breathe and move", uiIndex: 0 },
+            { time: 60, text: "Nice and easy — let the heart rate come down", uiIndex: 0 },
+            { time: 110, text: "Last ten seconds — finish clean", uiIndex: 0 }
+          ]
+        }
+      ]
+    },
+    cooldown: [
+      { id: 'shadow-cd1', name: 'Deep Breathing', duration: '1 min', desc: 'Inhale for 4 counts, hold for 4, exhale for 4. Slow the heart rate fully.' },
+      { id: 'shadow-cd2', name: 'Shoulder + Chest Stretch', duration: '1 min', desc: 'Clasp hands behind your back, open the chest, and hold.' },
+      { id: 'shadow-cd3', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' }
+    ]
+  },
+  {
+    id: 'quick-lower-power',
+    title: 'Lower Body Power',
+    type: 'strength',
+    duration: '~50 min',
+    focus: 'Strength',
+    warmup: [
+      { id: 'lower-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Light pace, warm up the ankles and calves' },
+      { id: 'lower-wu2', name: 'Leg Swings (forward/back)', type: 'timed', duration: 60, cue: 'Open up the hips' },
+      { id: 'lower-wu3', name: 'Hip Circles', type: 'timed', duration: 60, cue: 'Full range of motion, both directions' },
+      { id: 'lower-wu4', name: 'Lateral Lunge', type: 'timed', duration: 60, cue: 'Shift weight side to side, stretch the groin' },
+      { id: 'lower-wu5', name: 'Squat to Stand', type: 'timed', duration: 60, cue: 'Grab toes, drop hips, pry hips open' }
+    ],
+    exercises: [
+      {
+        id: 'lower-ex1',
+        name: 'Barbell Deadlift',
+        setsReps: '4 x 5',
+        weight: 'Bar + Plates',
+        notes: 'Suggested weight: 60-75% of your 1RM. Move the bar as explosively as possible while maintaining perfect form. Keep the bar close, hinge at the hips, flat back. Drive through the floor.',
+        benefits: 'Builds foundational lower body strength and posterior chain power.',
+        muscles: 'Hamstrings, glutes, lower back, core.',
+        restSeconds: 120
+      },
+      {
+        id: 'lower-ex2',
+        name: 'Bulgarian Split Squat',
+        setsReps: '3 x 6/side',
+        weight: 'Dumbbells',
+        notes: 'Suggested weight: 10-20 kg per hand. Heavy enough to challenge, but light enough to drive up explosively. Keep torso slightly leaned forward to target glutes, drive up explosively.',
+        benefits: 'Develops unilateral leg strength, mimicking the power transfer from the rear leg in a cross.',
+        muscles: 'Quads, glutes, core stability.',
+        restSeconds: 105
+      },
+      {
+        id: 'lower-ex3',
+        name: 'Squat Jumps',
+        setsReps: '4 x 6',
+        weight: 'Bodyweight',
+        notes: 'Dip down and explode vertically as high as possible. Land soft.',
+        benefits: 'Translates raw strength into explosive rate of force development.',
+        muscles: 'Quads, calves, glutes.',
+        restSeconds: 90
+      },
+      {
+        id: 'lower-ex4',
+        name: 'Lateral Bounds',
+        setsReps: '3 x 8/side',
+        weight: 'Bodyweight',
+        notes: 'Jump side to side, sticking the landing on one leg before bounding back.',
+        benefits: 'Improves lateral power and agility, essential for footwork and pivoting.',
+        muscles: 'Glute medius, adductors, quads.',
+        restSeconds: 75
+      },
+      {
+        id: 'lower-ex5',
+        name: 'Broad Jumps',
+        setsReps: '3 x 5',
+        weight: 'Bodyweight',
+        notes: 'Jump forward as far as possible, landing softly on both feet. Reset between reps.',
+        benefits: 'Builds horizontal power for closing distance fast.',
+        muscles: 'Glutes, hamstrings, quads.',
+        restSeconds: 90
+      }
+    ],
+    powerCircuit: {
+      id: 'lower-finisher',
+      name: 'Explosive Leg Circuit',
+      benefits: 'Perform back to back with NO rest between exercises. 60s rest between rounds.',
+      rounds: [
+        {
+          id: 'lower-finisher-r1',
+          name: 'Round 1',
+          workSeconds: 90,
+          restSeconds: 60,
+          combo: 'Squat Jumps × 10 reps<br>Lateral Bounds × 8 reps each side<br>Broad Jumps × 5 reps'
+        },
+        {
+          id: 'lower-finisher-r2',
+          name: 'Round 2',
+          workSeconds: 90,
+          restSeconds: 0,
+          combo: 'Squat Jumps × 10 reps<br>Lateral Bounds × 8 reps each side<br>Broad Jumps × 5 reps'
+        }
+      ]
+    },
+    cooldown: [
+      { id: 'lower-cd1', name: 'Pigeon Pose', duration: '1 min each side', desc: 'Cross one leg in front of you, extending the other leg back. Lean forward to stretch the glute.' },
+      { id: 'lower-cd2', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' },
+      { id: 'lower-cd3', name: 'Hamstring Stretch', duration: '1 min', desc: 'Sit with legs extended, reach for toes while keeping a straight back.' }
+    ]
+  },
+  {
+    id: 'quick-shadow-boxing',
+    title: 'Shadow Boxing',
+    type: 'technical',
+    duration: '~30 min',
+    focus: 'Technical',
+    warmup: [
+      { id: 'shadow-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Moderate pace — get rhythm and footwork ready' },
+      { id: 'shadow-wu2', name: 'Neck Rolls', type: 'timed', duration: 30, cue: 'Slow and controlled — full range of motion' },
+      { id: 'shadow-wu3', name: 'Shoulder Circles', type: 'timed', duration: 30, cue: 'Big circles, loosen the shoulder joint' },
+      { id: 'shadow-wu4', name: 'Hip Rotations', type: 'timed', duration: 60, cue: 'Stand tall, rotate from the hip — not just the knee' },
+      { id: 'shadow-wu5', name: 'Shadowboxing (40% effort)', type: 'timed', duration: 60, cue: 'Light movement only — just get your body moving' }
+    ],
+    bagRounds: {
+      id: 'shadow-main',
+      name: 'Shadow Boxing Rounds',
+      benefits: 'Focus on clean technique, footwork, and head movement. No bag — pure skill work.',
+      rounds: [
+        {
+          id: 'shadow-r1',
+          name: 'Round 1 — Footwork + Basic Combos',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Jab, Cross (1-2)<br>Jab, Cross, Hook (1-2-3)<br>Jab, Cross, Hook, Cross (1-2-3-2)<br>Freestyle: Mix & Move',
+          description: '🦶 <strong>Focus: Stay light, always moving</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Start in your boxing stance, weight on balls of feet<br>• After every combo — move! Step left, step right, circle out<br>• Combo 1: Jab, Cross (1-2) × 5 — step left after<br>• Combo 2: Jab, Cross, Hook (1-2-3) × 5 — circle right after<br>• Combo 3: Jab, Cross, Hook, Cross (1-2-3-2) × 5 — step back after<br>• Freestyle: mix the combos, never stop moving</div>',
+          timedCues: [
+            { time: 0,   text: "Stay light on your feet — Jab, Cross, One Two! Move after every combo!", uiIndex: 0 },
+            { time: 20,  text: "Jab, Cross, Hook — One Two Three! Circle left after!", uiIndex: 1 },
+            { time: 45,  text: "Jab, Cross, Hook, Cross — One Two Three Two! Step back, reset!", uiIndex: 2 },
+            { time: 80,  text: "Pivot drill — throw One Two, pivot right, throw One Two!", uiIndex: 3 },
+            { time: 120, text: "Freestyle — keep moving, stay light!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — finish strong, stay on your toes!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r2',
+          name: 'Round 2 — Head Movement + Counters',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Slip right/left → Jab Cross (1-2)<br>Roll under → Lead Hook (3)<br>Parry → Cross (2)<br>Slip, slip → Cross, Hook (2-3) / Freestyle',
+          description: '🧠 <strong>Focus: Make yourself a moving target</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Slip right → throw Jab Cross (1-2)<br>• Slip left → throw Jab Cross (1-2)<br>• Roll under → come up with Lead Hook (3)<br>• Parry → throw Cross (2)<br>• Slip, slip → Cross, Hook (2-3)<br>• Key rule: head must move BEFORE every counter</div>',
+          timedCues: [
+            { time: 0,   text: "Slip right, Jab Cross — slip left, Jab Cross! One Two each side!", uiIndex: 0 },
+            { time: 25,  text: "Roll under, come up with the Hook — Three! Roll and fire!", uiIndex: 1 },
+            { time: 55,  text: "Parry, Cross — parry that jab, fire the Two!", uiIndex: 2 },
+            { time: 90,  text: "Slip, slip, Cross Hook — move your head!", uiIndex: 3 },
+            { time: 130, text: "Freestyle head movement — never be a stationary target!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — last combinations!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r3',
+          name: 'Round 3 — Defense + Combos',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Body then head (1-2 body, 1-2 head)<br>Block → Cross, Hook (2-3)<br>Slip right → Body, Head (1-6-2)<br>Pull back → Cross, Hook, Cross (2-3-2)',
+          description: '🛡️ <strong>Focus: Absorb and fire back</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Guard up — block incoming, return fire<br>• Body then head: 1-2 body, 1-2 head<br>• Slip right → body shot → head shot (1-6-2)<br>• Pull back counter → Cross, Hook, Cross (2-3-2)<br>• Block → Cross, Hook (2-3)<br>• Think: defend first, THEN punch</div>',
+          timedCues: [
+            { time: 0,   text: "Guard up — Jab Cross to the body, Jab Cross to the head! One Two down, One Two up!", uiIndex: 0 },
+            { time: 25,  text: "Block, Cross, Hook — absorb and counter!", uiIndex: 1 },
+            { time: 55,  text: "Slip right, body shot, head shot — One Six Two!", uiIndex: 2 },
+            { time: 90,  text: "Pull back counter — lean back, Cross, Hook Cross — Two Three Two!", uiIndex: 3 },
+            { time: 130, text: "Freestyle defense and counters!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — defensive combinations!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r4',
+          name: 'Round 4 — Full Speed Free Flow',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Full Speed Free Flow<br>Mix everything from Rounds 1-3',
+          description: '⚡ <strong>Focus: No instructions — just fight</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Full speed, full power<br>• Mix everything from Rounds 1-3<br>• Move your feet, move your head<br>• Throw combinations in bursts of 3-5 punches<br>• Reset, breathe, go again<br>• This is YOUR round — trust your training</div>',
+          timedCues: [
+            { time: 0,   text: "This is YOUR round — full speed, full power, everything you've got!", uiIndex: 0 },
+            { time: 40,  text: "Don't slow down — move and punch!", uiIndex: 0 },
+            { time: 80,  text: "Halfway — push the pace!", uiIndex: 0 },
+            { time: 120, text: "Last minute — dig deep!", uiIndex: 0 },
+            { time: 155, text: "Final 25 seconds — leave nothing in the tank!", uiIndex: 0 },
+            { time: 170, text: "Ten seconds — FINISH!", uiIndex: 0 }
+          ]
+        },
+        {
+          id: 'shadow-r5',
+          name: 'Round 5 — Cool Down Shadow',
+          workSeconds: 120,
+          restSeconds: 0,
+          skipCountdown: true,
+          combo: 'Cool Down Shadow<br>50% effort — breathe and move',
+          description: '🌬️ <strong>Focus: Breathe and wind down</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Drop to 50% effort — no power, just flow<br>• Slow jab, slow cross — feel your breath<br>• Light footwork — small steps, relaxed shoulders<br>• No combos — just single shots and movement<br>• Let your heart rate come down naturally</div>',
+          timedCues: [
+            { time: 0,  text: "Ease it down — 50% effort, breathe and move", uiIndex: 0 },
+            { time: 60, text: "Nice and easy — let the heart rate come down", uiIndex: 0 },
+            { time: 110, text: "Last ten seconds — finish clean", uiIndex: 0 }
+          ]
+        }
+      ]
+    },
+    cooldown: [
+      { id: 'shadow-cd1', name: 'Deep Breathing', duration: '1 min', desc: 'Inhale for 4 counts, hold for 4, exhale for 4. Slow the heart rate fully.' },
+      { id: 'shadow-cd2', name: 'Shoulder + Chest Stretch', duration: '1 min', desc: 'Clasp hands behind your back, open the chest, and hold.' },
+      { id: 'shadow-cd3', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' }
+    ]
+  },
+  {
+    id: 'quick-lower-power',
+    title: 'Lower Body Power',
+    type: 'strength',
+    duration: '~50 min',
+    focus: 'Strength',
+    warmup: [
+      { id: 'lower-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Light pace, warm up the ankles and calves' },
+      { id: 'lower-wu2', name: 'Leg Swings (forward/back)', type: 'timed', duration: 60, cue: 'Open up the hips' },
+      { id: 'lower-wu3', name: 'Hip Circles', type: 'timed', duration: 60, cue: 'Full range of motion, both directions' },
+      { id: 'lower-wu4', name: 'Lateral Lunge', type: 'timed', duration: 60, cue: 'Shift weight side to side, stretch the groin' },
+      { id: 'lower-wu5', name: 'Squat to Stand', type: 'timed', duration: 60, cue: 'Grab toes, drop hips, pry hips open' }
+    ],
+    exercises: [
+      {
+        id: 'lower-ex1',
+        name: 'Barbell Deadlift',
+        setsReps: '4 x 5',
+        weight: 'Bar + Plates',
+        notes: 'Suggested weight: 60-75% of your 1RM. Move the bar as explosively as possible while maintaining perfect form. Keep the bar close, hinge at the hips, flat back. Drive through the floor.',
+        benefits: 'Builds foundational lower body strength and posterior chain power.',
+        muscles: 'Hamstrings, glutes, lower back, core.',
+        restSeconds: 120
+      },
+      {
+        id: 'lower-ex2',
+        name: 'Bulgarian Split Squat',
+        setsReps: '3 x 6/side',
+        weight: 'Dumbbells',
+        notes: 'Suggested weight: 10-20 kg per hand. Heavy enough to challenge, but light enough to drive up explosively. Keep torso slightly leaned forward to target glutes, drive up explosively.',
+        benefits: 'Develops unilateral leg strength, mimicking the power transfer from the rear leg in a cross.',
+        muscles: 'Quads, glutes, core stability.',
+        restSeconds: 105
+      },
+      {
+        id: 'lower-ex3',
+        name: 'Squat Jumps',
+        setsReps: '4 x 6',
+        weight: 'Bodyweight',
+        notes: 'Dip down and explode vertically as high as possible. Land soft.',
+        benefits: 'Translates raw strength into explosive rate of force development.',
+        muscles: 'Quads, calves, glutes.',
+        restSeconds: 90
+      },
+      {
+        id: 'lower-ex4',
+        name: 'Lateral Bounds',
+        setsReps: '3 x 8/side',
+        weight: 'Bodyweight',
+        notes: 'Jump side to side, sticking the landing on one leg before bounding back.',
+        benefits: 'Improves lateral power and agility, essential for footwork and pivoting.',
+        muscles: 'Glute medius, adductors, quads.',
+        restSeconds: 75
+      },
+      {
+        id: 'lower-ex5',
+        name: 'Broad Jumps',
+        setsReps: '3 x 5',
+        weight: 'Bodyweight',
+        notes: 'Jump forward as far as possible, landing softly on both feet. Reset between reps.',
+        benefits: 'Builds horizontal power for closing distance fast.',
+        muscles: 'Glutes, hamstrings, quads.',
+        restSeconds: 90
+      }
+    ],
+    powerCircuit: {
+      id: 'lower-finisher',
+      name: 'Explosive Leg Circuit',
+      benefits: 'Perform back to back with NO rest between exercises. 60s rest between rounds.',
+      rounds: [
+        {
+          id: 'lower-finisher-r1',
+          name: 'Round 1',
+          workSeconds: 90,
+          restSeconds: 60,
+          combo: 'Squat Jumps × 10 reps<br>Lateral Bounds × 8 reps each side<br>Broad Jumps × 5 reps'
+        },
+        {
+          id: 'lower-finisher-r2',
+          name: 'Round 2',
+          workSeconds: 90,
+          restSeconds: 0,
+          combo: 'Squat Jumps × 10 reps<br>Lateral Bounds × 8 reps each side<br>Broad Jumps × 5 reps'
+        }
+      ]
+    },
+    cooldown: [
+      { id: 'lower-cd1', name: 'Pigeon Pose', duration: '1 min each side', desc: 'Cross one leg in front of you, extending the other leg back. Lean forward to stretch the glute.' },
+      { id: 'lower-cd2', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' },
+      { id: 'lower-cd3', name: 'Hamstring Stretch', duration: '1 min', desc: 'Sit with legs extended, reach for toes while keeping a straight back.' }
+    ]
+  },
+  {
+    id: 'quick-shadow-boxing',
+    title: 'Shadow Boxing',
+    type: 'technical',
+    duration: '~30 min',
+    focus: 'Technical',
+    warmup: [
+      { id: 'shadow-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Moderate pace — get rhythm and footwork ready' },
+      { id: 'shadow-wu2', name: 'Neck Rolls', type: 'timed', duration: 30, cue: 'Slow and controlled — full range of motion' },
+      { id: 'shadow-wu3', name: 'Shoulder Circles', type: 'timed', duration: 30, cue: 'Big circles, loosen the shoulder joint' },
+      { id: 'shadow-wu4', name: 'Hip Rotations', type: 'timed', duration: 60, cue: 'Stand tall, rotate from the hip — not just the knee' },
+      { id: 'shadow-wu5', name: 'Shadowboxing (40% effort)', type: 'timed', duration: 60, cue: 'Light movement only — just get your body moving' }
+    ],
+    bagRounds: {
+      id: 'shadow-main',
+      name: 'Shadow Boxing Rounds',
+      benefits: 'Focus on clean technique, footwork, and head movement. No bag — pure skill work.',
+      rounds: [
+        {
+          id: 'shadow-r1',
+          name: 'Round 1 — Footwork + Basic Combos',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Jab, Cross (1-2)<br>Jab, Cross, Hook (1-2-3)<br>Jab, Cross, Hook, Cross (1-2-3-2)<br>Freestyle: Mix & Move',
+          description: '🦶 <strong>Focus: Stay light, always moving</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Start in your boxing stance, weight on balls of feet<br>• After every combo — move! Step left, step right, circle out<br>• Combo 1: Jab, Cross (1-2) × 5 — step left after<br>• Combo 2: Jab, Cross, Hook (1-2-3) × 5 — circle right after<br>• Combo 3: Jab, Cross, Hook, Cross (1-2-3-2) × 5 — step back after<br>• Freestyle: mix the combos, never stop moving</div>',
+          timedCues: [
+            { time: 0,   text: "Stay light on your feet — Jab, Cross, One Two! Move after every combo!", uiIndex: 0 },
+            { time: 20,  text: "Jab, Cross, Hook — One Two Three! Circle left after!", uiIndex: 1 },
+            { time: 45,  text: "Jab, Cross, Hook, Cross — One Two Three Two! Step back, reset!", uiIndex: 2 },
+            { time: 80,  text: "Pivot drill — throw One Two, pivot right, throw One Two!", uiIndex: 3 },
+            { time: 120, text: "Freestyle — keep moving, stay light!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — finish strong, stay on your toes!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r2',
+          name: 'Round 2 — Head Movement + Counters',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Slip right/left → Jab Cross (1-2)<br>Roll under → Lead Hook (3)<br>Parry → Cross (2)<br>Slip, slip → Cross, Hook (2-3) / Freestyle',
+          description: '🧠 <strong>Focus: Make yourself a moving target</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Slip right → throw Jab Cross (1-2)<br>• Slip left → throw Jab Cross (1-2)<br>• Roll under → come up with Lead Hook (3)<br>• Parry → throw Cross (2)<br>• Slip, slip → Cross, Hook (2-3)<br>• Key rule: head must move BEFORE every counter</div>',
+          timedCues: [
+            { time: 0,   text: "Slip right, Jab Cross — slip left, Jab Cross! One Two each side!", uiIndex: 0 },
+            { time: 25,  text: "Roll under, come up with the Hook — Three! Roll and fire!", uiIndex: 1 },
+            { time: 55,  text: "Parry, Cross — parry that jab, fire the Two!", uiIndex: 2 },
+            { time: 90,  text: "Slip, slip, Cross Hook — move your head!", uiIndex: 3 },
+            { time: 130, text: "Freestyle head movement — never be a stationary target!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — last combinations!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r3',
+          name: 'Round 3 — Defense + Combos',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Body then head (1-2 body, 1-2 head)<br>Block → Cross, Hook (2-3)<br>Slip right → Body, Head (1-6-2)<br>Pull back → Cross, Hook, Cross (2-3-2)',
+          description: '🛡️ <strong>Focus: Absorb and fire back</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Guard up — block incoming, return fire<br>• Body then head: 1-2 body, 1-2 head<br>• Slip right → body shot → head shot (1-6-2)<br>• Pull back counter → Cross, Hook, Cross (2-3-2)<br>• Block → Cross, Hook (2-3)<br>• Think: defend first, THEN punch</div>',
+          timedCues: [
+            { time: 0,   text: "Guard up — Jab Cross to the body, Jab Cross to the head! One Two down, One Two up!", uiIndex: 0 },
+            { time: 25,  text: "Block, Cross, Hook — absorb and counter!", uiIndex: 1 },
+            { time: 55,  text: "Slip right, body shot, head shot — One Six Two!", uiIndex: 2 },
+            { time: 90,  text: "Pull back counter — lean back, Cross, Hook Cross — Two Three Two!", uiIndex: 3 },
+            { time: 130, text: "Freestyle defense and counters!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — defensive combinations!", uiIndex: 3 }
+          ]
+        },
+        {
+          id: 'shadow-r4',
+          name: 'Round 4 — Full Speed Free Flow',
+          workSeconds: 180,
+          restSeconds: 60,
+          skipCountdown: false,
+          combo: 'Full Speed Free Flow<br>Mix everything from Rounds 1-3',
+          description: '⚡ <strong>Focus: No instructions — just fight</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Full speed, full power<br>• Mix everything from Rounds 1-3<br>• Move your feet, move your head<br>• Throw combinations in bursts of 3-5 punches<br>• Reset, breathe, go again<br>• This is YOUR round — trust your training</div>',
+          timedCues: [
+            { time: 0,   text: "This is YOUR round — full speed, full power, everything you've got!", uiIndex: 0 },
+            { time: 40,  text: "Don't slow down — move and punch!", uiIndex: 0 },
+            { time: 80,  text: "Halfway — push the pace!", uiIndex: 0 },
+            { time: 120, text: "Last minute — dig deep!", uiIndex: 0 },
+            { time: 155, text: "Final 25 seconds — leave nothing in the tank!", uiIndex: 0 },
+            { time: 170, text: "Ten seconds — FINISH!", uiIndex: 0 }
+          ]
+        },
+        {
+          id: 'shadow-r5',
+          name: 'Round 5 — Cool Down Shadow',
+          workSeconds: 120,
+          restSeconds: 0,
+          skipCountdown: true,
+          combo: 'Cool Down Shadow<br>50% effort — breathe and move',
+          description: '🌬️ <strong>Focus: Breathe and wind down</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Drop to 50% effort — no power, just flow<br>• Slow jab, slow cross — feel your breath<br>• Light footwork — small steps, relaxed shoulders<br>• No combos — just single shots and movement<br>• Let your heart rate come down naturally</div>',
+          timedCues: [
+            { time: 0,  text: "Ease it down — 50% effort, breathe and move", uiIndex: 0 },
+            { time: 60, text: "Nice and easy — let the heart rate come down", uiIndex: 0 },
+            { time: 110, text: "Last ten seconds — finish clean", uiIndex: 0 }
+          ]
+        }
+      ]
+    },
+    cooldown: [
+      { id: 'shadow-cd1', name: 'Deep Breathing', duration: '1 min', desc: 'Inhale for 4 counts, hold for 4, exhale for 4. Slow the heart rate fully.' },
+      { id: 'shadow-cd2', name: 'Shoulder + Chest Stretch', duration: '1 min', desc: 'Clasp hands behind your back, open the chest, and hold.' },
+      { id: 'shadow-cd3', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' }
+    ]
+  },
+  {
+    id: 'quick-hiit-boxing',
+    title: 'HIIT Boxing',
+    focus: 'Box + Conditioning',
+    type: 'bag',
+    isContinuous: true,
+    playlist: [
+      // Warm-up
+      { type: 'work', name: 'Jump Rope', duration: 60, timedCues: [{ time: 0, text: 'Alright, let\'s go. HIIT Boxing — twenty-five minutes, all out, no stopping. First up, jump rope. Easy pace, just wake the legs up.' }] },
+      { type: 'work', name: 'Arm Circles + Dynamic Shoulder Prep', duration: 60, timedCues: [
+          { time: 0, text: 'Good. Now arm circles — loosen those shoulders up, big circles, forward then back. You\'re gonna need them in a minute.' },
+          { time: 45, text: 'Fifteen seconds. Get loose. Tabata\'s coming up — this is the hard part.' }
+      ]},
+      // Bag Rounds (Tabata)
+      { type: 'countdown', duration: 5, timedCues: [{ time: 0, text: 'Get ready... five... four... three... two... one... GO!' }] },
+      { type: 'work', name: 'Round 1 (Power)', duration: 30, combo: 'Power: 1-2 and 2-3-2', timedCues: [{ time: 0, text: 'Round one — POWER. Hard shots. One-two, two-three-two. Make every punch count!' }, { time: 15, text: 'Sit down on that punch! Drive it through!' }] },
+      { type: 'rest', duration: 15, timedCues: [{ time: 0, text: 'Time! Hands down — fifteen seconds, breathe.' }] },
+      { type: 'work', name: 'Round 2 (Speed)', duration: 30, combo: 'Speed: 1-1-2', timedCues: [{ time: 0, text: 'Round two — SPEED. Fast hands. One-one-two. Light and quick, snap it back!' }, { time: 15, text: 'Quick, quick, quick! Don\'t load up, just fire!' }] },
+      { type: 'rest', duration: 15, timedCues: [{ time: 0, text: 'And rest. Shake it out, fifteen seconds.' }] },
+      { type: 'work', name: 'Round 3 (Power)', duration: 30, combo: 'Power: 1-2 and 2-3-2', timedCues: [{ time: 0, text: 'Round three — POWER. Back to hard shots. One-two, two-three-two. Dig deep!' }, { time: 15, text: 'That\'s it — full force, every rep!' }] },
+      { type: 'rest', duration: 15, timedCues: [{ time: 0, text: 'Time. Breathe. Fifteen seconds.' }] },
+      { type: 'work', name: 'Round 4 (Speed)', duration: 30, combo: 'Speed: 1-1-2', timedCues: [{ time: 0, text: 'Round four — SPEED. One-one-two. Keep it light, keep it fast!' }, { time: 15, text: 'Hands up, stay quick!' }] },
+      { type: 'rest', duration: 15, timedCues: [{ time: 0, text: 'Rest. You\'re halfway there — fifteen seconds.' }, { time: 1, text: 'That\'s four rounds down, four to go. You\'re halfway through Tabata — don\'t you dare slow down now.' }] },
+      { type: 'work', name: 'Round 5 (Power)', duration: 30, combo: 'Power: 1-2 and 2-3-2', timedCues: [{ time: 0, text: 'Round five — POWER. One-two, two-three-two. Three rounds left. Empty the tank on these!' }, { time: 15, text: 'Every punch full force — no half reps!' }] },
+      { type: 'rest', duration: 15, timedCues: [{ time: 0, text: 'Time. Fifteen seconds — recover.' }] },
+      { type: 'work', name: 'Round 6 (Speed)', duration: 30, combo: 'Speed: 1-1-2', timedCues: [{ time: 0, text: 'Round six — SPEED. One-one-two. Stay light on your feet, fast hands!' }, { time: 15, text: 'Keep the pace — don\'t slow down!' }] },
+      { type: 'rest', duration: 15, timedCues: [{ time: 0, text: 'Rest. Almost there — breathe.' }] },
+      { type: 'work', name: 'Round 7 (Power)', duration: 30, combo: 'Power: 1-2 and 2-3-2', timedCues: [{ time: 0, text: 'Round seven — POWER. Second to last round. One-two, two-three-two. This is where it gets tested — dig in!' }, { time: 15, text: 'This is where champions are made — push!' }] },
+      { type: 'rest', duration: 15, timedCues: [{ time: 0, text: 'Time. One more round. Fifteen seconds.' }] },
+      { type: 'work', name: 'Round 8 (Speed)', duration: 30, combo: 'Speed: 1-1-2', timedCues: [{ time: 0, text: 'Last round! SPEED. One-one-two. Everything you\'ve got — right now!' }, { time: 15, text: 'Finish strong! Don\'t leave anything left!' }] },
+      { type: 'rest', duration: 60, timedCues: [
+          { time: 0, text: 'That\'s Tabata — DONE! Incredible work. Take the rest.' },
+          { time: 2, text: 'One minute rest. Hands all the way down. Walk it off, grab some water if you need it — you earned this.' },
+          { time: 45, text: 'Fifteen seconds. Get your hands back up — the conditioning circuit is next, and it\'s a leg-burner.' }
+      ] },
+      // Circuit
+      { type: 'countdown', duration: 5, timedCues: [{ time: 0, text: 'Get ready... five... four... three... two... one... GO!' }] },
+      { type: 'work', name: 'Circuit Round 1', duration: 90, combo: 'Circuit: 10 Burpees, 10 Push-ups, 10 Squat Jumps',
+        exercises: [
+          { id: 'hiit-c1', name: 'Burpees', reps: '10 reps', restSeconds: 0 },
+          { id: 'hiit-c2', name: 'Push-ups', reps: '10 reps', restSeconds: 0 },
+          { id: 'hiit-c3', name: 'Squat Jumps', reps: '10 reps', restSeconds: 0 }
+        ],
+        timedCues: [
+          { time: 0, text: 'Circuit round one. Ten burpees, ten push-ups, ten squat jumps — back to back, no stopping. Go!' },
+          { time: 30, text: 'Push-ups — keep that core tight, chest to the floor!' },
+          { time: 60, text: 'Squat jumps — explode up, land soft!' }
+      ] },
+      { type: 'rest', duration: 45, timedCues: [{ time: 0, text: 'Round one, done! Forty-five seconds rest — two rounds to go.' }] },
+      { type: 'work', name: 'Circuit Round 2', duration: 90, combo: 'Circuit: 10 Burpees, 10 Push-ups, 10 Squat Jumps', timedCues: [
+          { time: 0, text: 'Round two. Same work — burpees, push-ups, squat jumps. Dig in!' },
+          { time: 30, text: 'Push-ups — don\'t rush, full range!' },
+          { time: 60, text: 'Squat jumps — up, up, up!' }
+      ] },
+      { type: 'rest', duration: 45, timedCues: [{ time: 0, text: 'Round two, down! One more round — forty-five seconds. Last push.' }] },
+      { type: 'work', name: 'Circuit Round 3', duration: 90, combo: 'Circuit: 10 Burpees, 10 Push-ups, 10 Squat Jumps', timedCues: [
+          { time: 0, text: 'Last round! Leave nothing left — burpees, push-ups, squat jumps. Go, go, go!' },
+          { time: 30, text: 'Push-ups — finish them clean!' },
+          { time: 60, text: 'Squat jumps — all the way up, this is the last one!' }
+      ] },
+      { type: 'rest', duration: 15, timedCues: [{ time: 0, text: 'That\'s it! Circuit — COMPLETE! Outstanding effort today.' }] },
+      // Cooldown
+      { type: 'work', name: 'Standing forward fold', duration: 60, desc: 'Let it all hang, relax.', timedCues: [{ time: 0, text: 'Great work today. Let\'s bring that heart rate down. Standing forward fold — hinge at the hips, let your arms hang, knees soft. Just breathe.' }] },
+      { type: 'work', name: 'Deep breathing / box breathing', duration: 60, desc: 'In for 4, hold 4, out 4, hold 4.', timedCues: [{ time: 0, text: 'Now box breathing with me. In for four... hold for four... out for four... hold for four. Let\'s reset the nervous system.' }] },
+      { type: 'work', name: 'Shoulder + calf stretch', duration: 60, desc: 'Thirty seconds each side.', timedCues: [
+          { time: 0, text: 'Last one — shoulder and calf stretch. Thirty seconds each side. Pull one arm across your chest... then switch to the calf, step back, press that heel down.' },
+          { time: 58, text: 'And that\'s HIIT Boxing — complete. Twenty-five minutes, eight rounds of Tabata, a brutal circuit, and you finished it. Go refuel, hydrate, and recover. Great session today.' }
+      ] }
+    ]
+  }];

@@ -80,6 +80,7 @@ function reRenderViewingDay() {
         window.renderDay(viewingDayId);
     }
 }
+window.reRenderViewingDay = reRenderViewingDay;
 
 window.logSet = function(dayId, itemId, setIndex, restSec, title, cue, btn) {
     const row = btn.closest('.set-row');
@@ -168,30 +169,14 @@ window.toggleWarmupExpanded = function() {
 function renderWarmup(day) {
     if (!day.warmup || day.warmup.length === 0) return '';
     
-    // Auto-expand if any item is completed
-    const hasCompletedItem = day.warmup.some(item => {
-        const logData = Store.getItemLog(day.id, item.id) || {};
-        return logData.completed;
-    });
-    
-    // Explicit user toggle overrides default collapsed state
-    const userExpanded = sessionStorage.getItem(`warmupExpanded_${day.id}`);
-    
-    let isExpanded = false;
-    if (userExpanded === 'true') {
-        isExpanded = true;
-    } else if (userExpanded === 'false') {
-        isExpanded = false;
-    } else if (hasCompletedItem) {
-        isExpanded = true; // Auto-expand
-    }
+    let isExpanded = expandedCardIds.has('warmup-card');
 
     const totalDurationSec = day.warmup.filter(w => w.type === 'timed').reduce((s, w) => s + w.duration, 0);
     const mins = Math.ceil(totalDurationSec / 60);
     
     let html = `
         <div class="card warmup-card">
-            <div class="warmup-header" onclick="toggleWarmupExpanded()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleWarmupExpanded();}" aria-expanded="${isExpanded}" role="button" tabindex="0">
+            <div class="warmup-header" onclick="toggleCard('warmup-card')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCard('warmup-card');}" aria-expanded="${isExpanded}" role="button" tabindex="0">
                 <div class="flex items-center gap-2">
                     <span class="warmup-label">WARM-UP</span>
                     <span class="warmup-header-duration">· ~${mins} min</span>
@@ -228,7 +213,7 @@ function renderWarmup(day) {
                         <div class="warmup-cue">${item.cue}</div>
                     </div>
                     <div class="warmup-actions">
-                        ${!isRepBased && !isCompleted ? `
+                        ${!isRepBased && !isCompleted && !day.warmupPlaylist ? `
                             <button class="btn-play type-${day.type}" onclick="startWarmupTimer(${dayIdStr}, '${item.id}', ${item.duration}, '${item.name.replace(/'/g, "\\'")}', '${item.cue.replace(/'/g, "\\'")}', ${item.switchSides})">
                                 <span class="play-icon">${icons.play}</span> Start
                             </button>
@@ -237,6 +222,16 @@ function renderWarmup(day) {
                 </div>
             `;
         });
+        html += `</div>`;
+        if (day.warmupPlaylist) {
+            html += `
+            <div style="padding: 16px; border-top: 1px solid var(--border-color);">
+                <button class="btn-primary" style="width: 100%;" onclick="startSectionSequence('${day.id}', 'warmupPlaylist')">
+                    <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start Warm Up
+                </button>
+            </div>`;
+        }
+        
         html += `</div>`;
     }
     
@@ -300,7 +295,17 @@ function calculateSessionDuration(day) {
 
 function calculateQuickSessionDuration(qs) {
     if (!qs) return null;
+    
     let totalSec = 0;
+    
+    // Playlist (Continuous Sessions like HIIT Boxing)
+    // If a playlist exists, it contains the entire sequence including countdowns and rests.
+    if (qs.playlist) {
+        qs.playlist.forEach(item => {
+            totalSec += (item.duration || 0);
+        });
+        return `~${Math.ceil(totalSec / 60)} min`;
+    }
     
     // Warm-up
     if (qs.warmup) {
@@ -351,6 +356,24 @@ function calculateQuickSessionDuration(qs) {
         totalSec += 180;
     }
     
+    // Sequence (Continuous Sessions)
+    if (qs.sequence) {
+        qs.sequence.forEach(sec => {
+            if (sec.type === 'timed-list') {
+                totalSec += sec.items.reduce((s, i) => s + (i.duration || 0), 0);
+            } else if (sec.type === 'tabata') {
+                totalSec += (sec.rounds || 0) * ((sec.workSeconds || 0) + (sec.restSeconds || 0));
+            } else if (sec.type === 'circuit') {
+                totalSec += (sec.rounds || 0) * (sec.roundData.totalWorkSeconds || 0);
+                if (sec.rounds > 1) {
+                    totalSec += (sec.rounds - 1) * (sec.restSeconds || 0);
+                }
+            } else if (sec.type === 'rest') {
+                totalSec += (sec.duration || 0);
+            }
+        });
+    }
+    
     // GET READY countdowns
     totalSec += (bagCount + finisherCount + pcCount) * 5;
     
@@ -386,6 +409,8 @@ function expandAll() {
             if (session.finisher) expandedCardIds.add(session.finisher.id);
             if (session.powerCircuit) expandedCardIds.add(session.powerCircuit.id);
             if (session.exercises) session.exercises.forEach(ex => expandedCardIds.add(ex.id));
+            if (session.warmup && session.warmup.length > 0) expandedCardIds.add('warmup-card');
+            if (session.cooldown && session.cooldown.length > 0) expandedCardIds.add('cooldown-card');
             renderQuickSession(viewingDayId);
         }
         return;
@@ -397,6 +422,7 @@ function expandAll() {
     // Add all valid ids
     if (currentDay.exercises) currentDay.exercises.forEach(ex => expandedCardIds.add(ex.id));
     if (currentDay.sections) currentDay.sections.forEach(sec => expandedCardIds.add(sec.id));
+    if (currentDay.warmup && currentDay.warmup.length > 0) expandedCardIds.add('warmup-card');
     
     renderDay(viewingDayId);
 }
@@ -708,7 +734,7 @@ const quickSessionCards = [
     { id: 'quick-upper-power', emoji: '💪', name: 'Upper Body Power',     duration: '~45 min', tag: 'Strength',            pill: 'qs-pill-orange', type: 'strength'  },
     { id: 'quick-lower-power', emoji: '🦵', name: 'Lower Body Power',     duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-lower-power')) || '~50 min', tag: 'Strength',            pill: 'qs-pill-orange', type: 'strength'  },
     { id: 'quick-shadow-boxing', emoji: '👤', name: 'Shadow Boxing',        duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-shadow-boxing')) || '~30 min', tag: 'Technical',           pill: 'qs-pill-cyan',   type: 'technical' },
-    { emoji: '🔥', name: 'HIIT Boxing',          duration: '~25 min', tag: 'Conditioning',        pill: 'qs-pill-red',    type: 'hiit'      },
+    { id: 'quick-hiit-boxing', emoji: '🔥', name: 'HIIT Boxing',          duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-hiit-boxing')) || '~25 min', tag: 'Conditioning',        pill: 'qs-pill-red',    type: 'bag'      },
     { emoji: '🧘', name: 'Active Recovery',      duration: '~20 min', tag: 'Recovery',            pill: 'qs-pill-teal',   type: 'rest'      },
     { emoji: '💥', name: 'Full Body Explosive',  duration: '~55 min', tag: 'Full Body',           pill: 'qs-pill-orange', type: 'strength'  },
 ];
@@ -919,8 +945,6 @@ window.renderDay = function(dayIdRaw) {
         `;
     }
 
-    html += renderWarmup(day);
-
     // Content Section Header
     if (day.type !== 'rest') {
         let countLabel = '';
@@ -933,7 +957,6 @@ window.renderDay = function(dayIdRaw) {
             let totalSeconds = day.exercises.reduce((sum, ex) => {
                 let w = ex.workSeconds || 0;
                 let r = ex.restSeconds || 0;
-                // Bag rounds are executed exactly once per round array element, do not multiply by setsReps
                 return sum + (w + r);
             }, 0);
             if (totalSeconds > 0) totalTime = `${Math.ceil(totalSeconds / 60)} min total`;
@@ -952,8 +975,14 @@ window.renderDay = function(dayIdRaw) {
         
         let totalExpandable = 0;
         let totalExpanded = 0;
-        if (day.exercises) { totalExpandable = day.exercises.length; totalExpanded = day.exercises.filter(ex => expandedCardIds.has(ex.id)).length; }
-        if (day.sections) { totalExpandable = day.sections.length; totalExpanded = day.sections.filter(sec => expandedCardIds.has(sec.id)).length; }
+        
+        if (day.warmup && day.warmup.length > 0) {
+            totalExpandable++;
+            if (expandedCardIds.has('warmup-card')) totalExpanded++;
+        }
+        
+        if (day.exercises) { totalExpandable += day.exercises.length; totalExpanded += day.exercises.filter(ex => expandedCardIds.has(ex.id)).length; }
+        if (day.sections) { totalExpandable += day.sections.length; totalExpanded += day.sections.filter(sec => expandedCardIds.has(sec.id)).length; }
         
         if (totalExpandable > 0 && totalExpanded === totalExpandable) {
             allExpanded = true;
@@ -974,6 +1003,9 @@ window.renderDay = function(dayIdRaw) {
 
     // Items
     html += `<div class="item-list">`;
+    
+    html += renderWarmup(day);
+
     if (day.type === 'rest') {
         html += `
             <div class="card type-rest">
@@ -1473,6 +1505,50 @@ window.renderQuickSession = function(quickId) {
     const session = window.quickWorkouts.find(q => q.id === quickId);
     if (!session) return;
     
+    // For HIIT Boxing, dynamically regenerate structural data from the single-source-of-truth playlist
+    if (session.id === 'quick-hiit-boxing' && session.playlist) {
+        const pList = session.playlist;
+        session.warmupPlaylist = pList.slice(0, 2);
+        session.bagRoundsPlaylist = pList.slice(2, 19);
+        session.circuitPlaylist = pList.slice(19, 26);
+        session.cooldownPlaylist = pList.slice(26);
+        
+        session.warmup = pList.slice(0, 2).map((p, i) => ({
+            id: 'hiit-wu' + (i+1),
+            name: p.name,
+            type: 'timed',
+            duration: p.duration,
+            cue: p.name.includes('Jump') ? 'Easy pace — just wake the body up' : 'Loosen those shoulders'
+        }));
+        session.bagRounds = {
+             id: 'hiit-tabata',
+             name: 'Tabata Bag Rounds',
+             benefits: 'Alternating Power and Speed rounds. 30s work, 15s rest.',
+             rounds: pList.filter(p => p.name && p.name.startsWith('Round')).map((p, i) => ({
+                 id: 'hiit-tab-' + (i + 1),
+                 name: p.name,
+                 workSeconds: p.duration,
+                 restSeconds: i < 7 ? 15 : 60,
+                 combo: p.combo || ''
+             }))
+        };
+        const circuitRound1 = pList.find(p => p.name === 'Circuit Round 1');
+        session.circuit = {
+             id: 'hiit-circuit',
+             name: 'Conditioning Circuit',
+             rounds: 3,
+             restSeconds: 45,
+             benefits: 'High intensity conditioning to finish the session strong.',
+             exercises: circuitRound1 && circuitRound1.exercises ? circuitRound1.exercises : []
+        };
+        session.cooldown = pList.filter(p => p.name && (p.name.includes('fold') || p.name.includes('breathing') || p.name.includes('stretch'))).map((p, i) => ({
+             id: 'hiit-cd' + (i + 1),
+             name: p.name,
+             duration: '1 min',
+             desc: p.desc || ''
+        }));
+    }
+    
     // GA4 Tracking
     if (typeof gtag === 'function') {
         gtag('event', 'page_view', {
@@ -1511,13 +1587,22 @@ window.renderQuickSession = function(quickId) {
         </div>
     `;
     
-    // 1. Warm-Up
-    html += renderWarmup(session);
     
-    // Exercises moved to item-list below
+    if (session.isContinuous) {
+        html += `
+        <div style="margin-bottom: var(--sp-4);">
+            <button class="btn-primary" style="width: 100%; padding: 16px; font-size: 16px;" onclick="startContinuousSequence('${quickId}')">
+                <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start Full Session
+            </button>
+            <p style="text-align: center; margin-top: 12px; color: var(--text-muted); font-size: 13px;">This session plays continuously from start to finish with full audio guidance. No manual taps required to advance.</p>
+        </div>
+        `;
+    }
+
     // Expand/Collapse All Logic for Quick Sessions
     let totalExpandable = 0;
     let totalExpanded = 0;
+    if (session.warmup && session.warmup.length > 0) { totalExpandable++; if (expandedCardIds.has('warmup-card')) totalExpanded++; }
     if (session.bagRounds) { totalExpandable++; if (expandedCardIds.has(session.bagRounds.id)) totalExpanded++; }
     if (session.circuit) { totalExpandable++; if (expandedCardIds.has(session.circuit.id)) totalExpanded++; }
     if (session.finisher) { totalExpandable++; if (expandedCardIds.has(session.finisher.id)) totalExpanded++; }
@@ -1528,6 +1613,7 @@ window.renderQuickSession = function(quickId) {
             if (expandedCardIds.has(ex.id)) totalExpanded++;
         });
     }
+    if (session.cooldown && session.cooldown.length > 0) { totalExpandable++; if (expandedCardIds.has('cooldown-card')) totalExpanded++; }
     
     let toggleAction = "expandAll()";
     let toggleText = "Expand all";
@@ -1544,8 +1630,11 @@ window.renderQuickSession = function(quickId) {
             </div>
         </div>
     `;
-    
+
     html += `<div class="item-list">`;
+    
+    // 1. Warm-Up
+    html += renderWarmup(session);
     
     // 1.5 Main Exercises (Strength)
     if (session.exercises) {
@@ -1625,7 +1714,7 @@ window.renderQuickSession = function(quickId) {
             <div class="nested-row ${isChecked}">
                 <button class="btn-check ${isChecked}" onclick="Store.logItem('${quickId}', '${r.id}', { completed: !${isCompleted} }); renderQuickSession('${quickId}')">${icons.checkmark}</button>
                 <div style="flex: 1;">${r.description || r.combo}</div>
-                ${!isCompleted ? `
+                ${!isCompleted && !session.isContinuous ? `
                 <button class="btn-play type-bag" onclick="startQuickRound('${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, ${i+1}, '${r.name.replace(/'/g, "\\'")}', '${comboArg}', ${isLast}, '${timedCuesArg}', ${!!r.skipCountdown})"><span class="play-icon">${icons.play}</span> Start</button>
                 ` : ''}
             </div>`;
@@ -1649,6 +1738,15 @@ window.renderQuickSession = function(quickId) {
             ]
         };
         
+        if (sectionObj.id === 'hiit-tabata' && session.bagRoundsPlaylist) {
+            normalizedItem.actionHtml = `
+            <div style="padding: 16px; border-top: 1px solid var(--border-color);">
+                <button class="btn-primary" style="width: 100%;" onclick="startSectionSequence('${quickId}', 'bagRoundsPlaylist')">
+                    <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start Tabata Bag Rounds
+                </button>
+            </div>`;
+        }
+
         return renderItemCard(normalizedItem, session.type);
     };
     
@@ -1689,6 +1787,15 @@ window.renderQuickSession = function(quickId) {
             ]
         };
         
+        if (session.circuitPlaylist) {
+            normalizedItem.actionHtml = `
+            <div style="padding: 16px; border-top: 1px solid var(--border-color);">
+                <button class="btn-primary" style="width: 100%;" onclick="startSectionSequence('${quickId}', 'circuitPlaylist')">
+                    <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start Conditioning Circuit
+                </button>
+            </div>`;
+        }
+
         html += renderItemCard(normalizedItem, 'strength');
     }
     
@@ -1709,7 +1816,7 @@ window.renderQuickSession = function(quickId) {
             <div class="nested-row ${isChecked}">
                 <button class="btn-check ${isChecked}" onclick="Store.logItem('${quickId}', '${r.id}', { completed: !${isCompleted} }); renderQuickSession('${quickId}')">${icons.checkmark}</button>
                 <div style="flex: 1;">${r.combo}</div>
-                ${!isCompleted ? `
+                ${!isCompleted && !session.isContinuous ? `
                 <button class="btn-play type-strength" onclick="startPowerCircuitRound('${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, '${r.name}')"><span class="play-icon">${icons.play}</span> Start Round</button>
                 ` : ''}
             </div>`;
@@ -1734,19 +1841,44 @@ window.renderQuickSession = function(quickId) {
     
     // 5. Cooldown
     if (session.cooldown) {
-        html += `
-            <div class="card type-rest" style="margin-top: 16px;">
-                <h4 class="label-small" style="margin-bottom: 8px;">COOL DOWN</h4>
-                <ul class="rest-list">
-                    ${session.cooldown.map(n => `
-                        <li>
-                            <div style="font-weight: 500;">${n.name} — ${n.duration}</div>
-                            ${n.desc ? `<div style="font-size: 13px; opacity: 0.8; margin-top: 4px;">${n.desc}</div>` : ''}
-                        </li>
-                    `).join('')}
-                </ul>
-            </div>
-        `;
+        let drillsHtml = session.cooldown.map((n, i) => {
+            const log = Store.getItemLog(quickId, 'cooldown-card-' + i) || {};
+            const isChecked = log.completed ? 'checked' : '';
+            return `
+            <div class="nested-row interactive ${isChecked}" role="button" tabindex="0" onclick="Store.logItem('${quickId}', 'cooldown-card-${i}', { completed: !${!!log.completed} }); renderQuickSession('${quickId}')">
+                <button class="btn-check ${isChecked}">${icons.checkmark}</button>
+                <div style="flex: 1;">
+                    <div style="font-weight: 500;">${n.name} — ${n.duration}</div>
+                    ${n.desc ? `<div style="font-size: 13px; opacity: 0.8; margin-top: 2px;">${n.desc}</div>` : ''}
+                </div>
+            </div>`;
+        }).join('');
+        
+        let normalizedItem = {
+            id: 'cooldown-card',
+            badge: 'CD',
+            title: 'Cool Down',
+            stats: [
+                { icon: icons.clock, value: `~3 min` },
+                'divider',
+                { icon: icons.rest, value: 'Active recovery' }
+            ],
+            callout: null,
+            sections: [
+                { title: "STRETCH ROUTINE", content: `<div class="nested-list">${drillsHtml}</div>` }
+            ]
+        };
+        
+        if (session.cooldownPlaylist) {
+            normalizedItem.actionHtml = `
+            <div style="padding: 16px; border-top: 1px solid var(--border-color);">
+                <button class="btn-primary" style="width: 100%;" onclick="startSectionSequence('${quickId}', 'cooldownPlaylist')">
+                    <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start Cool Down
+                </button>
+            </div>`;
+        }
+        
+        html += renderItemCard(normalizedItem, 'rest');
     }
     
     html += `</div>`; // .item-list
@@ -1762,3 +1894,30 @@ window.renderQuickSession = function(quickId) {
 
     appContainer.innerHTML = html;
 };
+
+// ==========================================
+// CONTINUOUS AUTO-PLAY QUICK SESSIONS
+// ==========================================
+window.startContinuousSequence = function(quickId) {
+    const session = window.quickWorkouts.find(q => q.id === quickId);
+    if (!session || !session.playlist) return;
+    
+    // Do not wipe the DOM, keep the detail page visible beneath the timer.
+    
+    Timer.startSequence(session.playlist, () => {
+        Store.logQuickSession(quickId, session.title);
+        renderQuickSession(quickId);
+    });
+};
+
+window.startSectionSequence = function(quickId, playlistType) {
+    const session = window.quickWorkouts.find(q => q.id === quickId);
+    if (!session || !session[playlistType]) return;
+    
+    // Do not wipe the DOM, keep the detail page visible beneath the timer.
+    Timer.startSequence(session[playlistType], () => {
+        // When finished, just re-render the detail page to show any log updates if applicable
+        renderQuickSession(quickId);
+    });
+};
+
