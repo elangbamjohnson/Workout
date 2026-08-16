@@ -1434,7 +1434,6 @@ window.quickWorkouts = [
       { id: 'lower-cd2', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' },
       { id: 'lower-cd3', name: 'Hamstring Stretch', duration: '1 min', desc: 'Sit with legs extended, reach for toes while keeping a straight back.' }
     ]
-  }
   },
   {
     id: 'quick-shadow-boxing',
