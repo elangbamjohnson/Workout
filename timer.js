@@ -75,9 +75,14 @@ window.Timer = {
     hasPlayed10Sec: false,
     lastSpokenSecond: null,
     workoutType: null,
+    isPaused: false,
     
     // Round specific config
     roundData: null, // { workSec, restSec, roundId, title, cue, nextCallback }
+    
+    // Sequence specific config
+    playlist: null,
+    sequenceOnComplete: null,
 
     initAudio() {
         if (!this.audioCtx) {
@@ -112,16 +117,18 @@ window.Timer = {
     
     playDoubleBeep() {
         this.playBeep(600, 0.2);
-        setTimeout(() => this.playBeep(800, 0.4), 250);
+        this.beepTimeoutId = setTimeout(() => this.playBeep(800, 0.4), 250);
         if (navigator.vibrate) navigator.vibrate([100, 50, 200]);
     },
 
     createDOM() {
-        if (this.modal) return;
-        this.modal = document.createElement('div');
-        this.modal.id = 'timer-modal';
-        this.modal.className = 'timer-modal hidden';
-        document.body.appendChild(this.modal);
+        this.isPaused = false;
+        if (!this.modal) {
+            this.modal = document.createElement('div');
+            this.modal.id = 'timer-modal';
+            this.modal.className = 'timer-modal hidden';
+            document.body.appendChild(this.modal);
+        }
     },
 
     formatTime(sec) {
@@ -130,11 +137,12 @@ window.Timer = {
         return `${m}:${s.toString().padStart(2, '0')}`;
     },
 
-    startRest(seconds, title, cue, workoutType = 'strength') {
+    startRest(seconds, title, cue, workoutType = 'strength', onComplete, suppressAudio = false, timedCues = null) {
         this.initAudio();
         this.mode = 'rest';
         this.workoutType = workoutType;
-        this.roundData = { title: title || 'Rest Period', cue: cue || '' };
+        const hasTimedCues = timedCues && timedCues.length > 0;
+        this.roundData = { title: title || 'Rest Period', cue: cue || '', onComplete, suppressEndAudio: suppressAudio, timedCues, hasTimedCues };
         this.totalDuration = seconds;
         this.endTime = Date.now() + seconds * 1000;
         this.hasPlayed10Sec = false;
@@ -143,8 +151,18 @@ window.Timer = {
         this.render();
         this.modal.classList.remove('hidden');
         this.attachListener();
-        window.speakAlert("Rest time started");
+        
+        if (!suppressAudio) {
+            window.speakAlert("Rest time started");
+        } else if (hasTimedCues) {
+            const cue0 = timedCues.find(c => c.time === 0);
+            if (cue0) {
+                window.speakAlert(cue0.text);
+                this.updateCueText(cue0.text);
+            }
+        }
         this.tick();
+        if (this.intervalId) clearInterval(this.intervalId);
         this.intervalId = setInterval(() => this.tick(), 100);
         if (window.WakeLock) window.WakeLock.acquire();
     },
@@ -172,11 +190,12 @@ window.Timer = {
         }
         
         this.tick();
+        if (this.intervalId) clearInterval(this.intervalId);
         this.intervalId = setInterval(() => this.tick(), 100);
         if (window.WakeLock) window.WakeLock.acquire();
     },
 
-    startRound(workSec, restSec, title, cue, workoutType = 'bag', onComplete, timedCues = null) {
+    startRound(workSec, restSec, title, cue, workoutType = 'bag', onComplete, timedCues = null, suppressAudio = false) {
         this.initAudio();
         this.mode = 'round';
         this.phase = 'work';
@@ -188,7 +207,7 @@ window.Timer = {
         }
         
         const hasTimedCues = timedCues && timedCues.length > 0;
-        this.roundData = { workSec, restSec, title, cue, combos, onComplete, timedCues, hasTimedCues };
+        this.roundData = { workSec, restSec, title, cue, combos, onComplete, timedCues, hasTimedCues, suppressEndAudio: suppressAudio };
         this.totalDuration = workSec;
         this.endTime = Date.now() + workSec * 1000;
         this.hasPlayed10Sec = false;
@@ -201,20 +220,21 @@ window.Timer = {
         this.modal.classList.remove('hidden');
         this.attachListener();
         
-        if (this.workoutType === 'technical') {
+        if (this.workoutType === 'technical' && !suppressAudio) {
             window.speakAlert(`${this.roundData.title} started`);
         } else if (hasTimedCues) {
             const cue0 = timedCues.find(c => c.time === 0);
             if (cue0) {
                 window.speakAlert(cue0.text);
+                this.updateCueText(cue0.text);
                 if (cue0.uiIndex !== undefined) {
                     this.activeComboIndex = cue0.uiIndex;
                     this.updateUI();
                 }
             }
-        } else if (this.workoutType === 'bag' && combos.length > 0) {
+        } else if (this.workoutType === 'bag' && combos.length > 0 && !suppressAudio) {
             this.speakCombo(0);
-        } else {
+        } else if (!suppressAudio) {
             window.speakAlert("Round started, go");
         }
         
@@ -248,23 +268,63 @@ window.Timer = {
         this.updateUI();
     },
 
-    startCountdown(totalCount, label, onDone) {
+    startSequence(playlist, onComplete) {
+        if (!playlist || playlist.length === 0) {
+            if (onComplete) onComplete();
+            return;
+        }
+        this.mode = null; // Reset any previous 'cancelled' state
+        this.playlist = [...playlist];
+        this.sequenceOnComplete = onComplete;
+        this.playNextInSequence();
+    },
+
+    playNextInSequence() {
+        if (this.mode === 'cancelled') return;
+        if (!this.playlist || this.playlist.length === 0) {
+            this.close();
+            if (this.sequenceOnComplete) this.sequenceOnComplete();
+            return;
+        }
+        
+        const nextPhase = this.playlist.shift();
+        
+        const onPhaseEnd = () => {
+            if (this.mode === 'cancelled') return;
+            // Short delay so DOM updates visually between phases seamlessly
+            this.phaseTimeoutId = setTimeout(() => {
+                this.playNextInSequence();
+            }, 10);
+        };
+
+        if (nextPhase.type === 'countdown') {
+            this.startCountdown(nextPhase.duration || 5, nextPhase.title || nextPhase.name, onPhaseEnd, nextPhase.timedCues);
+        } else if (nextPhase.type === 'rest') {
+            this.startRest(nextPhase.duration, nextPhase.title || nextPhase.name, nextPhase.cue, 'bag', onPhaseEnd, true, nextPhase.timedCues);
+        } else if (nextPhase.type === 'work') {
+            this.startRound(nextPhase.duration, 0, nextPhase.title || nextPhase.name, nextPhase.combo || nextPhase.cue, 'bag', onPhaseEnd, nextPhase.timedCues, true);
+        }
+    },
+
+    startCountdown(totalCount, label, onDone, timedCues = null) {
         this.initAudio();
         this.mode = 'countdown';
         this.createDOM();
         
         let count = totalCount;
+        const hasTimedCues = timedCues && timedCues.length > 0;
         
-        const renderCount = (num) => {
+        const renderCount = (num, overrideLabel) => {
+            const displayLabel = overrideLabel || label + (hasTimedCues ? '' : " starting");
             const html = `
                 <div class="timer-card round-mode work-color" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 350px;">
                     <div class="label-small" style="margin-bottom: 24px;">GET READY</div>
                     <div class="countdown-number" style="font-size: 120px; font-weight: 800; color: var(--text-primary); line-height: 1; animation: countdownPulse 1s infinite;">${num > 0 ? num : 'GO!'}</div>
-                    <div class="timer-cue" style="margin-top: 24px; font-size: 18px;">${label} starting</div>
-                    <button class="btn-cancel" style="position: absolute; top: 16px; right: 16px;" onclick="Timer.close()">Cancel</button>
+                    <div class="timer-cue" style="margin-top: 24px; font-size: 18px;">${displayLabel}</div>
+                    <button class="btn-cancel" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: var(--text-muted); font-size: 14px; cursor: pointer; text-transform: uppercase; font-weight: bold; padding: 8px;" onclick="Timer.close()">Cancel</button>
                 </div>
             `;
-            this.modal.innerHTML = `<div class="timer-backdrop" onclick="Timer.close()"></div>` + html;
+            this.modal.innerHTML = `<div class="timer-backdrop"></div>` + html;
         };
         
         this.modal.classList.remove('hidden');
@@ -272,18 +332,33 @@ window.Timer = {
         
         const nextTick = () => {
             if (this.mode !== 'countdown') return; // Cancelled
+            
+            const elapsed = totalCount - count; console.log("tick elapsed:", elapsed, "timedCues:", JSON.stringify(timedCues));
+            let currentCueText = null;
+            if (hasTimedCues) {
+                const currentCue = timedCues.find(c => c.time === elapsed);
+                if (currentCue) {
+                    window.speakAlert(currentCue.text);
+                    currentCueText = currentCue.text;
+                    label = currentCue.text; // sticky update for future ticks
+                }
+            }
+
             if (count > 0) {
-                renderCount(count);
-                window.speakAlert(count.toString());
+                renderCount(count, currentCueText ? currentCueText : (hasTimedCues ? label : label + " starting"));
+                if (!currentCueText && !hasTimedCues) {
+                    window.speakAlert(count.toString());
+                }
                 count--;
+                if (this.intervalId) clearTimeout(this.intervalId);
                 this.intervalId = setTimeout(nextTick, 1000);
             } else {
                 renderCount('GO!');
                 window.speakAlert('Go');
                 if (navigator.vibrate) navigator.vibrate([200]);
-                setTimeout(() => {
+                this.countdownTimeoutId = setTimeout(() => {
                     if (this.mode === 'countdown') {
-                        this.close();
+                        if (!this.playlist) this.close();
                         if (onDone) onDone();
                     }
                 }, 1000);
@@ -307,10 +382,11 @@ window.Timer = {
             const elapsed = this.totalDuration - diff;
             const hasTimedCues = this.roundData && this.roundData.hasTimedCues;
             
-            if (hasTimedCues && !isResting && this.mode === 'round') {
+            if (hasTimedCues) {
                 const currentCue = this.roundData.timedCues.find(c => c.time === elapsed);
                 if (currentCue) {
                     window.speakAlert(currentCue.text);
+                    this.updateCueText(currentCue.text);
                     if (currentCue.uiIndex !== undefined) {
                         this.activeComboIndex = currentCue.uiIndex;
                     }
@@ -323,13 +399,13 @@ window.Timer = {
                 if (timerDisplay) {
                     timerDisplay.setAttribute('data-flash', 'SWITCH SIDES');
                     timerDisplay.classList.add('flash-overlay');
-                    setTimeout(() => timerDisplay.classList.remove('flash-overlay'), 2000);
+                    this.flashTimeoutId = setTimeout(() => timerDisplay.classList.remove('flash-overlay'), 2000);
                 }
             } else if (diff === 10 && !hasTimedCues) {
                 window.speakAlert("Ten seconds");
             } else if (diff < 10 && !hasTimedCues) {
                 window.speakAlert(diff.toString());
-            } else if (isResting && diff % 5 === 0) {
+            } else if (isResting && diff % 5 === 0 && !hasTimedCues) {
                 window.speakAlert(diff.toString() + " seconds");
             } else if (!isResting && this.mode === 'round' && this.workoutType === 'bag' && this.comboInterval > 0 && !hasTimedCues) {
                 if (elapsed > 0 && elapsed % this.comboInterval === 0) {
@@ -360,9 +436,15 @@ window.Timer = {
             this.playDoubleBeep();
             this.completeRound();
         } else if (this.mode === 'rest') {
-            window.speakAlert("Rest time ended, get ready");
+            if (!this.roundData || !this.roundData.suppressEndAudio) {
+                window.speakAlert("Rest time ended, get ready");
+            }
             this.playDoubleBeep();
-            this.close();
+            if (!this.playlist) this.close();
+            if (this.roundData && this.roundData.onComplete) {
+                this.roundData.onComplete();
+            }
+
         } else if (this.mode === 'round') {
             if (this.phase === 'work') {
                 this.playDoubleBeep();
@@ -374,12 +456,15 @@ window.Timer = {
                     this.hasPlayed10Sec = false;
                     this.lastSpokenSecond = this.roundData.restSec;
                     this.render(); // Re-render once to update phase colors/text
+                    if (this.intervalId) clearInterval(this.intervalId);
                     this.intervalId = setInterval(() => this.tick(), 100);
                 } else {
-                    if (this.workoutType === 'technical') {
-                        window.speakAlert(`${this.roundData.title} ended, take a breath`);
-                    } else {
-                        window.speakAlert("Workout ended, take a breath");
+                    if (!this.roundData || !this.roundData.suppressEndAudio) {
+                        if (this.workoutType === 'technical') {
+                            window.speakAlert(`${this.roundData.title} ended, take a breath`);
+                        } else {
+                            window.speakAlert("Workout ended, take a breath");
+                        }
                     }
                     this.completeRound();
                 }
@@ -396,8 +481,8 @@ window.Timer = {
     },
     
     completeRound() {
-        this.close();
-        if (this.roundData.onComplete) {
+        if (!this.playlist) this.close();
+        if (this.roundData && this.roundData.onComplete) {
             this.roundData.onComplete();
         }
     },
@@ -414,6 +499,7 @@ window.Timer = {
             this.hasPlayed10Sec = false;
             this.lastSpokenSecond = this.roundData.restSec;
             this.render(); // Update UI for rest phase
+            if (this.intervalId) clearInterval(this.intervalId);
             this.intervalId = setInterval(() => this.tick(), 100);
             window.speakAlert("Rest starting");
         } else {
@@ -426,6 +512,36 @@ window.Timer = {
         this.endTime += sec * 1000;
         this.totalDuration += sec;
         this.tick();
+    },
+
+    togglePause() {
+        if (!this.isPaused) {
+            this.isPaused = true;
+            if (this.intervalId) {
+                clearInterval(this.intervalId);
+                this.intervalId = null;
+            }
+            if ('speechSynthesis' in window) window.speechSynthesis.pause();
+            
+            const pauseBtn = this.modal.querySelector('#btn-timer-pause');
+            if (pauseBtn) pauseBtn.innerText = "Resume";
+            
+            const timerMain = this.modal.querySelector('.timer-main');
+            if (timerMain) timerMain.style.opacity = '0.5';
+        } else {
+            this.isPaused = false;
+            this.endTime = Date.now() + this.remainingSeconds * 1000;
+            
+            if ('speechSynthesis' in window) window.speechSynthesis.resume();
+            
+            const pauseBtn = this.modal.querySelector('#btn-timer-pause');
+            if (pauseBtn) pauseBtn.innerText = "Pause";
+            
+            const timerMain = this.modal.querySelector('.timer-main');
+            if (timerMain) timerMain.style.opacity = '1';
+            
+            this.intervalId = setInterval(() => this.tick(), 100);
+        }
     },
 
     attachListener() {
@@ -441,19 +557,73 @@ window.Timer = {
 
     close() {
         console.log('END ROUND EARLY FIRED', Date.now());
-        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        
+        // Robust multi-step cancellation for Safari/iOS
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.pause();
+            window.speechSynthesis.cancel();
+            setTimeout(() => {
+                window.speechSynthesis.resume();
+                window.speechSynthesis.cancel();
+            }, 10);
+        }
+        
         if (window.WakeLock) window.WakeLock.release();
+        
+        // If part of a sequence, abort the whole sequence
+        if (this.playlist) {
+            this.playlist = null;
+            this.mode = 'cancelled';
+        }
+        
         if (this.intervalId) {
             clearInterval(this.intervalId);
+            clearTimeout(this.intervalId);
             this.intervalId = null;
         }
+        if (this.phaseTimeoutId) {
+            clearTimeout(this.phaseTimeoutId);
+            this.phaseTimeoutId = null;
+        }
+        if (this.beepTimeoutId) {
+            clearTimeout(this.beepTimeoutId);
+            this.beepTimeoutId = null;
+        }
+        if (this.countdownTimeoutId) {
+            clearTimeout(this.countdownTimeoutId);
+            this.countdownTimeoutId = null;
+        }
+        if (this.flashTimeoutId) {
+            clearTimeout(this.flashTimeoutId);
+            this.flashTimeoutId = null;
+        }
+        
         if (this.keydownListener) {
             document.removeEventListener('keydown', this.keydownListener);
             this.keydownListener = null;
         }
         if (this.modal) {
             this.modal.classList.add('hidden');
+            this.modal.innerHTML = '';
         }
+        if (typeof window.reRenderViewingDay === 'function') {
+            window.reRenderViewingDay();
+        }
+    },
+
+    updateCueText(text) {
+        if (!this.modal) return;
+        let cueEl = this.modal.querySelector('.timer-cue');
+        if (!cueEl) {
+            const mainEl = this.modal.querySelector('.timer-main');
+            if (mainEl) {
+                cueEl = document.createElement('div');
+                cueEl.className = 'timer-cue';
+                cueEl.style.cssText = 'margin-top: 24px; font-size: 18px; color: var(--text-primary); font-style: italic; opacity: 0.85;';
+                mainEl.appendChild(cueEl);
+            }
+        }
+        if (cueEl) cueEl.innerHTML = text;
     },
 
     updateUI() {
@@ -515,10 +685,23 @@ window.Timer = {
         if (isRestMode || (this.mode === 'round' && this.phase === 'rest')) {
             btnText = "Skip Rest";
         }
-        let actionsHtml = `<button class="btn-large" onclick="Timer.skipPhase()">${btnText}</button>`;
+        
+        let actionsHtml = '';
+        if (this.playlist) {
+            const pauseText = this.isPaused ? "Resume" : "Pause";
+            actionsHtml = `
+                <div style="display: flex; gap: 12px; width: 100%;">
+                    <button id="btn-timer-pause" class="btn-large btn-secondary" style="flex: 1; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-card);" onclick="Timer.togglePause()">${pauseText}</button>
+                    <button class="btn-large" style="flex: 1;" onclick="Timer.skipPhase()">${btnText}</button>
+                </div>
+            `;
+        } else {
+            actionsHtml = `<button class="btn-large" onclick="Timer.skipPhase()">${btnText}</button>`;
+        }
         
         const html = `
             <div class="timer-card round-mode ${colorClass}">
+                <button class="btn-cancel" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: var(--text-muted); font-size: 14px; cursor: pointer; text-transform: uppercase; font-weight: bold; padding: 8px; z-index: 2;" onclick="Timer.close()">Cancel</button>
                 <div class="timer-header">
                     <h3>${headerTitle}</h3>
                     <h2>${mainTitle}</h2>
@@ -535,6 +718,6 @@ window.Timer = {
             </div>
         `;
         
-        this.modal.innerHTML = `<div class="timer-backdrop" onclick="Timer.close()"></div>` + html;
+        this.modal.innerHTML = `<div class="timer-backdrop"></div>` + html;
     }
 };
