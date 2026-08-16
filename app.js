@@ -773,7 +773,7 @@ function renderHome() {
             </div>
             <div class="qs-scroll-container">
                 ${quickSessionCards.map(card => {
-                    const action = card.id ? `renderQuickSession('${card.id}')` : `showQuickSessionComingSoon('${card.name.replace(/'/g, "\\\\'")}')`;  
+                    const action = card.id ? `confirmQuickSessionSwap('${card.id}')` : `showQuickSessionComingSoon('${card.name.replace(/'/g, "\\\\'")}')`;  
                     return `
                     <div class="qs-card qs-type-${card.type}" role="button" tabindex="0"
                          onclick="${action};"
@@ -1278,6 +1278,34 @@ function showToast(msg) {
 // Phase-1 placeholder handler for Quick Session cards
 window.showQuickSessionComingSoon = function(name) {
     showToast('🥊 Coming soon — ' + name);
+};
+
+// Swap Confirmation Banner for Quick Sessions
+window.confirmQuickSessionSwap = function(quickId) {
+    const session = window.quickWorkouts.find(q => q.id === quickId);
+    if (!session) return;
+    
+    const overlay = document.createElement('div');
+    overlay.className = 'video-modal-overlay';
+    overlay.id = 'swap-banner';
+    
+    overlay.onclick = function(e) {
+        if (e.target === overlay) {
+            overlay.remove();
+        }
+    };
+    
+    overlay.innerHTML = `
+        <div class="video-modal-card" style="text-align: center; padding: var(--sp-6) var(--sp-5);">
+            <div class="video-modal-title" style="margin-bottom: var(--sp-5); line-height: 1.4;">Doing ${session.title} today instead of your scheduled workout?</div>
+            <div style="display: flex; gap: var(--sp-3); justify-content: center; width: 100%;">
+                <button class="btn-ghost" style="flex: 1;" onclick="this.closest('.video-modal-overlay').remove()">Cancel</button>
+                <button id="btn-confirm-swap" class="btn-primary" style="flex: 1;" onclick="this.closest('.video-modal-overlay').remove(); renderQuickSession('${quickId}')">Confirm</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
 };
 
 
