@@ -1373,7 +1373,8 @@ window.addEventListener('load', () => {
 // Phase 2 — Quick Sessions Renderer
 // =====================================================================
 
-window.startQuickRound = function(quickId, exId, workSec, restSec, roundNum, title, cue, isLast, timedCuesArg, skipCountdown) {
+window.startQuickRound = function(quickId, exId, workSec, restSec, roundNum, title, comboArg, isLast, timedCuesArg, skipCountdown) {
+    const cue = decodeURIComponent(comboArg);
     const timedCues = timedCuesArg ? JSON.parse(decodeURIComponent(timedCuesArg)) : null;
     const startRound = () => {
         Timer.startRound(workSec, restSec, title, cue, 'bag', () => {
@@ -1590,13 +1591,14 @@ window.renderQuickSession = function(quickId) {
             const isChecked = isCompleted ? 'checked' : '';
             const isLast = isFinisher && i === sectionObj.rounds.length - 1;
             const timedCuesArg = r.timedCues ? encodeURIComponent(JSON.stringify(r.timedCues)).replace(/'/g, "%27") : '';
+            const comboArg = encodeURIComponent(r.combo).replace(/'/g, "%27");
             
             return `
             <div class="nested-row ${isChecked}">
                 <button class="btn-check ${isChecked}" onclick="Store.logItem('${quickId}', '${r.id}', { completed: !${isCompleted} }); renderQuickSession('${quickId}')">${icons.checkmark}</button>
                 <div style="flex: 1;">${r.combo}</div>
                 ${!isCompleted ? `
-                <button class="btn-play type-bag" onclick="startQuickRound('${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, ${i+1}, '${r.name.replace(/'/g, "\\'")}', '${r.combo.replace(/'/g, "\\'")}', ${isLast}, '${timedCuesArg}', ${!!r.skipCountdown})"><span class="play-icon">${icons.play}</span> Start</button>
+                <button class="btn-play type-bag" onclick="startQuickRound('${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, ${i+1}, '${r.name.replace(/'/g, "\\'")}', '${comboArg}', ${isLast}, '${timedCuesArg}', ${!!r.skipCountdown})"><span class="play-icon">${icons.play}</span> Start</button>
                 ` : ''}
             </div>`;
         }).join('');
