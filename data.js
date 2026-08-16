@@ -1459,7 +1459,8 @@ window.quickWorkouts = [
           workSeconds: 180,
           restSeconds: 60,
           skipCountdown: false,
-          combo: '🦶 <strong>Focus: Stay light, always moving</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Start in your boxing stance, weight on balls of feet<br>• After every combo — move! Step left, step right, circle out<br>• Combo 1: Jab, Cross (1-2) × 5 — step left after<br>• Combo 2: Jab, Cross, Hook (1-2-3) × 5 — circle right after<br>• Combo 3: Jab, Cross, Hook, Cross (1-2-3-2) × 5 — step back after<br>• Freestyle: mix the combos, never stop moving</div>',
+          combo: 'Jab, Cross (1-2)<br>Jab, Cross, Hook (1-2-3)<br>Jab, Cross, Hook, Cross (1-2-3-2)<br>Freestyle: Mix & Move',
+          description: '🦶 <strong>Focus: Stay light, always moving</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Start in your boxing stance, weight on balls of feet<br>• After every combo — move! Step left, step right, circle out<br>• Combo 1: Jab, Cross (1-2) × 5 — step left after<br>• Combo 2: Jab, Cross, Hook (1-2-3) × 5 — circle right after<br>• Combo 3: Jab, Cross, Hook, Cross (1-2-3-2) × 5 — step back after<br>• Freestyle: mix the combos, never stop moving</div>',
           timedCues: [
             { time: 0,   text: "Stay light on your feet — Jab, Cross, One Two! Move after every combo!", uiIndex: 0 },
             { time: 20,  text: "Jab, Cross, Hook — One Two Three! Circle left after!", uiIndex: 1 },
@@ -1475,7 +1476,8 @@ window.quickWorkouts = [
           workSeconds: 180,
           restSeconds: 60,
           skipCountdown: false,
-          combo: '🧠 <strong>Focus: Make yourself a moving target</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Slip right → throw Jab Cross (1-2)<br>• Slip left → throw Jab Cross (1-2)<br>• Roll under → come up with Lead Hook (3)<br>• Parry → throw Cross (2)<br>• Slip, slip → Cross, Hook (2-3)<br>• Key rule: head must move BEFORE every counter</div>',
+          combo: 'Slip right/left → Jab Cross (1-2)<br>Roll under → Lead Hook (3)<br>Parry → Cross (2)<br>Slip, slip → Cross, Hook (2-3) / Freestyle',
+          description: '🧠 <strong>Focus: Make yourself a moving target</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Slip right → throw Jab Cross (1-2)<br>• Slip left → throw Jab Cross (1-2)<br>• Roll under → come up with Lead Hook (3)<br>• Parry → throw Cross (2)<br>• Slip, slip → Cross, Hook (2-3)<br>• Key rule: head must move BEFORE every counter</div>',
           timedCues: [
             { time: 0,   text: "Slip right, Jab Cross — slip left, Jab Cross! One Two each side!", uiIndex: 0 },
             { time: 25,  text: "Roll under, come up with the Hook — Three! Roll and fire!", uiIndex: 1 },
@@ -1491,7 +1493,8 @@ window.quickWorkouts = [
           workSeconds: 180,
           restSeconds: 60,
           skipCountdown: false,
-          combo: '🛡️ <strong>Focus: Absorb and fire back</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Guard up — block incoming, return fire<br>• Body then head: 1-2 body, 1-2 head<br>• Slip right → body shot → head shot (1-6-2)<br>• Pull back counter → Cross, Hook, Cross (2-3-2)<br>• Block → Cross, Hook (2-3)<br>• Think: defend first, THEN punch</div>',
+          combo: 'Body then head (1-2 body, 1-2 head)<br>Block → Cross, Hook (2-3)<br>Slip right → Body, Head (1-6-2)<br>Pull back → Cross, Hook, Cross (2-3-2)',
+          description: '🛡️ <strong>Focus: Absorb and fire back</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Guard up — block incoming, return fire<br>• Body then head: 1-2 body, 1-2 head<br>• Slip right → body shot → head shot (1-6-2)<br>• Pull back counter → Cross, Hook, Cross (2-3-2)<br>• Block → Cross, Hook (2-3)<br>• Think: defend first, THEN punch</div>',
           timedCues: [
             { time: 0,   text: "Guard up — Jab Cross to the body, Jab Cross to the head! One Two down, One Two up!", uiIndex: 0 },
             { time: 25,  text: "Block, Cross, Hook — absorb and counter!", uiIndex: 1 },
@@ -1507,7 +1510,8 @@ window.quickWorkouts = [
           workSeconds: 180,
           restSeconds: 60,
           skipCountdown: false,
-          combo: '⚡ <strong>Focus: No instructions — just fight</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Full speed, full power<br>• Mix everything from Rounds 1-3<br>• Move your feet, move your head<br>• Throw combinations in bursts of 3-5 punches<br>• Reset, breathe, go again<br>• This is YOUR round — trust your training</div>',
+          combo: 'Full Speed Free Flow<br>Mix everything from Rounds 1-3',
+          description: '⚡ <strong>Focus: No instructions — just fight</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Full speed, full power<br>• Mix everything from Rounds 1-3<br>• Move your feet, move your head<br>• Throw combinations in bursts of 3-5 punches<br>• Reset, breathe, go again<br>• This is YOUR round — trust your training</div>',
           timedCues: [
             { time: 0,   text: "This is YOUR round — full speed, full power, everything you've got!", uiIndex: 0 },
             { time: 40,  text: "Don't slow down — move and punch!", uiIndex: 0 },
@@ -1523,7 +1527,8 @@ window.quickWorkouts = [
           workSeconds: 120,
           restSeconds: 0,
           skipCountdown: true,
-          combo: '🌬️ <strong>Focus: Breathe and wind down</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Drop to 50% effort — no power, just flow<br>• Slow jab, slow cross — feel your breath<br>• Light footwork — small steps, relaxed shoulders<br>• No combos — just single shots and movement<br>• Let your heart rate come down naturally</div>',
+          combo: 'Cool Down Shadow<br>50% effort — breathe and move',
+          description: '🌬️ <strong>Focus: Breathe and wind down</strong><div style="margin-top: 8px; font-size: 13px; line-height: 1.5; opacity: 0.85;">• Drop to 50% effort — no power, just flow<br>• Slow jab, slow cross — feel your breath<br>• Light footwork — small steps, relaxed shoulders<br>• No combos — just single shots and movement<br>• Let your heart rate come down naturally</div>',
           timedCues: [
             { time: 0,  text: "Ease it down — 50% effort, breathe and move", uiIndex: 0 },
             { time: 60, text: "Nice and easy — let the heart rate come down", uiIndex: 0 },

@@ -1596,7 +1596,7 @@ window.renderQuickSession = function(quickId) {
             return `
             <div class="nested-row ${isChecked}">
                 <button class="btn-check ${isChecked}" onclick="Store.logItem('${quickId}', '${r.id}', { completed: !${isCompleted} }); renderQuickSession('${quickId}')">${icons.checkmark}</button>
-                <div style="flex: 1;">${r.combo}</div>
+                <div style="flex: 1;">${r.description || r.combo}</div>
                 ${!isCompleted ? `
                 <button class="btn-play type-bag" onclick="startQuickRound('${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, ${i+1}, '${r.name.replace(/'/g, "\\'")}', '${comboArg}', ${isLast}, '${timedCuesArg}', ${!!r.skipCountdown})"><span class="play-icon">${icons.play}</span> Start</button>
                 ` : ''}
