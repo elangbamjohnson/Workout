@@ -231,8 +231,6 @@ function renderWarmup(day) {
                 </button>
             </div>`;
         }
-        
-        html += `</div>`;
     }
     
     html += `</div>`;
@@ -1529,7 +1527,8 @@ window.renderQuickSession = function(quickId) {
                  name: p.name,
                  workSeconds: p.duration,
                  restSeconds: i < 7 ? 15 : 60,
-                 combo: p.combo || ''
+                 combo: p.combo || '',
+                 description: p.description || ''
              }))
         };
         const circuitRound1 = pList.find(p => p.name === 'Circuit Round 1');
@@ -1763,7 +1762,10 @@ window.renderQuickSession = function(quickId) {
             return `
             <div class="nested-row interactive ${isChecked}" role="button" tabindex="0" onclick="toggleQuickCircuitItem('${quickId}', '${ex.id}')">
                 <button class="btn-check ${isChecked}">${icons.checkmark}</button>
-                <div style="flex: 1;">${ex.name} — ${ex.reps}</div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 500;">${ex.name} — ${ex.reps}</div>
+                    ${ex.description ? `<div style="font-size: 13px; color: var(--text-secondary); margin-top: 4px; line-height: 1.4;">${ex.description}</div>` : ''}
+                </div>
             </div>`;
         }).join('');
         

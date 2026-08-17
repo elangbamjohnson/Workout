@@ -1278,7 +1278,10 @@ body {
 
 /* Warm-up Block Styles */
 .warmup-card {
-    border-top: 2px solid rgba(255,255,255,0.10);
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-card);
+    overflow: hidden;
 }
 .warmup-header {
     display: flex;
