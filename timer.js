@@ -321,7 +321,7 @@ window.Timer = {
                     <div class="label-small" style="margin-bottom: 24px;">GET READY</div>
                     <div class="countdown-number" style="font-size: 120px; font-weight: 800; color: var(--text-primary); line-height: 1; animation: countdownPulse 1s infinite;">${num > 0 ? num : 'GO!'}</div>
                     <div class="timer-cue" style="margin-top: 24px; font-size: 18px;">${displayLabel}</div>
-                    <button class="btn-cancel" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: var(--text-muted); font-size: 14px; cursor: pointer; text-transform: uppercase; font-weight: bold; padding: 8px;" onclick="Timer.close()">Cancel</button>
+                    <button class="btn-cancel" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: var(--text-muted); font-size: 14px; cursor: pointer; text-transform: uppercase; font-weight: bold; padding: 8px;" onclick="Timer.close()" aria-label="End timer early">Cancel</button>
                 </div>
             `;
             this.modal.innerHTML = `<div class="timer-backdrop"></div>` + html;
@@ -701,7 +701,7 @@ window.Timer = {
         
         const html = `
             <div class="timer-card round-mode ${colorClass}">
-                <button class="btn-cancel" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: var(--text-muted); font-size: 14px; cursor: pointer; text-transform: uppercase; font-weight: bold; padding: 8px; z-index: 2;" onclick="Timer.close()">Cancel</button>
+                <button class="btn-cancel" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: var(--text-muted); font-size: 14px; cursor: pointer; text-transform: uppercase; font-weight: bold; padding: 8px; z-index: 2;" onclick="Timer.close()" aria-label="End timer early">Cancel</button>
                 <div class="timer-header">
                     <h3>${headerTitle}</h3>
                     <h2>${mainTitle}</h2>

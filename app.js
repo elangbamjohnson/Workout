@@ -166,17 +166,20 @@ window.toggleWarmupExpanded = function() {
     reRenderViewingDay();
 };
 
-function renderWarmup(day) {
+function renderWarmup(day, parentSessionId) {
     if (!day.warmup || day.warmup.length === 0) return '';
     
-    let cardId = day.id || 'warmup-card';
+    const sessionId = parentSessionId || day.id || viewingDayId;
+    const isCustomBlock = day.id && typeof day.id === 'string' && day.id.startsWith('fb-blk');
+    const cardId = isCustomBlock ? day.id : 'warmup-card';
     const totalDurationSec = day.warmup.filter(w => w.type === 'timed').reduce((s, w) => s + w.duration, 0);
     const mins = Math.ceil(totalDurationSec / 60);
-    const labelTitle = day.title || 'WARM-UP';
+    const labelTitle = isCustomBlock && day.title ? day.title : 'Warm-up';
+    const badgeText = isCustomBlock && day.title && day.title.includes('Recovery') ? 'RC' : 'WU';
     
     let listHtml = '<div class="nested-list">';
     day.warmup.forEach((item, idx) => {
-        const logData = Store.getItemLog(day.id, item.id) || {};
+        const logData = Store.getItemLog(sessionId, item.id) || {};
         const isCompleted = logData.completed;
         const isRepBased = item.type === 'reps';
         
@@ -187,7 +190,7 @@ function renderWarmup(day) {
             timeOrRepsStr = item.duration >= 60 ? `${Math.floor(item.duration / 60)} min` : `${item.duration} sec`;
         }
         
-        const dayIdStr = typeof day.id === 'string' ? `'${day.id}'` : day.id;
+        const dayIdStr = typeof sessionId === 'string' ? `'${sessionId}'` : sessionId;
         const isCheckedStr = isCompleted ? 'checked' : '';
         
         listHtml += `
@@ -214,7 +217,7 @@ function renderWarmup(day) {
 
     let normalizedItem = {
         id: cardId,
-        badge: labelTitle.substring(0, 2).toUpperCase(),
+        badge: badgeText,
         title: labelTitle,
         stats: [
             { icon: icons.clock, value: `~${mins} min` }
@@ -227,12 +230,12 @@ function renderWarmup(day) {
     if (day.warmupPlaylist) {
         normalizedItem.actionHtml = `
         <div style="padding: 16px; border-top: 1px solid var(--border-color);">
-            <button class="btn-primary" style="width: 100%;" onclick="startSectionSequence('${day.id}', 'warmupPlaylist')">
+            <button class="btn-primary" style="width: 100%;" onclick="startSectionSequence('${sessionId}', 'warmupPlaylist')">
                 <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start Warm Up
             </button>
         </div>`;
     } else if (day.isBlockStart) {
-        let startLabel = day.title || "Warm-up";
+        let startLabel = labelTitle || "Warm-up";
         normalizedItem.actionHtml = `
         <div style="padding: 16px; border-top: 1px solid var(--border-color);">
             <button class="btn-primary" style="width: 100%;" onclick="Timer.startCountdown(5, '${startLabel.replace(/'/g, "\\'")}', null)">
@@ -407,19 +410,15 @@ function calculateQuickSessionDuration(qs) {
 
 
 function toggleCard(id) {
-    if (expandedCardIds.has(id)) {
+    const idStr = String(id);
+    if (expandedCardIds.has(idStr) || expandedCardIds.has(id)) {
+        expandedCardIds.delete(idStr);
         expandedCardIds.delete(id);
     } else {
+        expandedCardIds.add(idStr);
         expandedCardIds.add(id);
     }
-    // Re-render the currently viewed day to reflect state
-    if (viewingDayId !== null) {
-        if (typeof viewingDayId === 'string' && viewingDayId.startsWith('quick-')) {
-            renderQuickSession(viewingDayId);
-        } else if (document.getElementById('app-container').className === '') {
-            renderDay(viewingDayId);
-        }
-    }
+    reRenderViewingDay();
 }
 
 function expandAll() {
@@ -464,21 +463,15 @@ function expandAll() {
 
 function collapseAll() {
     expandedCardIds.clear();
-    if (viewingDayId !== null) {
-        if (typeof viewingDayId === 'string' && viewingDayId.startsWith('quick-')) {
-            renderQuickSession(viewingDayId);
-        } else {
-            renderDay(viewingDayId);
-        }
-    }
+    reRenderViewingDay();
 }
 
 function renderItemCard(item, dayType) {
-    const isExpanded = expandedCardIds.has(item.id);
+    const isExpanded = expandedCardIds.has(item.id) || expandedCardIds.has(String(item.id));
     
     let html = `
         <div class="item-card type-${dayType} ${isExpanded ? 'expanded' : ''}" data-id="${item.id}">
-            <button class="item-header" onclick="toggleCard('${item.id}')" aria-expanded="${isExpanded}">
+            <button class="item-header" onclick="toggleCard('${item.id}')" aria-expanded="${isExpanded}" aria-label="Toggle ${item.title.replace(/"/g, '&quot;')} section">
                 <div class="item-header-content">
                     <div class="item-header-top">
                         <div class="item-title-wrap">
@@ -1041,7 +1034,7 @@ window.renderDay = function(dayIdRaw) {
     // Items
     html += `<div class="item-list">`;
     
-    html += renderWarmup(day);
+    html += renderWarmup(day, day.id);
 
     if (day.type === 'rest') {
         html += `
@@ -1598,7 +1591,7 @@ window.renderQuickSession = function(quickId) {
     const headerHtml = `
         <header class="app-header">
             <div class="nav-day">
-                <button class="nav-back-btn" onclick="renderHome()">
+                <button class="nav-back-btn" onclick="renderHome()" aria-label="Back to Week">
                   <svg width="10" height="16" viewBox="0 0 10 16" fill="none">
                     <path d="M8 2L2 8L8 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
@@ -1694,7 +1687,7 @@ window.renderQuickSession = function(quickId) {
     html += `<div class="item-list">`;
     
     // 1. Warm-Up
-    html += renderWarmup(session);
+    html += renderWarmup(session, quickId);
     
     const renderExercises = (exercises, quickId, sessionType) => {
         let outHtml = '';
@@ -1830,7 +1823,7 @@ window.renderQuickSession = function(quickId) {
 
             exercisesHtml += `
                 <div class="nested-row ${isCheckedRow}" style="flex-direction: column; align-items: stretch; gap: 0;">
-                    <div style="margin-bottom: ${isExExpanded ? '12px' : '0'}; display: flex; justify-content: space-between; align-items: flex-start; cursor: pointer;" onclick="toggleCard('${ex.id}')">
+                    <div role="button" tabindex="0" aria-expanded="${isExExpanded}" aria-label="Toggle ${ex.name.replace(/"/g, '&quot;')} details" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCard('${ex.id}');}" style="margin-bottom: ${isExExpanded ? '12px' : '0'}; display: flex; justify-content: space-between; align-items: flex-start; cursor: pointer;" onclick="toggleCard('${ex.id}')">
                         <div style="width: 100%;">
                             <h4 class="label-small" style="margin-bottom: 2px; color: var(--text-primary); font-size: 14px; text-transform: none; letter-spacing: normal;">${ex.name}</h4>
                             ${ex.subtitle ? `<div style="font-size: 13px; color: var(--accent-color); margin-bottom: 4px; font-weight: 500;">${ex.subtitle}</div>` : ''}
@@ -2051,7 +2044,7 @@ window.renderQuickSession = function(quickId) {
     if (session.blocks) {
         session.blocks.forEach(block => {
             if (block.type === 'warmup') {
-                html += renderWarmup(block.data);
+                html += renderWarmup(block.data, quickId);
             } else if (block.type === 'exercises') {
                 html += renderExercisesBlock(block.data, quickId, session.type);
             } else if (block.type === 'bagRounds') {
