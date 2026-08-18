@@ -3212,4 +3212,310 @@ window.quickWorkouts = [
           { time: 58, text: 'And that\'s HIIT Boxing — complete. Twenty-five minutes, eight rounds of Tabata, a brutal circuit, and you finished it. Go refuel, hydrate, and recover. Great session today.' }
       ] }
     ]
-  }];
+  }, 
+  {
+    id: 'quick-full-body-explosive',
+    title: 'Full-Body Workout',
+    type: 'strength',
+    duration: '~55 min',
+    focus: 'Power, Strength, Core & Conditioning',
+    equipment: 'Dumbbells (2.5–20 kg), an 18 kg kettlebell, a 20 kg Olympic barbell with plates, a landmine attachment, a pull-up/dip station, Olympic rings, and a 7 kg medicine ball',
+    blocks: [
+      {
+        type: 'warmup',
+        data: {
+          id: 'fb-blk1',
+          title: 'Warm-up & Mobility',
+          isBlockStart: true,
+          warmup: [
+            // Round 1
+            { id: 'fb-wu-1-1', name: 'Jumping jacks', type: 'timed', duration: 30, cue: 'Welcome to the Full-Body Workout. We are training power, strength, explosiveness, conditioning, core, and mobility in one fifty-five minute session. Start with jumping jacks.' },
+            { id: 'fb-wu-1-2', name: 'High knees', type: 'timed', duration: 30, cue: 'High knees, get them up.' },
+            { id: 'fb-wu-1-3', name: 'Bodyweight squats', type: 'reps', reps: '10 reps', cue: 'Bodyweight squats.' },
+            { id: 'fb-wu-1-4', name: 'Reverse lunges with rotation', type: 'reps', reps: '6 reps each side', cue: 'Reverse lunges with rotation.' },
+            { id: 'fb-wu-1-5', name: 'Inchworm to push-up', type: 'reps', reps: '5 reps', cue: 'Inchworm to push-up.' },
+            { id: 'fb-wu-1-6', name: 'World\'s Greatest Stretch', type: 'reps', reps: '4 reps each side', cue: 'World\'s greatest stretch.' },
+            { id: 'fb-wu-1-7', name: 'Thoracic rotation', type: 'reps', reps: '6 reps each side', cue: 'Thoracic rotation.' },
+            { id: 'fb-wu-1-8', name: 'Arm circles', type: 'reps', reps: '15 reps each direction', cue: 'Arm circles.' },
+            // Round 2
+            { id: 'fb-wu-2-1', name: 'Jumping jacks', type: 'timed', duration: 30, cue: 'Round 2 starting. Move with a bit more intent. Jumping jacks.' },
+            { id: 'fb-wu-2-2', name: 'High knees', type: 'timed', duration: 30, cue: 'High knees.' },
+            { id: 'fb-wu-2-3', name: 'Bodyweight squats', type: 'reps', reps: '10 reps', cue: 'Bodyweight squats.' },
+            { id: 'fb-wu-2-4', name: 'Reverse lunges with rotation', type: 'reps', reps: '6 reps each side', cue: 'Reverse lunges with rotation.' },
+            { id: 'fb-wu-2-5', name: 'Inchworm to push-up', type: 'reps', reps: '5 reps', cue: 'Inchworm to push-up.' },
+            { id: 'fb-wu-2-6', name: 'World\'s Greatest Stretch', type: 'reps', reps: '4 reps each side', cue: 'World\'s greatest stretch.' },
+            { id: 'fb-wu-2-7', name: 'Thoracic rotation', type: 'reps', reps: '6 reps each side', cue: 'Thoracic rotation.' },
+            { id: 'fb-wu-2-8', name: 'Arm circles', type: 'reps', reps: '15 reps each direction', cue: 'Arm circles.' },
+            { id: 'fb-wu-rest', name: 'Rest / Transition', type: 'timed', duration: 30, cue: 'Body is warmed up and ready for explosive work. Rest and transition.' }
+          ]
+        }
+      },
+      {
+        type: 'exercises',
+        data: {
+          id: 'fb-blk2',
+          title: 'Explosive Power',
+          isBlockStart: true,
+          exercises: [
+            {
+              id: 'fb-blk2-1',
+              name: 'Medicine Ball Rotational Throw',
+              isBlockStart: true,
+              setsReps: '4 x 5/side',
+              weight: 'Med Ball',
+              restSeconds: 60,
+              cue: 'Recover and breathe.',
+              notes: 'Load hips/shoulders away from wall, explosively reverse — legs drive, hips snap, release ball hard.',
+              benefits: 'Trains the ground-hip-shoulder chain a punch uses, at full speed.',
+              muscles: 'Obliques/core, glutes/legs, shoulders/chest.'
+            },
+            {
+              id: 'fb-blk2-2',
+              name: 'Landmine Rotational Press',
+              setsReps: '3 x 6/side',
+              weight: 'Bar + Plates',
+              restSeconds: 45,
+              cue: 'Recover and breathe.',
+              benefits: 'Combines press + rotation — closer to a real punch than a straight press.',
+              notes: 'Drive bar diagonally up and across body, rotating through hips/torso as you press.',
+              muscles: 'Shoulders/chest, obliques/core, legs/glutes.'
+            },
+            {
+              id: 'fb-blk2-3',
+              name: 'Explosive Push-up',
+              setsReps: '2 x 5',
+              weight: 'Bodyweight',
+              restSeconds: 60,
+              cue: 'Recover and breathe. Explosive power block complete.',
+              benefits: 'Trains speed/snap, not just strength — the "fast-twitch" complement to heavier lifts.',
+              notes: 'Lower controlled, push up hard enough hands leave the floor, land soft.',
+              muscles: 'Chest, front shoulders, triceps, core.'
+            }
+          ]
+        }
+      },
+      {
+        type: 'exercises',
+        data: {
+          id: 'fb-blk3',
+          title: 'Full-Body Strength',
+          isBlockStart: true,
+          exercises: [
+            {
+              id: 'fb-blk3-1',
+              name: 'Barbell Front Squat',
+              setsReps: '3 x 6-8',
+              weight: 'Barbell',
+              restSeconds: 0,
+              cue: 'Good set. Move to pull-ups.',
+              benefits: 'Legs/glutes/core plus lats/upper back/grip/shoulder stability — a strong athletic foundation.',
+              notes: 'Superset A: Alternate between this and Pull-ups. Perform a set of Front Squats, then immediately move to Pull-ups.',
+              muscles: 'Quadriceps, glutes, core, upper back.'
+            },
+            {
+              id: 'fb-blk3-2',
+              name: 'Pull-ups',
+              setsReps: '3 x 5-8',
+              weight: 'Bodyweight/Weighted',
+              restSeconds: 75,
+              cue: 'Rest 75 seconds.',
+              notes: 'Superset A: Alternate between Barbell Front Squat and Pull-ups. Rest 75 seconds after the Pull-ups before the next round of Squats. Weighted if possible.',
+              benefits: 'Builds pulling strength and lat width, crucial for pulling punches back and clinching.',
+              muscles: 'Lats, biceps, upper back, grip.'
+            },
+            {
+              id: 'fb-blk3-3',
+              name: 'Romanian Deadlift (RDL)',
+              setsReps: '3 x 8',
+              weight: 'Barbell/Dumbbells',
+              restSeconds: 0,
+              cue: 'Good set. Move to push press.',
+              notes: 'Superset B: Alternate between this and Dumbbell Push Press. Perform a set of RDLs, then immediately move to Push Press.',
+              benefits: 'Develops posterior chain strength, essential for hip hinge power and injury prevention.',
+              muscles: 'Hamstrings, glutes, lower back.'
+            },
+            {
+              id: 'fb-blk3-4',
+              name: 'Dumbbell Push Press',
+              setsReps: '3 x 6',
+              weight: 'Dumbbells',
+              restSeconds: 60,
+              cue: 'Rest 60 seconds. Full-Body Strength block complete.',
+              notes: 'Superset B: Alternate between RDL and Dumbbell Push Press. Rest 60 seconds after the Push Press before the next round of RDLs. Drive from the legs.',
+              benefits: 'Teaches power transfer from the lower body through the core to the upper body.',
+              muscles: 'Shoulders, triceps, legs, core.'
+            }
+          ]
+        }
+      },
+      {
+        type: 'exercises',
+        data: {
+          id: 'fb-blk4',
+          title: 'Unilateral Athletic Strength',
+          isBlockStart: true,
+          exercises: [
+            {
+              id: 'fb-blk4-1',
+              name: 'Bulgarian Split Squat',
+              setsReps: '3 x 8/leg',
+              weight: 'Dumbbells',
+              restSeconds: 0,
+              cue: 'Good set. Move to Dumbbell Row.',
+              notes: 'Unilateral Circuit: Alternate sequentially between Bulgarian Split Squats, DB Rows, and Farmer Carries for 3 total rounds.',
+              benefits: 'Builds single-leg stability, power, and balances out leg strength.',
+              muscles: 'Quadriceps, glutes, core.'
+            },
+            {
+              id: 'fb-blk4-2',
+              name: 'Single-arm Dumbbell Row',
+              setsReps: '3 x 10/arm',
+              weight: 'Dumbbell',
+              restSeconds: 0,
+              cue: 'Good set. Move to Farmer Carry.',
+              notes: 'Unilateral Circuit: Perform 10 reps per arm.',
+              benefits: 'Builds pulling strength and core anti-rotation, mimicking the pull-back of a punch.',
+              muscles: 'Lats, biceps, grip, core.'
+            },
+            {
+              id: 'fb-blk4-3',
+              name: 'Single-arm Farmer Carry',
+              setsReps: '3 x 30s/side',
+              weight: 'Heavy Dumbbell/Kettlebell',
+              restSeconds: 45,
+              cue: 'Good set. Breathe. Rest 45 seconds. Unilateral strength block complete.',
+              notes: 'Unilateral Circuit: Carry for 30s per side. Rest 45 seconds before starting the next circuit round.',
+              benefits: 'Builds grip, core anti-lateral flexion, and total body stability.',
+              muscles: 'Grip, forearms, obliques, core.'
+            }
+          ]
+        }
+      },
+      {
+        type: 'exercises',
+        data: {
+          id: 'fb-blk5',
+          title: 'Full-Body Athletic Conditioning',
+          isBlockStart: true,
+          exercises: [
+            {
+              id: 'fb-blk5-1',
+              name: 'Kettlebell Swings',
+              setsReps: '4 x 30s',
+              weight: '18kg KB',
+              restSeconds: 0,
+              cue: 'Good set. Move to DB Thrusters.',
+              notes: 'Circuit: Perform back-to-back with the next 3 exercises. Intensity targets per round: R1 (70%), R2 (75%), R3 (80%), R4 (85-90%). Powerful hip drive, keep the lower back out of it.',
+              benefits: 'Builds explosive hip power and posterior chain conditioning.',
+              muscles: 'Glutes, hamstrings, core.'
+            },
+            {
+              id: 'fb-blk5-2',
+              name: 'Dumbbell Thrusters',
+              setsReps: '4 x 30s',
+              weight: 'Light/Mod DBs',
+              restSeconds: 0,
+              cue: 'Good set. Move to Burpees.',
+              notes: 'Circuit: Intensity targets per round: R1 (70%), R2 (75%), R3 (80%), R4 (85-90%). Squat deep, drive through the legs, press overhead.',
+              benefits: 'Total body coordination and extreme cardiovascular demand.',
+              muscles: 'Quads, shoulders, triceps, core.'
+            },
+            {
+              id: 'fb-blk5-3',
+              name: 'Burpees',
+              setsReps: '4 x 30s',
+              weight: 'Bodyweight',
+              restSeconds: 0,
+              cue: 'Good set. Move to Reverse Lunges.',
+              notes: 'Circuit: Intensity targets per round: R1 (70%), R2 (75%), R3 (80%), R4 (85-90%). Keep a controlled but continuous pace.',
+              benefits: 'Unmatched bodyweight conditioning and functional fitness.',
+              muscles: 'Full body, cardiovascular system.'
+            },
+            {
+              id: 'fb-blk5-4',
+              name: 'Alternating Reverse Lunges',
+              setsReps: '4 x 30s',
+              weight: 'Bodyweight/Light DBs',
+              restSeconds: 45,
+              cue: 'Good set. Breathe. Rest 45 seconds before the next round.',
+              notes: 'Circuit: Intensity targets per round: R1 (70%), R2 (75%), R3 (80%), R4 (85-90%). Keep the chest up. Rest 45 seconds after this exercise.',
+              benefits: 'Active recovery for the upper body while building leg endurance.',
+              muscles: 'Quads, glutes, hamstrings.'
+            }
+          ]
+        }
+      },
+      {
+        type: 'exercises',
+        data: {
+          id: 'fb-blk6',
+          title: 'Rotational Core',
+          isBlockStart: true,
+          exercises: [
+            {
+              id: 'fb-blk6-1',
+              name: 'Landmine Rotations',
+              setsReps: '3 x 8/side',
+              weight: 'Bar + Plates',
+              restSeconds: 0,
+              cue: 'Good set. Move to hanging knee raises.',
+              notes: 'Core Circuit: Alternate sequentially through all 4 exercises for 3 total rounds. Keep hips stable.',
+              benefits: 'Trains rotational power and anti-rotation strength, crucial for generating and controlling force.',
+              muscles: 'Obliques, core, shoulders.'
+            },
+            {
+              id: 'fb-blk6-2',
+              name: 'Hanging Knee Raises',
+              setsReps: '3 x 8-12',
+              weight: 'Bodyweight',
+              restSeconds: 0,
+              cue: 'Good set. Move to ring plank.',
+              notes: 'Core Circuit: Controlled reps, do not swing.',
+              benefits: 'Develops lower core strength and grip endurance.',
+              muscles: 'Lower abs, hip flexors, grip.'
+            },
+            {
+              id: 'fb-blk6-3',
+              name: 'Ring Plank',
+              setsReps: '3 x 20-30s',
+              weight: 'Bodyweight',
+              restSeconds: 0,
+              cue: 'Good set. Move to Russian twists.',
+              notes: 'Core Circuit: Maintain a hollow body position. The instability of the rings forces maximum core engagement.',
+              benefits: 'Builds extreme anti-extension strength and shoulder stability.',
+              muscles: 'Core, chest, shoulders.'
+            },
+            {
+              id: 'fb-blk6-4',
+              name: 'Russian Twists',
+              setsReps: '3 x 8/side',
+              weight: 'Med Ball',
+              restSeconds: 30,
+              cue: 'Good set. Breathe. Rest 30 seconds. Core block complete.',
+              notes: 'Core Circuit: Tap the ball on each side. Rest 30 seconds before starting the next circuit round.',
+              benefits: 'Reinforces rotational endurance under fatigue.',
+              muscles: 'Obliques, core.'
+            }
+          ]
+        }
+      },
+      {
+        type: 'warmup',
+        data: {
+          id: 'fb-blk7',
+          title: 'Mobility & Recovery',
+          isBlockStart: true,
+          warmup: [
+            { id: 'fb-cd-1', name: 'Hip flexor stretch', type: 'timed', duration: 60, cue: 'Time to recover. Hip flexor stretch, 30 seconds each side.' },
+            { id: 'fb-cd-2', name: 'Hamstring stretch', type: 'timed', duration: 60, cue: 'Hamstring stretch, 30 seconds each side.' },
+            { id: 'fb-cd-3', name: 'Calf stretch', type: 'timed', duration: 60, cue: 'Calf stretch, 30 seconds each side.' },
+            { id: 'fb-cd-4', name: 'Lat stretch', type: 'timed', duration: 30, cue: 'Lat stretch, 30 seconds.' },
+            { id: 'fb-cd-5', name: 'Thoracic rotation', type: 'reps', reps: '5 reps each side', cue: 'Thoracic rotation, 5 reps each side.' },
+            { id: 'fb-cd-6', name: 'Deep nasal breathing', type: 'timed', duration: 60, cue: 'Deep nasal breathing for 60 seconds.' },
+            { id: 'fb-cd-end', name: 'Session Complete', type: 'timed', duration: 1, cue: 'Congratulations on completing all six trained qualities: power, strength, explosiveness, conditioning, core, mobility. Great job today. Prioritize your recovery.' }
+          ]
+        }
+      }
+    ]
+  }
+];
