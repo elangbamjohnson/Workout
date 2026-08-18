@@ -733,7 +733,6 @@ const quickSessionCards = [
     { id: 'quick-lower-power', emoji: '🦵', name: 'Lower Body Power',     duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-lower-power')) || '~50 min', tag: 'Strength',            pill: 'qs-pill-orange', type: 'strength'  },
     { id: 'quick-shadow-boxing', emoji: '👤', name: 'Shadow Boxing',        duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-shadow-boxing')) || '~30 min', tag: 'Technical',           pill: 'qs-pill-cyan',   type: 'technical' },
     { id: 'quick-hiit-boxing', emoji: '🔥', name: 'HIIT Boxing',          duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-hiit-boxing')) || '~25 min', tag: 'Conditioning',        pill: 'qs-pill-red',    type: 'bag'      },
-    { emoji: '🧘', name: 'Active Recovery',      duration: '~20 min', tag: 'Recovery',            pill: 'qs-pill-teal',   type: 'rest'      },
     { emoji: '💥', name: 'Full Body Explosive',  duration: '~55 min', tag: 'Full Body',           pill: 'qs-pill-orange', type: 'strength'  },
 ];
 
@@ -814,7 +813,7 @@ function renderHome() {
 
     // Week Grid
     html += `<h2 class="section-header">This Week</h2><div class="days-grid">`;
-    workoutData.days.forEach((day, index) => {
+    workoutData.days.slice(0, 5).forEach((day, index) => {
         const isCurrent = index === currentDayIndex;
         let iconName = day.type === 'rest' ? 'rest' : (day.type === 'strength' ? 'strength' : (day.type === 'bag' ? 'bag' : 'technical'));
         let countLabel = '';
@@ -823,14 +822,12 @@ function renderHome() {
         else if (day.type === 'technical') countLabel = `${day.sections.length} sections`;
         else countLabel = `0 exercises`;
 
-        let dayLabelStr = typeof day.id === 'string' ? day.id : `Day ${day.id}`;
-        
         html += `
             <a href="#" class="card day-card type-${day.type} ${isCurrent ? 'is-current' : ''}" onclick="event.preventDefault(); renderDay('${day.id}')" style="text-decoration: none; animation-delay: ${index * 0.06}s;">
                 <div class="flex justify-between items-start" style="margin-bottom: var(--sp-4);">
                     <div class="flex items-center gap-2">
                         <div class="card-icon-box" aria-hidden="true">${icons[iconName]}</div>
-                        <span class="label-small">DAY ${typeof day.id === 'number' ? day.id : '6-7'}</span>
+                        <span class="label-small">DAY ${typeof day.id === 'number' ? day.id : index + 1}</span>
                     </div>
                     <div class="type-badge" aria-hidden="true">${icons[iconName]} ${day.type}</div>
                 </div>
@@ -844,6 +841,20 @@ function renderHome() {
             </a>
         `;
     });
+
+    // Rest & Recovery Banner (Days 6 & 7)
+    html += `
+        <div class="card rest-recovery-banner">
+            <div class="rest-banner-left">
+                <div class="rest-icon-box" aria-hidden="true">😴</div>
+                <div class="rest-banner-text">
+                    <div class="rest-banner-title">Days 6 &amp; 7 — Rest &amp; Recovery</div>
+                    <div class="rest-banner-subtitle">Active mobility &amp; full rest. You've earned it — see you next week.</div>
+                </div>
+            </div>
+            <div class="rest-pill-badge">REST</div>
+        </div>
+    `;
     html += `</div>`;
 
 
@@ -1712,7 +1723,10 @@ window.renderQuickSession = function(quickId) {
             return `
             <div class="nested-row ${isChecked}">
                 <button class="btn-check ${isChecked}" onclick="Store.logItem('${quickId}', '${r.id}', { completed: !${isCompleted} }); renderQuickSession('${quickId}')">${icons.checkmark}</button>
-                <div style="flex: 1;">${r.description || r.combo}</div>
+                <div style="flex: 1;">
+                    ${r.name ? `<div style="font-weight: 700; font-size: 14px; color: var(--text-primary); margin-bottom: 4px;">${r.name}</div>` : ''}
+                    <div>${r.description || r.combo}</div>
+                </div>
                 ${!isCompleted && !session.isContinuous ? `
                 <button class="btn-play type-bag" onclick="startQuickRound('${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, ${i+1}, '${r.name.replace(/'/g, "\\'")}', '${comboArg}', ${isLast}, '${timedCuesArg}', ${!!r.skipCountdown})"><span class="play-icon">${icons.play}</span> Start</button>
                 ` : ''}
@@ -1856,12 +1870,26 @@ window.renderQuickSession = function(quickId) {
             </div>`;
         }).join('');
         
+        let cdMinsStr = '~3 min';
+        if (session.cooldown && session.cooldown.length > 0) {
+            let totalCdSec = 0;
+            session.cooldown.forEach(c => {
+                if (c.workSeconds) totalCdSec += c.workSeconds;
+                else if (c.duration && String(c.duration).includes('s')) totalCdSec += parseInt(c.duration) || 0;
+                else if (c.duration && String(c.duration).includes('min')) totalCdSec += (parseFloat(c.duration) || 0) * 60;
+                else totalCdSec += 60;
+            });
+            const m = Math.floor(totalCdSec / 60);
+            const s = totalCdSec % 60;
+            cdMinsStr = s > 0 ? `~${m} min ${s}s` : `~${m} min`;
+        }
+
         let normalizedItem = {
             id: 'cooldown-card',
             badge: 'CD',
             title: 'Cool Down',
             stats: [
-                { icon: icons.clock, value: `~3 min` },
+                { icon: icons.clock, value: cdMinsStr },
                 'divider',
                 { icon: icons.rest, value: 'Active recovery' }
             ],

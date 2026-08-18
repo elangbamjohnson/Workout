@@ -12,11 +12,12 @@ test.describe('Regular 5-Day Program Baseline', () => {
 
     // Wait for day cards to render
     const dayCards = page.locator('.day-card');
-    await expect(dayCards).toHaveCount(7);
+    await expect(dayCards).toHaveCount(5);
     
-    // Check Day 1 is visible
+    // Check Day 1 and Day 5 are visible, plus Rest & Recovery banner
     await expect(dayCards.first()).toContainText('DAY 1');
-    await expect(dayCards.nth(6)).toContainText('DAY 7');
+    await expect(dayCards.nth(4)).toContainText('DAY 5');
+    await expect(page.locator('.rest-recovery-banner')).toContainText('Days 6 & 7 — Rest & Recovery');
   });
 
   test('Day 1 layout shows warm-up, exercises, and start timer controls', async ({ page }) => {
@@ -67,9 +68,8 @@ test.describe('Regular 5-Day Program Baseline', () => {
     await expect(page.locator('.title-page')).toHaveText('Bag Power Day');
     await expect(prevBtn).toBeEnabled();
 
-    // Close and open Day 7 directly
-    await page.evaluate(() => window.renderHome());
-    await page.locator('.day-card').nth(6).click();
+    // Navigate to Day 7 directly
+    await page.evaluate(() => window.renderDay(7));
     await expect(page.locator('.title-page')).toContainText('Rest Day');
     await expect(nextBtn).toBeDisabled();
   });
