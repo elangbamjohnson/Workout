@@ -15,8 +15,8 @@ test.describe('Hybrid Boxing Content Audit Fixes', () => {
         await expect(page.locator('.title-page')).toHaveText('Hybrid Boxing');
 
         // Fix 6 — Warm-up Hip Rotations cue
-        const warmupCard = page.locator('.warmup-card');
-        await warmupCard.locator('.warmup-header').click();
+        const warmupCard = page.locator('.item-card').filter({ hasText: 'Warm-up' });
+        await warmupCard.locator('.item-header').click();
         await expect(warmupCard).toContainText('Hands on hips, draw big circles — loosen the hip joint fully');
 
         // Fix 1 — Conditioning Circuit: No inter-exercise rest, 45s rest after 3 exercises
