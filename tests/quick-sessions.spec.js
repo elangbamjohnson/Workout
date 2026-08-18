@@ -88,7 +88,8 @@ test.describe('Quick Sessions Feature', () => {
     { id: 'quick-hybrid', name: 'Hybrid Boxing' },
     { id: 'quick-lower-power', name: 'Lower Body Power' },
     { id: 'quick-shadow-boxing', name: 'Shadow Boxing' },
-    { id: 'quick-hiit-boxing', name: 'HIIT Boxing' }
+    { id: 'quick-hiit-boxing', name: 'HIIT Boxing' },
+    { id: 'quick-full-body-explosive', name: 'Full-Body Workout' }
   ];
 
   for (const qs of quickSessions) {
@@ -228,6 +229,40 @@ test.describe('Quick Sessions Feature', () => {
     const newTime = await timeDisplay.textContent();
     expect(newTime).not.toEqual(initialTime);
 
+    // Clean up
+    await page.evaluate(() => {
+        if (typeof Timer !== 'undefined') Timer.close();
+    });
+  });
+  test('Full-Body Workout continuous session flow', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#splash-screen')).toBeHidden();
+
+    await page.locator('.qs-card').filter({ hasText: 'Full-Body Workout' }).click();
+    
+    // Swap banner confirmation
+    await page.locator('#btn-confirm-swap').click();
+    await expect(page.locator('.title-page')).toContainText('Full-Body Workout');
+
+    // Verify equipment renders
+    await expect(page.locator('.callout-text')).toContainText('Equipment Required: Dumbbells');
+
+    // Expand all to render warmup blocks' content
+    await page.locator('button', { hasText: 'Expand all' }).click();
+
+    // Verify all 7 blocks render (we have 7 sections with a start button)
+    const startBtns = page.locator('button', { hasText: /Start (Warm-up & Mobility|Explosive Power|Full-Body Strength|Unilateral Athletic Strength|Full-Body Athletic Conditioning|Rotational Core|Mobility & Recovery)/ });
+    await expect(startBtns).toHaveCount(7);
+
+    // Verify countdown fires on tap for the first block
+    await startBtns.first().click();
+    const timerModal = page.locator('#timer-modal');
+    await expect(timerModal).toBeVisible();
+
+    // Verify countdown timer text
+    const timeDisplay = timerModal.locator('.countdown-number');
+    await expect(timeDisplay).toBeVisible();
+    
     // Clean up
     await page.evaluate(() => {
         if (typeof Timer !== 'undefined') Timer.close();

@@ -166,75 +166,85 @@ window.toggleWarmupExpanded = function() {
     reRenderViewingDay();
 };
 
-function renderWarmup(day) {
+function renderWarmup(day, parentSessionId) {
     if (!day.warmup || day.warmup.length === 0) return '';
     
-    let isExpanded = expandedCardIds.has('warmup-card');
-
+    const sessionId = parentSessionId || day.id || viewingDayId;
+    const isCustomBlock = day.id && typeof day.id === 'string' && day.id.startsWith('fb-blk');
+    const cardId = isCustomBlock ? day.id : 'warmup-card';
     const totalDurationSec = day.warmup.filter(w => w.type === 'timed').reduce((s, w) => s + w.duration, 0);
     const mins = Math.ceil(totalDurationSec / 60);
+    const labelTitle = isCustomBlock && day.title ? day.title : 'Warm-up';
+    const badgeText = isCustomBlock && day.title && day.title.includes('Recovery') ? 'RC' : 'WU';
     
-    let html = `
-        <div class="card warmup-card">
-            <div class="warmup-header" onclick="toggleCard('warmup-card')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCard('warmup-card');}" aria-expanded="${isExpanded}" role="button" tabindex="0">
-                <div class="flex items-center gap-2">
-                    <span class="warmup-label">WARM-UP</span>
-                    <span class="warmup-header-duration">· ~${mins} min</span>
-                </div>
-                <div class="warmup-chevron ${isExpanded ? 'expanded' : ''}" aria-hidden="true">${icons.chevron}</div>
-            </div>
-    `;
-    
-    if (isExpanded) {
-        html += `<div class="warmup-list">`;
-        day.warmup.forEach((item, idx) => {
-            const logData = Store.getItemLog(day.id, item.id) || {};
-            const isCompleted = logData.completed;
-            const isRepBased = item.type === 'reps';
-            
-            let timeOrRepsStr = '';
-            if (isRepBased) {
-                timeOrRepsStr = item.reps;
-            } else {
-                timeOrRepsStr = item.duration >= 60 ? `${Math.floor(item.duration / 60)} min` : `${item.duration} sec`;
-            }
-            
-            const dayIdStr = typeof day.id === 'string' ? `'${day.id}'` : day.id;
-            
-            const isCheckedStr = isCompleted ? 'checked' : '';
-            html += `
-                <div class="warmup-row ${isCheckedStr}">
-                    <button class="btn-check ${isCheckedStr}" onclick="toggleRound(event, ${dayIdStr}, '${item.id}')">${icons.checkmark}</button>
-                    <div class="warmup-info" style="flex: 1; margin-left: 12px;">
-                        <div class="warmup-title-row">
-                            <h3 class="warmup-name">${item.name}</h3>
-                            ${isRepBased ? `<span class="warmup-reps">${timeOrRepsStr}</span>` : `<span class="warmup-duration">${timeOrRepsStr}</span>`}
-                        </div>
-                        <div class="warmup-cue">${item.cue}</div>
-                    </div>
-                    <div class="warmup-actions">
-                        ${!isRepBased && !isCompleted && !day.warmupPlaylist ? `
-                            <button class="btn-play type-${day.type}" onclick="startWarmupTimer(${dayIdStr}, '${item.id}', ${item.duration}, '${item.name.replace(/'/g, "\\'")}', '${item.cue.replace(/'/g, "\\'")}', ${item.switchSides})">
-                                <span class="play-icon">${icons.play}</span> Start
-                            </button>
-                        ` : ''}
-                    </div>
-                </div>
-            `;
-        });
-        html += `</div>`;
-        if (day.warmupPlaylist) {
-            html += `
-            <div style="padding: 16px; border-top: 1px solid var(--border-color);">
-                <button class="btn-primary" style="width: 100%;" onclick="startSectionSequence('${day.id}', 'warmupPlaylist')">
-                    <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start Warm Up
-                </button>
-            </div>`;
+    let listHtml = '<div class="nested-list">';
+    day.warmup.forEach((item, idx) => {
+        const logData = Store.getItemLog(sessionId, item.id) || {};
+        const isCompleted = logData.completed;
+        const isRepBased = item.type === 'reps';
+        
+        let timeOrRepsStr = '';
+        if (isRepBased) {
+            timeOrRepsStr = item.reps;
+        } else {
+            timeOrRepsStr = item.duration >= 60 ? `${Math.floor(item.duration / 60)} min` : `${item.duration} sec`;
         }
-    }
+        
+        const dayIdStr = typeof sessionId === 'string' ? `'${sessionId}'` : sessionId;
+        const isCheckedStr = isCompleted ? 'checked' : '';
+        
+        listHtml += `
+            <div class="nested-row ${isCheckedStr}">
+                <button class="btn-check ${isCheckedStr}" onclick="toggleRound(event, ${dayIdStr}, '${item.id}')">${icons.checkmark}</button>
+                <div style="flex: 1; margin-left: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+                        <h3 class="warmup-name" style="margin: 0; font-size: 14px; font-weight: 600; color: var(--text-primary);">${item.name}</h3>
+                        <span style="font-weight: 600; font-size: 13px; color: var(--accent-color);">${timeOrRepsStr}</span>
+                    </div>
+                    <div class="warmup-cue" style="color: var(--text-secondary); font-size: 13px;">${item.cue}</div>
+                </div>
+                ${!isRepBased && !isCompleted && !day.warmupPlaylist ? `
+                    <div class="warmup-actions" style="margin-left: 12px;">
+                        <button class="btn-play type-${day.type || 'warmup'}" onclick="startWarmupTimer(${dayIdStr}, '${item.id}', ${item.duration}, '${item.name.replace(/'/g, "\\'")}', '${item.cue.replace(/'/g, "\\'")}', ${item.switchSides})">
+                            <span class="play-icon">${icons.play}</span> Start
+                        </button>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    });
+    listHtml += '</div>';
+
+    let normalizedItem = {
+        id: cardId,
+        badge: badgeText,
+        title: labelTitle,
+        stats: [
+            { icon: icons.clock, value: `~${mins} min` }
+        ],
+        sections: [
+            { title: "EXERCISES", content: listHtml }
+        ]
+    };
     
-    html += `</div>`;
-    return html;
+    if (day.warmupPlaylist) {
+        normalizedItem.actionHtml = `
+        <div style="padding: 16px; border-top: 1px solid var(--border-color);">
+            <button class="btn-primary" style="width: 100%;" onclick="startSectionSequence('${sessionId}', 'warmupPlaylist')">
+                <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start Warm Up
+            </button>
+        </div>`;
+    } else if (day.isBlockStart) {
+        let startLabel = labelTitle || "Warm-up";
+        normalizedItem.actionHtml = `
+        <div style="padding: 16px; border-top: 1px solid var(--border-color);">
+            <button class="btn-primary" style="width: 100%;" onclick="Timer.startCountdown(5, '${startLabel.replace(/'/g, "\\'")}', null)">
+                <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start ${startLabel}
+            </button>
+        </div>`;
+    }
+
+    return renderItemCard(normalizedItem, day.type || 'warmup');
 }
 
 window.finishWorkout = function(dayId) {
@@ -293,6 +303,7 @@ function calculateSessionDuration(day) {
 
 function calculateQuickSessionDuration(qs) {
     if (!qs) return null;
+    if (qs.duration) return qs.duration;
     
     let totalSec = 0;
     
@@ -371,6 +382,24 @@ function calculateQuickSessionDuration(qs) {
             }
         });
     }
+
+    // Blocks (Hybrid Sessions like Full-Body Workout)
+    if (qs.blocks) {
+        qs.blocks.forEach(block => {
+            if (block.type === 'warmup') {
+                totalSec += block.data.warmup.filter(w => w.type === 'timed').reduce((s, w) => s + (w.duration || 0), 0);
+            } else if (block.type === 'bagRounds') {
+                totalSec += block.data.rounds.reduce((s, r) => s + (r.workSeconds || 0) + (r.restSeconds || 0), 0);
+                bagCount += block.data.rounds.length;
+            } else if (block.type === 'exercises') {
+                block.data.exercises.forEach(ex => {
+                    let setsCount = parseInt((ex.setsReps || "1").split(" ")[0]) || 1;
+                    totalSec += setsCount * 45; // estimate 45s of work per set
+                    totalSec += setsCount * (ex.restSeconds || 0);
+                });
+            }
+        });
+    }
     
     // GET READY countdowns
     totalSec += (bagCount + finisherCount + pcCount) * 5;
@@ -381,19 +410,15 @@ function calculateQuickSessionDuration(qs) {
 
 
 function toggleCard(id) {
-    if (expandedCardIds.has(id)) {
+    const idStr = String(id);
+    if (expandedCardIds.has(idStr) || expandedCardIds.has(id)) {
+        expandedCardIds.delete(idStr);
         expandedCardIds.delete(id);
     } else {
+        expandedCardIds.add(idStr);
         expandedCardIds.add(id);
     }
-    // Re-render the currently viewed day to reflect state
-    if (viewingDayId !== null) {
-        if (typeof viewingDayId === 'string' && viewingDayId.startsWith('quick-')) {
-            renderQuickSession(viewingDayId);
-        } else if (document.getElementById('app-container').className === '') {
-            renderDay(viewingDayId);
-        }
-    }
+    reRenderViewingDay();
 }
 
 function expandAll() {
@@ -409,6 +434,18 @@ function expandAll() {
             if (session.exercises) session.exercises.forEach(ex => expandedCardIds.add(ex.id));
             if (session.warmup && session.warmup.length > 0) expandedCardIds.add('warmup-card');
             if (session.cooldown && session.cooldown.length > 0) expandedCardIds.add('cooldown-card');
+            if (session.blocks) {
+                session.blocks.forEach(block => {
+                    if (block.type === 'exercises') {
+                        expandedCardIds.add(block.data.id);
+                        if (block.data.exercises) {
+                            block.data.exercises.forEach(ex => expandedCardIds.add(ex.id));
+                        }
+                    }
+                    else if (block.type === 'warmup') expandedCardIds.add(block.data.id || 'warmup-card');
+                    else if (block.type === 'bagRounds' || block.type === 'circuit') expandedCardIds.add(block.data.id);
+                });
+            }
             renderQuickSession(viewingDayId);
         }
         return;
@@ -417,36 +454,32 @@ function expandAll() {
     const currentDay = workoutData.days.find(d => d.id === viewingDayId);
     if (!currentDay) return;
     
-    // Add all valid ids
     if (currentDay.exercises) currentDay.exercises.forEach(ex => expandedCardIds.add(ex.id));
     if (currentDay.sections) currentDay.sections.forEach(sec => expandedCardIds.add(sec.id));
     if (currentDay.warmup && currentDay.warmup.length > 0) expandedCardIds.add('warmup-card');
     
-    renderDay(viewingDayId);
+    reRenderViewingDay();
 }
 
 function collapseAll() {
     expandedCardIds.clear();
-    if (viewingDayId !== null) {
-        if (typeof viewingDayId === 'string' && viewingDayId.startsWith('quick-')) {
-            renderQuickSession(viewingDayId);
-        } else {
-            renderDay(viewingDayId);
-        }
-    }
+    reRenderViewingDay();
 }
 
 function renderItemCard(item, dayType) {
-    const isExpanded = expandedCardIds.has(item.id);
+    const isExpanded = expandedCardIds.has(item.id) || expandedCardIds.has(String(item.id));
     
     let html = `
         <div class="item-card type-${dayType} ${isExpanded ? 'expanded' : ''}" data-id="${item.id}">
-            <button class="item-header" onclick="toggleCard('${item.id}')" aria-expanded="${isExpanded}">
+            <button class="item-header" onclick="toggleCard('${item.id}')" aria-expanded="${isExpanded}" aria-label="Toggle ${item.title.replace(/"/g, '&quot;')} section">
                 <div class="item-header-content">
                     <div class="item-header-top">
                         <div class="item-title-wrap">
                             <div class="num-badge" aria-hidden="true">${item.badge}</div>
-                            <h3 class="title-card">${item.title}</h3>
+                            <div>
+                                <h3 class="title-card">${item.title}</h3>
+                                ${item.subtitle ? `<div style="font-size: 13px; color: var(--accent-color); margin-top: 2px; font-weight: 500;">${item.subtitle}</div>` : ''}
+                            </div>
                         </div>
                     </div>
                     <div class="item-stats">
@@ -733,8 +766,7 @@ const quickSessionCards = [
     { id: 'quick-lower-power', emoji: '🦵', name: 'Lower Body Power',     duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-lower-power')) || '~50 min', tag: 'Strength',            pill: 'qs-pill-orange', type: 'strength'  },
     { id: 'quick-shadow-boxing', emoji: '👤', name: 'Shadow Boxing',        duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-shadow-boxing')) || '~30 min', tag: 'Technical',           pill: 'qs-pill-cyan',   type: 'technical' },
     { id: 'quick-hiit-boxing', emoji: '🔥', name: 'HIIT Boxing',          duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-hiit-boxing')) || '~25 min', tag: 'Conditioning',        pill: 'qs-pill-red',    type: 'bag'      },
-    { emoji: '🧘', name: 'Active Recovery',      duration: '~20 min', tag: 'Recovery',            pill: 'qs-pill-teal',   type: 'rest'      },
-    { emoji: '💥', name: 'Full Body Explosive',  duration: '~55 min', tag: 'Full Body',           pill: 'qs-pill-orange', type: 'strength'  },
+    { id: 'quick-full-body-explosive', emoji: '💥', name: 'Full-Body Workout',  duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-full-body-explosive')) || '~55 min', tag: 'Full Body',           pill: 'qs-pill-orange', type: 'strength'  },
 ];
 
 function renderHome() {
@@ -1002,7 +1034,7 @@ window.renderDay = function(dayIdRaw) {
     // Items
     html += `<div class="item-list">`;
     
-    html += renderWarmup(day);
+    html += renderWarmup(day, day.id);
 
     if (day.type === 'rest') {
         html += `
@@ -1122,7 +1154,7 @@ window.renderDay = function(dayIdRaw) {
                         <input type="number" class="input-val input-rep" value="${repsVal}" />
                         <span class="input-label">reps</span>
                     </div>
-                    <button class="btn-check ${isChecked}" onclick="logSet(${day.id}, '${ex.id}', ${s}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', 'Drive through the floor explosively — speed matters over weight.', this)">${icons.checkmark}</button>
+                    <button class="btn-check ${isChecked}" onclick="logSet(${day.id}, '${ex.id}', ${s}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', ${ex.cue ? "'" + ex.cue.replace(/'/g, "\\'") + "'" : "'Drive through the floor explosively — speed matters over weight.'"}, this)">${icons.checkmark}</button>
                 </div>
                 `;
             }
@@ -1559,7 +1591,7 @@ window.renderQuickSession = function(quickId) {
     const headerHtml = `
         <header class="app-header">
             <div class="nav-day">
-                <button class="nav-back-btn" onclick="renderHome()">
+                <button class="nav-back-btn" onclick="renderHome()" aria-label="Back to Week">
                   <svg width="10" height="16" viewBox="0 0 10 16" fill="none">
                     <path d="M8 2L2 8L8 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
@@ -1586,6 +1618,14 @@ window.renderQuickSession = function(quickId) {
         </div>
     `;
     
+    if (session.equipment) {
+        html += `
+            <div class="callout type-strength" style="margin-bottom: var(--sp-4);">
+                ${icons.lightbulb}
+                <div class="callout-text"><strong>Equipment Required:</strong> ${session.equipment}</div>
+            </div>
+        `;
+    }
     
     if (session.isContinuous) {
         html += `
@@ -1612,6 +1652,20 @@ window.renderQuickSession = function(quickId) {
             if (expandedCardIds.has(ex.id)) totalExpanded++;
         });
     }
+    if (session.blocks) {
+        session.blocks.forEach(block => {
+            if (block.type === 'exercises') {
+                totalExpandable++;
+                if (expandedCardIds.has(block.data.id)) totalExpanded++;
+            } else if (block.type === 'warmup') {
+                totalExpandable++;
+                if (expandedCardIds.has(block.data.id || 'warmup-card')) totalExpanded++;
+            } else if (block.type === 'bagRounds' || block.type === 'circuit') {
+                totalExpandable++;
+                if (expandedCardIds.has(block.data.id)) totalExpanded++;
+            }
+        });
+    }
     if (session.cooldown && session.cooldown.length > 0) { totalExpandable++; if (expandedCardIds.has('cooldown-card')) totalExpanded++; }
     
     let toggleAction = "expandAll()";
@@ -1633,24 +1687,22 @@ window.renderQuickSession = function(quickId) {
     html += `<div class="item-list">`;
     
     // 1. Warm-Up
-    html += renderWarmup(session);
+    html += renderWarmup(session, quickId);
     
-    // 1.5 Main Exercises (Strength)
-    if (session.exercises) {
-        session.exercises.forEach((ex, idx) => {
+    const renderExercises = (exercises, quickId, sessionType) => {
+        let outHtml = '';
+        exercises.forEach((ex, idx) => {
             let musclesHtml = ex.muscles ? ex.muscles.split(',').map(m => `<div class="muscle-tag">${m.trim()}</div>`).join('') : '';
             
-            let stats = [
-                { icon: icons.repeat, value: ex.setsReps, label: "sets × reps" },
-                "divider",
-                { icon: icons.weight, value: ex.weight }
-            ];
+            let stats = [];
+            if (ex.setsReps) stats.push({ icon: icons.repeat, value: ex.setsReps, label: "sets × reps" }, "divider");
+            if (ex.weight) stats.push({ icon: icons.weight, value: ex.weight });
             
             if (ex.restSeconds) {
+                if (stats.length > 0 && stats[stats.length - 1] !== "divider") stats.push("divider");
                 let m = Math.floor(ex.restSeconds / 60);
                 let s = ex.restSeconds % 60;
                 let text = m > 0 && s > 0 ? `${m} min ${s} sec rest` : m > 0 ? `${m} min rest` : `${s} sec rest`;
-                stats.push("divider");
                 stats.push({ icon: icons.rest, value: text });
             }
             
@@ -1661,7 +1713,7 @@ window.renderQuickSession = function(quickId) {
             for(let s=1; s<=setsCount; s++) {
                 const setData = logData.sets[s] || {};
                 const isChecked = setData.completed ? 'checked' : '';
-                const repsVal = setData.reps || (ex.setsReps.includes('x') ? ex.setsReps.split('x')[1].trim() : '5');
+                const repsVal = setData.reps || (ex.setsReps && ex.setsReps.includes('x') ? ex.setsReps.split('x')[1].trim() : '5');
                 const weightVal = setData.weight || ex.weight || '';
                 
                 logHtml += `
@@ -1675,27 +1727,167 @@ window.renderQuickSession = function(quickId) {
                         <input type="number" class="input-val input-rep" value="${repsVal}" />
                         <span class="input-label">reps</span>
                     </div>
-                    <button class="btn-check ${isChecked}" onclick="logSet('${quickId}', '${ex.id}', ${s}, ${ex.restSeconds || 0}, '${ex.name.replace(/'/g, "\\'")}', 'Focus on form.', this)">${icons.checkmark}</button>
+                    <button class="btn-check ${isChecked}" onclick="logSet('${quickId}', '${ex.id}', ${s}, ${ex.restSeconds || 0}, '${ex.name.replace(/'/g, "\\'")}', ${ex.cue ? "'" + ex.cue.replace(/'/g, "\\'") + "'" : "'Focus on form.'"}, this)">${icons.checkmark}</button>
                 </div>
                 `;
             }
 
             let normalizedItem = {
                 id: ex.id,
-                badge: idx + 1,
+                badge: ex.badge || (idx + 1),
                 title: ex.name,
+                subtitle: ex.subtitle,
                 stats: stats,
-                callout: { icon: icons.strength, text: "Focus on explosion and intent over weight." },
+                callout: { icon: icons.strength, text: ex.calloutText || "Focus on explosion and intent over weight." },
                 sections: [
                     { title: "LOG SETS", content: logHtml },
-                    { title: "EXECUTION NOTES", content: `<p>${ex.notes}</p>` },
-                    { title: "WHY THIS EXERCISE", content: `<p>${ex.benefits}</p>` },
-                    { title: "MUSCLES WORKED", content: `<div class="muscle-tags">${musclesHtml}</div>` }
+                    { title: "EXECUTION NOTES", content: `<p>${ex.notes}</p>` }
                 ]
             };
+            if (ex.benefits) normalizedItem.sections.push({ title: "WHY THIS EXERCISE", content: `<p>${ex.benefits}</p>` });
+            if (ex.muscles) normalizedItem.sections.push({ title: "MUSCLES WORKED", content: `<div class="muscle-tags">${musclesHtml}</div>` });
             
-            html += renderItemCard(normalizedItem, session.type);
+            if (ex.isBlockStart) {
+                normalizedItem.actionHtml = `
+                <div style="padding: 16px; border-top: 1px solid var(--border-color);">
+                    <button class="btn-primary" style="width: 100%;" onclick="Timer.startCountdown(5, '${ex.name.replace(/'/g, "\\'")}', null)">
+                        <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start ${ex.name}
+                    </button>
+                </div>`;
+            }
+            
+            outHtml += renderItemCard(normalizedItem, sessionType);
         });
+        return outHtml;
+    };
+
+    const renderExercisesBlock = (blockData, quickId, sessionType) => {
+        let exercisesHtml = '<div class="nested-list">';
+        blockData.exercises.forEach((ex, idx) => {
+            let musclesHtml = ex.muscles ? ex.muscles.split(',').map(m => `<div class="muscle-tag">${m.trim()}</div>`).join('') : '';
+            
+            let setsCount = parseInt((ex.setsReps || "1").split(" ")[0]) || 1;
+            let logHtml = '';
+            const logData = Store.getItemLog(quickId, ex.id) || { sets: {} };
+            let allCompleted = true;
+            for(let s=1; s<=setsCount; s++) {
+                const setData = logData.sets[s] || {};
+                const isChecked = setData.completed ? 'checked' : '';
+                if (!setData.completed) allCompleted = false;
+                const repsVal = setData.reps || (ex.setsReps && ex.setsReps.includes('x') ? ex.setsReps.split('x')[1].trim() : '5');
+                const weightVal = setData.weight || ex.weight || '';
+                
+                logHtml += `
+                <div class="set-row ${isChecked}">
+                    <div class="set-num">${s}</div>
+                    <div class="set-input-group">
+                        <input type="text" class="input-val input-weight" value="${weightVal}" placeholder="lbs" />
+                        <span class="input-label">weight</span>
+                    </div>
+                    <div class="set-input-group">
+                        <input type="number" class="input-val input-rep" value="${repsVal}" />
+                        <span class="input-label">reps</span>
+                    </div>
+                    <button class="btn-check ${isChecked}" onclick="logSet('${quickId}', '${ex.id}', ${s}, ${ex.restSeconds || 0}, '${ex.name.replace(/'/g, "\\'")}', ${ex.cue ? "'" + ex.cue.replace(/'/g, "\\'") + "'" : "'Focus on form.'"}, this)">${icons.checkmark}</button>
+                </div>
+                `;
+            }
+            
+            const isCheckedRow = (allCompleted && setsCount > 0) ? 'checked' : '';
+            
+            const isExExpanded = expandedCardIds.has(ex.id);
+            
+            let stats = [];
+            if (ex.setsReps) stats.push({ icon: icons.repeat, value: ex.setsReps, label: "sets × reps" }, "divider");
+            if (ex.weight) stats.push({ icon: icons.weight, value: ex.weight });
+            
+            if (ex.restSeconds || ex.restSeconds === 0) {
+                if (stats.length > 0 && stats[stats.length - 1] !== "divider") stats.push("divider");
+                let m = Math.floor(ex.restSeconds / 60);
+                let s = ex.restSeconds % 60;
+                let text = m > 0 && s > 0 ? `${m} min ${s} sec rest` : m > 0 ? `${m} min rest` : `${s} sec rest`;
+                stats.push({ icon: icons.rest, value: text });
+            }
+            
+            let statsHtml = '';
+            if (stats.length > 0) {
+                statsHtml = `
+                    <div class="item-stats" style="margin-left: 0; margin-top: 6px;">
+                        ${stats.map((st) => {
+                            if (st === 'divider') return '<div class="stat-divider" aria-hidden="true"></div>';
+                            return `<div class="stat-item">${st.icon ? st.icon : ''} <span class="text-mono">${st.value}</span> ${st.label ? `<span class="stat-item-label">${st.label}</span>` : ''}</div>`;
+                        }).join('')}
+                    </div>
+                `;
+            }
+
+            exercisesHtml += `
+                <div class="nested-row ${isCheckedRow}" style="flex-direction: column; align-items: stretch; gap: 0;">
+                    <div role="button" tabindex="0" aria-expanded="${isExExpanded}" aria-label="Toggle ${ex.name.replace(/"/g, '&quot;')} details" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCard('${ex.id}');}" style="margin-bottom: ${isExExpanded ? '12px' : '0'}; display: flex; justify-content: space-between; align-items: flex-start; cursor: pointer;" onclick="toggleCard('${ex.id}')">
+                        <div style="width: 100%;">
+                            <h4 class="label-small" style="margin-bottom: 2px; color: var(--text-primary); font-size: 14px; text-transform: none; letter-spacing: normal;">${ex.name}</h4>
+                            ${ex.subtitle ? `<div style="font-size: 13px; color: var(--accent-color); margin-bottom: 4px; font-weight: 500;">${ex.subtitle}</div>` : ''}
+                            ${statsHtml}
+                        </div>
+                        <div class="item-chevron" aria-hidden="true" style="transform: ${isExExpanded ? 'rotate(90deg)' : 'rotate(0)'}; margin-top: 2px;">${icons.chevron}</div>
+                    </div>
+                    ${isExExpanded ? `
+                    ${logHtml}
+                    ${(ex.notes || ex.benefits || musclesHtml) ? `
+                    <div style="margin-top: 16px;">
+                        ${ex.notes ? `
+                        <div class="item-content-section">
+                            <h4 class="label-small">EXECUTION NOTES</h4>
+                            <p>${ex.notes}</p>
+                        </div>
+                        ` : ''}
+                        
+                        ${ex.benefits ? `
+                        <div class="item-content-section">
+                            <h4 class="label-small">WHY THIS EXERCISE</h4>
+                            <p>${ex.benefits}</p>
+                        </div>
+                        ` : ''}
+                        
+                        ${musclesHtml ? `
+                        <div class="item-content-section">
+                            <h4 class="label-small">MUSCLES WORKED</h4>
+                            <div class="muscle-tags">${musclesHtml}</div>
+                        </div>
+                        ` : ''}
+                    </div>
+                    ` : ''}
+                    ` : ''}
+                </div>
+            `;
+        });
+        exercisesHtml += '</div>';
+        
+        let normalizedItem = {
+            id: blockData.id,
+            badge: blockData.badge || blockData.title.substring(0, 2).toUpperCase(),
+            title: blockData.title,
+            stats: [], // Empty stats array to maintain schema but hide rendering
+            sections: [
+                { title: "EXERCISES", content: exercisesHtml }
+            ]
+        };
+        
+        if (blockData.isBlockStart) {
+            normalizedItem.actionHtml = `
+            <div style="padding: 16px; border-top: 1px solid var(--border-color);">
+                <button class="btn-primary" style="width: 100%;" onclick="Timer.startCountdown(5, '${blockData.title.replace(/'/g, "\\'")}', null)">
+                    <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start ${blockData.title}
+                </button>
+            </div>`;
+        }
+        
+        return renderItemCard(normalizedItem, sessionType);
+    };
+
+    // 1.5 Main Exercises (Strength)
+    if (session.exercises) {
+        html += renderExercises(session.exercises, quickId, session.type);
     }
     
     // Helper to render bag/finisher rounds
@@ -1737,7 +1929,14 @@ window.renderQuickSession = function(quickId) {
             ]
         };
         
-        if (sectionObj.id === 'hiit-tabata' && session.bagRoundsPlaylist) {
+        if (sectionObj.isBlockStart) {
+            normalizedItem.actionHtml = `
+            <div style="padding: 16px; border-top: 1px solid var(--border-color);">
+                <button class="btn-primary" style="width: 100%;" onclick="Timer.startCountdown(5, '${sectionObj.name.replace(/'/g, "\\'")}', null)">
+                    <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start ${sectionObj.name}
+                </button>
+            </div>`;
+        } else if (sectionObj.id === 'hiit-tabata' && session.bagRoundsPlaylist) {
             normalizedItem.actionHtml = `
             <div style="padding: 16px; border-top: 1px solid var(--border-color);">
                 <button class="btn-primary" style="width: 100%;" onclick="startSectionSequence('${quickId}', 'bagRoundsPlaylist')">
@@ -1839,6 +2038,21 @@ window.renderQuickSession = function(quickId) {
             ]
         };
         html += renderItemCard(normalizedItem, 'strength');
+    }
+    
+    // 4.8 Custom Blocks
+    if (session.blocks) {
+        session.blocks.forEach(block => {
+            if (block.type === 'warmup') {
+                html += renderWarmup(block.data, quickId);
+            } else if (block.type === 'exercises') {
+                html += renderExercisesBlock(block.data, quickId, session.type);
+            } else if (block.type === 'bagRounds') {
+                html += renderBagSection(block.data, false);
+            } else if (block.type === 'circuit') {
+                // Not implementing general circuit rendering inside blocks for now, unless needed
+            }
+        });
     }
     
     // 5. Cooldown
