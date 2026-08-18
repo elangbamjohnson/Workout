@@ -40,7 +40,7 @@ test.describe('Regular 5-Day Program Baseline', () => {
     await expect(page.locator('text=Barbell deadlift')).toBeVisible();
 
     // The Watch Video button should appear when the exercise card is expanded
-    await page.locator('.item-header').first().click();
+    await page.locator('.item-header').nth(1).click();
     await expect(page.locator('text=Watch Video').first()).toBeVisible();
   });
 
@@ -90,10 +90,10 @@ test.describe('Regular 5-Day Program Baseline', () => {
     await page.locator('.day-card').first().click();
 
     // Expand the first exercise card so its checkmarks become visible
-    await page.locator('.item-header').first().click();
+    await page.locator('.item-header').nth(1).click();
 
-    // Click the first checkmark to complete an item
-    const firstCheckmark = page.locator('.btn-check').first();
+    // Click the first checkmark inside the exercise to complete an item
+    const firstCheckmark = page.locator('.item-card').nth(1).locator('.btn-check').first();
     await firstCheckmark.click();
 
     // Ensure it gets the 'checked' class

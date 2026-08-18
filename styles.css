@@ -8,7 +8,7 @@
     /* Text Colors */
     --text-primary: #f5f5f7;
     --text-secondary: #a3a3ad;
-    --text-muted: #71717a;
+    --text-muted: #9ca3af;
     
     /* Type Accents: Strength */
     --strength-accent: #ee6c3f;
@@ -1330,12 +1330,14 @@ body {
     background: transparent;
     border: 1px solid rgba(255,255,255,0.2);
     color: var(--text-muted);
-    padding: 3px 8px;
+    padding: 10px 16px;
     border-radius: 12px;
     font-size: 11px;
     font-weight: 600;
-    display: inline-flex;
+    display: flex;
     align-items: center;
+    justify-content: center;
+    min-height: 44px;
     gap: 4px;
     cursor: pointer;
     flex-shrink: 0;
@@ -1906,3 +1908,40 @@ body {
     padding: var(--sp-6) 0;
     margin-bottom: var(--sp-8);
 }
+
+/* Shadow Boxing Round Detail Instructions */
+.shadow-round-title {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+}
+.shadow-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+.shadow-bullets {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    text-align: left;
+}
+.shadow-bullets li {
+    margin-bottom: 3px;
+}
+
+/* Accessibility Focus Ring (Keyboard navigation only) */
+button:focus-visible,
+[role="button"]:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+    outline: 2px solid #E8643A !important;
+    outline-offset: 2px !important;
+}
+
