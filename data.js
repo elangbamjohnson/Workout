@@ -214,6 +214,8 @@ const workoutData = {
           "intensity": "Build \u2014 60% \u2192 80%",
           "workSeconds": 180,
           "restSeconds": 60,
+          "videoId": "mfvJPxQ0WGw",
+          "videoFormat": "short",
           "benefits": "The jab is your range finder AND a weapon. Drive from the rear foot through the hip. Your shoulder should nearly touch your chin at full extension.",
           "rounds": [
             {
@@ -247,6 +249,8 @@ const workoutData = {
           "intensity": "85-95%",
           "workSeconds": 180,
           "restSeconds": 60,
+          "videoId": "kBCxN4togYg",
+          "videoFormat": "short",
           "benefits": "The cross is your power weapon. Hip rotation leads \u2014 your shoulder follows your hip, not the other way. You should feel this in your glute and hip, not just your shoulder.",
           "rounds": [
             {
@@ -280,6 +284,8 @@ const workoutData = {
           "intensity": "85-95%",
           "workSeconds": 180,
           "restSeconds": 60,
+          "videoId": "-R383f95Lpc",
+          "videoFormat": "short",
           "benefits": "The hook generates power through hip pivot, not shoulder swing. Lead foot pivots inward as you throw. Your bodyweight transfers to the lead foot. Feel the hip snap.",
           "rounds": [
             {
@@ -296,12 +302,16 @@ const workoutData = {
             },
             {
               "id": "day2-ex3-r3",
-              "combo": "8x Hook with Hip Pivot \u2014 exaggerate the lead foot pivot",
+              "combo": "8x Hook with Hip Pivot \u2014 keep your elbow high, exaggerate the lead foot pivot",
               "videoId": "mF2HmMVH_DQ",
               "videoFormat": "short"
             },
             {
               "id": "day2-ex3-r4",
+              "combo": "4x Lead Hook Double \u2014 body then head, snap the hip on each"
+            },
+            {
+              "id": "day2-ex3-r5",
               "combo": "Repeat 2x through the sequence"
             }
           ]
@@ -313,6 +323,8 @@ const workoutData = {
           "intensity": "85-90%",
           "workSeconds": 180,
           "restSeconds": 60,
+          "videoId": "RQQX-z11U5M",
+          "videoFormat": "short",
           "benefits": "Uppercuts are leg-driven. Bend your knees slightly, then drive upward through the punch. The power comes from leg extension, not shoulder elevation.",
           "rounds": [
             {
@@ -342,6 +354,8 @@ const workoutData = {
           "intensity": "90-100%",
           "workSeconds": 180,
           "restSeconds": 60,
+          "videoId": "neS7wdvid6E",
+          "videoFormat": "short",
           "benefits": "Maintain power through the full combination. Most fighters lose power after the 3rd punch. Train to keep it explosive.",
           "rounds": [
             {
@@ -352,7 +366,7 @@ const workoutData = {
             },
             {
               "id": "day2-ex5-r2",
-              "combo": "5x 3-Punch Power Combo: Cross - Lead Hook - Rear Overhand",
+              "combo": "5x 4-Punch Power Combo: Jab - Cross - Lead Hook - Rear Overhand",
               "videoId": "jfrdknkhtJQ",
               "videoFormat": "short"
             },
@@ -375,6 +389,8 @@ const workoutData = {
           "intensity": "100% on work intervals",
           "workSeconds": 165,
           "restSeconds": 0,
+          "videoId": "AtRf876ShFk",
+          "videoFormat": "short",
           "benefits": "This round tests power under fatigue. Your punch quality at the end of this round is your baseline \u2014 you will improve it over the program.",
           "rounds": [
             {
@@ -387,7 +403,9 @@ const workoutData = {
             },
             {
               "id": "day2-ex6-r3",
-              "combo": "30 sec: Power combinations of your choice"
+              "combo": "30 sec: Repeat 1-2-3-2 (Jab-Cross-Lead Hook-Cross) continuously \u2014 focus on pace over power this segment",
+              "videoId": "AtRf876ShFk",
+              "videoFormat": "short"
             },
             {
               "id": "day2-ex6-r4",

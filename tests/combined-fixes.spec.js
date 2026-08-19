@@ -8,33 +8,27 @@ test.describe('Combined Fixes Verification', () => {
         await expect(page.locator('#splash-screen')).toBeHidden();
     });
 
-    test('Fix 1: btn-demo has minimum 44px height and flex layout on Days 2 & 3', async ({ page }) => {
-        // Navigate to Day 2 (Technical)
+    test('Fix 1: Demo buttons on Days 2 & 3 use inline play icon button next to exercise names', async ({ page }) => {
+        // Navigate to Day 2 (Bag Power)
         await page.locator('.day-card').nth(1).click();
         await expect(page.locator('#app-container')).not.toHaveClass(/is-home/);
 
-        // Expand all item cards on Day 2 to reveal all demo buttons
+        // Expand all item cards on Day 2 to reveal all demo icons
         const countHeaders = await page.locator('.item-header').count();
         for (let i = 0; i < countHeaders; i++) {
             await page.locator('.item-header').nth(i).click();
         }
 
-        const demoBtns = page.locator('.btn-demo');
-        const count = await demoBtns.count();
-        expect(count).toBeGreaterThan(0);
+        const demoBtnsD2 = page.locator('.nested-row .btn-demo-icon');
+        const countD2 = await demoBtnsD2.count();
+        expect(countD2).toBeGreaterThan(0);
 
-        for (let i = 0; i < count; i++) {
-            const btn = demoBtns.nth(i);
+        for (let i = 0; i < countD2; i++) {
+            const btn = demoBtnsD2.nth(i);
             await expect(btn).toBeVisible();
-            const box = await btn.boundingBox();
-            expect(box.height).toBeGreaterThanOrEqual(44);
-            const display = await btn.evaluate(el => window.getComputedStyle(el).display);
-            expect(display).toBe('flex');
-            const minHeight = await btn.evaluate(el => window.getComputedStyle(el).minHeight);
-            expect(minHeight).toBe('44px');
         }
 
-        // Navigate back to Home and go to Day 3 (Heavy Bag)
+        // Navigate back to Home and go to Day 3 (Technical)
         await page.locator('.nav-back-btn').click();
         await expect(page.locator('#app-container')).toHaveClass(/is-home/);
         await page.locator('.day-card').nth(2).click();
@@ -46,17 +40,13 @@ test.describe('Combined Fixes Verification', () => {
             await page.locator('.item-header').nth(i).click();
         }
 
-        const demoBtnsD3 = page.locator('.btn-demo');
+        const demoBtnsD3 = page.locator('.nested-row .btn-demo-icon');
         const countD3 = await demoBtnsD3.count();
         expect(countD3).toBeGreaterThan(0);
 
         for (let i = 0; i < countD3; i++) {
             const btn = demoBtnsD3.nth(i);
             await expect(btn).toBeVisible();
-            const box = await btn.boundingBox();
-            expect(box.height).toBeGreaterThanOrEqual(44);
-            const minHeight = await btn.evaluate(el => window.getComputedStyle(el).minHeight);
-            expect(minHeight).toBe('44px');
         }
     });
 

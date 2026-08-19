@@ -474,6 +474,11 @@ function collapseAll() {
 
 function renderItemCard(item, dayType) {
     const isExpanded = expandedCardIds.has(item.id) || expandedCardIds.has(String(item.id));
+    const demoIconBtn = item.videoId
+        ? `<span role="button" tabindex="0" class="btn-demo-icon" aria-label="Watch demo for ${item.title.replace(/"/g, '&quot;')}" onclick="event.stopPropagation(); openVideoModal('${item.videoId}', '${item.title.replace(/'/g, "\\'")}', '${item.videoFormat || 'short'}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.stopPropagation();event.preventDefault();openVideoModal('${item.videoId}', '${item.title.replace(/'/g, "\\'")}', '${item.videoFormat || 'short'}');}">
+               <svg viewBox="0 0 24 24" width="10" height="10"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+           </span>`
+        : '';
     
     let html = `
         <div class="item-card type-${dayType} ${isExpanded ? 'expanded' : ''}" data-id="${item.id}">
@@ -483,7 +488,10 @@ function renderItemCard(item, dayType) {
                         <div class="item-title-wrap">
                             <div class="num-badge" aria-hidden="true">${item.badge}</div>
                             <div>
-                                <h3 class="title-card">${item.title}</h3>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <h3 class="title-card">${item.title}</h3>
+                                    ${demoIconBtn}
+                                </div>
                                 ${item.subtitle ? `<div style="font-size: 13px; color: var(--accent-color); margin-top: 2px; font-weight: 500;">${item.subtitle}</div>` : ''}
                             </div>
                         </div>
@@ -1067,16 +1075,21 @@ window.renderDay = function(dayIdRaw) {
             let drillsHtml = sec.rounds ? sec.rounds.map((r, i) => {
                 const log = Store.getItemLog(day.id, r.id) || {};
                 const isChecked = log.completed ? 'checked' : '';
-                const demoBtn = r.videoId
-                    ? `<button class="btn-demo" onclick="openVideoModal('${r.videoId}', '${r.combo.replace(/'/g, "\\'")}', '${r.videoFormat || 'short'}')">
-                           <svg viewBox="0 0 24 24" width="12" height="12"><path fill="currentColor" d="M8 5v14l11-7z"/></svg> Demo
+                const demoIconBtn = r.videoId
+                    ? `<button class="btn-demo-icon" aria-label="Watch demo for ${r.combo.replace(/"/g, '&quot;')}" onclick="openVideoModal('${r.videoId}', '${r.combo.replace(/'/g, "\\'")}', '${r.videoFormat || 'short'}')">
+                           <svg viewBox="0 0 24 24" width="10" height="10"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
                        </button>`
                     : '';
+                const drillText = `${r.round ? `Round ${r.round} — ` : ''}${r.combo}${r.focus ? ` : ${r.focus}` : ''}`;
                 return `
-                <div class="nested-row interactive" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}">
+                <div class="nested-row interactive ${isChecked}" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}">
                     <button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
-                    <div style="flex: 1;">${r.round ? `Round ${r.round} — ` : ''}${r.combo}${r.focus ? ` : ${r.focus}` : ''}</div>
-                    ${demoBtn}
+                    <div style="flex: 1; margin-left: 12px; min-width: 0;">
+                        <div style="display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                            <span style="font-size: 14px; line-height: 1.4; color: var(--text-primary);">${drillText}</span>
+                            ${demoIconBtn}
+                        </div>
+                    </div>
                 </div>`;
             }).join('') : '';
 
@@ -1103,18 +1116,22 @@ window.renderDay = function(dayIdRaw) {
             let roundsHtml = ex.rounds ? ex.rounds.map((r, i) => {
                 const log = Store.getItemLog(day.id, r.id) || {};
                 const isChecked = log.completed ? 'checked' : '';
-                const demoBtn = r.videoId
-                    ? `<button class="btn-demo" onclick="openVideoModal('${r.videoId}', '${r.combo.replace(/'/g, "\\'")}', 'short')">
-                           <svg viewBox="0 0 24 24" width="12" height="12"><path fill="currentColor" d="M8 5v14l11-7z"/></svg> Demo
+                const demoIconBtn = r.videoId
+                    ? `<button class="btn-demo-icon" aria-label="Watch demo for ${r.combo.replace(/"/g, '&quot;')}" onclick="openVideoModal('${r.videoId}', '${r.combo.replace(/'/g, "\\'")}', '${r.videoFormat || 'short'}')">
+                           <svg viewBox="0 0 24 24" width="10" height="10"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
                        </button>`
                     : '';
                 return `
-                <div class="nested-row">
+                <div class="nested-row ${isChecked}">
                     <button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
-                    <div style="flex: 1;">${r.combo}</div>
-                    ${demoBtn}
+                    <div style="flex: 1; margin-left: 12px; min-width: 0;">
+                        <div style="display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                            <span style="font-size: 14px; line-height: 1.4; color: var(--text-primary);">${r.combo}</span>
+                            ${demoIconBtn}
+                        </div>
+                    </div>
                 </div>`;
-            }).join('') : `<div class="nested-row"><button class="btn-check ${Store.getItemLog(day.id, ex.id)?.completed ? 'checked':''}" onclick="toggleRound(event, ${day.id}, '${ex.id}')">${icons.checkmark}</button><div style="flex:1;">${ex.notes}</div></div>`;
+            }).join('') : `<div class="nested-row"><button class="btn-check ${Store.getItemLog(day.id, ex.id)?.completed ? 'checked':''}" onclick="toggleRound(event, ${day.id}, '${ex.id}')">${icons.checkmark}</button><div style="flex:1; margin-left: 12px;">${ex.notes}</div></div>`;
 
             let normalizedItem = {
                 id: ex.id,
