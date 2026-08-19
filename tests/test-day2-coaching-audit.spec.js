@@ -27,20 +27,24 @@ test.describe('Day 2 Bag Power Coaching Refinements Audit', () => {
             };
         });
 
-        // 1. Round 3 missing 3rd element & defensive cue
+        // 1. Round 3: exactly 4 drills (10x Lead Hooks, 5x Jab-Cross-Hook, 4x Lead Hook Double, Repeat 2x)
+        expect(auditData.ex3Rounds.length).toBe(4);
+
+        const r1 = auditData.ex3Rounds.find(r => r.id === 'day2-ex3-r1');
+        expect(r1.combo).toContain('10x Lead Hooks');
+        expect(r1.videoId).toBe('-R383f95Lpc');
+
+        const r2 = auditData.ex3Rounds.find(r => r.id === 'day2-ex3-r2');
+        expect(r2.combo).toContain('5x Jab-Cross-Hook');
+        expect(r2.videoId).toBe('l3e3qeLwC6Q');
+
         const r3 = auditData.ex3Rounds.find(r => r.id === 'day2-ex3-r3');
-        expect(r3.combo).toContain('keep your elbow high, exaggerate the lead foot pivot');
-        expect(r3.videoId).toBe('mF2HmMVH_DQ');
+        expect(r3.combo).toBe('4x Lead Hook Double — body then head, snap the hip on each');
+        expect(r3.videoId).toBe('QBNSGxoNYiA');
+        expect(r3.videoFormat).toBe('short');
 
         const r4 = auditData.ex3Rounds.find(r => r.id === 'day2-ex3-r4');
-        expect(r4.combo).toBe('4x Lead Hook Double — body then head, snap the hip on each');
-
-        const r5 = auditData.ex3Rounds.find(r => r.id === 'day2-ex3-r5');
-        expect(r5.combo).toBe('Repeat 2x through the sequence');
-
-        // Verify video IDs intact in Round 3
-        expect(auditData.ex3Rounds.find(r => r.id === 'day2-ex3-r1').videoId).toBe('-R383f95Lpc');
-        expect(auditData.ex3Rounds.find(r => r.id === 'day2-ex3-r2').videoId).toBe('l3e3qeLwC6Q');
+        expect(r4.combo).toBe('Repeat 2x through the sequence');
 
         // 2. Round 5 sub-exercise 2 combo order
         expect(auditData.ex5R2.combo).toBe('5x 4-Punch Power Combo: Jab - Cross - Lead Hook - Rear Overhand');
@@ -52,8 +56,9 @@ test.describe('Day 2 Bag Power Coaching Refinements Audit', () => {
         // Expand Round 3 card in UI
         const r3Card = page.locator('.item-card').filter({ hasText: 'Lead Hook Power' });
         await r3Card.locator('.item-header').click();
-        await expect(r3Card.locator('.nested-row').filter({ hasText: 'keep your elbow high' })).toBeVisible();
-        await expect(r3Card.locator('.nested-row').filter({ hasText: '4x Lead Hook Double' })).toBeVisible();
+        const r3DoubleRow = r3Card.locator('.nested-row').filter({ hasText: '4x Lead Hook Double' });
+        await expect(r3DoubleRow).toBeVisible();
+        await expect(r3DoubleRow.locator('.btn-demo-icon')).toBeVisible();
 
         // Expand Round 5 card in UI
         const r5Card = page.locator('.item-card').filter({ hasText: 'Power Combinations' });

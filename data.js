@@ -302,16 +302,12 @@ const workoutData = {
             },
             {
               "id": "day2-ex3-r3",
-              "combo": "8x Hook with Hip Pivot \u2014 keep your elbow high, exaggerate the lead foot pivot",
-              "videoId": "mF2HmMVH_DQ",
+              "combo": "4x Lead Hook Double \u2014 body then head, snap the hip on each",
+              "videoId": "QBNSGxoNYiA",
               "videoFormat": "short"
             },
             {
               "id": "day2-ex3-r4",
-              "combo": "4x Lead Hook Double \u2014 body then head, snap the hip on each"
-            },
-            {
-              "id": "day2-ex3-r5",
               "combo": "Repeat 2x through the sequence"
             }
           ]

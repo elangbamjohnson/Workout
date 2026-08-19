@@ -714,6 +714,11 @@ body {
     font-weight: 700;
     flex-shrink: 0;
 }
+.type-strength { --accent-color: var(--strength-accent); }
+.type-bag { --accent-color: var(--bag-accent); }
+.type-technical { --accent-color: var(--technical-accent); }
+.type-rest { --accent-color: var(--rest-accent); }
+
 .type-strength .num-badge { background: var(--strength-accent); color: #000; }
 .type-bag .num-badge { background: var(--bag-accent); color: #000; }
 .type-technical .num-badge { background: var(--technical-accent); color: #000; }
@@ -1385,13 +1390,39 @@ body {
     fill: currentColor;
 }
 .btn-demo-icon:hover {
-    background: var(--accent-color, #ff4757);
-    border-color: var(--accent-color, #ff4757);
-    color: #fff;
+    background: var(--accent-color, var(--strength-accent));
+    border-color: var(--accent-color, var(--strength-accent));
+    color: #000;
     transform: scale(1.1);
 }
 .btn-demo-icon:active {
     transform: scale(0.95);
+}
+
+/* Day-type specific hover states for play demo icon */
+.type-strength .btn-demo-icon:hover,
+.btn-demo-icon.type-strength:hover {
+    background: var(--strength-accent);
+    border-color: var(--strength-accent);
+    color: #000;
+}
+.type-bag .btn-demo-icon:hover,
+.btn-demo-icon.type-bag:hover {
+    background: var(--bag-accent);
+    border-color: var(--bag-accent);
+    color: #000;
+}
+.type-technical .btn-demo-icon:hover,
+.btn-demo-icon.type-technical:hover {
+    background: var(--technical-accent);
+    border-color: var(--technical-accent);
+    color: #000;
+}
+.type-rest .btn-demo-icon:hover,
+.btn-demo-icon.type-rest:hover {
+    background: var(--rest-accent);
+    border-color: var(--rest-accent);
+    color: #000;
 }
 
 /* Toast Notification */
@@ -1569,14 +1600,24 @@ body {
 
 /* Type specific hover accents for play button */
 .btn-play.type-bag:hover {
-    border-color: var(--bag-accent, #ff4757);
-    color: var(--bag-accent, #ff4757);
-    background: rgba(255, 71, 87, 0.1);
+    border-color: var(--bag-accent);
+    color: var(--bag-accent);
+    background: var(--bag-bg);
 }
 .btn-play.type-strength:hover {
-    border-color: var(--strength-accent, #2ed573);
-    color: var(--strength-accent, #2ed573);
-    background: rgba(46, 213, 115, 0.1);
+    border-color: var(--strength-accent);
+    color: var(--strength-accent);
+    background: var(--strength-bg);
+}
+.btn-play.type-technical:hover {
+    border-color: var(--technical-accent);
+    color: var(--technical-accent);
+    background: var(--technical-bg);
+}
+.btn-play.type-rest:hover {
+    border-color: var(--rest-accent);
+    color: var(--rest-accent);
+    background: var(--rest-bg);
 }
 
 .btn-icon { color: var(--text-secondary); }

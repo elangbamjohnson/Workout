@@ -69,6 +69,44 @@ test.describe('Day 2 Bag Power Rounds & Combos Play Icon Pattern', () => {
         await expect(page.locator('.btn-demo')).toHaveCount(0);
     });
 
+    test('Verify Round 3 (Lead Hook Power) 4x Lead Hook Double play icon opens Tony Jeffries video (QBNSGxoNYiA)', async ({ page }) => {
+        // Navigate to Day 2 (Bag Power)
+        await page.locator('.day-card').nth(1).click();
+        await expect(page.locator('.title-page')).toHaveText('Bag Power Day');
+
+        // Expand Round 3
+        const round3Card = page.locator('.item-card[data-id="day2-ex3"]');
+        if (!await round3Card.evaluate(el => el.classList.contains('expanded'))) {
+            await round3Card.locator('.item-header').click();
+        }
+        await expect(round3Card).toHaveClass(/expanded/);
+
+        // Verify exactly 4 drills rendered in Round 3
+        const rows = round3Card.locator('.nested-row');
+        await expect(rows).toHaveCount(4);
+
+        // 3rd drill: 4x Lead Hook Double
+        const hookDoubleRow = rows.nth(2);
+        await expect(hookDoubleRow).toContainText('4x Lead Hook Double');
+
+        const playIcon = hookDoubleRow.locator('.btn-demo-icon');
+        await expect(playIcon).toBeVisible();
+
+        // Click play icon
+        await playIcon.click();
+        const videoModal = page.locator('#videoModalOverlay');
+        await expect(videoModal).toBeVisible();
+        await expect(videoModal.locator('.video-container')).toHaveClass(/format-short/);
+        await expect(videoModal.locator('iframe')).toHaveAttribute('src', /QBNSGxoNYiA/);
+        await videoModal.locator('.btn-close-modal').click();
+        await expect(videoModal).toBeHidden();
+
+        // 4th row: Repeat 2x (no video icon)
+        const repeatRow = rows.nth(3);
+        await expect(repeatRow).toContainText('Repeat 2x through the sequence');
+        await expect(repeatRow.locator('.btn-demo-icon')).toHaveCount(0);
+    });
+
     test('Verify Day 1 warm-up play icon pattern remains completely unaffected', async ({ page }) => {
         // Navigate to Day 1
         await page.locator('.day-card').first().click();
