@@ -39,9 +39,9 @@ test.describe('Regular 5-Day Program Baseline', () => {
     // Verify sections
     await expect(page.locator('text=Barbell deadlift')).toBeVisible();
 
-    // The Watch Video button should appear when the exercise card is expanded
-    await page.locator('.item-header').nth(1).click();
-    await expect(page.locator('text=Watch Video').first()).toBeVisible();
+    // The inline demo play icon should be visible next to the exercise title
+    const ex1Header = page.locator('.item-header').nth(1);
+    await expect(ex1Header.locator('.btn-demo-icon')).toBeVisible();
   });
 
   test('Prev/next day navigation works and respects bounds', async ({ page }) => {

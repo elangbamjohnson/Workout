@@ -1169,27 +1169,30 @@ window.renderDay = function(dayIdRaw) {
 
             
             // Generate Set Logging Rows
-            let setsCount = parseInt((ex.setsReps || "1").split(" ")[0]) || 1;
+            let setsCount = parseInt((ex.setsReps || "1").split(/[xX\u00d7\s]/)[0]) || 1;
             let logHtml = '';
             const logData = Store.getItemLog(day.id, ex.id) || { sets: {} };
+            const defaultCue = "Drive through the floor explosively — speed matters over weight.";
+            const restCue = ex.restCue || defaultCue;
             for(let s=1; s<=setsCount; s++) {
                 const setData = logData.sets[s] || {};
                 const isChecked = setData.completed ? 'checked' : '';
-                const repsVal = setData.reps || (ex.setsReps.includes('x') ? ex.setsReps.split('x')[1].trim() : '5');
+                const repsParts = (ex.setsReps || '').split(/[xX\u00d7]/);
+                const repsVal = setData.reps || (repsParts[1] ? repsParts[1].trim() : '5');
                 const weightVal = setData.weight || ex.weight || '';
                 
                 logHtml += `
                 <div class="set-row ${isChecked}">
                     <div class="set-num">${s}</div>
                     <div class="set-input-group">
-                        <input type="text" class="input-val input-weight" value="${weightVal}" placeholder="lbs" />
+                        <input type="text" class="input-val input-weight" value="${weightVal}" placeholder="kg" />
                         <span class="input-label">weight</span>
                     </div>
                     <div class="set-input-group">
-                        <input type="number" class="input-val input-rep" value="${repsVal}" />
+                        <input type="text" class="input-val input-rep" value="${repsVal}" />
                         <span class="input-label">reps</span>
                     </div>
-                    <button class="btn-check ${isChecked}" onclick="logSet(${day.id}, '${ex.id}', ${s}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', ${ex.cue ? "'" + ex.cue.replace(/'/g, "\\'") + "'" : "'Drive through the floor explosively — speed matters over weight.'"}, this)">${icons.checkmark}</button>
+                    <button class="btn-check ${isChecked}" onclick="logSet(${day.id}, '${ex.id}', ${s}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', '${restCue.replace(/'/g, "\\'")}', this)">${icons.checkmark}</button>
                 </div>
                 `;
             }
@@ -1201,7 +1204,7 @@ window.renderDay = function(dayIdRaw) {
                 videoId: ex.videoId,
                 videoFormat: ex.videoFormat,
                 stats: stats,
-                callout: { icon: icons.strength, text: "Drive through the floor explosively — speed matters over weight." },
+                callout: { icon: icons.strength, text: ex.cue || defaultCue },
                 sections: [
                     { title: "LOG SETS", content: logHtml },
                     { title: "EXECUTION NOTES", content: `<p>${ex.notes}</p>` },
@@ -1209,12 +1212,6 @@ window.renderDay = function(dayIdRaw) {
                     { title: "MUSCLES WORKED", content: `<div class="muscle-tags">${musclesHtml}</div>` }
                 ]
             };
-            
-            if (ex.videoId) {
-                normalizedItem.actionHtml = `<button class="btn-ghost" style="width: 100%; margin-top: var(--sp-4);" onclick="openVideoModal('${ex.videoId}', '${ex.name.replace(/'/g, "\\'")}', '${ex.videoFormat || 'short'}')">
-                    <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M8 5v14l11-7z"/></svg> Watch Video
-                </button>`;
-            }
 
             html += renderItemCard(normalizedItem, day.type);
         });
@@ -1744,24 +1741,25 @@ window.renderQuickSession = function(quickId) {
             }
             
             // Generate Set Logging Rows
-            let setsCount = parseInt((ex.setsReps || "1").split(" ")[0]) || 1;
+            let setsCount = parseInt((ex.setsReps || "1").split(/[xX\u00d7\s]/)[0]) || 1;
             let logHtml = '';
             const logData = Store.getItemLog(quickId, ex.id) || { sets: {} };
             for(let s=1; s<=setsCount; s++) {
                 const setData = logData.sets[s] || {};
                 const isChecked = setData.completed ? 'checked' : '';
-                const repsVal = setData.reps || (ex.setsReps && ex.setsReps.includes('x') ? ex.setsReps.split('x')[1].trim() : '5');
+                const repsParts = (ex.setsReps || '').split(/[xX\u00d7]/);
+                const repsVal = setData.reps || (repsParts[1] ? repsParts[1].trim() : '5');
                 const weightVal = setData.weight || ex.weight || '';
                 
                 logHtml += `
                 <div class="set-row ${isChecked}">
                     <div class="set-num">${s}</div>
                     <div class="set-input-group">
-                        <input type="text" class="input-val input-weight" value="${weightVal}" placeholder="lbs" />
+                        <input type="text" class="input-val input-weight" value="${weightVal}" placeholder="kg" />
                         <span class="input-label">weight</span>
                     </div>
                     <div class="set-input-group">
-                        <input type="number" class="input-val input-rep" value="${repsVal}" />
+                        <input type="text" class="input-val input-rep" value="${repsVal}" />
                         <span class="input-label">reps</span>
                     </div>
                     <button class="btn-check ${isChecked}" onclick="logSet('${quickId}', '${ex.id}', ${s}, ${ex.restSeconds || 0}, '${ex.name.replace(/'/g, "\\'")}', ${ex.cue ? "'" + ex.cue.replace(/'/g, "\\'") + "'" : "'Focus on form.'"}, this)">${icons.checkmark}</button>
@@ -1803,7 +1801,7 @@ window.renderQuickSession = function(quickId) {
         blockData.exercises.forEach((ex, idx) => {
             let musclesHtml = ex.muscles ? ex.muscles.split(',').map(m => `<div class="muscle-tag">${m.trim()}</div>`).join('') : '';
             
-            let setsCount = parseInt((ex.setsReps || "1").split(" ")[0]) || 1;
+            let setsCount = parseInt((ex.setsReps || "1").split(/[xX\u00d7\s]/)[0]) || 1;
             let logHtml = '';
             const logData = Store.getItemLog(quickId, ex.id) || { sets: {} };
             let allCompleted = true;
@@ -1811,18 +1809,19 @@ window.renderQuickSession = function(quickId) {
                 const setData = logData.sets[s] || {};
                 const isChecked = setData.completed ? 'checked' : '';
                 if (!setData.completed) allCompleted = false;
-                const repsVal = setData.reps || (ex.setsReps && ex.setsReps.includes('x') ? ex.setsReps.split('x')[1].trim() : '5');
+                const repsParts = (ex.setsReps || '').split(/[xX\u00d7]/);
+                const repsVal = setData.reps || (repsParts[1] ? repsParts[1].trim() : '5');
                 const weightVal = setData.weight || ex.weight || '';
                 
                 logHtml += `
                 <div class="set-row ${isChecked}">
                     <div class="set-num">${s}</div>
                     <div class="set-input-group">
-                        <input type="text" class="input-val input-weight" value="${weightVal}" placeholder="lbs" />
+                        <input type="text" class="input-val input-weight" value="${weightVal}" placeholder="kg" />
                         <span class="input-label">weight</span>
                     </div>
                     <div class="set-input-group">
-                        <input type="number" class="input-val input-rep" value="${repsVal}" />
+                        <input type="text" class="input-val input-rep" value="${repsVal}" />
                         <span class="input-label">reps</span>
                     </div>
                     <button class="btn-check ${isChecked}" onclick="logSet('${quickId}', '${ex.id}', ${s}, ${ex.restSeconds || 0}, '${ex.name.replace(/'/g, "\\'")}', ${ex.cue ? "'" + ex.cue.replace(/'/g, "\\'") + "'" : "'Focus on form.'"}, this)">${icons.checkmark}</button>
