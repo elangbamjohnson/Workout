@@ -655,112 +655,100 @@ const workoutData = {
       "type": "strength",
       "exercises": [
         {
-          "name": "Plyometric push-ups (floor, or rings for added instability)",
+          "id": "day4-ex1",
+          "name": "Plyometric Push-ups",
           "setsReps": "4 x 6",
           "weight": "Bodyweight",
           "notes": "Standard push-up position, lower under control, then push up explosively so your hands leave the ground (or on rings, so the rings drop and you catch the instability). Land soft, reset your position before the next rep.",
           "benefits": "Builds explosive pushing power and shoulder stability \u2014 trains your chest and arms to fire fast, not just strong.",
-          "muscles": "Chest, triceps, front shoulders, core.",
+          "muscles": "Chest, Triceps, Front shoulders, Core",
           "restSeconds": 90,
           "videoId": "iO0sT5FDgj4",
-          "videoFormat": "short",
-          "id": "day4-ex1"
+          "videoFormat": "short"
         },
         {
+          "id": "day4-ex2",
+          "name": "Landmine Rotational Clean and Press",
+          "setsReps": "3 \u00d7 5 each side",
+          "weight": "Bar only (20kg) to start \u2014 add 5kg once form is clean and movement is fluid end-to-end",
+          "notes": "Stand side-on to the landmine anchor. Hinge at the hips and grip the top of the bar with the hand furthest from the anchor. Drive through the hips explosively to clean the bar up to shoulder height, rotating your torso as it rises, then press it overhead at full extension. Lower under control back to the hip-hinge start position \u2014 do not drop the bar. The movement is one continuous fluid sequence: hinge, clean, rotate, press. If any phase breaks down, stop the set.",
+          "benefits": "The single exercise in this program that trains the full punching kinetic chain in one movement \u2014 hip drive, rotational power, and overhead pressing stability combined. Placed early in the session while the nervous system is freshest, since this is the most technically demanding movement of the day.",
+          "muscles": "Glutes, Hamstrings, Obliques, Lats, Anterior deltoid, Triceps, Core",
+          "restSeconds": 105,
+          "videoId": "kYj_kuUCla4",
+          "videoFormat": "short"
+        },
+        {
+          "id": "day4-ex3",
           "name": "Landmine Single-Arm Push Press",
           "setsReps": "4 \u00d7 5 each side",
           "weight": "Bar only (20kg) to start \u2014 add 5kg once the leg drive and lockout are crisp on every rep",
           "notes": "Stand facing the landmine anchor, feet shoulder-width, bar at shoulder height in one hand. Dip slightly at the knees (not a full squat \u2014 just a quarter dip), then drive explosively through the legs, using that momentum to press the bar forward and upward to full arm extension. Lower under control back to shoulder height, reset your stance, then go again. The power comes from the legs first \u2014 if you're pressing with just your arm, the weight is too heavy. Keep your core braced throughout to prevent excessive trunk lean.",
           "benefits": "Trains explosive single-arm pressing power with leg drive \u2014 closely mirrors the forward pressing angle and full-body sequencing of throwing a cross or jab. The unilateral nature also trains anti-rotation core stability on the non-pressing side, similar to the demand of punching from a boxing stance.",
-          "muscles": "Anterior deltoid, triceps, glutes, quads, core (anti-rotation).",
+          "muscles": "Anterior deltoid, Triceps, Glutes, Quads, Core (anti-rotation)",
           "restSeconds": 90,
           "videoId": "eXD70Z14c34",
-          "videoFormat": "short",
-          "id": "day4-ex2"
+          "videoFormat": "short"
         },
         {
-          "name": "Ring rows (explosive pull)",
+          "id": "day4-ex4",
+          "name": "Ring Rows (Explosive Pull)",
           "setsReps": "4 x 6",
           "weight": "Bodyweight",
           "notes": "Set rings around chest height, lean back with body straight, feet on floor. Pull yourself up explosively toward the rings, chest driving to hands, then lower slowly (2-3 sec) under control. More horizontal body position = harder; start closer to upright and work toward horizontal over time.",
-          "benefits": "Builds the \"pull back\" side of punching \u2014 the retraction speed that lets you snap your hand back to guard after a punch, and balances out all the pressing work.",
-          "muscles": "Upper back (lats, rhomboids), biceps, rear shoulders.",
+          "benefits": "Builds the 'pull back' side of punching \u2014 the retraction speed that lets you snap your hand back to guard after a punch, and balances out all the pressing work.",
+          "muscles": "Upper back (lats, rhomboids), Biceps, Rear shoulders",
           "restSeconds": 90,
           "videoId": "pyhQJuxxskk",
-          "videoFormat": "short",
-          "id": "day4-ex3"
+          "videoFormat": "short"
         },
         {
-          "name": "Med ball chest pass throws (wall)",
-          "setsReps": "3 x 8",
-          "weight": "Med ball",
-          "notes": "Hold ball at chest, stand a few feet from wall. Push/throw the ball explosively straight out from your chest like a basketball chest pass, catch on rebound, reset and repeat immediately with full effort each rep.",
-          "benefits": "Trains explosive arm extension speed with zero eccentric braking (you let go of the ball) \u2014 pure power output training.",
-          "muscles": "Chest, triceps, front shoulders.",
+          "id": "day4-ex5",
+          "name": "Archer Ring Row",
+          "setsReps": "3 \u00d7 6 each side",
+          "weight": "Bodyweight",
+          "notes": "Set rings to a comfortable pulling height, feet on the floor, body straight in a plank line. Grip both rings, but pull with one arm while the opposite arm stays extended straight out to the side, transferring your weight to the pulling arm. Row your chest up toward the pulling-side ring, keeping shoulders and hips square \u2014 don't let your hips rotate open. Control the descent back to full extension before switching arms or repeating on the same side per your set.",
+          "benefits": "A unilateral pulling movement that adds an anti-rotation demand on top of the pulling strength already built by regular ring rows \u2014 your core has to resist rotating as one arm pulls and the other stays extended. This closely mirrors the core stability needed when one arm punches and the other stays back in guard.",
+          "muscles": "Upper back (lats, rhomboids, traps), Biceps, Rear shoulders, Obliques (anti-rotation)",
           "restSeconds": 90,
-          "videoId": "gEov6cxDswM",
-          "videoFormat": "short",
-          "id": "day4-ex4"
+          "videoId": "YDEuRPiJpuU",
+          "videoFormat": "short"
         },
         {
-          "name": "Barbell landmine anti-rotation press",
-          "setsReps": "3 x 8/side",
-          "weight": "Bar (20kg) + 5kg = 25kg total",
-          "notes": "Load barbell into landmine attachment, hold the end at chest height with both hands (or one hand for more challenge), stand side-on to the anchor point. Press the bar straight out while resisting the urge to let your torso rotate \u2014 brace your core hard.",
-          "benefits": "Builds anti-rotation core strength \u2014 keeps your torso stable so power from your hips doesn't leak before it reaches your fist.",
-          "muscles": "Obliques, deep core, shoulders.",
-          "restSeconds": 90,
-          "videoId": "e5DP6961WEk",
-          "videoFormat": "regular",
-          "id": "day4-ex5"
-        },
-        {
-          "name": "Single-arm kettlebell swings",
+          "id": "day4-ex6",
+          "name": "Single-arm Kettlebell Swings",
           "setsReps": "3 x 8/side",
           "weight": "18kg",
           "notes": "Same hip-hinge and hip-snap as the two-hand swing on Day 1, but with one hand on the bell \u2014 this forces your core and obliques to resist rotation while your hips still drive the power, very close to the anti-rotation demand of throwing a straight punch off your rear hand. Switch hands mid-set by letting the bell float briefly in front of you at the top. If 18kg feels too heavy single-arm to control cleanly, drop reps to 5-6/side rather than losing form.",
           "benefits": "Combines hip-snap power with anti-rotation core demand in one movement \u2014 very close to the physical demand of a rear-hand punch.",
-          "muscles": "Glutes, hamstrings, obliques, grip, forearms.",
+          "muscles": "Glutes, Hamstrings, Obliques, Grip, Forearms",
           "restSeconds": 90,
           "videoId": "N9iGxOKl38A",
-          "videoFormat": "short",
-          "id": "day4-ex6"
+          "videoFormat": "short"
         },
         {
-          "name": "Landmine Rotational Clean and Press",
-          "setsReps": "3 \u00d7 5 each side",
-          "weight": "Bar only (20kg) to start \u2014 add 5kg once form is clean and movement is fluid end-to-end",
-          "notes": "Stand side-on to the landmine anchor. Hinge at the hips and grip the top of the bar with the hand furthest from the anchor. Drive through the hips explosively to clean the bar up to shoulder height, rotating your torso as it rises, then press it overhead at full extension. Lower under control back to the hip-hinge start position \u2014 do not drop the bar. The movement is one continuous fluid sequence: hinge, clean, rotate, press. If any phase breaks down, stop the set.",
-          "benefits": "The single exercise in this program that trains the full punching kinetic chain in one movement \u2014 hip drive, rotational power, and overhead pressing stability combined. The clean component trains the same explosive hip-to-shoulder transfer as a cross or hook, while the press overhead builds shoulder stability under rotational load. Directly transfers to punching power and punch recovery speed.",
-          "muscles": "Glutes, hamstrings, obliques, lats, anterior deltoid, triceps, core.",
-          "restSeconds": 105,
-          "videoFormat": "short",
-          "videoId": "kYj_kuUCla4",
-          "id": "day4-ex7"
-        },
-        {
-          "name": "Dumbbell woodchoppers (explosive)",
+          "id": "day4-ex7",
+          "name": "Dumbbell Woodchoppers (Explosive)",
           "setsReps": "3 x 8/side",
           "weight": "One dumbbell, 5-6kg",
           "notes": "Hold it with both hands. Start high on one side (shoulder height), rotate and chop down and across your body to the opposite hip, driving the motion from your hips and trunk rotation, not just your arms. Reset at the top each rep.",
           "benefits": "Trains rotational power through a diagonal plane, which overlaps with hook and uppercut mechanics more than straight-line exercises do.",
-          "muscles": "Obliques, core, shoulders, hips.",
+          "muscles": "Obliques, Core, Shoulders, Hips",
           "restSeconds": 75,
           "videoId": "rgjHOnCgkuk",
-          "videoFormat": "short",
-          "id": "day4-ex8"
+          "videoFormat": "short"
         },
         {
-          "name": "Hanging leg raises (power stand)",
+          "id": "day4-ex8",
+          "name": "Hanging Leg Raises (Power Stand)",
           "setsReps": "3 x 10",
           "weight": "Bodyweight",
           "notes": "Hang from the power stand with straight or slightly bent arms. Raise your legs (straight or knees tucked) up toward your chest using your lower abs, avoid swinging \u2014 control both the raise and the lower.",
           "benefits": "Builds lower ab and hip flexor strength, which supports overall core stiffness needed to transfer power without your midsection collapsing.",
-          "muscles": "Lower abs, hip flexors, grip.",
+          "muscles": "Lower abs, Hip flexors, Grip",
           "restSeconds": 60,
           "videoId": "XgTlyPzuKmQ",
-          "videoFormat": "short",
-          "id": "day4-ex9"
+          "videoFormat": "short"
         }
       ],
       "warmup": [

@@ -1198,6 +1198,8 @@ window.renderDay = function(dayIdRaw) {
                 id: ex.id,
                 badge: idx + 1,
                 title: ex.name,
+                videoId: ex.videoId,
+                videoFormat: ex.videoFormat,
                 stats: stats,
                 callout: { icon: icons.strength, text: "Drive through the floor explosively — speed matters over weight." },
                 sections: [
