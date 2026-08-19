@@ -1380,10 +1380,10 @@ body {
 .btn-demo-icon::before {
     content: '';
     position: absolute;
-    top: -10px;
-    bottom: -10px;
-    left: -10px;
-    right: -10px;
+    top: -11px;
+    bottom: -11px;
+    left: -11px;
+    right: -11px;
 }
 .btn-demo-icon svg {
     margin-left: 1px;

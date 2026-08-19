@@ -153,7 +153,11 @@ window.Timer = {
         this.attachListener();
         
         if (!suppressAudio) {
-            window.speakAlert("Rest time started");
+            if (cue) {
+                window.speakAlert(cue);
+            } else {
+                window.speakAlert("Rest time started");
+            }
         } else if (hasTimedCues) {
             const cue0 = timedCues.find(c => c.time === 0);
             if (cue0) {
@@ -684,6 +688,8 @@ window.Timer = {
         let btnText = "Finish Workout";
         if (isRestMode || (this.mode === 'round' && this.phase === 'rest')) {
             btnText = "Skip Rest";
+        } else if (this.mode === 'warmup') {
+            btnText = "Skip";
         }
         
         let actionsHtml = '';
