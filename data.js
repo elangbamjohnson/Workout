@@ -156,9 +156,11 @@ const workoutData = {
           "id": "day1-wu4",
           "name": "Hip 90/90 Stretch",
           "type": "timed",
-          "duration": 180,
+          "duration": 60,
           "switchSides": true,
-          "cue": "Sit tall, press the front shin down, feel the hip open"
+          "cue": "Sit tall, press the front shin down, feel the hip open",
+          "videoId": "fDC2KC1XqY8",
+          "videoFormat": "short"
         },
         {
           "id": "day1-wu5",
@@ -166,7 +168,9 @@ const workoutData = {
           "type": "reps",
           "reps": "2 \u00d7 10",
           "switchSides": false,
-          "cue": "Squeeze glutes hard at the top, hold 1 second"
+          "cue": "Squeeze glutes hard at the top, hold 1 second",
+          "videoId": "GI5BtRDTuyc",
+          "videoFormat": "short"
         },
         {
           "id": "day1-wu6",
@@ -190,7 +194,9 @@ const workoutData = {
           "type": "reps",
           "reps": "5 reps",
           "switchSides": false,
-          "cue": "Walk hands out to full plank, walk feet back in \u2014 slow"
+          "cue": "Walk hands out to full plank, walk feet back in \u2014 slow",
+          "videoId": "7jeW4v_oaes",
+          "videoFormat": "short"
         }
       ]
     },
@@ -1230,7 +1236,7 @@ window.quickWorkouts = [
       { id: 'hybrid-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Moderate pace — get your feet and rhythm ready' },
       { id: 'hybrid-wu2', name: 'Jumping Jacks', type: 'timed', duration: 60, cue: 'Full arm extension overhead on every rep' },
       { id: 'hybrid-wu3', name: 'Arm Circles + Shoulder Rolls', type: 'timed', duration: 60, cue: 'Loosen the shoulder joint — full range in both directions' },
-      { id: 'hybrid-wu4', name: 'Hip Rotations', type: 'timed', duration: 60, cue: 'Stand tall, rotate from the hip — not just the knee' }
+      { id: 'hybrid-wu4', name: 'Hip Rotations', type: 'timed', duration: 60, cue: 'Hands on hips, draw big circles — loosen the hip joint fully' }
     ],
     bagRounds: {
       id: 'hybrid-bag',
@@ -1266,6 +1272,7 @@ window.quickWorkouts = [
             { time: 85, text: "Good work! Freestyle — move your head, Jab Cross!", uiIndex: 3 },
             { time: 110, text: "Stay on your toes — keep that jab working!", uiIndex: 3 },
             { time: 140, text: "Last minute — head movement!", uiIndex: 3 },
+            { time: 145, text: "Thirty seconds — finish with everything!", uiIndex: 3 },
             { time: 170, text: "Ten seconds — finish strong!", uiIndex: 3 }
           ]
         },
@@ -1281,6 +1288,7 @@ window.quickWorkouts = [
             { time: 50, text: "Jab, Cross, Lead Hook, Rear Hook — One Two Three Four! Full combo!", uiIndex: 2 },
             { time: 82, text: "Last 30 seconds coming — stay with me!", uiIndex: 2 },
             { time: 105, text: "ALL OUT — freestyle, everything, GO!", uiIndex: 3 },
+            { time: 120, text: "Keep throwing — don't stop!", uiIndex: 3 },
             { time: 135, text: "Don't slow down — this is where champions are made!", uiIndex: 3 },
             { time: 170, text: "Ten seconds — FINISH!", uiIndex: 3 }
           ]
@@ -1294,9 +1302,9 @@ window.quickWorkouts = [
       rounds: 2,
       restSeconds: 45,
       exercises: [
-        { id: 'hybrid-circ-1', name: 'Kettlebell Swings', reps: '15 reps', restSeconds: 20 },
-        { id: 'hybrid-circ-2', name: 'Burpees', reps: '10 reps', restSeconds: 20 },
-        { id: 'hybrid-circ-3', name: 'Squat Jumps', reps: '10 reps', restSeconds: 20 }
+        { id: 'hybrid-circ-1', name: 'Kettlebell Swings', reps: '15 reps' },
+        { id: 'hybrid-circ-2', name: 'Burpees', reps: '10 reps' },
+        { id: 'hybrid-circ-3', name: 'Squat Jumps', reps: '10 reps' }
       ]
     },
     finisher: {
@@ -1306,7 +1314,7 @@ window.quickWorkouts = [
       rounds: [
         {
           id: 'hybrid-finish-r1',
-          name: 'Speed Round',
+          name: 'Speed Endurance Round',
           workSeconds: 180,
           restSeconds: 60,
           combo: '1-2 fast × 10 reps<br>1-2-3-2 fast × 5 reps<br>Freestyle — maximum output for remaining time',
@@ -1321,10 +1329,10 @@ window.quickWorkouts = [
         },
         {
           id: 'hybrid-finish-r2',
-          name: 'Power Round',
+          name: 'Fight Finish Round',
           workSeconds: 180,
           restSeconds: 0,
-          combo: '2-3-2 with power × 5 reps<br>1-2-5-2 with power × 5 reps<br>End with 10 hard crosses (2) — maximum power',
+          combo: '2-3-2 with power × 5 reps<br>1-2-5-2 with power × 5 reps<br>End with 10 explosive rear crosses — maximum hip rotation, maximum power',
           timedCues: [
             { time: 0, text: "Power round! Cross, Lead Hook, Cross — Two Three Two, put your body into it!", uiIndex: 0 },
             { time: 22, text: "Jab, Cross, Uppercut, Cross — One Two Five Two! Mean it!", uiIndex: 1 },
@@ -1338,9 +1346,9 @@ window.quickWorkouts = [
       ]
     },
     cooldown: [
-      { id: 'hybrid-cd1', name: 'Slow shadowboxing 50% effort', duration: '1 min' },
-      { id: 'hybrid-cd2', name: 'Chest opener stretch', duration: '1 min' },
-      { id: 'hybrid-cd3', name: 'Wrist + shoulder stretch', duration: '1 min' }
+      { id: 'hybrid-cd1', name: 'Slow shadowboxing 50% effort', duration: '90s', workSeconds: 90 },
+      { id: 'hybrid-cd2', name: 'Chest opener stretch', duration: '60s', workSeconds: 60 },
+      { id: 'hybrid-cd3', name: 'Wrist + shoulder stretch', duration: '45s', workSeconds: 45 }
     ]
   },
   {
