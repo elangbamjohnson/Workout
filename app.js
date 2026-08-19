@@ -192,24 +192,30 @@ function renderWarmup(day, parentSessionId) {
         
         const dayIdStr = typeof sessionId === 'string' ? `'${sessionId}'` : sessionId;
         const isCheckedStr = isCompleted ? 'checked' : '';
+        const demoIconBtn = item.videoId
+            ? `<button class="btn-demo-icon" aria-label="Watch demo for ${item.name.replace(/"/g, '&quot;')}" onclick="openVideoModal('${item.videoId}', '${item.name.replace(/'/g, "\\'")}', '${item.videoFormat || 'short'}')">
+                   <svg viewBox="0 0 24 24" width="10" height="10"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+               </button>`
+            : '';
         
         listHtml += `
             <div class="nested-row ${isCheckedStr}">
                 <button class="btn-check ${isCheckedStr}" onclick="toggleRound(event, ${dayIdStr}, '${item.id}')">${icons.checkmark}</button>
-                <div style="flex: 1; margin-left: 12px;">
-                    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+                <div style="flex: 1; margin-left: 12px; min-width: 0;">
+                    <div style="display: flex; align-items: center; gap: 6px;">
                         <h3 class="warmup-name" style="margin: 0; font-size: 14px; font-weight: 600; color: var(--text-primary);">${item.name}</h3>
-                        <span style="font-weight: 600; font-size: 13px; color: var(--accent-color);">${timeOrRepsStr}</span>
+                        ${demoIconBtn}
                     </div>
-                    <div class="warmup-cue" style="color: var(--text-secondary); font-size: 13px;">${item.cue}</div>
+                    <div class="warmup-cue" style="color: var(--text-secondary); font-size: 13px; margin-top: 2px;">${item.cue}</div>
                 </div>
-                ${!isRepBased && !isCompleted && !day.warmupPlaylist ? `
-                    <div class="warmup-actions" style="margin-left: 12px;">
+                <div class="warmup-actions" style="margin-left: 12px;">
+                    <span class="warmup-duration-label" style="font-weight: 600; font-size: 13px; color: var(--accent-color);">${timeOrRepsStr}</span>
+                    ${!isRepBased && !isCompleted && !day.warmupPlaylist ? `
                         <button class="btn-play type-${day.type || 'warmup'}" onclick="startWarmupTimer(${dayIdStr}, '${item.id}', ${item.duration}, '${item.name.replace(/'/g, "\\'")}', '${item.cue.replace(/'/g, "\\'")}', ${item.switchSides})">
                             <span class="play-icon">${icons.play}</span> Start
                         </button>
-                    </div>
-                ` : ''}
+                    ` : ''}
+                </div>
             </div>
         `;
     });

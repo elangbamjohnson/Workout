@@ -156,9 +156,11 @@ const workoutData = {
           "id": "day1-wu4",
           "name": "Hip 90/90 Stretch",
           "type": "timed",
-          "duration": 180,
+          "duration": 60,
           "switchSides": true,
-          "cue": "Sit tall, press the front shin down, feel the hip open"
+          "cue": "Sit tall, press the front shin down, feel the hip open",
+          "videoId": "fDC2KC1XqY8",
+          "videoFormat": "short"
         },
         {
           "id": "day1-wu5",
@@ -166,7 +168,9 @@ const workoutData = {
           "type": "reps",
           "reps": "2 \u00d7 10",
           "switchSides": false,
-          "cue": "Squeeze glutes hard at the top, hold 1 second"
+          "cue": "Squeeze glutes hard at the top, hold 1 second",
+          "videoId": "GI5BtRDTuyc",
+          "videoFormat": "short"
         },
         {
           "id": "day1-wu6",
@@ -190,7 +194,9 @@ const workoutData = {
           "type": "reps",
           "reps": "5 reps",
           "switchSides": false,
-          "cue": "Walk hands out to full plank, walk feet back in \u2014 slow"
+          "cue": "Walk hands out to full plank, walk feet back in \u2014 slow",
+          "videoId": "7jeW4v_oaes",
+          "videoFormat": "short"
         }
       ]
     },
