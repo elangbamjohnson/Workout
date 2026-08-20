@@ -238,7 +238,7 @@ window.startPowerCircuitRound = function(quickId, roundId, workSec, restSec, tit
     Timer.startCountdown(5, title, () => {
         Timer.startRound(workSec, restSec, title, "Focus on explosive speed", 'strength', () => {
             Store.logItem(quickId, roundId, { completed: true });
-            if (viewingDayId.startsWith('quick-')) {
+            if (String(viewingDayId).startsWith('quick-')) {
                 renderQuickSession(viewingDayId);
             } else {
                 reRenderViewingDay();
@@ -1141,6 +1141,16 @@ window.renderDay = function(dayIdRaw) {
             if (expandedCardIds.has('warmup-card')) totalExpanded++;
         }
         
+        if (day.powerCircuit) {
+            totalExpandable++;
+            if (expandedCardIds.has(day.powerCircuit.id)) totalExpanded++;
+        }
+        
+        if (day.cooldown && day.cooldown.length > 0) {
+            totalExpandable++;
+            if (expandedCardIds.has('cooldown-card')) totalExpanded++;
+        }
+
         if (day.exercises) { totalExpandable += day.exercises.length; totalExpanded += day.exercises.filter(ex => expandedCardIds.has(ex.id)).length; }
         if (day.sections) { totalExpandable += day.sections.length; totalExpanded += day.sections.filter(sec => expandedCardIds.has(sec.id)).length; }
         
@@ -1332,6 +1342,78 @@ window.renderDay = function(dayIdRaw) {
 
             html += renderItemCard(normalizedItem, day.type);
         });
+    }
+    
+    if (day.powerCircuit) {
+        const pc = day.powerCircuit;
+        const isExpanded = expandedCardIds.has(pc.id);
+        
+        const roundsHtml = pc.rounds.map((r, i) => {
+            const log = Store.getItemLog(day.id, r.id) || {};
+            const isCompleted = !!log.completed;
+            const isChecked = isCompleted ? 'checked' : '';
+            
+            return `
+            <div class="nested-row ${isChecked}">
+                <button class="btn-check ${isChecked}" onclick="Store.logItem(${day.id}, '${r.id}', { completed: !${isCompleted} }); renderDay(${day.id})">${icons.checkmark}</button>
+                <div style="flex: 1;">${r.combo}</div>
+                ${!isCompleted ? `
+                <button class="btn-play type-strength" onclick="startPowerCircuitRound(${day.id}, '${r.id}', ${r.workSeconds}, ${r.restSeconds}, '${r.name.replace(/'/g, "\\'")}', '${r.restCue ? r.restCue.replace(/'/g, "\\'") : ''}')"><span class="play-icon">${icons.play}</span> Start Round</button>
+                ` : ''}
+            </div>`;
+        }).join('');
+        
+        let normalizedItem = {
+            id: pc.id,
+            badge: pc.badge || `R${day.exercises ? day.exercises.length + 1 : 1}`,
+            title: pc.name,
+            stats: [
+                { icon: icons.clock, value: `~${Math.ceil((pc.rounds.length * 90 + 60) / 60)} min` },
+                'divider',
+                { icon: icons.repeat, value: `${pc.rounds.length} rounds` }
+            ],
+            callout: { icon: icons.flame, text: pc.benefits },
+            sections: [
+                { title: "ROUNDS", content: `<div class="nested-list">${roundsHtml}</div>` }
+            ]
+        };
+        html += renderItemCard(normalizedItem, 'strength');
+    }
+    
+    if (day.cooldown) {
+        let drillsHtml = day.cooldown.map((n, i) => {
+            const log = Store.getItemLog(day.id, 'cooldown-card-' + i) || {};
+            const isChecked = log.completed ? 'checked' : '';
+            return `
+            <div class="nested-row interactive ${isChecked}" role="button" tabindex="0" onclick="Store.logItem(${day.id}, 'cooldown-card-${i}', { completed: !${!!log.completed} }); renderDay(${day.id})">
+                <button class="btn-check ${isChecked}">${icons.checkmark}</button>
+                <div style="flex: 1;">
+                    <div style="font-weight: 500;">${n.name} — ${n.duration}</div>
+                    ${n.desc ? `<div style="font-size: 13px; opacity: 0.8; margin-top: 2px;">${n.desc}</div>` : ''}
+                </div>
+            </div>`;
+        }).join('');
+        
+        let cdMinsStr = '~3 min';
+        let totalCdSec = 0;
+        day.cooldown.forEach(c => {
+            if (c.workSeconds) totalCdSec += c.workSeconds;
+            else if (c.duration && String(c.duration).includes('s')) totalCdSec += parseInt(c.duration) || 0;
+            else if (c.duration && String(c.duration).includes('min')) totalCdSec += (parseFloat(c.duration) || 0) * 60;
+            else totalCdSec += 60;
+        });
+        const m = Math.floor(totalCdSec / 60);
+        const s = totalCdSec % 60;
+        cdMinsStr = s > 0 ? `~${m} min ${s}s` : `~${m} min`;
+
+        let normalizedItem = {
+            id: 'cooldown-card',
+            badge: 'CD',
+            title: 'Cool Down',
+            stats: [{ icon: icons.clock, value: cdMinsStr }],
+            sections: [ { title: "STRETCHES & RECOVERY", content: `<div class="nested-list">${drillsHtml}</div>` } ]
+        };
+        html += renderItemCard(normalizedItem, 'rest');
     }
     
     html += `</div>`; // .item-list
@@ -1989,6 +2071,8 @@ window.renderQuickSession = function(quickId) {
                 badge: ex.badge || `R${globalBlockIndex++}`,
                 title: ex.name,
                 subtitle: ex.subtitle,
+                videoId: ex.videoId,
+                videoFormat: ex.videoFormat,
                 stats: stats,
                 callout: { icon: icons.strength, text: ex.calloutText || "Focus on explosion and intent over weight." },
                 sections: [
