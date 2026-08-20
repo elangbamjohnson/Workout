@@ -1553,40 +1553,56 @@ window.toggleQuickCircuitItem = function(quickId, itemId) {
     
     // Check if circuit is complete
     const session = window.quickWorkouts.find(q => q.id === quickId);
-    if (session && session.circuit) {
+    let shouldStartRest = false;
+    let restDuration = 0;
+    let restTitle = "";
+    let restCue = "";
+    let onRestComplete = null;
+
+    if (session && session.circuit && !isCompleted) {
         const allDone = session.circuit.exercises.every(ex => {
             const l = Store.getItemLog(quickId, ex.id);
             return l && l.completed;
         });
         
-        if (!isCompleted) {
-            if (allDone) {
-                // Track completions to know if it's the final round
-                const completionsLog = Store.getItemLog(quickId, 'circuit_completions') || { count: 0 };
-                completionsLog.count += 1;
-                Store.logItem(quickId, 'circuit_completions', completionsLog);
-                
-                // Only rest if there are more rounds to do
-                if (completionsLog.count < session.circuit.rounds) {
-                    const restCueText = "One round down. Shake out the legs before the next round.";
-                    Timer.startRest(session.circuit.restSeconds, "Circuit Rest", restCueText, "strength", () => {
-                        // Uncheck exercises for next round
-                        session.circuit.exercises.forEach(e => {
-                            Store.logItem(quickId, e.id, { completed: false });
-                        });
-                        if (viewingDayId === quickId) renderQuickSession(quickId);
+        if (allDone) {
+            // Track completions to know if it's the final round
+            const completionsLog = Store.getItemLog(quickId, 'circuit_completions') || { count: 0 };
+            completionsLog.count += 1;
+            Store.logItem(quickId, 'circuit_completions', completionsLog);
+            
+            // Only rest if there are more rounds to do
+            if (completionsLog.count < session.circuit.rounds) {
+                shouldStartRest = true;
+                restDuration = session.circuit.restSeconds;
+                restTitle = "Circuit Rest";
+                restCue = "One round down. Shake out the legs before the next round.";
+                onRestComplete = () => {
+                    // Uncheck exercises for next round
+                    session.circuit.exercises.forEach(e => {
+                        Store.logItem(quickId, e.id, { completed: false });
                     });
-                }
-            } else {
-                const ex = session.circuit.exercises.find(e => e.id === itemId);
-                if (ex && ex.restSeconds) {
-                    Timer.startRest(ex.restSeconds, ex.name + " Rest", "", "strength");
-                }
+                    if (viewingDayId === quickId) renderQuickSession(quickId);
+                };
+            }
+        } else {
+            const ex = session.circuit.exercises.find(e => e.id === itemId);
+            if (ex && ex.restSeconds) {
+                shouldStartRest = true;
+                restDuration = ex.restSeconds;
+                restTitle = ex.name + " Rest";
+                restCue = "";
             }
         }
     }
     
+    // Re-render underlying session UI first (updating checkboxes and current round header)
     if (viewingDayId === quickId) renderQuickSession(quickId);
+    
+    // Trigger rest timer after UI re-render
+    if (shouldStartRest) {
+        Timer.startRest(restDuration, restTitle, restCue, "strength", onRestComplete);
+    }
 };
 
 window.finishQuickHybrid = function(quickId, title) {
