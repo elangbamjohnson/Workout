@@ -1071,6 +1071,7 @@ window.renderDay = function(dayIdRaw) {
             </div>
         `;
     } else if (day.type === 'technical') {
+        let roundCounter = 1;
         day.sections.forEach((sec, idx) => {
             let drillsHtml = sec.rounds ? sec.rounds.map((r, i) => {
                 const log = Store.getItemLog(day.id, r.id) || {};
@@ -1093,9 +1094,21 @@ window.renderDay = function(dayIdRaw) {
                 </div>`;
             }).join('') : '';
 
+            let badge;
+            const secNameLower = (sec.name || '').toLowerCase();
+            if (sec.badge) {
+                badge = sec.badge;
+            } else if (secNameLower.includes('warm-up') || secNameLower.includes('warmup')) {
+                badge = 'WU';
+            } else if (secNameLower.includes('cool down') || secNameLower.includes('cooldown') || secNameLower.includes('mobility')) {
+                badge = 'CD';
+            } else {
+                badge = `R${roundCounter++}`;
+            }
+
             let normalizedItem = {
                 id: sec.id,
-                badge: `R${idx + 1}`,
+                badge: badge,
                 title: sec.name,
                 stats: [
                     { value: sec.duration },
@@ -1796,7 +1809,7 @@ window.renderQuickSession = function(quickId) {
         return outHtml;
     };
 
-    const renderExercisesBlock = (blockData, quickId, sessionType) => {
+    const renderExercisesBlock = (blockData, quickId, sessionType, blockIdx) => {
         let exercisesHtml = '<div class="nested-list">';
         blockData.exercises.forEach((ex, idx) => {
             let musclesHtml = ex.muscles ? ex.muscles.split(',').map(m => `<div class="muscle-tag">${m.trim()}</div>`).join('') : '';
@@ -1901,7 +1914,7 @@ window.renderQuickSession = function(quickId) {
         
         let normalizedItem = {
             id: blockData.id,
-            badge: blockData.badge || blockData.title.substring(0, 2).toUpperCase(),
+            badge: blockData.badge || (blockIdx ? `R${blockIdx}` : 'R1'),
             title: blockData.title,
             stats: [], // Empty stats array to maintain schema but hide rendering
             sections: [
@@ -1955,7 +1968,7 @@ window.renderQuickSession = function(quickId) {
         
         let normalizedItem = {
             id: sectionObj.id,
-            badge: sectionObj.name.substring(0,2).toUpperCase(),
+            badge: sectionObj.badge || (isFinisher ? 'R2' : 'R1'),
             title: sectionObj.name,
             stats: [
                 { icon: icons.clock, value: `~${mins} min` },
@@ -2081,11 +2094,12 @@ window.renderQuickSession = function(quickId) {
     
     // 4.8 Custom Blocks
     if (session.blocks) {
+        let blockCounter = 1;
         session.blocks.forEach(block => {
             if (block.type === 'warmup') {
                 html += renderWarmup(block.data, quickId);
             } else if (block.type === 'exercises') {
-                html += renderExercisesBlock(block.data, quickId, session.type);
+                html += renderExercisesBlock(block.data, quickId, session.type, blockCounter++);
             } else if (block.type === 'bagRounds') {
                 html += renderBagSection(block.data, false);
             } else if (block.type === 'circuit') {

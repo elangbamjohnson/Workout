@@ -160,7 +160,7 @@ test.describe('Day 4 (Upper Body Power) 8-Exercise Reordered Session Audit & Ren
 
         for (let i = 0; i < 8; i++) {
             const card = itemCards.nth(i + 1);
-            await expect(card.locator('.num-badge')).toHaveText(String(i + 1));
+            await expect(card.locator('.num-badge')).toHaveText(`R${i + 1}`);
             await expect(card.locator('.title-card')).toHaveText(expectedTitles[i]);
             await expect(card.locator('.btn-demo-icon')).toBeVisible();
         }
