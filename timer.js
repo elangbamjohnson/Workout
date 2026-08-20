@@ -386,7 +386,7 @@ window.Timer = {
             const elapsed = this.totalDuration - diff;
             const hasTimedCues = this.roundData && this.roundData.hasTimedCues;
             
-            if (hasTimedCues) {
+            if (hasTimedCues && !isResting) {
                 const currentCue = this.roundData.timedCues.find(c => c.time === elapsed);
                 if (currentCue) {
                     window.speakAlert(currentCue.text);

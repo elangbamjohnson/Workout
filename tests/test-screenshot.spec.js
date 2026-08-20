@@ -36,3 +36,35 @@ test('Screenshot HIIT Boxing round 1 timer modal', async ({ page }) => {
   expect(hasComboContainer).toBeTruthy();
   expect(hasCueText).toBeTruthy();
 });
+
+test('Screenshot Hybrid Boxing Round 1 Rest Modal', async ({ page }) => {
+  await page.clock.install();
+
+  await page.goto('/');
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+
+  await page.locator('.qs-card').filter({ hasText: 'Hybrid Boxing' }).click();
+  await page.locator('#btn-confirm-swap').click();
+
+  const bagCard = page.locator('.item-card').filter({ hasText: 'Bag Work' });
+  await bagCard.locator('.item-header').click();
+
+  const round1 = bagCard.locator('.nested-row').filter({ hasText: 'Basic Power Combinations' });
+  await round1.locator('.btn-play').click();
+
+  const timerModal = page.locator('#timer-modal');
+  await expect(timerModal).toBeVisible();
+
+  // Fast forward through 5s countdown + 180s work + 5s into rest
+  for (let i = 0; i < 190; i++) {
+      await page.clock.fastForward('00:01');
+      await page.waitForTimeout(5);
+  }
+
+  // Wait for the modal to settle
+  await page.waitForTimeout(500);
+
+  // Take a screenshot of the entire timer modal and save it to the artifacts directory
+  await timerModal.screenshot({ path: '/Users/johnsonelangbam/.gemini/antigravity-ide/brain/c036ac54-95ed-4221-9d52-924c7baed996/hybrid_rest_modal.png' });
+});
