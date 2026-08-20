@@ -718,11 +718,13 @@ body {
 .type-bag { --accent-color: var(--bag-accent); }
 .type-technical { --accent-color: var(--technical-accent); }
 .type-rest { --accent-color: var(--rest-accent); }
+.type-warmup { --accent-color: var(--strength-accent); }
 
 .type-strength .num-badge { background: var(--strength-accent); color: #000; }
 .type-bag .num-badge { background: var(--bag-accent); color: #000; }
 .type-technical .num-badge { background: var(--technical-accent); color: #000; }
 .type-rest .num-badge { background: var(--rest-accent); color: #000; }
+.type-warmup .num-badge { background: var(--strength-accent); color: #000; }
 
 .item-chevron {
     color: var(--text-muted);
@@ -1874,6 +1876,14 @@ body {
     display: block;
     margin-bottom: 6px;
 }
+.qs-boxer-icon {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    display: inline-block;
+    vertical-align: middle;
+}
 .qs-card-title {
     font-size: 13px;
     font-weight: 700;
@@ -1974,6 +1984,10 @@ body {
     .qs-card-emoji {
         font-size: 40px;
         margin-bottom: 8px;
+    }
+    .qs-boxer-icon {
+        width: 40px;
+        height: 40px;
     }
     .qs-card-title {
         font-size: 16px;

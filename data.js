@@ -1649,7 +1649,7 @@ window.quickWorkouts = [
     id: 'quick-full-body-explosive',
     title: 'Full-Body Workout',
     type: 'strength',
-    duration: '~55 min',
+    duration: '~45 min',
     focus: 'Power, Strength, Core & Conditioning',
     equipment: 'Dumbbells (2.5–20 kg), an 18 kg kettlebell, a 20 kg Olympic barbell with plates, a landmine attachment, a pull-up/dip station, Olympic rings, and a 7 kg medicine ball',
     blocks: [
@@ -1661,7 +1661,7 @@ window.quickWorkouts = [
           isBlockStart: true,
           warmup: [
             // Round 1
-            { id: 'fb-wu-1-1', name: 'Jumping jacks', type: 'timed', duration: 30, cue: 'Welcome to the Full-Body Workout. We are training power, strength, explosiveness, conditioning, core, and mobility in one fifty-five minute session. Start with jumping jacks.' },
+            { id: 'fb-wu-1-1', name: 'Jumping jacks', type: 'timed', duration: 30, cue: 'Welcome to the Full-Body Workout. We are training power, strength, explosiveness, conditioning, core, and mobility in one forty-five minute session. Start with jumping jacks.' },
             { id: 'fb-wu-1-2', name: 'High knees', type: 'timed', duration: 30, cue: 'High knees, get them up.' },
             { id: 'fb-wu-1-3', name: 'Bodyweight squats', type: 'reps', reps: '10 reps', cue: 'Bodyweight squats.' },
             { id: 'fb-wu-1-4', name: 'Reverse lunges with rotation', type: 'reps', reps: '6 reps each side', cue: 'Reverse lunges with rotation.' },
@@ -1836,43 +1836,21 @@ window.quickWorkouts = [
               setsReps: '4 x 30s',
               weight: '18kg KB',
               restSeconds: 0,
-              cue: 'Good set. Move to DB Thrusters.',
-              notes: 'Circuit: Perform back-to-back with the next 3 exercises. Intensity targets per round: R1 (70%), R2 (75%), R3 (80%), R4 (85-90%). Powerful hip drive, keep the lower back out of it.',
+              cue: 'Good set. Move to Burpees.',
+              notes: 'Circuit: Perform back-to-back with the next exercise. Intensity targets per round: R1 (70%), R2 (75%), R3 (80%), R4 (85-90%). Powerful hip drive, keep the lower back out of it.',
               benefits: 'Builds explosive hip power and posterior chain conditioning.',
               muscles: 'Glutes, hamstrings, core.'
             },
             {
               id: 'fb-blk5-2',
-              name: 'Dumbbell Thrusters',
-              setsReps: '4 x 30s',
-              weight: 'Light/Mod DBs',
-              restSeconds: 0,
-              cue: 'Good set. Move to Burpees.',
-              notes: 'Circuit: Intensity targets per round: R1 (70%), R2 (75%), R3 (80%), R4 (85-90%). Squat deep, drive through the legs, press overhead.',
-              benefits: 'Total body coordination and extreme cardiovascular demand.',
-              muscles: 'Quads, shoulders, triceps, core.'
-            },
-            {
-              id: 'fb-blk5-3',
               name: 'Burpees',
               setsReps: '4 x 30s',
               weight: 'Bodyweight',
-              restSeconds: 0,
-              cue: 'Good set. Move to Reverse Lunges.',
-              notes: 'Circuit: Intensity targets per round: R1 (70%), R2 (75%), R3 (80%), R4 (85-90%). Keep a controlled but continuous pace.',
-              benefits: 'Unmatched bodyweight conditioning and functional fitness.',
-              muscles: 'Full body, cardiovascular system.'
-            },
-            {
-              id: 'fb-blk5-4',
-              name: 'Alternating Reverse Lunges',
-              setsReps: '4 x 30s',
-              weight: 'Bodyweight/Light DBs',
               restSeconds: 45,
               cue: 'Good set. Breathe. Rest 45 seconds before the next round.',
-              notes: 'Circuit: Intensity targets per round: R1 (70%), R2 (75%), R3 (80%), R4 (85-90%). Keep the chest up. Rest 45 seconds after this exercise.',
-              benefits: 'Active recovery for the upper body while building leg endurance.',
-              muscles: 'Quads, glutes, hamstrings.'
+              notes: 'Circuit: Intensity targets per round: R1 (70%), R2 (75%), R3 (80%), R4 (85-90%). Keep a controlled but continuous pace. Rest 45 seconds after this exercise.',
+              benefits: 'Unmatched bodyweight conditioning and functional fitness.',
+              muscles: 'Full body, cardiovascular system.'
             }
           ]
         }
@@ -1886,28 +1864,17 @@ window.quickWorkouts = [
           exercises: [
             {
               id: 'fb-blk6-1',
-              name: 'Landmine Rotations',
-              setsReps: '3 x 8/side',
-              weight: 'Bar + Plates',
-              restSeconds: 0,
-              cue: 'Good set. Move to hanging knee raises.',
-              notes: 'Core Circuit: Alternate sequentially through all 4 exercises for 3 total rounds. Keep hips stable.',
-              benefits: 'Trains rotational power and anti-rotation strength, crucial for generating and controlling force.',
-              muscles: 'Obliques, core, shoulders.'
-            },
-            {
-              id: 'fb-blk6-2',
               name: 'Hanging Knee Raises',
               setsReps: '3 x 8-12',
               weight: 'Bodyweight',
               restSeconds: 0,
               cue: 'Good set. Move to ring plank.',
-              notes: 'Core Circuit: Controlled reps, do not swing.',
+              notes: 'Core Circuit: Alternate sequentially through all 3 exercises for 3 total rounds. Controlled reps, do not swing.',
               benefits: 'Develops lower core strength and grip endurance.',
               muscles: 'Lower abs, hip flexors, grip.'
             },
             {
-              id: 'fb-blk6-3',
+              id: 'fb-blk6-2',
               name: 'Ring Plank',
               setsReps: '3 x 20-30s',
               weight: 'Bodyweight',
@@ -1918,7 +1885,7 @@ window.quickWorkouts = [
               muscles: 'Core, chest, shoulders.'
             },
             {
-              id: 'fb-blk6-4',
+              id: 'fb-blk6-3',
               name: 'Russian Twists',
               setsReps: '3 x 8/side',
               weight: 'Med Ball',
