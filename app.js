@@ -1095,7 +1095,7 @@ window.renderDay = function(dayIdRaw) {
 
             let normalizedItem = {
                 id: sec.id,
-                badge: idx + 1,
+                badge: `R${idx + 1}`,
                 title: sec.name,
                 stats: [
                     { value: sec.duration },
@@ -1199,7 +1199,7 @@ window.renderDay = function(dayIdRaw) {
 
             let normalizedItem = {
                 id: ex.id,
-                badge: idx + 1,
+                badge: `R${idx + 1}`,
                 title: ex.name,
                 videoId: ex.videoId,
                 videoFormat: ex.videoFormat,
@@ -1769,7 +1769,7 @@ window.renderQuickSession = function(quickId) {
 
             let normalizedItem = {
                 id: ex.id,
-                badge: ex.badge || (idx + 1),
+                badge: ex.badge || `R${idx + 1}`,
                 title: ex.name,
                 subtitle: ex.subtitle,
                 stats: stats,
