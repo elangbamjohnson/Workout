@@ -280,7 +280,7 @@ test.describe('Rest Timer Text & Voice Prompts Audit & UI Bleed Fix Verification
         }
 
         // Expand first exercise (Plyometric Push-ups)
-        const plyoCard = page.locator('.item-card[data-id="upper-ex1"]');
+        const plyoCard = page.locator('.item-card[data-id="day4-ex1"]');
         await plyoCard.locator('.item-header').click();
 
         // Click first set check button
@@ -292,7 +292,7 @@ test.describe('Rest Timer Text & Voice Prompts Audit & UI Bleed Fix Verification
         // Should display restCue instead of work cue
         const restCue = timerModal.locator('.timer-cue');
         await expect(restCue).toBeVisible();
-        await expect(restCue).toHaveText('Shake out the chest and triceps. Stay loose.');
+        await expect(restCue).toHaveText('Shake out your arms. Stay light on your feet.');
         
         await timerModal.locator('.btn-cancel').click();
     });
