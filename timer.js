@@ -199,7 +199,7 @@ window.Timer = {
         if (window.WakeLock) window.WakeLock.acquire();
     },
 
-    startRound(workSec, restSec, title, cue, workoutType = 'bag', onComplete, timedCues = null, suppressAudio = false) {
+    startRound(workSec, restSec, title, cue, workoutType = 'bag', onComplete, timedCues = null, suppressAudio = false, restCue = '') {
         this.initAudio();
         this.mode = 'round';
         this.phase = 'work';
@@ -211,7 +211,7 @@ window.Timer = {
         }
         
         const hasTimedCues = timedCues && timedCues.length > 0;
-        this.roundData = { workSec, restSec, title, cue, combos, onComplete, timedCues, hasTimedCues, suppressEndAudio: suppressAudio };
+        this.roundData = { workSec, restSec, title, cue, combos, onComplete, timedCues, hasTimedCues, suppressEndAudio: suppressAudio, restCue };
         this.totalDuration = workSec;
         this.endTime = Date.now() + workSec * 1000;
         this.hasPlayed10Sec = false;
@@ -310,7 +310,7 @@ window.Timer = {
         }
     },
 
-    startCountdown(totalCount, label, onDone, timedCues = null) {
+    startCountdown(totalCount, label, onDone, timedCues = null, customGoText = null) {
         this.initAudio();
         this.mode = 'countdown';
         this.createDOM();
@@ -358,7 +358,7 @@ window.Timer = {
                 this.intervalId = setTimeout(nextTick, 1000);
             } else {
                 renderCount('GO!');
-                window.speakAlert('Go');
+                window.speakAlert(customGoText || 'Go');
                 if (navigator.vibrate) navigator.vibrate([200]);
                 this.countdownTimeoutId = setTimeout(() => {
                     if (this.mode === 'countdown') {
@@ -672,17 +672,24 @@ window.Timer = {
         const headerTitle = isRestMode ? 'REST' : (isWork ? 'WORK' : 'REST');
         const mainTitle = this.roundData ? this.roundData.title : 'Rest Period';
         const cueText = this.roundData && this.roundData.cue ? this.roundData.cue : '';
+        const restCueText = this.roundData && this.roundData.restCue ? this.roundData.restCue : '';
         
         let cueHtml = '';
-        if (this.roundData && this.roundData.combos && this.roundData.combos.length > 0) {
-            cueHtml = `<div class="timer-cue-container" style="display:flex; flex-direction:column; gap:4px; margin-top:24px; font-size:18px;">`;
-            cueHtml += this.roundData.combos.map((combo, idx) => {
-                const isActive = (this.phase === 'work' && idx === this.activeComboIndex) ? 'color: var(--bag-accent, #ff4757); font-weight: bold; transform: scale(1.05); opacity: 1;' : 'color: var(--text-muted); opacity: 0.6;';
-                return `<div style="transition: all 0.3s ease; transform-origin: center; ${isActive}">${combo}</div>`;
-            }).join('');
-            cueHtml += `</div>`;
-        } else if (cueText) {
-            cueHtml = `<div class="timer-cue" style="margin-top: 24px; font-size: 18px;">${cueText}</div>`;
+        if (this.mode === 'round' && this.phase === 'rest') {
+            if (restCueText) {
+                cueHtml = `<div class="timer-cue" style="margin-top: 24px; font-size: 18px;">${restCueText}</div>`;
+            }
+        } else {
+            if (this.roundData && this.roundData.combos && this.roundData.combos.length > 0) {
+                cueHtml = `<div class="timer-cue-container" style="display:flex; flex-direction:column; gap:4px; margin-top:24px; font-size:18px;">`;
+                cueHtml += this.roundData.combos.map((combo, idx) => {
+                    const isActive = (this.phase === 'work' && idx === this.activeComboIndex) ? 'color: var(--bag-accent, #ff4757); font-weight: bold; transform: scale(1.05); opacity: 1;' : 'color: var(--text-muted); opacity: 0.6;';
+                    return `<div style="transition: all 0.3s ease; transform-origin: center; ${isActive}">${combo}</div>`;
+                }).join('');
+                cueHtml += `</div>`;
+            } else if (cueText) {
+                cueHtml = `<div class="timer-cue" style="margin-top: 24px; font-size: 18px;">${cueText}</div>`;
+            }
         }
         
         let btnText = "Finish Workout";
