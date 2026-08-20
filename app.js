@@ -1568,8 +1568,14 @@ window.toggleQuickCircuitItem = function(quickId, itemId) {
                 
                 // Only rest if there are more rounds to do
                 if (completionsLog.count < session.circuit.rounds) {
-                    // Auto start rest immediately without countdown
-                    Timer.startRest(session.circuit.restSeconds, "Circuit Rest", "", "strength");
+                    const restCueText = "One round down. Shake out the legs before the next round.";
+                    Timer.startRest(session.circuit.restSeconds, "Circuit Rest", restCueText, "strength", () => {
+                        // Uncheck exercises for next round
+                        session.circuit.exercises.forEach(e => {
+                            Store.logItem(quickId, e.id, { completed: false });
+                        });
+                        if (viewingDayId === quickId) renderQuickSession(quickId);
+                    });
                 }
             } else {
                 const ex = session.circuit.exercises.find(e => e.id === itemId);
@@ -2040,10 +2046,13 @@ window.renderQuickSession = function(quickId) {
         const totalSec = c.rounds * 180 + (c.rounds > 1 ? (c.rounds - 1) * (c.restSeconds || 0) : 0);
         const mins = Math.ceil(totalSec / 60);
         
+        const completionsLog = Store.getItemLog(quickId, 'circuit_completions') || { count: 0 };
+        const currentRoundStr = (completionsLog.count > 0 && completionsLog.count < c.rounds) ? ` (Round ${completionsLog.count + 1} of ${c.rounds})` : '';
+
         let normalizedItem = {
             id: c.id,
             badge: c.badge || `R${globalBlockIndex++}`,
-            title: c.name,
+            title: c.name + currentRoundStr,
             stats: [
                 { icon: icons.clock, value: `~${mins} min` },
                 'divider',
