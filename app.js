@@ -113,26 +113,37 @@ window.toggleRound = function(e, dayId, roundId) {
     reRenderViewingDay();
 };
 
-window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue) {
+window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue, restCue = '') {
     const day = getDayData(dayId);
     Timer.startRound(workSec, restSec, title, cue, day ? day.type : 'bag', () => {
         Store.logItem(dayId, roundId, { completed: true });
         reRenderViewingDay();
-    });
+    }, null, false, restCue);
 };
 
 
 window.startWarmupTimer = function(dayId, itemId, duration, title, cue, switchSides) {
     const day = getDayData(dayId);
+    
+    let durationText = duration + " seconds";
+    if (duration === 180) durationText = "three minutes";
+    else if (duration === 120) durationText = "two minutes";
+    else if (duration === 90) durationText = "ninety seconds";
+    else if (duration === 60) durationText = "one minute";
+    else if (duration === 45) durationText = "forty five seconds";
+    else if (duration === 30) durationText = "thirty seconds";
+    
+    const startPrompt = `${title} started. Go! This will last ${durationText}. ${cue}`;
+
     Timer.startCountdown(5, title, () => {
         Timer.startWarmup(duration, title, cue, switchSides, day ? day.type : 'strength', () => {
             Store.logItem(dayId, itemId, { completed: true });
             reRenderViewingDay();
         });
-    });
+    }, null, startPrompt);
 };
 
-window.startPowerCircuitRound = function(quickId, roundId, workSec, restSec, title) {
+window.startPowerCircuitRound = function(quickId, roundId, workSec, restSec, title, restCue) {
     Timer.startCountdown(5, title, () => {
         Timer.startRound(workSec, restSec, title, "Focus on explosive speed", 'strength', () => {
             Store.logItem(quickId, roundId, { completed: true });
@@ -141,7 +152,7 @@ window.startPowerCircuitRound = function(quickId, roundId, workSec, restSec, tit
             } else {
                 reRenderViewingDay();
             }
-        });
+        }, null, false, restCue);
     });
 };
 
@@ -1160,7 +1171,7 @@ window.renderDay = function(dayIdRaw) {
                 sections: [
                     { title: "COMBINATIONS", content: `<div class="nested-list">${roundsHtml}</div>` }
                 ],
-                actionHtml: `<button class="btn-large" style="margin-top: var(--sp-4);" onclick="startRoundTimer(${day.id}, '${ex.id}', ${ex.workSeconds}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', '${(ex.rounds ? ex.rounds.map(r => r.combo).join('<br>') : '').replace(/'/g, "\\'")}')">Start Round Timer</button>`
+                actionHtml: `<button class="btn-large" style="margin-top: var(--sp-4);" onclick="startRoundTimer(${day.id}, '${ex.id}', ${ex.workSeconds}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', '${(ex.rounds ? ex.rounds.map(r => r.combo).join('<br>') : '').replace(/'/g, "\\'")}', '${(ex.restCue || '').replace(/'/g, "\\'")}')">Start Round Timer</button>`
             };
             html += renderItemCard(normalizedItem, day.type);
         });
@@ -1512,8 +1523,9 @@ window.addEventListener('load', () => {
 // Phase 2 — Quick Sessions Renderer
 // =====================================================================
 
-window.startQuickRound = function(quickId, exId, workSec, restSec, roundNum, title, comboArg, isLast, timedCuesArg, skipCountdown) {
+window.startQuickRound = function(quickId, exId, workSec, restSec, roundNum, title, comboArg, isLast, timedCuesArg, skipCountdown, restCueArg) {
     const cue = decodeURIComponent(comboArg);
+    const restCue = restCueArg ? decodeURIComponent(restCueArg) : '';
     const timedCues = timedCuesArg ? JSON.parse(decodeURIComponent(timedCuesArg)) : null;
     const startRound = () => {
         Timer.startRound(workSec, restSec, title, cue, 'bag', () => {
@@ -1524,7 +1536,7 @@ window.startQuickRound = function(quickId, exId, workSec, restSec, roundNum, tit
                 }, 500);
             }
             if (viewingDayId === quickId) renderQuickSession(quickId);
-        }, timedCues);
+        }, timedCues, false, restCue);
     };
     if (skipCountdown) {
         startRound();
@@ -1779,7 +1791,7 @@ window.renderQuickSession = function(quickId) {
                         <input type="text" class="input-val input-rep" value="${repsVal}" />
                         <span class="input-label">reps</span>
                     </div>
-                    <button class="btn-check ${isChecked}" onclick="logSet('${quickId}', '${ex.id}', ${s}, ${ex.restSeconds || 0}, '${ex.name.replace(/'/g, "\\'")}', ${ex.cue ? "'" + ex.cue.replace(/'/g, "\\'") + "'" : "'Focus on form.'"}, this)">${icons.checkmark}</button>
+                    <button class="btn-check ${isChecked}" onclick="logSet('${quickId}', '${ex.id}', ${s}, ${ex.restSeconds || 0}, '${ex.name.replace(/'/g, "\\'")}', ${ex.restCue ? "'" + ex.restCue.replace(/'/g, "\\'") + "'" : "'Focus on recovery.'"}, this)">${icons.checkmark}</button>
                 </div>
                 `;
             }
@@ -1841,7 +1853,7 @@ window.renderQuickSession = function(quickId) {
                         <input type="text" class="input-val input-rep" value="${repsVal}" />
                         <span class="input-label">reps</span>
                     </div>
-                    <button class="btn-check ${isChecked}" onclick="logSet('${quickId}', '${ex.id}', ${s}, ${ex.restSeconds || 0}, '${ex.name.replace(/'/g, "\\'")}', ${ex.cue ? "'" + ex.cue.replace(/'/g, "\\'") + "'" : "'Focus on form.'"}, this)">${icons.checkmark}</button>
+                    <button class="btn-check ${isChecked}" onclick="logSet('${quickId}', '${ex.id}', ${s}, ${ex.restSeconds || 0}, '${ex.name.replace(/'/g, "\\'")}', ${ex.restCue ? "'" + ex.restCue.replace(/'/g, "\\'") + "'" : "'Focus on recovery.'"}, this)">${icons.checkmark}</button>
                 </div>
                 `;
             }
@@ -1953,6 +1965,7 @@ window.renderQuickSession = function(quickId) {
             const isLast = isFinisher && i === sectionObj.rounds.length - 1;
             const timedCuesArg = r.timedCues ? encodeURIComponent(JSON.stringify(r.timedCues)).replace(/'/g, "%27") : '';
             const comboArg = encodeURIComponent(r.combo).replace(/'/g, "%27");
+            const restCueArg = r.restCue ? encodeURIComponent(r.restCue).replace(/'/g, "%27") : '';
             
             return `
             <div class="nested-row ${isChecked}">
@@ -1962,7 +1975,7 @@ window.renderQuickSession = function(quickId) {
                     <div>${r.description || r.combo}</div>
                 </div>
                 ${!isCompleted && !session.isContinuous ? `
-                <button class="btn-play type-bag" onclick="startQuickRound('${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, ${i+1}, '${r.name.replace(/'/g, "\\'")}', '${comboArg}', ${isLast}, '${timedCuesArg}', ${!!r.skipCountdown})"><span class="play-icon">${icons.play}</span> Start</button>
+                <button class="btn-play type-bag" onclick="startQuickRound('${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, ${i+1}, '${r.name.replace(/'/g, "\\'")}', '${comboArg}', ${isLast}, '${timedCuesArg}', ${!!r.skipCountdown}, '${restCueArg}')"><span class="play-icon">${icons.play}</span> Start</button>
                 ` : ''}
             </div>`;
         }).join('');
@@ -2074,7 +2087,7 @@ window.renderQuickSession = function(quickId) {
                 <button class="btn-check ${isChecked}" onclick="Store.logItem('${quickId}', '${r.id}', { completed: !${isCompleted} }); renderQuickSession('${quickId}')">${icons.checkmark}</button>
                 <div style="flex: 1;">${r.combo}</div>
                 ${!isCompleted && !session.isContinuous ? `
-                <button class="btn-play type-strength" onclick="startPowerCircuitRound('${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, '${r.name}')"><span class="play-icon">${icons.play}</span> Start Round</button>
+                <button class="btn-play type-strength" onclick="startPowerCircuitRound('${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, '${r.name.replace(/'/g, "\\'")}', '${r.restCue ? r.restCue.replace(/'/g, "\\'") : ''}')"><span class="play-icon">${icons.play}</span> Start Round</button>
                 ` : ''}
             </div>`;
         }).join('');
