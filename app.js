@@ -166,7 +166,7 @@ window.toggleWarmupExpanded = function() {
     reRenderViewingDay();
 };
 
-function renderWarmup(day, parentSessionId) {
+function renderWarmup(day, parentSessionId, sessionType) {
     if (!day.warmup || day.warmup.length === 0) return '';
     
     const sessionId = parentSessionId || day.id || viewingDayId;
@@ -175,7 +175,9 @@ function renderWarmup(day, parentSessionId) {
     const totalDurationSec = day.warmup.filter(w => w.type === 'timed').reduce((s, w) => s + w.duration, 0);
     const mins = Math.ceil(totalDurationSec / 60);
     const labelTitle = isCustomBlock && day.title ? day.title : 'Warm-up';
-    const badgeText = isCustomBlock && day.title && day.title.includes('Recovery') ? 'RC' : 'WU';
+    const isRecovery = isCustomBlock && day.title && (day.title.toLowerCase().includes('recovery') || day.title.toLowerCase().includes('cool down'));
+    const badgeText = isRecovery ? 'RC' : 'WU';
+    const cardType = isRecovery ? 'rest' : (day.type || sessionType || 'strength');
     
     let listHtml = '<div class="nested-list">';
     day.warmup.forEach((item, idx) => {
@@ -211,7 +213,7 @@ function renderWarmup(day, parentSessionId) {
                 <div class="warmup-actions" style="margin-left: 12px;">
                     <span class="warmup-duration-label" style="font-weight: 600; font-size: 13px; color: var(--accent-color);">${timeOrRepsStr}</span>
                     ${!isRepBased && !isCompleted && !day.warmupPlaylist ? `
-                        <button class="btn-play type-${day.type || 'warmup'}" onclick="startWarmupTimer(${dayIdStr}, '${item.id}', ${item.duration}, '${item.name.replace(/'/g, "\\'")}', '${item.cue.replace(/'/g, "\\'")}', ${item.switchSides})">
+                        <button class="btn-play type-${cardType}" onclick="startWarmupTimer(${dayIdStr}, '${item.id}', ${item.duration}, '${item.name.replace(/'/g, "\\'")}', '${item.cue.replace(/'/g, "\\'")}', ${item.switchSides})">
                             <span class="play-icon">${icons.play}</span> Start
                         </button>
                     ` : ''}
@@ -250,7 +252,7 @@ function renderWarmup(day, parentSessionId) {
         </div>`;
     }
 
-    return renderItemCard(normalizedItem, day.type || 'warmup');
+    return renderItemCard(normalizedItem, cardType);
 }
 
 window.finishWorkout = function(dayId) {
@@ -778,9 +780,9 @@ const quickSessionCards = [
     { id: 'quick-hybrid', emoji: '🥊', name: 'Hybrid Boxing',       duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-hybrid')), tag: 'Box + Conditioning', pill: 'qs-pill-amber',  type: 'bag'       },
     { id: 'quick-upper-power', emoji: '💪', name: 'Upper Body Power',     duration: '~45 min', tag: 'Strength',            pill: 'qs-pill-orange', type: 'strength'  },
     { id: 'quick-lower-power', emoji: '🦵', name: 'Lower Body Power',     duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-lower-power')) || '~50 min', tag: 'Strength',            pill: 'qs-pill-orange', type: 'strength'  },
-    { id: 'quick-shadow-boxing', emoji: '👤', name: 'Shadow Boxing',        duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-shadow-boxing')) || '~30 min', tag: 'Technical',           pill: 'qs-pill-cyan',   type: 'technical' },
+    { id: 'quick-shadow-boxing', emoji: '<img src="./assets/boxer-icon.png" class="qs-boxer-icon" alt="Shadow Boxing" />', name: 'Shadow Boxing', duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-shadow-boxing')) || '~30 min', tag: 'Technical', pill: 'qs-pill-cyan', type: 'technical' },
     { id: 'quick-hiit-boxing', emoji: '🔥', name: 'HIIT Boxing',          duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-hiit-boxing')) || '~25 min', tag: 'Conditioning',        pill: 'qs-pill-red',    type: 'bag'      },
-    { id: 'quick-full-body-explosive', emoji: '💥', name: 'Full-Body Workout',  duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-full-body-explosive')) || '~55 min', tag: 'Full Body',           pill: 'qs-pill-orange', type: 'strength'  },
+    { id: 'quick-full-body-explosive', emoji: '💥', name: 'Full-Body Workout',  duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-full-body-explosive')) || '~45 min', tag: 'Full Body',           pill: 'qs-pill-orange', type: 'strength'  },
 ];
 
 function renderHome() {
@@ -1736,6 +1738,8 @@ window.renderQuickSession = function(quickId) {
     // 1. Warm-Up
     html += renderWarmup(session, quickId);
     
+    let globalBlockIndex = 1;
+    
     const renderExercises = (exercises, quickId, sessionType) => {
         let outHtml = '';
         exercises.forEach((ex, idx) => {
@@ -1782,7 +1786,7 @@ window.renderQuickSession = function(quickId) {
 
             let normalizedItem = {
                 id: ex.id,
-                badge: ex.badge || `R${idx + 1}`,
+                badge: ex.badge || `R${globalBlockIndex++}`,
                 title: ex.name,
                 subtitle: ex.subtitle,
                 stats: stats,
@@ -1914,7 +1918,7 @@ window.renderQuickSession = function(quickId) {
         
         let normalizedItem = {
             id: blockData.id,
-            badge: blockData.badge || (blockIdx ? `R${blockIdx}` : 'R1'),
+            badge: blockData.badge || `R${globalBlockIndex++}`,
             title: blockData.title,
             stats: [], // Empty stats array to maintain schema but hide rendering
             sections: [
@@ -1968,7 +1972,7 @@ window.renderQuickSession = function(quickId) {
         
         let normalizedItem = {
             id: sectionObj.id,
-            badge: sectionObj.badge || (isFinisher ? 'R2' : 'R1'),
+            badge: sectionObj.badge || `R${globalBlockIndex++}`,
             title: sectionObj.name,
             stats: [
                 { icon: icons.clock, value: `~${mins} min` },
@@ -2025,7 +2029,7 @@ window.renderQuickSession = function(quickId) {
         
         let normalizedItem = {
             id: c.id,
-            badge: 'CC',
+            badge: c.badge || `R${globalBlockIndex++}`,
             title: c.name,
             stats: [
                 { icon: icons.clock, value: `~${mins} min` },
@@ -2077,7 +2081,7 @@ window.renderQuickSession = function(quickId) {
         
         let normalizedItem = {
             id: pc.id,
-            badge: 'PC',
+            badge: pc.badge || `R${globalBlockIndex++}`,
             title: pc.name,
             stats: [
                 { icon: icons.clock, value: `~${Math.ceil((pc.rounds.length * 90 + 60) / 60)} min` },
@@ -2094,12 +2098,11 @@ window.renderQuickSession = function(quickId) {
     
     // 4.8 Custom Blocks
     if (session.blocks) {
-        let blockCounter = 1;
         session.blocks.forEach(block => {
             if (block.type === 'warmup') {
-                html += renderWarmup(block.data, quickId);
+                html += renderWarmup(block.data, quickId, session.type);
             } else if (block.type === 'exercises') {
-                html += renderExercisesBlock(block.data, quickId, session.type, blockCounter++);
+                html += renderExercisesBlock(block.data, quickId, session.type);
             } else if (block.type === 'bagRounds') {
                 html += renderBagSection(block.data, false);
             } else if (block.type === 'circuit') {
