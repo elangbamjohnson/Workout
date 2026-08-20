@@ -138,37 +138,60 @@ window.Timer = {
     },
 
     startRest(seconds, title, cue, workoutType = 'strength', onComplete, suppressAudio = false, timedCues = null) {
-        this.initAudio();
-        this.mode = 'rest';
-        this.workoutType = workoutType;
-        const hasTimedCues = timedCues && timedCues.length > 0;
-        this.roundData = { title: title || 'Rest Period', cue: cue || '', onComplete, suppressEndAudio: suppressAudio, timedCues, hasTimedCues };
-        this.totalDuration = seconds;
-        this.endTime = Date.now() + seconds * 1000;
-        this.hasPlayed10Sec = false;
-        this.lastSpokenSecond = seconds;
-        this.createDOM();
-        this.render();
-        this.modal.classList.remove('hidden');
-        this.attachListener();
-        
-        if (!suppressAudio) {
-            if (cue) {
-                window.speakAlert(cue);
-            } else {
-                window.speakAlert("Rest time started");
+        if (window.SFDebug) window.SFDebug.log('TIMER_START_REST_CALLED', { seconds, title, cue, workoutType, suppressAudio });
+        try {
+            this.initAudio();
+            this.mode = 'rest';
+            this.workoutType = workoutType;
+            const hasTimedCues = timedCues && timedCues.length > 0;
+            this.roundData = { title: title || 'Rest Period', cue: cue || '', onComplete, suppressEndAudio: suppressAudio, timedCues, hasTimedCues };
+            this.totalDuration = seconds;
+            this.endTime = Date.now() + seconds * 1000;
+            this.hasPlayed10Sec = false;
+            this.lastSpokenSecond = seconds;
+            this.remainingSeconds = seconds; // Guarantee remainingSeconds is initialized
+            this.createDOM();
+            this.render();
+            if (this.modal) {
+                this.modal.classList.remove('hidden');
             }
-        } else if (hasTimedCues) {
-            const cue0 = timedCues.find(c => c.time === 0);
-            if (cue0) {
-                window.speakAlert(cue0.text);
-                this.updateCueText(cue0.text);
+            this.attachListener();
+            
+            if (!suppressAudio) {
+                try {
+                    if (cue) {
+                        window.speakAlert(cue);
+                    } else {
+                        window.speakAlert("Rest time started");
+                    }
+                } catch (audioErr) {
+                    if (window.SFDebug) window.SFDebug.error('AUDIO_CUE_ERROR', audioErr);
+                }
+            } else if (hasTimedCues) {
+                const cue0 = timedCues.find(c => c.time === 0);
+                if (cue0) {
+                    try {
+                        window.speakAlert(cue0.text);
+                        this.updateCueText(cue0.text);
+                    } catch (audioErr) {
+                        if (window.SFDebug) window.SFDebug.error('AUDIO_CUE0_ERROR', audioErr);
+                    }
+                }
             }
+            this.tick();
+            if (this.intervalId) clearInterval(this.intervalId);
+            this.intervalId = setInterval(() => this.tick(), 100);
+            if (window.WakeLock) {
+                try {
+                    window.WakeLock.acquire();
+                } catch (wlErr) {
+                    if (window.SFDebug) window.SFDebug.error('WAKELOCK_ERROR', wlErr);
+                }
+            }
+            if (window.SFDebug) window.SFDebug.log('TIMER_START_REST_COMPLETED_SUCCESSFULLY');
+        } catch (err) {
+            if (window.SFDebug) window.SFDebug.error('TIMER_START_REST_FATAL_ERROR', err);
         }
-        this.tick();
-        if (this.intervalId) clearInterval(this.intervalId);
-        this.intervalId = setInterval(() => this.tick(), 100);
-        if (window.WakeLock) window.WakeLock.acquire();
     },
 
 

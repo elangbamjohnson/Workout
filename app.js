@@ -57,6 +57,97 @@ const WakeLock = {
 
 window.WakeLock = WakeLock;
 
+// ==========================================
+// PERSISTENT DIAGNOSTIC LOGGING SYSTEM
+// ==========================================
+const SFDebug = {
+    logs: [],
+    maxLogs: 100,
+    log(step, data = null) {
+        const time = new Date().toISOString().split('T')[1].slice(0, 8) + '.' + String(new Date().getMilliseconds()).padStart(3, '0');
+        const entry = { time, step, data };
+        this.logs.push(entry);
+        if (this.logs.length > this.maxLogs) this.logs.shift();
+        try {
+            sessionStorage.setItem('sf_debug_trace', JSON.stringify(this.logs));
+        } catch (e) {}
+        console.log(`[SF-DEBUG ${time}] ${step}`, data !== null ? data : '');
+        this.updateUI();
+    },
+    error(step, err) {
+        const time = new Date().toISOString().split('T')[1].slice(0, 8) + '.' + String(new Date().getMilliseconds()).padStart(3, '0');
+        const entry = { time, step, error: err ? (err.stack || err.message || String(err)) : 'Unknown Error' };
+        this.logs.push(entry);
+        try {
+            sessionStorage.setItem('sf_debug_trace', JSON.stringify(this.logs));
+        } catch (e) {}
+        console.error(`[SF-DEBUG-ERR ${time}] ${step}`, err);
+        this.updateUI();
+    },
+    getText() {
+        return this.logs.map(l => `[${l.time}] ${l.step}${l.data !== null && l.data !== undefined ? ' -> ' + (typeof l.data === 'object' ? JSON.stringify(l.data) : l.data) : ''}${l.error ? ' -> ERROR: ' + l.error : ''}`).join('\n');
+    },
+    copy() {
+        const text = this.getText();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Diagnostic trace copied to clipboard!');
+            }).catch(() => {
+                this.fallbackCopy(text);
+            });
+        } else {
+            this.fallbackCopy(text);
+        }
+    },
+    fallbackCopy(text) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        alert('Diagnostic trace copied to clipboard!');
+    },
+    showModal() {
+        let modal = document.getElementById('sf-debug-modal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'sf-debug-modal';
+            modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:999999;display:flex;flex-direction:column;padding:16px;box-sizing:border-box;font-family:monospace;color:#fff;';
+            modal.innerHTML = `
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                    <h3 style="margin:0;font-size:16px;color:#00ff88;">🛠️ Live Diagnostic Trace</h3>
+                    <div style="display:flex;gap:8px;">
+                        <button id="btn-copy-debug" style="background:#00ff88;color:#000;border:none;padding:6px 12px;border-radius:4px;font-weight:bold;cursor:pointer;">Copy Trace</button>
+                        <button id="btn-close-debug" style="background:#333;color:#fff;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;">Close</button>
+                    </div>
+                </div>
+                <div style="font-size:12px;color:#aaa;margin-bottom:8px;">Copy and paste this output directly back into the chat.</div>
+                <textarea id="sf-debug-textarea" readonly style="flex:1;background:#111;color:#00ff88;border:1px solid #333;padding:10px;font-size:12px;border-radius:4px;resize:none;white-space:pre;overflow:auto;"></textarea>
+            `;
+            document.body.appendChild(modal);
+            modal.querySelector('#btn-copy-debug').onclick = () => this.copy();
+            modal.querySelector('#btn-close-debug').onclick = () => { modal.style.display = 'none'; };
+        }
+        modal.style.display = 'flex';
+        const ta = modal.querySelector('#sf-debug-textarea');
+        if (ta) ta.value = this.getText() || 'No logs recorded yet. Tap "Complete Round" and check back.';
+    },
+    updateUI() {
+        const ta = document.getElementById('sf-debug-textarea');
+        if (ta) ta.value = this.getText();
+        const badge = document.getElementById('sf-debug-count');
+        if (badge) badge.innerText = `${this.logs.length} events`;
+    }
+};
+window.SFDebug = SFDebug;
+window.addEventListener('error', (e) => {
+    SFDebug.error('GLOBAL_UNCAUGHT_ERROR', { message: e.message, filename: e.filename, lineno: e.lineno, colno: e.colno });
+});
+window.addEventListener('unhandledrejection', (e) => {
+    SFDebug.error('UNHANDLED_PROMISE_REJECTION', e.reason);
+});
+
 document.addEventListener('visibilitychange', () => {
   WakeLock.handleVisibilityChange();
 });
@@ -1549,9 +1640,9 @@ window.toggleQuickCircuitItem = function(quickId, itemId) {
     const logData = Store.getItemLog(quickId, itemId) || {};
     const isCompleted = !!logData.completed;
     
+    // Toggle completed state for this item
     Store.logItem(quickId, itemId, { completed: !isCompleted });
     
-    // Check if circuit is complete
     const session = window.quickWorkouts.find(q => q.id === quickId);
     let shouldStartRest = false;
     let restDuration = 0;
@@ -1559,49 +1650,124 @@ window.toggleQuickCircuitItem = function(quickId, itemId) {
     let restCue = "";
     let onRestComplete = null;
 
-    if (session && session.circuit && !isCompleted) {
-        const allDone = session.circuit.exercises.every(ex => {
-            const l = Store.getItemLog(quickId, ex.id);
-            return l && l.completed;
-        });
-        
-        if (allDone) {
-            // Track completions to know if it's the final round
-            const completionsLog = Store.getItemLog(quickId, 'circuit_completions') || { count: 0 };
-            completionsLog.count += 1;
-            Store.logItem(quickId, 'circuit_completions', completionsLog);
+    if (session && session.circuit) {
+        if (!isCompleted) {
+            // Checkbox was just checked — check if all exercises in circuit are now checked
+            const allDone = session.circuit.exercises.every(ex => {
+                const l = Store.getItemLog(quickId, ex.id);
+                return l && l.completed;
+            });
             
-            // Only rest if there are more rounds to do
-            if (completionsLog.count < session.circuit.rounds) {
-                shouldStartRest = true;
-                restDuration = session.circuit.restSeconds;
-                restTitle = "Circuit Rest";
-                restCue = "One round down. Shake out the legs before the next round.";
-                onRestComplete = () => {
-                    // Uncheck exercises for next round
-                    session.circuit.exercises.forEach(e => {
-                        Store.logItem(quickId, e.id, { completed: false });
-                    });
-                    if (viewingDayId === quickId) renderQuickSession(quickId);
-                };
+            if (allDone) {
+                const completionsLog = Store.getItemLog(quickId, 'circuit_completions') || { count: 0 };
+                completionsLog.count += 1;
+                Store.logItem(quickId, 'circuit_completions', completionsLog);
+                
+                if (completionsLog.count < session.circuit.rounds) {
+                    shouldStartRest = true;
+                    restDuration = session.circuit.restSeconds;
+                    restTitle = "Circuit Rest";
+                    restCue = "One round down. Shake out the legs before the next round.";
+                    onRestComplete = () => {
+                        session.circuit.exercises.forEach(e => {
+                            Store.logItem(quickId, e.id, { completed: false });
+                        });
+                        if (viewingDayId === quickId) renderQuickSession(quickId);
+                    };
+                }
             }
         } else {
-            const ex = session.circuit.exercises.find(e => e.id === itemId);
-            if (ex && ex.restSeconds) {
-                shouldStartRest = true;
-                restDuration = ex.restSeconds;
-                restTitle = ex.name + " Rest";
-                restCue = "";
+            // Checkbox was unchecked — if all are now unchecked, reset completions counter
+            const anyChecked = session.circuit.exercises.some(ex => {
+                const l = Store.getItemLog(quickId, ex.id);
+                return l && l.completed;
+            });
+            if (!anyChecked) {
+                Store.logItem(quickId, 'circuit_completions', { count: 0 });
             }
         }
     }
     
-    // Re-render underlying session UI first (updating checkboxes and current round header)
+    // Re-render UI to update checkbox states and round header
     if (viewingDayId === quickId) renderQuickSession(quickId);
     
-    // Trigger rest timer after UI re-render
+    // Trigger rest timer if round 1 completed
     if (shouldStartRest) {
         Timer.startRest(restDuration, restTitle, restCue, "strength", onRestComplete);
+    }
+};
+
+window.completeCircuitRound = function(quickId) {
+    SFDebug.log('COMPLETE_ROUND_TAP', { quickId, viewingDayId });
+    try {
+        const session = window.quickWorkouts.find(q => q.id === quickId);
+        if (!session) {
+            SFDebug.error('SESSION_NOT_FOUND', { quickId });
+            return;
+        }
+        if (!session.circuit) {
+            SFDebug.error('SESSION_CIRCUIT_NOT_FOUND', { quickId, hasCircuit: !!session.circuit });
+            return;
+        }
+        
+        // 1. Force all exercises in this circuit to be completed
+        session.circuit.exercises.forEach(ex => {
+            Store.logItem(quickId, ex.id, { completed: true });
+        });
+        SFDebug.log('EXERCISES_MARKED_COMPLETED', session.circuit.exercises.map(e => e.id));
+        
+        // 2. Increment completions log
+        const completionsLogBefore = Store.getItemLog(quickId, 'circuit_completions') || { count: 0 };
+        const completionsLog = { count: (completionsLogBefore.count || 0) + 1 };
+        Store.logItem(quickId, 'circuit_completions', completionsLog);
+        SFDebug.log('COMPLETIONS_INCREMENTED', { before: completionsLogBefore.count || 0, after: completionsLog.count, roundsTotal: session.circuit.rounds });
+        
+        // 3. Determine if rest is needed
+        if (completionsLog.count < session.circuit.rounds) {
+            SFDebug.log('TRIGGERING_REST_PATH', { currentCount: completionsLog.count, rounds: session.circuit.rounds, restSeconds: session.circuit.restSeconds });
+            
+            // Re-render immediately so checkboxes show as checked before rest modal appears
+            if (viewingDayId === quickId) {
+                SFDebug.log('CALLING_RENDER_QUICK_SESSION');
+                renderQuickSession(quickId);
+            }
+            
+            const restCueText = "One round down. Shake out the legs before the next round.";
+            const args = {
+                duration: session.circuit.restSeconds,
+                title: "Circuit Rest",
+                cue: restCueText,
+                workoutType: "strength"
+            };
+            SFDebug.log('CALLING_TIMER_START_REST', args);
+            
+            Timer.startRest(session.circuit.restSeconds, "Circuit Rest", restCueText, "strength", () => {
+                SFDebug.log('REST_ON_COMPLETE_CALLBACK_FIRED');
+                // Uncheck exercises for the next round
+                session.circuit.exercises.forEach(e => {
+                    Store.logItem(quickId, e.id, { completed: false });
+                });
+                if (viewingDayId === quickId) renderQuickSession(quickId);
+            });
+
+            // Inspect DOM immediately
+            const modalEl = document.querySelector('#timer-modal');
+            const modalCheck = {
+                modalFoundInDOM: !!modalEl,
+                inBody: modalEl ? modalEl.parentNode === document.body : false,
+                classList: modalEl ? modalEl.className : null,
+                computedDisplay: modalEl ? window.getComputedStyle(modalEl).display : null,
+                computedVisibility: modalEl ? window.getComputedStyle(modalEl).visibility : null,
+                computedZIndex: modalEl ? window.getComputedStyle(modalEl).zIndex : null
+            };
+            SFDebug.log('POST_START_REST_DOM_CHECK', modalCheck);
+        } else {
+            SFDebug.log('FINAL_ROUND_SKIPPING_TIMER', { currentCount: completionsLog.count, rounds: session.circuit.rounds });
+            // Final round complete: no rest timer needed, just reflect the fully complete state
+            if (viewingDayId === quickId) renderQuickSession(quickId);
+        }
+    } catch (err) {
+        SFDebug.error('EXCEPTION_IN_COMPLETE_CIRCUIT_ROUND', err);
     }
 };
 
@@ -2211,8 +2377,13 @@ window.renderQuickSession = function(quickId) {
         <div class="qs-cooldown-complete">
             🥊 Session Complete — Great work today!
         </div>
-        <div style="margin-bottom: 64px;">
+        <div style="margin-bottom: 24px;">
             <button class="btn-large" onclick="finishQuickHybrid('${quickId}', '${session.title}')">Finish & Save</button>
+        </div>
+        <div style="margin-bottom: 64px; text-align: center;">
+            <button class="btn-ghost" style="font-size: 13px; color: var(--text-muted); border: 1px dashed var(--border-card); padding: 8px 16px; border-radius: 6px; cursor: pointer;" onclick="SFDebug.showModal()">
+                🛠️ View Diagnostic Trace (<span id="sf-debug-count">${SFDebug.logs.length}</span>)
+            </button>
         </div>
     `;
 
