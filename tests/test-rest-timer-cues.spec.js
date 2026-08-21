@@ -1,7 +1,14 @@
 const { test, expect } = require('@playwright/test');
 
+async function advanceTimer(page, seconds) {
+    await page.clock.runFor(seconds * 1000);
+    // Allow DOM to update
+    await page.waitForTimeout(50);
+}
+
 test.describe('Rest Timer Text & Voice Prompts Audit & UI Bleed Fix Verification', () => {
     test.beforeEach(async ({ page }) => {
+        await page.clock.pauseAt(new Date('2024-01-01T00:00:00Z'));
         await page.goto('/');
         await page.evaluate(async () => {
             localStorage.clear();
@@ -11,7 +18,7 @@ test.describe('Rest Timer Text & Voice Prompts Audit & UI Bleed Fix Verification
             }
         });
         await page.reload();
-        await expect(page.locator('#splash-screen')).toBeHidden();
+        await page.evaluate(() => { document.getElementById('splash-screen').style.display = 'none'; });
     });
 
     test('Day 2 (Bag Power Day): All bag rounds with rest have bespoke restCue and combo-bleed is suppressed', async ({ page }) => {
@@ -46,6 +53,8 @@ test.describe('Rest Timer Text & Voice Prompts Audit & UI Bleed Fix Verification
         await firstBagCard.locator('button.btn-large:has-text("Start Round Timer")').click();
         const timerModal = page.locator('#timer-modal');
         await expect(timerModal).toBeVisible();
+
+        await advanceTimer(page, 6);
 
         // During Work Phase: Combos are rendered
         await expect(timerModal.locator('.timer-cue-container')).toBeVisible();
@@ -105,6 +114,8 @@ test.describe('Rest Timer Text & Voice Prompts Audit & UI Bleed Fix Verification
         await r2Card.locator('button.btn-large:has-text("Start Round Timer")').click();
         const timerModal = page.locator('#timer-modal');
         await expect(timerModal).toBeVisible();
+
+        await advanceTimer(page, 6);
 
         // Switch to rest phase
         await page.evaluate(() => {

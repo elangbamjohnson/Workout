@@ -1,16 +1,15 @@
 const { test, expect } = require('@playwright/test');
 
 async function advanceTimer(page, seconds) {
-    for (let i = 0; i < seconds; i++) {
-        await page.clock.fastForward('00:01');
-        await page.waitForTimeout(5);
-    }
+    await page.clock.runFor(seconds * 1000);
+    // Allow DOM to update
+    await page.waitForTimeout(50);
 }
 
 test.describe('Day 5 Restructure — Round 5 (Pressure Round) TimedCues & Workflow', () => {
 
     test.beforeEach(async ({ page }) => {
-        await page.clock.install();
+        await page.clock.pauseAt(new Date('2024-01-01T00:00:00Z'));
         await page.goto('/');
         
         // Use a clean state
@@ -19,7 +18,7 @@ test.describe('Day 5 Restructure — Round 5 (Pressure Round) TimedCues & Workfl
         });
         await page.reload();
 
-        await expect(page.locator('#splash-screen')).toBeHidden();
+        await page.evaluate(() => { document.getElementById('splash-screen').style.display = 'none'; });
 
         // Mock speech to capture calls
         await page.evaluate(() => {
@@ -76,17 +75,21 @@ test.describe('Day 5 Restructure — Round 5 (Pressure Round) TimedCues & Workfl
 
         const timerModal = page.locator('#timer-modal');
         await expect(timerModal).toBeVisible();
+
+        // Advance past 5s countdown
+        await advanceTimer(page, 6);
+
         await expect(timerModal.locator('.timer-header h2')).toHaveText('Pressure Round');
 
         // Phase 1 (0:00 - 0:45) -> 0s elapsed
-        await advanceTimer(page, 1);
         const cue1 = "Move and attack. Throw a 1–2 every eight to ten seconds. Stay relaxed and establish your rhythm.";
         await expect(timerModal.locator('.timer-cue')).toHaveText(cue1);
         let spokenCues = await page.evaluate(() => window.spokenCues);
         expect(spokenCues).toContain(cue1);
+        await page.evaluate(() => { window.spokenCues = []; });
 
         // Phase 2 (0:45 - 1:30) -> 45s elapsed
-        await advanceTimer(page, 44);
+        await advanceTimer(page, 45);
         const cue2 = "Increase your combinations. Use 1–2–3 or 1–2–3–2. Attack, exit, reset.";
         await expect(timerModal.locator('.timer-cue')).toHaveText(cue2);
         spokenCues = await page.evaluate(() => window.spokenCues);

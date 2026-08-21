@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 
 async function advanceTimer(page, seconds) {
     for (let i = 0; i < seconds; i++) {
-        await page.clock.fastForward('00:01');
+        await page.clock.runFor('00:01');
         await page.waitForTimeout(5);
     }
 }
@@ -70,6 +70,7 @@ test.describe('Day 5 Restructure — Round 7 (Cool-Down Shadowboxing) TimedCues 
 
         const timerModal = page.locator('#timer-modal');
         await expect(timerModal).toBeVisible();
+        await advanceTimer(page, 6);
         await expect(timerModal.locator('.timer-header h2')).toHaveText('Cool-Down Shadowboxing');
 
         // Phase 1: 0:00 - 0:40
