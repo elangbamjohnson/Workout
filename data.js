@@ -950,30 +950,36 @@ const workoutData = {
         },
         {
           "id": "day5-ex3",
-          "name": "Body Work",
+          "name": "Body Power + Level Change",
           "setsReps": "3 min",
-          "intensity": "85-90%",
+          "intensity": "80-85%",
           "workSeconds": 180,
           "restSeconds": 60,
           "restCue": "Recover. Next round is zero rest — Combination Power. Get ready.",
-          "benefits": "Body shots require you to bend your knees and get your level down \u2014 do not just swing downward. Your punch trajectory should be horizontal to the body.",
+          "benefits": "Level change, body shot, recover stance, exit. Do not remain stationary in front of the bag.",
           "rounds": [
             {
               "id": "day5-ex3-r1",
-              "combo": "10x Lead Body Hook \u2014 dig into the body, not just tap it"
+              "combo": "3 body — 45 seconds, 80 to 85 percent. Bend the knees and change level, don't just bend at the waist."
             },
             {
               "id": "day5-ex3-r2",
-              "combo": "10x Rear Body Hook"
+              "combo": "4 body — 45 seconds, 80 to 85 percent. Focus on hip rotation and returning to boxing stance."
             },
             {
               "id": "day5-ex3-r3",
-              "combo": "8x Jab-Rear Body Hook"
+              "combo": "1, 4 body, exit — 45 seconds, 80 to 85 percent. Exit with a pivot or lateral step after every combination."
             },
             {
               "id": "day5-ex3-r4",
-              "combo": "8x Lead Body Hook-Cross (come back up after the body shot)"
+              "combo": "3 body, 2, exit — 45 seconds, 80 to 85 percent. Use the body shot to set up the cross."
             }
+          ],
+          "timedCues": [
+            { "time": 0, "text": "3 body — 45 seconds, 80 to 85 percent. Bend the knees and change level, don't just bend at the waist.", "uiIndex": 0 },
+            { "time": 45, "text": "4 body — 45 seconds, 80 to 85 percent. Focus on hip rotation and returning to boxing stance.", "uiIndex": 1 },
+            { "time": 90, "text": "1, 4 body, exit — 45 seconds, 80 to 85 percent. Exit with a pivot or lateral step after every combination.", "uiIndex": 2 },
+            { "time": 135, "text": "3 body, 2, exit — 45 seconds, 80 to 85 percent. Use the body shot to set up the cross.", "uiIndex": 3 }
           ]
         },
         {
