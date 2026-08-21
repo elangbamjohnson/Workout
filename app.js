@@ -215,6 +215,11 @@ window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue, 
 
 window.startWarmupTimer = function(dayId, itemId, duration, title, cue, switchSides) {
     const day = getDayData(dayId);
+    let item = null;
+    if (day && day.warmup) {
+        item = day.warmup.find(w => w.id === itemId);
+    }
+    const segments = item ? item.segments : null;
     
     let durationText = duration + " seconds";
     if (duration === 180) durationText = "three minutes";
@@ -230,7 +235,7 @@ window.startWarmupTimer = function(dayId, itemId, duration, title, cue, switchSi
         Timer.startWarmup(duration, title, cue, switchSides, day ? day.type : 'strength', () => {
             Store.logItem(dayId, itemId, { completed: true });
             reRenderViewingDay();
-        });
+        }, segments);
     }, null, startPrompt);
 };
 
