@@ -811,7 +811,7 @@ const workoutData = {
           "id": "day4-wu4",
           "name": "Hip 90/90 Stretch",
           "type": "timed",
-          "duration": 180,
+          "duration": 60,
           "switchSides": true,
           "cue": "Sit tall, press the front shin down, feel the hip open",
           "videoId": "fDC2KC1XqY8",
@@ -831,9 +831,15 @@ const workoutData = {
           "id": "day4-wu6",
           "name": "Arm Circles",
           "type": "timed",
-          "duration": 30,
+          "duration": 120,
           "switchSides": false,
-          "cue": "Full range \u2014 front and back, gradually increasing size"
+          "cue": "Full range — front and back, gradually increasing size",
+          "segments": [
+            { "time": 120, "text": "Right arm, clockwise" },
+            { "time": 90, "text": "Right arm, counter-clockwise" },
+            { "time": 60, "text": "Left arm, clockwise" },
+            { "time": 30, "text": "Left arm, counter-clockwise" }
+          ]
         },
         {
           "id": "day4-wu7",
@@ -862,18 +868,18 @@ const workoutData = {
         {
           id: 'upper-finisher-r1',
           name: 'Round 1',
-          workSeconds: 90,
+          workSeconds: 60,
           restSeconds: 60,
           restCue: 'One round down. Shake out the arms, deep breaths before Round 2.',
-          combo: 'Plyometric Push-ups × 8 reps<br>Dumbbell Woodchoppers × 8 reps each side<br>Shadow Box full-speed 1-2-3 combos for 30 seconds'
+          combo: 'a) Plyometric Push-ups × 8<br>b) Burpees × 8'
         },
         {
           id: 'upper-finisher-r2',
           name: 'Round 2',
-          workSeconds: 90,
+          workSeconds: 60,
           restSeconds: 60,
           restCue: 'Circuit complete. Catch your breath before the cooldown.',
-          combo: 'Plyometric Push-ups × 8 reps<br>Dumbbell Woodchoppers × 8 reps each side<br>Shadow Box full-speed 1-2-3 combos for 30 seconds'
+          combo: 'a) Plyometric Push-ups × 8<br>b) Burpees × 8'
         }
       ]
     },

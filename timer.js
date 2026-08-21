@@ -195,12 +195,12 @@ window.Timer = {
     },
 
 
-    startWarmup(duration, title, cue, switchSides, workoutType, onComplete) {
+    startWarmup(duration, title, cue, switchSides, workoutType, onComplete, segments = null) {
         this.initAudio();
         this.mode = 'warmup';
         this.phase = 'work';
         this.workoutType = workoutType;
-        this.roundData = { title, cue, switchSides, onComplete };
+        this.roundData = { title, cue, switchSides, onComplete, segments };
         this.totalDuration = duration;
         this.endTime = Date.now() + duration * 1000;
         this.hasPlayed10Sec = false;
@@ -212,6 +212,15 @@ window.Timer = {
         
         if (switchSides) {
             window.speakAlert(`${this.roundData.title} — first side, start now`);
+        } else if (segments && segments.length > 0) {
+            const firstSeg = segments.find(s => s.time === duration);
+            if (firstSeg) {
+                window.speakAlert(`${this.roundData.title} started. ${firstSeg.text}`);
+                this.roundData.cue = firstSeg.text;
+                this.updateCueText(firstSeg.text);
+            } else {
+                window.speakAlert(`${this.roundData.title} started`);
+            }
         } else {
             window.speakAlert(`${this.roundData.title} started`);
         }
@@ -427,6 +436,18 @@ window.Timer = {
                     timerDisplay.setAttribute('data-flash', 'SWITCH SIDES');
                     timerDisplay.classList.add('flash-overlay');
                     this.flashTimeoutId = setTimeout(() => timerDisplay.classList.remove('flash-overlay'), 2000);
+                }
+            } else if (this.mode === 'warmup' && this.roundData.segments && diff !== this.totalDuration) {
+                const seg = this.roundData.segments.find(s => s.time === diff);
+                if (seg) {
+                    window.speakAlert(seg.text);
+                    this.updateCueText(seg.text);
+                    const timerDisplay = this.modal.querySelector('.timer-display');
+                    if (timerDisplay) {
+                        timerDisplay.setAttribute('data-flash', seg.text.toUpperCase());
+                        timerDisplay.classList.add('flash-overlay');
+                        this.flashTimeoutId = setTimeout(() => timerDisplay.classList.remove('flash-overlay'), 2000);
+                    }
                 }
             } else if (diff === 10 && !hasTimedCues) {
                 window.speakAlert("Ten seconds");
