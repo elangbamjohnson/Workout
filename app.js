@@ -206,10 +206,33 @@ window.toggleRound = function(e, dayId, roundId) {
 
 window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue, restCue = '') {
     const day = getDayData(dayId);
+    let timedCues = null;
+    let itemsToComplete = [];
+    if (day && day.exercises) {
+        const ex = day.exercises.find(e => e.id === roundId);
+        if (ex && ex.timedCues) {
+            timedCues = ex.timedCues;
+        }
+        if (ex && ex.rounds) {
+            itemsToComplete = ex.rounds;
+        }
+    } else if (day && day.sections) {
+        const sec = day.sections.find(s => s.id === roundId);
+        if (sec && sec.rounds) {
+            itemsToComplete = sec.rounds;
+        }
+    }
     Timer.startRound(workSec, restSec, title, cue, day ? day.type : 'bag', () => {
+        console.log('Completing round:', dayId, roundId);
         Store.logItem(dayId, roundId, { completed: true });
+        if (itemsToComplete.length > 0) {
+            itemsToComplete.forEach(r => {
+                console.log('Completing child:', dayId, r.id);
+                Store.logItem(dayId, r.id, { completed: true });
+            });
+        }
         reRenderViewingDay();
-    }, null, false, restCue);
+    }, timedCues, false, restCue);
 };
 
 
@@ -592,10 +615,10 @@ function renderItemCard(item, dayType) {
     let html = `
         <div class="item-card type-${dayType} ${isExpanded ? 'expanded' : ''}" data-id="${item.id}">
             <button class="item-header" onclick="toggleCard('${item.id}')" aria-expanded="${isExpanded}" aria-label="Toggle ${item.title.replace(/"/g, '&quot;')} section">
+                <div class="num-badge" aria-hidden="true">${item.badge}</div>
                 <div class="item-header-content">
                     <div class="item-header-top">
                         <div class="item-title-wrap">
-                            <div class="num-badge" aria-hidden="true">${item.badge}</div>
                             <div>
                                 <div style="display: flex; align-items: center; gap: 6px;">
                                     <h3 class="title-card">${item.title}</h3>
@@ -1255,11 +1278,15 @@ window.renderDay = function(dayIdRaw) {
                     : '';
                 return `
                 <div class="nested-row ${isChecked}">
-                    <button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
-                    <div style="flex: 1; margin-left: 12px; min-width: 0;">
-                        <div style="display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                            <span style="font-size: 14px; line-height: 1.4; color: var(--text-primary);">${r.combo}</span>
-                            ${demoIconBtn}
+                    <div style="display: flex; align-items: center; width: 100%;">
+                        <button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
+                        <div style="flex: 1; margin-left: 12px; min-width: 0;">
+                            <div style="display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <span style="font-size: 14px; line-height: 1.4; color: var(--text-primary);">
+                                    ${r.combo}
+                                </span>
+                                ${demoIconBtn}
+                            </div>
                         </div>
                     </div>
                 </div>`;

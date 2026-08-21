@@ -747,7 +747,6 @@ body {
     display: flex;
     align-items: center;
     gap: var(--sp-4);
-    margin-left: 44px; /* Align with text, bypassing badge */
     flex-wrap: wrap;
 }
 .stat-item {

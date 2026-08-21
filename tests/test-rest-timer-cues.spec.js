@@ -78,7 +78,7 @@ test.describe('Rest Timer Text & Voice Prompts Audit & UI Bleed Fix Verification
             'day5-ex1': 'Shoulders should be warm now. Shake it out, prepare for power singles.',
             'day5-ex2': 'Breathe deep. Drop the hands. Body work coming up next.',
             'day5-ex3': 'Recover. Next round is zero rest — Combination Power. Get ready.',
-            'day5-ex5': 'One minute to recover. Final round is a maximum effort sprint.',
+            'day5-ex5': 'One minute to recover. Final round is your power endurance test.',
             'day5-ex6': 'Outstanding work. Catch your breath for the cool-down shadowboxing.'
         };
 
@@ -89,9 +89,9 @@ test.describe('Rest Timer Text & Voice Prompts Audit & UI Bleed Fix Verification
             expect(ex.restSeconds).toBe(60);
         }
 
-        // Round 4 (Combination Power) intentionally has 0s rest to flow straight to pressure round
+        // Round 4 (Combination Power) is a standard timed round again
         const r4 = day5.exercises.find(e => e.id === 'day5-ex4');
-        expect(r4.restSeconds).toBe(0);
+        expect(r4.restSeconds).toBe(30);
 
         // Round 7 (Cool-Down Shadowboxing) has 0s rest (session ends)
         const r7 = day5.exercises.find(e => e.id === 'day5-ex7');
