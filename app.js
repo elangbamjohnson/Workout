@@ -2532,3 +2532,119 @@ window.startSectionSequence = function(quickId, playlistType) {
     });
 };
 
+// ==========================================
+// PWA UPDATE NOTIFICATION SYSTEM
+// ==========================================
+const APP_VERSION = 'v33';
+const APP_UPDATE_MESSAGE = 'Strike First has been updated with improvements and fixes.';
+
+window.PWAUpdateManager = {
+    registration: null,
+    bannerElement: null,
+    isReloading: false,
+
+    init() {
+        if (!('serviceWorker' in navigator)) return;
+
+        // Initialize banner DOM
+        this.createBannerElement();
+
+        // Track if this is the first time a controller is taking over
+        let hasInitialController = !!navigator.serviceWorker.controller;
+
+        // Listen for controllerchange to reload safely
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            // Ignore the very first activation to prevent infinite reload on initial visit
+            if (!hasInitialController) {
+                hasInitialController = true;
+                return;
+            }
+            
+            if (!this.isReloading) {
+                this.isReloading = true;
+                window.location.reload();
+            }
+        });
+
+        // Register and track updates
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then(reg => {
+                    this.registration = reg;
+                    
+                    // Handle existing waiting worker on startup
+                    if (reg.waiting && navigator.serviceWorker.controller) {
+                        this.showUpdateAvailable();
+                    }
+
+                    // Handle new update found during session
+                    reg.addEventListener('updatefound', () => {
+                        const newWorker = reg.installing;
+                        if (newWorker) {
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    this.showUpdateAvailable();
+                                }
+                            });
+                        }
+                    });
+                })
+                .catch(err => console.error('[SW] Registration failed:', err));
+        });
+    },
+
+    createBannerElement() {
+        const banner = document.createElement('div');
+        banner.id = 'update-banner';
+        document.body.appendChild(banner);
+        this.bannerElement = banner;
+    },
+
+    showUpdateAvailable() {
+        if (!this.bannerElement || this.bannerElement.style.display === 'flex') return;
+
+        // Check if workout is active to determine safe UI
+        const isWorkoutActive = Timer && (Timer.isActive || Timer.phase === 'work' || Timer.phase === 'rest');
+        
+        let messageHtml = `<p>${APP_UPDATE_MESSAGE}</p>`;
+        let actionsHtml = `
+            <button class="btn-update-later" onclick="PWAUpdateManager.dismissBanner()">Later</button>
+            <button class="btn-update-now" onclick="PWAUpdateManager.applyUpdate()">Update now</button>
+        `;
+
+        if (isWorkoutActive) {
+            messageHtml = `<p>Your workout is still running. Update when you're finished.</p>`;
+            actionsHtml = `<button class="btn-update-later" onclick="PWAUpdateManager.dismissBanner()">Later</button>`;
+        }
+
+        this.bannerElement.innerHTML = `
+            <h3>New version available (${APP_VERSION})</h3>
+            ${messageHtml}
+            <div class="update-actions">
+                ${actionsHtml}
+            </div>
+        `;
+        
+        this.bannerElement.style.display = 'flex';
+    },
+
+    dismissBanner() {
+        if (this.bannerElement) {
+            this.bannerElement.style.display = 'none';
+        }
+    },
+
+    applyUpdate() {
+        if (!this.registration || !this.registration.waiting) return;
+        
+        // Prevent accidental multiple taps
+        this.dismissBanner();
+        
+        // Send SKIP_WAITING to the waiting service worker
+        this.registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+    }
+};
+
+// Initialize PWA Update Manager
+window.PWAUpdateManager.init();
+
