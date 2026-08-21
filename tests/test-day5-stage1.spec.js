@@ -57,7 +57,7 @@ test.describe('Day 5 Stage 1 Restructure', () => {
         // 0:00 (Start)
         // Wait for first tick
         await advanceTimer(page, 1);
-        const cue1 = "1-2. Focus on perfect mechanics rather than power. Rotate the hips and return hands quickly.";
+        const cue1 = "1-2 — one minute. Focus on perfect mechanics, not power.";
         await expect(timerModal.locator('.timer-cue')).toHaveText(cue1);
         
         let spokenCues = await page.evaluate(() => window.spokenCues);
@@ -65,7 +65,7 @@ test.describe('Day 5 Stage 1 Restructure', () => {
 
         // Advance to 1:00 (60s elapsed)
         await advanceTimer(page, 60);
-        const cue2 = "1-2-3. Add small lateral movement or pivot after the combination.";
+        const cue2 = "1-2-3 — one minute, 70 to 75 percent. Add lateral movement or a pivot after the combination.";
         await expect(timerModal.locator('.timer-cue')).toHaveText(cue2);
 
         spokenCues = await page.evaluate(() => window.spokenCues);
@@ -73,7 +73,7 @@ test.describe('Day 5 Stage 1 Restructure', () => {
 
         // Advance to 2:00 (120s elapsed)
         await advanceTimer(page, 60);
-        const cue3 = "1-2-3-2. Add movement between combinations.";
+        const cue3 = "1-2-3-2 — one minute, 75 to 80 percent. Add movement between combinations.";
         await expect(timerModal.locator('.timer-cue')).toHaveText(cue3);
 
         spokenCues = await page.evaluate(() => window.spokenCues);

@@ -920,9 +920,9 @@ const workoutData = {
             }
           ],
           "timedCues": [
-            { "time": 0, "text": "1-2. Focus on perfect mechanics rather than power. Rotate the hips and return hands quickly.", "uiIndex": 0 },
-            { "time": 60, "text": "1-2-3. Add small lateral movement or pivot after the combination.", "uiIndex": 1 },
-            { "time": 120, "text": "1-2-3-2. Add movement between combinations.", "uiIndex": 2 },
+            { "time": 0, "text": "1-2 — one minute. Focus on perfect mechanics, not power.", "uiIndex": 0 },
+            { "time": 60, "text": "1-2-3 — one minute, 70 to 75 percent. Add lateral movement or a pivot after the combination.", "uiIndex": 1 },
+            { "time": 120, "text": "1-2-3-2 — one minute, 75 to 80 percent. Add movement between combinations.", "uiIndex": 2 },
             { "time": 175, "text": "Finish the round feeling warm and sharp, not fatigued." }
           ]
         },
