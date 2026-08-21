@@ -976,36 +976,39 @@ const workoutData = {
             }
           ],
           "timedCues": [
-            { "time": 0, "text": "3 body — 45 seconds, 80 to 85 percent. Bend the knees and change level, don't just bend at the waist.", "uiIndex": 0 },
-            { "time": 45, "text": "4 body — 45 seconds, 80 to 85 percent. Focus on hip rotation and returning to boxing stance.", "uiIndex": 1 },
-            { "time": 90, "text": "1, 4 body, exit — 45 seconds, 80 to 85 percent. Exit with a pivot or lateral step after every combination.", "uiIndex": 2 },
-            { "time": 135, "text": "3 body, 2, exit — 45 seconds, 80 to 85 percent. Use the body shot to set up the cross.", "uiIndex": 3 }
+            { "time": 0, "text": "3 body \u2014 45 seconds, 80 to 85 percent. Bend the knees and change level, don't just bend at the waist.", "uiIndex": 0 },
+            { "time": 45, "text": "4 body \u2014 45 seconds, 80 to 85 percent. Focus on hip rotation and returning to boxing stance.", "uiIndex": 1 },
+            { "time": 90, "text": "1, 4 body, exit \u2014 45 seconds, 80 to 85 percent. Exit with a pivot or lateral step after every combination.", "uiIndex": 2 },
+            { "time": 135, "text": "3 body, 2, exit \u2014 45 seconds, 80 to 85 percent. Use the body shot to set up the cross.", "uiIndex": 3 }
           ]
         },
         {
           "id": "day5-ex4",
           "name": "Combination Power",
           "setsReps": "3 min",
-          "intensity": "90%",
-          "workSeconds": 180,
-          "restSeconds": 0,
+          "intensity": "88-90%",
+          "isHybrid": true,
           "benefits": "Move your feet between combinations. Set up each combination from a new angle.",
           "rounds": [
             {
               "id": "day5-ex4-r1",
-              "combo": "8x 1-2-3 at full power"
+              "combo": "1-2-3 \u2014 approximately 6 repetitions. Move laterally, reset, re-enter after each combination."
             },
             {
               "id": "day5-ex4-r2",
-              "combo": "6x 1-2-3-2 at full power"
+              "combo": "1-2-3-2 \u2014 approximately 5 repetitions. Focus on maintaining speed through the final cross."
             },
             {
               "id": "day5-ex4-r3",
-              "combo": "5x 1-2-body hook-2 at full power"
+              "combo": "1-2-Lead Body Hook-2 \u2014 approximately 5 repetitions. Level change, hip rotation, explosive body shot, immediate return to stance, strong cross."
             },
             {
               "id": "day5-ex4-r4",
-              "combo": "Move between combinations \u2014 do not stay planted"
+              "name": "Final 30 seconds",
+              "combo": "Free combination work using 1-2-3, 1-2-3-2, or 1-2-body hook-2, at 90% intensity. Every combination should be powerful, but never sacrifice balance or technique. Move after every attack.",
+              "workSeconds": 30,
+              "restSeconds": 30,
+              "restCue": "Walk around the bag, shake out the shoulders, take controlled breaths, do not sit down."
             }
           ]
         },

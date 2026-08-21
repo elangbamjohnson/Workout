@@ -89,9 +89,11 @@ test.describe('Rest Timer Text & Voice Prompts Audit & UI Bleed Fix Verification
             expect(ex.restSeconds).toBe(60);
         }
 
-        // Round 4 (Combination Power) intentionally has 0s rest to flow straight to pressure round
+        // Round 4 (Combination Power) has hybrid structure, rest is now on the timed segment
         const r4 = day5.exercises.find(e => e.id === 'day5-ex4');
-        expect(r4.restSeconds).toBe(0);
+        expect(r4.restSeconds).toBeUndefined(); // removed from root
+        const r4FinalSeg = r4.rounds.find(r => r.id === 'day5-ex4-r4');
+        expect(r4FinalSeg.restSeconds).toBe(30);
 
         // Round 7 (Cool-Down Shadowboxing) has 0s rest (session ends)
         const r7 = day5.exercises.find(e => e.id === 'day5-ex7');

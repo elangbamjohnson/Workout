@@ -132,18 +132,18 @@ test.describe('Day 4 (Upper Body Power) 8-Exercise Reordered Session Audit & Ren
 
         // Check header session duration tag
         const durationStat = page.locator('.session-duration-stat');
-        await expect(durationStat).toContainText('~47 min with warm-up');
+        await expect(durationStat).toContainText('~46 min with warm-up');
 
         // Check section header label
         const countHeader = page.locator('.content-header-row h2');
         await expect(countHeader).toHaveText('EXERCISES · 8');
 
-        // Warmup card + 8 exercise cards = 9 total item cards
+        // Warmup card + 8 exercise cards + Power Circuit + Cooldown = 11 total item cards
         const itemCards = page.locator('.item-card');
-        await expect(itemCards).toHaveCount(9);
-
+        await expect(itemCards).toHaveCount(11);
+        
         // First card is Warmup
-        await expect(itemCards.first().locator('.title-card')).toHaveText('Warm-up');
+        await expect(itemCards.nth(0).locator('.title-card')).toHaveText('Warm-up');
         await expect(itemCards.first().locator('.num-badge')).toHaveText('WU');
 
         // Cards 1-8

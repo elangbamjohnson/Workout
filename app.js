@@ -209,7 +209,10 @@ window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue, 
     let timedCues = null;
     let itemsToComplete = [];
     if (day && day.exercises) {
-        const ex = day.exercises.find(e => e.id === roundId);
+        let ex = day.exercises.find(e => e.id === roundId);
+        if (!ex) {
+            ex = day.exercises.find(e => e.rounds && e.rounds.some(r => r.id === roundId));
+        }
         if (ex && ex.timedCues) {
             timedCues = ex.timedCues;
         }
@@ -1274,15 +1277,29 @@ window.renderDay = function(dayIdRaw) {
                            <svg viewBox="0 0 24 24" width="10" height="10"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
                        </button>`
                     : '';
+                let timerHtml = '';
+                if (ex.isHybrid && r.workSeconds) {
+                    const timedCuesArg = r.timedCues ? encodeURIComponent(JSON.stringify(r.timedCues)).replace(/'/g, "\\'") : '';
+                    const comboArg = r.combo.replace(/'/g, "\\'");
+                    const restCueArg = r.restCue ? r.restCue.replace(/'/g, "\\'") : '';
+                    timerHtml = `
+                    <button class="btn-play type-bag" onclick="startRoundTimer(${day.id}, '${r.id}', ${r.workSeconds}, ${r.restSeconds || 0}, '${r.name ? r.name.replace(/'/g, "\\'") : ex.name.replace(/'/g, "\\'")}', '${comboArg}', '${restCueArg}')" style="margin-top: 12px;"><span class="play-icon">${icons.play}</span> Start Timer</button>`;
+                }
+
                 return `
-                <div class="nested-row ${isChecked}">
-                    <button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
-                    <div style="flex: 1; margin-left: 12px; min-width: 0;">
-                        <div style="display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                            <span style="font-size: 14px; line-height: 1.4; color: var(--text-primary);">${r.combo}</span>
-                            ${demoIconBtn}
+                <div class="nested-row ${isChecked}" style="${timerHtml ? 'flex-direction: column; align-items: stretch;' : ''}">
+                    <div style="display: flex; align-items: flex-start; width: 100%;">
+                        <button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
+                        <div style="flex: 1; margin-left: 12px; min-width: 0;">
+                            <div style="display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <span style="font-size: 14px; line-height: 1.4; color: var(--text-primary);">
+                                    ${r.name ? `<strong>${r.name}</strong><br>` : ''}${r.combo}
+                                </span>
+                                ${demoIconBtn}
+                            </div>
                         </div>
                     </div>
+                    ${timerHtml}
                 </div>`;
             }).join('') : `<div class="nested-row"><button class="btn-check ${Store.getItemLog(day.id, ex.id)?.completed ? 'checked':''}" onclick="toggleRound(event, ${day.id}, '${ex.id}')">${icons.checkmark}</button><div style="flex:1; margin-left: 12px;">${ex.notes}</div></div>`;
 
@@ -1298,7 +1315,7 @@ window.renderDay = function(dayIdRaw) {
                 sections: [
                     { title: "COMBINATIONS", content: `<div class="nested-list">${roundsHtml}</div>` }
                 ],
-                actionHtml: `<button class="btn-large" style="margin-top: var(--sp-4);" onclick="startRoundTimer(${day.id}, '${ex.id}', ${ex.workSeconds}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', '${(ex.rounds ? ex.rounds.map(r => r.combo).join('<br>') : '').replace(/'/g, "\\'")}', '${(ex.restCue || '').replace(/'/g, "\\'")}')">Start Round Timer</button>`
+                actionHtml: ex.isHybrid ? '' : `<button class="btn-large" style="margin-top: var(--sp-4);" onclick="startRoundTimer(${day.id}, '${ex.id}', ${ex.workSeconds}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', '${(ex.rounds ? ex.rounds.map(r => r.combo).join('<br>') : '').replace(/'/g, "\\'")}', '${(ex.restCue || '').replace(/'/g, "\\'")}')">Start Round Timer</button>`
             };
             html += renderItemCard(normalizedItem, day.type);
         });
