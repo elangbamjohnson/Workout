@@ -207,11 +207,15 @@ window.toggleRound = function(e, dayId, roundId) {
 window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue, restCue = '') {
     const day = getDayData(dayId);
     let timedCues = null;
+    let completionCue = null;
     let itemsToComplete = [];
     if (day && day.exercises) {
         const ex = day.exercises.find(e => e.id === roundId);
         if (ex && ex.timedCues) {
             timedCues = ex.timedCues;
+        }
+        if (ex && ex.completionCue) {
+            completionCue = ex.completionCue;
         }
         if (ex && ex.rounds) {
             itemsToComplete = ex.rounds;
@@ -232,7 +236,7 @@ window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue, 
             });
         }
         reRenderViewingDay();
-    }, timedCues, false, restCue);
+    }, timedCues, false, restCue, completionCue);
 };
 
 

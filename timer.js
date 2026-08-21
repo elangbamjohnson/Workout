@@ -231,7 +231,7 @@ window.Timer = {
         if (window.WakeLock) window.WakeLock.acquire();
     },
 
-    startRound(workSec, restSec, title, cue, workoutType = 'bag', onComplete, timedCues = null, suppressAudio = false, restCue = '') {
+    startRound(workSec, restSec, title, cue, workoutType = 'bag', onComplete, timedCues = null, suppressAudio = false, restCue = '', completionCue = '') {
         this.initAudio();
         this.mode = 'round';
         this.phase = 'work';
@@ -243,7 +243,7 @@ window.Timer = {
         }
         
         const hasTimedCues = timedCues && timedCues.length > 0;
-        this.roundData = { workSec, restSec, title, cue, combos, onComplete, timedCues, hasTimedCues, suppressEndAudio: suppressAudio, restCue };
+        this.roundData = { workSec, restSec, title, cue, combos, onComplete, timedCues, hasTimedCues, suppressEndAudio: suppressAudio, restCue, completionCue };
         this.totalDuration = workSec;
         this.endTime = Date.now() + workSec * 1000;
         this.hasPlayed10Sec = false;
@@ -508,7 +508,9 @@ window.Timer = {
                     this.intervalId = setInterval(() => this.tick(), 100);
                 } else {
                     if (!this.roundData || !this.roundData.suppressEndAudio) {
-                        if (this.workoutType === 'technical') {
+                        if (this.roundData && this.roundData.completionCue) {
+                            window.speakAlert(this.roundData.completionCue);
+                        } else if (this.workoutType === 'technical') {
                             window.speakAlert(`${this.roundData.title} ended, take a breath`);
                         } else {
                             window.speakAlert("Workout ended, take a breath");

@@ -1106,24 +1106,31 @@ const workoutData = {
           "id": "day5-ex7",
           "name": "Cool-Down Shadowboxing",
           "setsReps": "2 min",
-          "intensity": "40%",
+          "intensity": "40% → 30–35% → ~20% → easy",
           "workSeconds": 120,
           "restSeconds": 0,
-          "benefits": "Do not end on the bag. Cool down with shadowboxing to begin the recovery process.",
+          "benefits": "Do not end on the bag. Use light shadowboxing to progressively lower intensity, restore controlled breathing, relax the shoulders and hands, and begin recovery. This is recovery work, not another boxing round. Reduce intensity throughout the two minutes.",
           "rounds": [
             {
               "id": "day5-ex7-r1",
-              "combo": "Light shadowboxing at 40% \u2014 no bag contact"
+              "combo": "Light shadowboxing — 1–2 • Hook • Move"
             },
             {
               "id": "day5-ex7-r2",
-              "combo": "Focus on breath control and movement"
+              "combo": "Slow down — Breathe + Move • 30–35%"
             },
             {
               "id": "day5-ex7-r3",
-              "combo": "Shake out the hands and shoulders"
+              "combo": "Recovery — Move + Shake Out • 20% → Easy"
             }
-          ]
+          ],
+          "hasTimedCues": true,
+          "timedCues": [
+            { "time": 0, "text": "Light shadowboxing. Forty percent. Use easy 1–2s and hooks. Keep moving and breathe.", "uiIndex": 0 },
+            { "time": 40, "text": "Slow it down. Thirty to thirty-five percent. Breathe deeply and keep your movement relaxed.", "uiIndex": 1 },
+            { "time": 80, "text": "Recovery pace. Let your hands and shoulders relax. Slow your movement and take deep breaths.", "uiIndex": 2 }
+          ],
+          "completionCue": "Cooldown complete. Take a breath and recover."
         }
       ],
       "description": "Higher-volume bag work building power endurance \u2014 maintaining punch quality under accumulated fatigue.",
