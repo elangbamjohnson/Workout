@@ -49,6 +49,20 @@ test.describe('Day 5 Stage 1 Restructure', () => {
     test('Round 1: Technical Combination Build phases sync correctly', async ({ page }) => {
         const round1 = page.locator('.item-card').filter({ hasText: 'Technical Combination Build' });
         await round1.locator('.item-header').click();
+
+        // Verify combination cells in card
+        const row1 = round1.locator('.nested-row').filter({ hasText: '1-2 — one minute' });
+        await expect(row1).toBeVisible();
+        await expect(row1).toContainText('Focus on perfect mechanics, not power.');
+
+        const row2 = round1.locator('.nested-row').filter({ hasText: '1-2-3 — one minute' });
+        await expect(row2).toBeVisible();
+        await expect(row2).toContainText('70 to 75 percent');
+
+        const row3 = round1.locator('.nested-row').filter({ hasText: '1-2-3-2 — one minute' });
+        await expect(row3).toBeVisible();
+        await expect(row3).toContainText('75 to 80 percent');
+
         await round1.locator('.btn-large', { hasText: 'Start Round Timer' }).click();
 
         const timerModal = page.locator('#timer-modal');

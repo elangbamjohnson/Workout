@@ -908,15 +908,15 @@ const workoutData = {
           "rounds": [
             {
               "id": "day5-ex1-r1",
-              "combo": "1-2"
+              "combo": "1-2 — one minute. Focus on perfect mechanics, not power."
             },
             {
               "id": "day5-ex1-r2",
-              "combo": "1-2-3"
+              "combo": "1-2-3 — one minute, 70 to 75 percent. Add lateral movement or a pivot after the combination."
             },
             {
               "id": "day5-ex1-r3",
-              "combo": "1-2-3-2"
+              "combo": "1-2-3-2 — one minute, 75 to 80 percent. Add movement between combinations."
             }
           ],
           "timedCues": [
