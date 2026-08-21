@@ -85,7 +85,7 @@ test.describe('Rest Timer Text & Voice Prompts Audit & UI Bleed Fix Verification
 
         const expectedDay5Cues = {
             'day5-ex1': 'Shoulders should be warm now. Shake it out, prepare for power singles.',
-            'day5-ex2': 'Breathe deep. Drop the hands. Body work coming up next.',
+            'day5-ex2': 'Breathe deep. Shake out the shoulders. Body work coming up next.',
             'day5-ex3': 'Recover. Next round is zero rest — Combination Power. Get ready.',
             'day5-ex5': 'One minute to recover. Final round is your power endurance test.',
             'day5-ex6': 'Outstanding work. Catch your breath. Day 5 is almost done.'

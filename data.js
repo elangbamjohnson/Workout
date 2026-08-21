@@ -927,25 +927,42 @@ const workoutData = {
           "intensity": "90-95%",
           "workSeconds": 180,
           "restSeconds": 60,
-          "restCue": "Breathe deep. Drop the hands. Body work coming up next.",
+          "restCue": "Breathe deep. Shake out the shoulders. Body work coming up next.",
           "benefits": "Singles force you to commit fully to each punch. No combination rhythm to hide behind.",
           "rounds": [
             {
               "id": "day5-ex2-r1",
-              "combo": "10x Power Jabs (one at a time, full reset)"
+              "combo": "Power jabs \u2014 10 quality singles \u2022 Punch \u2192 Full Reset"
             },
             {
               "id": "day5-ex2-r2",
-              "combo": "10x Power Crosses (one at a time, full reset)"
+              "combo": "Active reset \u2014 Move + Breathe \u2022 15 sec \u2022 No punches"
             },
             {
               "id": "day5-ex2-r3",
-              "combo": "10x Power Hooks (lead, one at a time)"
+              "combo": "Power crosses \u2014 10 quality singles \u2022 Punch \u2192 Full Reset"
             },
             {
               "id": "day5-ex2-r4",
-              "combo": "Focus: maximum force on each individual punch"
+              "combo": "Active reset \u2014 Move + Breathe \u2022 15 sec \u2022 Prepare for hooks"
+            },
+            {
+              "id": "day5-ex2-r5",
+              "combo": "Power hooks \u2014 5 lead + 5 rear \u2022 Punch \u2192 Full Reset"
+            },
+            {
+              "id": "day5-ex2-r6",
+              "combo": "Final reset \u2014 Shake Out + Breathe \u2022 15 sec"
             }
+          ],
+          "hasTimedCues": true,
+          "timedCues": [
+            { "time": 0, "text": "Power jabs. Forty-five seconds. Ten quality singles. Punch, fully reset, breathe, and go again. Ninety to ninety-five percent power.", "uiIndex": 0 },
+            { "time": 45, "text": "Active reset. Fifteen seconds. Move, breathe, and relax the shoulders.", "uiIndex": 1 },
+            { "time": 60, "text": "Power crosses. Forty-five seconds. Ten quality singles. Rotate, reset, breathe, and go again. Ninety to ninety-five percent power.", "uiIndex": 2 },
+            { "time": 105, "text": "Active reset. Fifteen seconds. Shake out the arms, breathe, and prepare for hooks.", "uiIndex": 3 },
+            { "time": 120, "text": "Power hooks. Forty-five seconds. Five lead and five rear hooks. One punch at a time. Full reset after every punch.", "uiIndex": 4 },
+            { "time": 165, "text": "Final reset. Fifteen seconds. Shake out the shoulders, breathe deep, and prepare for body work.", "uiIndex": 5 }
           ]
         },
         {
