@@ -336,7 +336,13 @@ function renderWarmup(day, parentSessionId, sessionType) {
         if (isRepBased) {
             timeOrRepsStr = item.reps;
         } else {
-            timeOrRepsStr = item.duration >= 60 ? `${Math.floor(item.duration / 60)} min` : `${item.duration} sec`;
+            if (item.duration >= 60) {
+                const mins = Math.floor(item.duration / 60);
+                const secs = item.duration % 60;
+                timeOrRepsStr = secs > 0 ? `${mins} min ${secs}s` : `${mins} min`;
+            } else {
+                timeOrRepsStr = `${item.duration}s`;
+            }
         }
         
         const dayIdStr = typeof sessionId === 'string' ? `'${sessionId}'` : sessionId;

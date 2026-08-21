@@ -898,7 +898,7 @@ const workoutData = {
       "exercises": [
         {
           "id": "day5-ex1",
-          "name": "Warm-Up Combinations",
+          "name": "Technical Combination Build",
           "setsReps": "3 min",
           "intensity": "70-80%",
           "workSeconds": 180,
@@ -908,16 +908,22 @@ const workoutData = {
           "rounds": [
             {
               "id": "day5-ex1-r1",
-              "combo": "1-2 combinations at 70% \u2014 warm up the shoulders and hips"
+              "combo": "1-2"
             },
             {
               "id": "day5-ex1-r2",
-              "combo": "Add the 3 (hook) at round midpoint"
+              "combo": "1-2-3"
             },
             {
               "id": "day5-ex1-r3",
-              "combo": "Finish with 1-2-3-2 at 80%"
+              "combo": "1-2-3-2"
             }
+          ],
+          "timedCues": [
+            { "time": 0, "text": "1-2. Focus on perfect mechanics rather than power. Rotate the hips and return hands quickly.", "uiIndex": 0 },
+            { "time": 60, "text": "1-2-3. Add small lateral movement or pivot after the combination.", "uiIndex": 1 },
+            { "time": 120, "text": "1-2-3-2. Add movement between combinations.", "uiIndex": 2 },
+            { "time": 175, "text": "Finish the round feeling warm and sharp, not fatigued." }
           ]
         },
         {
@@ -1157,9 +1163,13 @@ const workoutData = {
           "id": "day5-wu1",
           "name": "Jump Rope",
           "type": "timed",
-          "duration": 120,
+          "duration": 90,
           "switchSides": false,
-          "cue": "Easy pace \u2014 today is about endurance, start fresh"
+          "cue": "Start relaxed. Light feet, relaxed shoulders, steady breathing. Gradually increase pace during the final 20 seconds.",
+          "segments": [
+            { "time": 90, "text": "Start relaxed. Light feet, relaxed shoulders, steady breathing." },
+            { "time": 20, "text": "Gradually increase pace during the final 20 seconds." }
+          ]
         },
         {
           "id": "day5-wu2",
@@ -1167,7 +1177,7 @@ const workoutData = {
           "type": "timed",
           "duration": 30,
           "switchSides": false,
-          "cue": "Full arm extension overhead on every rep"
+          "cue": "Full arm extension overhead. Land softly and maintain a steady rhythm."
         },
         {
           "id": "day5-wu3",
@@ -1175,15 +1185,7 @@ const workoutData = {
           "type": "timed",
           "duration": 30,
           "switchSides": false,
-          "cue": "Hips level, drive each knee toward your chest"
-        },
-        {
-          "id": "day5-wu4",
-          "name": "Neck Rolls",
-          "type": "timed",
-          "duration": 30,
-          "switchSides": false,
-          "cue": "Slow and controlled \u2014 5 each direction"
+          "cue": "Keep hips level. Drive each knee toward the chest without bouncing excessively."
         },
         {
           "id": "day5-wu5",
@@ -1191,7 +1193,11 @@ const workoutData = {
           "type": "timed",
           "duration": 30,
           "switchSides": false,
-          "cue": "Full range \u2014 front and back"
+          "cue": "Controlled full range of motion. 15 seconds forward, 15 seconds backward.",
+          "segments": [
+            { "time": 30, "text": "Controlled full range of motion. 15 seconds forward" },
+            { "time": 15, "text": "Switch direction, 15 seconds backward" }
+          ]
         },
         {
           "id": "day5-wu6",
@@ -1199,15 +1205,19 @@ const workoutData = {
           "type": "timed",
           "duration": 30,
           "switchSides": false,
-          "cue": "Wide circles \u2014 loosen the hip joint before bag work"
+          "cue": "Wide controlled circles. Loosen the hips without rushing."
         },
         {
           "id": "day5-wu7",
           "name": "Shadowboxing",
           "type": "timed",
-          "duration": 60,
+          "duration": 90,
           "switchSides": false,
-          "cue": "40% speed \u2014 easy movement, just breathe into the session"
+          "cue": "Breathe continuously. Do not throw hard punches during the warm-up.",
+          "segments": [
+            { "time": 90, "text": "1-2, hooks, body shots, slips, pivots. Light movement." },
+            { "time": 30, "text": "Gradually increase speed to approximately 60 percent." }
+          ]
         }
       ]
     },
