@@ -206,10 +206,31 @@ window.toggleRound = function(e, dayId, roundId) {
 
 window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue, restCue = '') {
     const day = getDayData(dayId);
+    let timedCues = null;
+    let itemsToComplete = [];
+    if (day && day.exercises) {
+        const ex = day.exercises.find(e => e.id === roundId);
+        if (ex && ex.timedCues) {
+            timedCues = ex.timedCues;
+        }
+        if (ex && ex.rounds) {
+            itemsToComplete = ex.rounds;
+        }
+    } else if (day && day.sections) {
+        const sec = day.sections.find(s => s.id === roundId);
+        if (sec && sec.rounds) {
+            itemsToComplete = sec.rounds;
+        }
+    }
     Timer.startRound(workSec, restSec, title, cue, day ? day.type : 'bag', () => {
         Store.logItem(dayId, roundId, { completed: true });
+        if (itemsToComplete.length > 0) {
+            itemsToComplete.forEach(r => {
+                Store.logItem(dayId, r.id, { completed: true });
+            });
+        }
         reRenderViewingDay();
-    }, null, false, restCue);
+    }, timedCues, false, restCue);
 };
 
 
