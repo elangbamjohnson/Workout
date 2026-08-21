@@ -1061,32 +1061,45 @@ const workoutData = {
           "id": "day5-ex6",
           "name": "Power Endurance Test",
           "setsReps": "3 min",
-          "intensity": "100% on work intervals",
+          "intensity": "90–100% on work intervals",
           "workSeconds": 180,
           "restSeconds": 60,
-          "restCue": "Outstanding work. Catch your breath for the cool-down shadowboxing.",
-          "benefits": "Note your power level in the final 45-second interval. Compare to Round 1 of Day 2. This gap is your power endurance deficit \u2014 it narrows over the program.",
+          "restCue": "Outstanding work. Catch your breath. Day 5 is almost done.",
+          "benefits": "This is your power-under-fatigue test. Compare the quality of your final 45 seconds with your first 45 seconds. The goal is to reduce the drop in power and technique over time.",
           "rounds": [
             {
               "id": "day5-ex6-r1",
-              "combo": "45 sec: Maximum output \u2014 hardest punches you can throw"
+              "combo": "45 sec — Power Block 1: 1–2 / 1–2–3"
             },
             {
               "id": "day5-ex6-r2",
-              "combo": "15 sec: Active rest (footwork only)"
+              "combo": "15 sec — Active Recovery: Move + Breathe"
             },
             {
               "id": "day5-ex6-r3",
-              "combo": "45 sec: Maximum output"
+              "combo": "45 sec — Power Block 2: 1–2–3–2 / 1–2–Body Hook–2"
             },
             {
               "id": "day5-ex6-r4",
-              "combo": "15 sec: Active rest"
+              "combo": "15 sec — Active Recovery: Move + Reset"
             },
             {
               "id": "day5-ex6-r5",
-              "combo": "45 sec: Final maximum output"
+              "combo": "45 sec — Power Endurance: Hard + Clean"
+            },
+            {
+              "id": "day5-ex6-r6",
+              "combo": "15 sec — Final Surge: 1–2–3–2"
             }
+          ],
+          "hasTimedCues": true,
+          "timedCues": [
+            { "time": 0, "text": "Power block. Forty-five seconds. Use hard, clean 1–2s and 1–2–3s. Ninety to ninety-five percent power. Stay relaxed.", "uiIndex": 0 },
+            { "time": 45, "text": "Active recovery. Fifteen seconds. Keep moving, breathe, hands relaxed.", "uiIndex": 1 },
+            { "time": 60, "text": "Power block. Forty-five seconds. Use 1–2–3–2 and 1–2, body hook, 2. Hard and clean.", "uiIndex": 2 },
+            { "time": 105, "text": "Active recovery. Fifteen seconds. Move, breathe, reset.", "uiIndex": 3 },
+            { "time": 120, "text": "Final power block. Forty-five seconds. Maintain your hardest clean combinations. Do not sacrifice technique.", "uiIndex": 4 },
+            { "time": 165, "text": "Final fifteen. Maximum clean output. 1–2–3–2. Hard, fast and sharp.", "uiIndex": 5 }
           ]
         },
         {
