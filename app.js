@@ -209,10 +209,7 @@ window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue, 
     let timedCues = null;
     let itemsToComplete = [];
     if (day && day.exercises) {
-        let ex = day.exercises.find(e => e.id === roundId);
-        if (!ex) {
-            ex = day.exercises.find(e => e.rounds && e.rounds.some(r => r.id === roundId));
-        }
+        const ex = day.exercises.find(e => e.id === roundId);
         if (ex && ex.timedCues) {
             timedCues = ex.timedCues;
         }
@@ -226,9 +223,11 @@ window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue, 
         }
     }
     Timer.startRound(workSec, restSec, title, cue, day ? day.type : 'bag', () => {
+        console.log('Completing round:', dayId, roundId);
         Store.logItem(dayId, roundId, { completed: true });
         if (itemsToComplete.length > 0) {
             itemsToComplete.forEach(r => {
+                console.log('Completing child:', dayId, r.id);
                 Store.logItem(dayId, r.id, { completed: true });
             });
         }
@@ -616,10 +615,10 @@ function renderItemCard(item, dayType) {
     let html = `
         <div class="item-card type-${dayType} ${isExpanded ? 'expanded' : ''}" data-id="${item.id}">
             <button class="item-header" onclick="toggleCard('${item.id}')" aria-expanded="${isExpanded}" aria-label="Toggle ${item.title.replace(/"/g, '&quot;')} section">
+                <div class="num-badge" aria-hidden="true">${item.badge}</div>
                 <div class="item-header-content">
                     <div class="item-header-top">
                         <div class="item-title-wrap">
-                            <div class="num-badge" aria-hidden="true">${item.badge}</div>
                             <div>
                                 <div style="display: flex; align-items: center; gap: 6px;">
                                     <h3 class="title-card">${item.title}</h3>
@@ -1277,29 +1276,19 @@ window.renderDay = function(dayIdRaw) {
                            <svg viewBox="0 0 24 24" width="10" height="10"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
                        </button>`
                     : '';
-                let timerHtml = '';
-                if (ex.isHybrid && r.workSeconds) {
-                    const timedCuesArg = r.timedCues ? encodeURIComponent(JSON.stringify(r.timedCues)).replace(/'/g, "\\'") : '';
-                    const comboArg = r.combo.replace(/'/g, "\\'");
-                    const restCueArg = r.restCue ? r.restCue.replace(/'/g, "\\'") : '';
-                    timerHtml = `
-                    <button class="btn-play type-bag" onclick="startRoundTimer(${day.id}, '${r.id}', ${r.workSeconds}, ${r.restSeconds || 0}, '${r.name ? r.name.replace(/'/g, "\\'") : ex.name.replace(/'/g, "\\'")}', '${comboArg}', '${restCueArg}')" style="margin-top: 12px;"><span class="play-icon">${icons.play}</span> Start Timer</button>`;
-                }
-
                 return `
-                <div class="nested-row ${isChecked}" style="${timerHtml ? 'flex-direction: column; align-items: stretch;' : ''}">
-                    <div style="display: flex; align-items: flex-start; width: 100%;">
+                <div class="nested-row ${isChecked}">
+                    <div style="display: flex; align-items: center; width: 100%;">
                         <button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
                         <div style="flex: 1; margin-left: 12px; min-width: 0;">
                             <div style="display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                                 <span style="font-size: 14px; line-height: 1.4; color: var(--text-primary);">
-                                    ${r.name ? `<strong>${r.name}</strong><br>` : ''}${r.combo}
+                                    ${r.combo}
                                 </span>
                                 ${demoIconBtn}
                             </div>
                         </div>
                     </div>
-                    ${timerHtml}
                 </div>`;
             }).join('') : `<div class="nested-row"><button class="btn-check ${Store.getItemLog(day.id, ex.id)?.completed ? 'checked':''}" onclick="toggleRound(event, ${day.id}, '${ex.id}')">${icons.checkmark}</button><div style="flex:1; margin-left: 12px;">${ex.notes}</div></div>`;
 
@@ -1315,7 +1304,7 @@ window.renderDay = function(dayIdRaw) {
                 sections: [
                     { title: "COMBINATIONS", content: `<div class="nested-list">${roundsHtml}</div>` }
                 ],
-                actionHtml: ex.isHybrid ? '' : `<button class="btn-large" style="margin-top: var(--sp-4);" onclick="startRoundTimer(${day.id}, '${ex.id}', ${ex.workSeconds}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', '${(ex.rounds ? ex.rounds.map(r => r.combo).join('<br>') : '').replace(/'/g, "\\'")}', '${(ex.restCue || '').replace(/'/g, "\\'")}')">Start Round Timer</button>`
+                actionHtml: `<button class="btn-large" style="margin-top: var(--sp-4);" onclick="startRoundTimer(${day.id}, '${ex.id}', ${ex.workSeconds}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', '${(ex.rounds ? ex.rounds.map(r => r.combo).join('<br>') : '').replace(/'/g, "\\'")}', '${(ex.restCue || '').replace(/'/g, "\\'")}')">Start Round Timer</button>`
             };
             html += renderItemCard(normalizedItem, day.type);
         });

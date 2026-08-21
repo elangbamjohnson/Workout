@@ -987,57 +987,74 @@ const workoutData = {
           "name": "Combination Power",
           "setsReps": "3 min",
           "intensity": "88-90%",
-          "isHybrid": true,
           "benefits": "Move your feet between combinations. Set up each combination from a new angle.",
+          "workSeconds": 180,
+          "restSeconds": 30,
+          "restCue": "Walk around the bag. Shake out the shoulders. Take controlled breaths. Do not sit down.",
           "rounds": [
             {
               "id": "day5-ex4-r1",
-              "combo": "1-2-3 \u2014 approximately 6 repetitions. Move laterally, reset, re-enter after each combination."
+              "combo": "1-2-3 \u2014 move laterally, reset, re-enter after each combination."
             },
             {
               "id": "day5-ex4-r2",
-              "combo": "1-2-3-2 \u2014 approximately 5 repetitions. Focus on maintaining speed through the final cross."
+              "combo": "1-2-3-2 \u2014 focus on maintaining speed through the final cross."
             },
             {
               "id": "day5-ex4-r3",
-              "combo": "1-2-Lead Body Hook-2 \u2014 approximately 5 repetitions. Level change, hip rotation, explosive body shot, immediate return to stance, strong cross."
+              "combo": "1, 2, 3 body, 2 \u2014 level change, hip rotation, explosive body shot, immediate return to stance, strong cross."
             },
             {
               "id": "day5-ex4-r4",
-              "name": "Final 30 seconds",
-              "combo": "Free combination work using 1-2-3, 1-2-3-2, or 1-2-body hook-2, at 90% intensity. Every combination should be powerful, but never sacrifice balance or technique. Move after every attack.",
-              "workSeconds": 30,
-              "restSeconds": 30,
-              "restCue": "Walk around the bag, shake out the shoulders, take controlled breaths, do not sit down."
+              "combo": "Final free combination work, 90% intensity. Every combination should be powerful, but never sacrifice balance or technique. Move after every attack."
             }
+          ],
+          "hasTimedCues": true,
+          "timedCues": [
+            { "time": 0, "text": "1-2-3 \u2014 move laterally, reset, re-enter after each combination.", "uiIndex": 0 },
+            { "time": 60, "text": "1-2-3-2 \u2014 focus on maintaining speed through the final cross.", "uiIndex": 1 },
+            { "time": 105, "text": "1, 2, 3 body, 2 \u2014 level change, hip rotation, explosive body shot, immediate return to stance, strong cross.", "uiIndex": 2 },
+            { "time": 150, "text": "Final free combination work, 90% intensity. Every combination should be powerful, but never sacrifice balance or technique. Move after every attack.", "uiIndex": 3 }
           ]
         },
         {
           "id": "day5-ex5",
           "name": "Pressure Round",
           "setsReps": "3 min",
-          "intensity": "85%",
+          "intensity": "80-95%",
           "workSeconds": 180,
           "restSeconds": 60,
-          "restCue": "One minute to recover. Final round is a maximum effort sprint.",
-          "benefits": "This simulates a real fight round. Constant movement with intermittent power output. Your power maintenance under movement is tested here.",
+          "restCue": "One minute to recover. Final round is your power endurance test.",
+          "benefits": "This simulates a real fight round. Constant movement with intermittent power output. Your power maintenance under movement is tested here. If technique breaks down significantly, temporarily reduce punching intensity, regain balance and form, then increase output again. Do not sacrifice technique simply to maintain the prescribed intensity.",
           "rounds": [
             {
               "id": "day5-ex5-r1",
-              "combo": "Constant movement \u2014 never stop moving your feet"
+              "combo": "Move + Attack \u2014 1\u20132 every 8\u201310 sec"
             },
             {
               "id": "day5-ex5-r2",
-              "combo": "Throw combinations every 5-8 seconds"
+              "combo": "Increase Combinations \u2014 1\u20132\u20133 / 1\u20132\u20133\u20132"
             },
             {
               "id": "day5-ex5-r3",
-              "combo": "No set pattern \u2014 improvise but maintain power"
+              "combo": "Head \u2192 Body \u2192 Angle \u2014 1\u20132 \u2192 Lead Body Hook \u2192 Pivot OR 1\u20132\u20133 \u2192 Rear Body Hook \u2192 Exit"
             },
             {
               "id": "day5-ex5-r4",
-              "combo": "Mix head and body targets"
+              "combo": "Pressure Surge \u2014 1\u20132\u20133\u20132 / 1\u20132\u2013Body Hook\u20132"
+            },
+            {
+              "id": "day5-ex5-r5",
+              "combo": "FINAL 15 \u2014 1\u20132\u20133\u20132 / 1\u20132\u2013Body Hook\u20132"
             }
+          ],
+          "hasTimedCues": true,
+          "timedCues": [
+            { "time": 0, "text": "Move and attack. Throw a 1\u20132 every eight to ten seconds. Stay relaxed and establish your rhythm.", "uiIndex": 0 },
+            { "time": 45, "text": "Increase your combinations. Use 1\u20132\u20133 or 1\u20132\u20133\u20132. Attack, exit, reset.", "uiIndex": 1 },
+            { "time": 90, "text": "Change targets and angles. Throw 1\u20132, lead body hook, then pivot out. Or 1\u20132\u20133, rear body hook, and exit.", "uiIndex": 2 },
+            { "time": 135, "text": "Pressure surge. Use 1\u20132\u20133\u20132 and 1\u20132, body hook, 2. Increase your output. Stay sharp.", "uiIndex": 3 },
+            { "time": 165, "text": "Final fifteen. Give me 1\u20132\u20133\u20132 and 1\u20132, body hook, 2. Hard and clean. Keep moving.", "uiIndex": 4 }
           ]
         },
         {
