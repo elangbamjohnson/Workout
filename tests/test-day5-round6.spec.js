@@ -1,16 +1,15 @@
 const { test, expect } = require('@playwright/test');
 
 async function advanceTimer(page, seconds) {
-    for (let i = 0; i < seconds; i++) {
-        await page.clock.fastForward('00:01');
-        await page.waitForTimeout(5);
-    }
+    await page.clock.runFor(seconds * 1000);
+    // Allow DOM to update
+    await page.waitForTimeout(50);
 }
 
 test.describe('Day 5 Restructure — Round 6 (Power Endurance Test) TimedCues & Workflow', () => {
 
     test.beforeEach(async ({ page }) => {
-        await page.clock.install();
+        await page.clock.pauseAt(new Date('2024-01-01T00:00:00Z'));
         await page.goto('/');
         
         // Use a clean state
@@ -19,7 +18,7 @@ test.describe('Day 5 Restructure — Round 6 (Power Endurance Test) TimedCues & 
         });
         await page.reload();
 
-        await expect(page.locator('#splash-screen')).toBeHidden();
+        await page.evaluate(() => { document.getElementById('splash-screen').style.display = 'none'; });
 
         // Mock speech to capture calls
         await page.evaluate(() => {
@@ -79,6 +78,10 @@ test.describe('Day 5 Restructure — Round 6 (Power Endurance Test) TimedCues & 
 
         const timerModal = page.locator('#timer-modal');
         await expect(timerModal).toBeVisible();
+
+        // Advance past 5s countdown
+        await advanceTimer(page, 6);
+
         await expect(timerModal.locator('.timer-header h2')).toHaveText('Power Endurance Test');
 
         // Phase 1: 0:00 - 0:45

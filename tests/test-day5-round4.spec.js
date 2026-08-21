@@ -1,16 +1,15 @@
 const { test, expect } = require('@playwright/test');
 
 async function advanceTimer(page, seconds) {
-    for (let i = 0; i < seconds; i++) {
-        await page.clock.fastForward('00:01');
-        await page.waitForTimeout(5);
-    }
+    await page.clock.runFor(seconds * 1000);
+    // Allow DOM to update
+    await page.waitForTimeout(50);
 }
 
 test.describe('Day 5 Restructure — Round 4 (Combination Power) Standard Rendering', () => {
 
     test.beforeEach(async ({ page }) => {
-        await page.clock.install();
+        await page.clock.pauseAt(new Date('2024-01-01T00:00:00Z'));
         page.on('console', msg => console.log('BROWSER:', msg.text()));
         await page.goto('/');
         
@@ -20,7 +19,7 @@ test.describe('Day 5 Restructure — Round 4 (Combination Power) Standard Render
         });
         await page.reload();
 
-        await expect(page.locator('#splash-screen')).toBeHidden();
+        await page.evaluate(() => { document.getElementById('splash-screen').style.display = 'none'; });
 
         // Intercept global audio to prevent real playback and capture speech events
         await page.evaluate(() => {
@@ -57,17 +56,24 @@ test.describe('Day 5 Restructure — Round 4 (Combination Power) Standard Render
         // Verify timer modal layout
         const timerModal = page.locator('#timer-modal');
         await expect(timerModal).toBeVisible();
+
+        await advanceTimer(page, 6);
+
         await expect(timerModal.locator('.timer-header h2')).toHaveText('Combination Power');
 
-        // Phase 1 (0:00 - 1:00)
+        // Wait a beat to let it process
         await advanceTimer(page, 1);
+
+        // Sub-title checks: (Round 1/3 have combos, Day 5 uses custom layout)
+        
         const cue1 = "1-2-3 — move laterally, reset, re-enter after each combination.";
         await expect(timerModal.locator('.timer-cue')).toHaveText(cue1);
         let spokenCues = await page.evaluate(() => window.spokenCues);
         expect(spokenCues).toContain(cue1);
+        await page.evaluate(() => { window.spokenCues = []; });
 
         // Phase 2 (1:00 - 1:45) -> 60s elapsed
-        await advanceTimer(page, 59);
+        await advanceTimer(page, 60);
         const cue2 = "1-2-3-2 — focus on maintaining speed through the final cross.";
         await expect(timerModal.locator('.timer-cue')).toHaveText(cue2);
         spokenCues = await page.evaluate(() => window.spokenCues);

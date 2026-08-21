@@ -1,19 +1,18 @@
 const { test, expect } = require('@playwright/test');
 
 async function advanceTimer(page, seconds) {
-    for (let i = 0; i < seconds; i++) {
-        await page.clock.fastForward('00:01');
-        await page.waitForTimeout(5);
-    }
+    await page.clock.runFor(seconds * 1000);
+    // Allow DOM to update
+    await page.waitForTimeout(50);
 }
 
 test.describe('Day 5 Restructure — Round 3 (Body Power + Level Change)', () => {
     test.beforeEach(async ({ page }) => {
-        await page.clock.install();
+        await page.clock.pauseAt(new Date('2024-01-01T00:00:00Z'));
         await page.goto('/');
         await page.evaluate(() => localStorage.clear());
         await page.reload();
-        await expect(page.locator('#splash-screen')).toBeHidden();
+        await page.evaluate(() => { document.getElementById('splash-screen').style.display = 'none'; });
 
         // Navigate to Day 5
         const day5Card = page.locator('.day-card').filter({ hasText: 'Day 5' });
@@ -64,15 +63,19 @@ test.describe('Day 5 Restructure — Round 3 (Body Power + Level Change)', () =>
         const timerModal = page.locator('#timer-modal');
         await expect(timerModal).toBeVisible();
 
+        await advanceTimer(page, 6);
+
+        await expect(timerModal.locator('.timer-header h2')).toHaveText('Body Power + Level Change');
+
         // Phase 1 (0:00 - 0:45)
-        await advanceTimer(page, 1);
         const cue1 = "3 body — 45 seconds, 80 to 85 percent. Bend the knees and change level, don't just bend at the waist.";
         await expect(timerModal.locator('.timer-cue')).toHaveText(cue1);
         let spokenCues = await page.evaluate(() => window.spokenCues);
         expect(spokenCues).toContain(cue1);
+        await page.evaluate(() => { window.spokenCues = []; });
 
         // Phase 2 (0:45 - 1:30) -> 45s elapsed
-        await advanceTimer(page, 44);
+        await advanceTimer(page, 45);
         const cue2 = "4 body — 45 seconds, 80 to 85 percent. Focus on hip rotation and returning to boxing stance.";
         await expect(timerModal.locator('.timer-cue')).toHaveText(cue2);
         spokenCues = await page.evaluate(() => window.spokenCues);

@@ -207,11 +207,15 @@ window.toggleRound = function(e, dayId, roundId) {
 window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue, restCue = '') {
     const day = getDayData(dayId);
     let timedCues = null;
+    let completionCue = null;
     let itemsToComplete = [];
     if (day && day.exercises) {
         const ex = day.exercises.find(e => e.id === roundId);
         if (ex && ex.timedCues) {
             timedCues = ex.timedCues;
+        }
+        if (ex && ex.completionCue) {
+            completionCue = ex.completionCue;
         }
         if (ex && ex.rounds) {
             itemsToComplete = ex.rounds;
@@ -222,17 +226,30 @@ window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue, 
             itemsToComplete = sec.rounds;
         }
     }
-    Timer.startRound(workSec, restSec, title, cue, day ? day.type : 'bag', () => {
-        console.log('Completing round:', dayId, roundId);
-        Store.logItem(dayId, roundId, { completed: true });
-        if (itemsToComplete.length > 0) {
-            itemsToComplete.forEach(r => {
-                console.log('Completing child:', dayId, r.id);
-                Store.logItem(dayId, r.id, { completed: true });
-            });
-        }
-        reRenderViewingDay();
-    }, timedCues, false, restCue);
+    let durationText = workSec + " seconds";
+    if (workSec === 180) durationText = "three minutes";
+    else if (workSec === 120) durationText = "two minutes";
+    else if (workSec === 90) durationText = "ninety seconds";
+    else if (workSec === 60) durationText = "one minute";
+    else if (workSec === 45) durationText = "forty five seconds";
+    else if (workSec === 30) durationText = "thirty seconds";
+    
+    // We only announce the title if we don't have a complex cue, or just "Get ready"
+    const startPrompt = `Get ready for ${title}.`;
+
+    Timer.startCountdown(5, title, () => {
+        Timer.startRound(workSec, restSec, title, cue, day ? day.type : 'bag', () => {
+            console.log('Completing round:', dayId, roundId);
+            Store.logItem(dayId, roundId, { completed: true });
+            if (itemsToComplete.length > 0) {
+                itemsToComplete.forEach(r => {
+                    console.log('Completing child:', dayId, r.id);
+                    Store.logItem(dayId, r.id, { completed: true });
+                });
+            }
+            reRenderViewingDay();
+        }, timedCues, false, restCue, completionCue);
+    }, null, startPrompt);
 };
 
 
