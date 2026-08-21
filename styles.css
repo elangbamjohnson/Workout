@@ -2059,3 +2059,68 @@ select:focus-visible {
     outline-offset: 2px !important;
 }
 
+/* ==========================================
+   PWA UPDATE BANNER
+   ========================================== */
+#update-banner {
+    position: fixed;
+    bottom: calc(env(safe-area-inset-bottom) + 16px);
+    left: 16px;
+    right: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    z-index: 10000;
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    animation: slideUp 0.3s ease-out;
+}
+
+#update-banner h3 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 700;
+}
+
+#update-banner p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.update-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.update-actions button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-update-later {
+    background: transparent;
+    border: 1px solid var(--border-card);
+    color: var(--text-muted);
+}
+
+.btn-update-now {
+    background: var(--primary);
+    border: none;
+    color: white;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+

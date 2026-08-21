@@ -24,7 +24,13 @@ self.addEventListener('install', event => {
       return cache.addAll(ASSETS_TO_CACHE);
     })
   );
-  self.skipWaiting();
+});
+
+// Message — handle skipWaiting from client
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 // Activate — clean up old caches
