@@ -79,7 +79,7 @@ test.describe('Rest Timer Text & Voice Prompts Audit & UI Bleed Fix Verification
             'day5-ex2': 'Breathe deep. Drop the hands. Body work coming up next.',
             'day5-ex3': 'Recover. Next round is zero rest — Combination Power. Get ready.',
             'day5-ex5': 'One minute to recover. Final round is your power endurance test.',
-            'day5-ex6': 'Outstanding work. Catch your breath for the cool-down shadowboxing.'
+            'day5-ex6': 'Outstanding work. Catch your breath. Day 5 is almost done.'
         };
 
         for (const [id, expectedCue] of Object.entries(expectedDay5Cues)) {
