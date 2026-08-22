@@ -920,9 +920,9 @@ const workoutData = {
             }
           ],
           "timedCues": [
-            { "time": 0, "text": "1-2 — one minute. Focus on perfect mechanics, not power.", "uiIndex": 0 },
-            { "time": 60, "text": "1-2-3 — one minute, 70 to 75 percent. Add lateral movement or a pivot after the combination.", "uiIndex": 1 },
-            { "time": 120, "text": "1-2-3-2 — one minute, 75 to 80 percent. Add movement between combinations.", "uiIndex": 2 },
+            { "time": 0, "text": "1-2 — one minute. Focus on perfect mechanics, not power.", "uiIndex": 0, "autoCheckId": "day5-ex1-r1" },
+            { "time": 60, "text": "1-2-3 — one minute, 70 to 75 percent. Add lateral movement or a pivot after the combination.", "uiIndex": 1, "autoCheckId": "day5-ex1-r2" },
+            { "time": 120, "text": "1-2-3-2 — one minute, 75 to 80 percent. Add movement between combinations.", "uiIndex": 2, "autoCheckId": "day5-ex1-r3" },
             { "time": 175, "text": "Finish the round feeling warm and sharp, not fatigued." }
           ]
         },
@@ -963,12 +963,12 @@ const workoutData = {
           ],
           "hasTimedCues": true,
           "timedCues": [
-            { "time": 0, "text": "Power jabs. Forty-five seconds. Ten quality singles. Punch, fully reset, breathe, and go again. Ninety to ninety-five percent power.", "uiIndex": 0 },
-            { "time": 45, "text": "Active reset. Fifteen seconds. Move, breathe, and relax the shoulders.", "uiIndex": 1 },
-            { "time": 60, "text": "Power crosses. Forty-five seconds. Ten quality singles. Rotate, reset, breathe, and go again. Ninety to ninety-five percent power.", "uiIndex": 2 },
-            { "time": 105, "text": "Active reset. Fifteen seconds. Shake out the arms, breathe, and prepare for hooks.", "uiIndex": 3 },
-            { "time": 120, "text": "Power hooks. Forty-five seconds. Five lead and five rear hooks. One punch at a time. Full reset after every punch.", "uiIndex": 4 },
-            { "time": 165, "text": "Final reset. Fifteen seconds. Shake out the shoulders, breathe deep, and prepare for body work.", "uiIndex": 5 }
+            { "time": 0, "text": "Power jabs. Forty-five seconds. Ten quality singles. Punch, fully reset, breathe, and go again. Ninety to ninety-five percent power.", "uiIndex": 0, "autoCheckId": "day5-ex2-r1" },
+            { "time": 45, "text": "Active reset. Fifteen seconds. Move, breathe, and relax the shoulders.", "uiIndex": 1, "autoCheckId": "day5-ex2-r2" },
+            { "time": 60, "text": "Power crosses. Forty-five seconds. Ten quality singles. Rotate, reset, breathe, and go again. Ninety to ninety-five percent power.", "uiIndex": 2, "autoCheckId": "day5-ex2-r3" },
+            { "time": 105, "text": "Active reset. Fifteen seconds. Shake out the arms, breathe, and prepare for hooks.", "uiIndex": 3, "autoCheckId": "day5-ex2-r4" },
+            { "time": 120, "text": "Power hooks. Forty-five seconds. Five lead and five rear hooks. One punch at a time. Full reset after every punch.", "uiIndex": 4, "autoCheckId": "day5-ex2-r5" },
+            { "time": 165, "text": "Final reset. Fifteen seconds. Shake out the shoulders, breathe deep, and prepare for body work.", "uiIndex": 5, "autoCheckId": "day5-ex2-r6" }
           ]
         },
         {
@@ -1163,11 +1163,11 @@ const workoutData = {
           "id": "day5-wu1",
           "name": "Jump Rope",
           "type": "timed",
-          "duration": 90,
+          "duration": 120,
           "switchSides": false,
           "cue": "Start relaxed. Light feet, relaxed shoulders, steady breathing. Gradually increase pace during the final 20 seconds.",
           "segments": [
-            { "time": 90, "text": "Start relaxed. Light feet, relaxed shoulders, steady breathing." },
+            { "time": 120, "text": "Start relaxed. Light feet, relaxed shoulders, steady breathing." },
             { "time": 20, "text": "Gradually increase pace during the final 20 seconds." }
           ]
         },
@@ -1195,8 +1195,8 @@ const workoutData = {
           "switchSides": false,
           "cue": "Controlled full range of motion. 15 seconds forward, 15 seconds backward.",
           "segments": [
-            { "time": 30, "text": "Controlled full range of motion. 15 seconds forward" },
-            { "time": 15, "text": "Switch direction, 15 seconds backward" }
+            { "time": 30, "text": "Controlled full range of motion. 15 seconds forward." },
+            { "time": 15, "text": "Switch direction, 15 seconds backward." }
           ]
         },
         {
@@ -1213,12 +1213,31 @@ const workoutData = {
           "type": "timed",
           "duration": 90,
           "switchSides": false,
-          "cue": "Breathe continuously. Do not throw hard punches during the warm-up.",
+          "cue": "1-2, hooks, body shots, slips, pivots. Light movement. Gradually increase speed to approximately 60 percent.",
           "segments": [
             { "time": 90, "text": "1-2, hooks, body shots, slips, pivots. Light movement." },
             { "time": 30, "text": "Gradually increase speed to approximately 60 percent." }
           ]
         }
+      ],
+      "warmupTimedCues": [
+        { "time": 0, "text": "Start relaxed. Light feet, relaxed shoulders, steady breathing.", "uiIndex": 0 },
+        { "time": 100, "text": "Gradually increase pace during the final 20 seconds.", "uiIndex": 0 },
+        { "time": 120, "text": "Full arm extension overhead. Land softly and maintain a steady rhythm.", "uiIndex": 1, "autoCheckId": "day5-wu1" },
+        { "time": 150, "text": "Keep hips level. Drive each knee toward the chest without bouncing excessively.", "uiIndex": 2, "autoCheckId": "day5-wu2" },
+        { "time": 180, "text": "Controlled full range of motion. 15 seconds forward.", "uiIndex": 3, "autoCheckId": "day5-wu3" },
+        { "time": 195, "text": "Switch direction, 15 seconds backward.", "uiIndex": 3 },
+        { "time": 210, "text": "Wide controlled circles. Loosen the hips without rushing.", "uiIndex": 4, "autoCheckId": "day5-wu5" },
+        { "time": 240, "text": "1-2, hooks, body shots, slips, pivots. Light movement.", "uiIndex": 5, "autoCheckId": "day5-wu6" },
+        { "time": 300, "text": "Gradually increase speed to approximately 60 percent.", "uiIndex": 5 }
+      ],
+      "warmupCombos": [
+        "Jump Rope — 2:00",
+        "Jumping Jacks — 30s",
+        "Mountain Climbers — 30s",
+        "Shoulder Circles — 30s",
+        "Hip Circles — 30s",
+        "Shadowboxing — 1:30"
       ]
     },
     {

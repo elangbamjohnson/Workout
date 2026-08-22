@@ -15,8 +15,16 @@ const icons = {
     clock: `<svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-.25-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>`,
     weight: `<svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>`,
     repeat: `<svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>`,
-    play: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`
+    play: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`,
+    // Warmup exercise icons (line-art, stroke-based)
+    iconJumpRope: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="3.5" r="1.2"/><line x1="12" y1="4.7" x2="12" y2="8.5"/><line x1="9.5" y1="6.5" x2="6.5" y2="4.5"/><line x1="14.5" y1="6.5" x2="17.5" y2="4.5"/><path d="M9 10c0 0 .8 2 3 2s3-2 3-2"/><path d="M6 14.5c-1 .8-1 2.2 0 3 .8.7 2 .7 3 0l3-2.5 3 2.5c1 .7 2.2.7 3 0 1-.8 1-2.2 0-3"/><line x1="12" y1="12" x2="12" y2="17.5" stroke-dasharray="2 1.5"/></svg>`,
+    iconJumpingJacks: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="3.5" r="1.5"/><line x1="12" y1="5" x2="12" y2="11"/><line x1="5" y1="7.5" x2="9" y2="10.5"/><line x1="19" y1="7.5" x2="15" y2="10.5"/><line x1="12" y1="11" x2="9" y2="17"/><line x1="12" y1="11" x2="15" y2="17"/><line x1="9" y1="17" x2="7" y2="20.5"/><line x1="15" y1="17" x2="17" y2="20.5"/></svg>`,
+    iconMountainClimbers: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="17" cy="4" r="1.5"/><path d="M14.5 6l-2 3-4 1-5 3.5"/><line x1="12.5" y1="9" x2="15" y2="13.5"/><line x1="15" y1="13.5" x2="13" y2="17.5"/><line x1="13" y1="17.5" x2="14" y2="21"/><line x1="3.5" y1="12.5" x2="7.5" y2="9"/></svg>`,
+    iconShoulderCircles: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.5"/><line x1="12" y1="5.5" x2="12" y2="10"/><line x1="8.5" y1="10" x2="15.5" y2="10"/><line x1="8.5" y1="10" x2="8.5" y2="15"/><line x1="15.5" y1="10" x2="15.5" y2="15"/><line x1="8.5" y1="15" x2="7" y2="20"/><line x1="15.5" y1="15" x2="17" y2="20"/><path d="M5.5 7.5 A6.5 6.5 0 0 1 18.5 7.5" stroke-dasharray="2 1.5"/><path d="M5.5 10.5 A6.5 6.5 0 0 0 18.5 10.5" stroke-dasharray="2 1.5"/></svg>`,
+    iconHipCircles: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.5"/><line x1="12" y1="5.5" x2="12" y2="9.5"/><line x1="9" y1="9.5" x2="15" y2="9.5"/><line x1="9" y1="9.5" x2="9" y2="14.5"/><line x1="15" y1="9.5" x2="15" y2="14.5"/><line x1="9" y1="14.5" x2="7.5" y2="20"/><line x1="15" y1="14.5" x2="16.5" y2="20"/><ellipse cx="12" cy="12" rx="5" ry="3" stroke-dasharray="2.5 1.5"/></svg>`,
+    iconShadowboxing: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="3.5" r="1.5"/><line x1="12" y1="5" x2="12" y2="10"/><line x1="12" y1="8" x2="5.5" y2="11.5"/><line x1="12" y1="10" x2="17.5" y2="13.5"/><line x1="5.5" y1="11.5" x2="4.5" y2="13"/><line x1="17.5" y1="13.5" x2="18.5" y2="15"/><line x1="12" y1="10" x2="12" y2="15.5"/><line x1="12" y1="15.5" x2="9.5" y2="21"/><line x1="12" y1="15.5" x2="14.5" y2="21"/></svg>`
 };
+
 
 const WakeLock = {
   _sentinel: null,
@@ -161,7 +169,7 @@ function getDayData(dayId) {
     if (typeof dayId === 'string' && dayId.startsWith('quick-')) {
         return window.quickWorkouts.find(q => q.id === dayId);
     }
-    return workoutData.days.find(d => d.id === dayId);
+    return workoutData.days.find(d => d.id === dayId || d.id == dayId);
 }
 
 function reRenderViewingDay() {
@@ -279,6 +287,41 @@ window.startWarmupTimer = function(dayId, itemId, duration, title, cue, switchSi
     }, null, startPrompt);
 };
 
+window.startWarmupRoundTimer = function(dayId) {
+    const day = getDayData(dayId);
+    if (!day || !day.warmup) return;
+    
+    const workSec = day.warmup.reduce((sum, w) => sum + (w.duration || 0), 0);
+    const title = "Warm-up";
+    const timedCues = day.warmupTimedCues;
+    const comboStr = (day.warmupCombos || day.warmup.map(w => {
+        const dStr = w.duration >= 60 ? `${Math.floor(w.duration / 60)}:${(w.duration % 60).toString().padStart(2, '0')}` : `${w.duration}s`;
+        return `${w.name} — ${dStr}`;
+    })).join('<br>');
+    
+    const startPrompt = "Get ready for Warm-up.";
+    
+    Timer.startCountdown(5, title, () => {
+        Timer.startRound(workSec, 0, title, comboStr, day.type || 'bag', () => {
+            day.warmup.forEach(item => {
+                Store.logItem(dayId, item.id, { completed: true });
+            });
+            Store.logItem(dayId, 'warmup-card', { completed: true });
+            reRenderViewingDay();
+        }, timedCues, false, '', "Warm-up complete. Take a breath and get ready for Round 1.");
+    }, null, startPrompt);
+};
+
+window.resetWarmup = function(dayId) {
+    const day = getDayData(dayId);
+    if (!day || !day.warmup) return;
+    day.warmup.forEach(item => {
+        Store.logItem(dayId, item.id, { completed: false });
+    });
+    Store.logItem(dayId, 'warmup-card', { completed: false });
+    reRenderViewingDay();
+};
+
 window.startPowerCircuitRound = function(quickId, roundId, workSec, restSec, title, restCue) {
     Timer.startCountdown(5, title, () => {
         Timer.startRound(workSec, restSec, title, "Focus on explosive speed", 'strength', () => {
@@ -317,6 +360,7 @@ function renderWarmup(day, parentSessionId, sessionType) {
     if (!day.warmup || day.warmup.length === 0) return '';
     
     const sessionId = parentSessionId || day.id || viewingDayId;
+    const dayIdStr = typeof sessionId === 'string' ? `'${sessionId}'` : sessionId;
     const isCustomBlock = day.id && typeof day.id === 'string' && day.id.startsWith('fb-blk');
     const cardId = isCustomBlock ? day.id : 'warmup-card';
     const totalDurationSec = day.warmup.filter(w => w.type === 'timed').reduce((s, w) => s + w.duration, 0);
@@ -326,7 +370,8 @@ function renderWarmup(day, parentSessionId, sessionType) {
     const badgeText = isRecovery ? 'RC' : 'WU';
     const cardType = isRecovery ? 'rest' : (day.type || sessionType || 'strength');
     
-    let listHtml = '<div class="nested-list">';
+    const isDay5 = (sessionId === 5 || sessionId === '5');
+    let listHtml = `<div class="nested-list${isDay5 ? ' warmup-v2-list' : ''}">`;
     day.warmup.forEach((item, idx) => {
         const logData = Store.getItemLog(sessionId, item.id) || {};
         const isCompleted = logData.completed;
@@ -353,42 +398,96 @@ function renderWarmup(day, parentSessionId, sessionType) {
                </button>`
             : '';
         
-        listHtml += `
-            <div class="nested-row ${isCheckedStr}">
-                <button class="btn-check ${isCheckedStr}" onclick="toggleRound(event, ${dayIdStr}, '${item.id}')">${icons.checkmark}</button>
-                <div style="flex: 1; margin-left: 12px; min-width: 0;">
-                    <div style="display: flex; align-items: center; gap: 6px;">
-                        <h3 class="warmup-name" style="margin: 0; font-size: 14px; font-weight: 600; color: var(--text-primary);">${item.name}</h3>
-                        ${demoIconBtn}
+        if (isDay5) {
+            const exerciseIcon = `<img src="./assets/icon-192.png" alt="Strike First" style="width: 100%; height: 100%; object-fit: contain; border-radius: 10px;">`;
+
+            listHtml += `
+                <div class="warmup-v2-row ${isCheckedStr}" data-item-id="${item.id}">
+                    <div class="warmup-v2-main">
+                        <div class="warmup-v2-band1">
+                            <div class="warmup-v2-icon-box" style="background: transparent; padding: 0;">
+                                ${exerciseIcon}
+                            </div>
+                            <div class="warmup-v2-header-line">
+                                <h3 class="warmup-v2-title">${item.name}</h3>
+                                <span class="warmup-v2-dot">&bull;</span>
+                                <span class="warmup-v2-duration">${timeOrRepsStr}</span>
+                                ${demoIconBtn}
+                            </div>
+                        </div>
+                        <div class="warmup-v2-band2">
+                            <div class="warmup-v2-cue">${item.cue}</div>
+                        </div>
                     </div>
-                    <div class="warmup-cue" style="color: var(--text-secondary); font-size: 13px; margin-top: 2px;">${item.cue}</div>
                 </div>
-                <div class="warmup-actions" style="margin-left: 12px;">
-                    <span class="warmup-duration-label" style="font-weight: 600; font-size: 13px; color: var(--accent-color);">${timeOrRepsStr}</span>
-                    ${!isRepBased && !isCompleted && !day.warmupPlaylist ? `
-                        <button class="btn-play type-${cardType}" onclick="startWarmupTimer(${dayIdStr}, '${item.id}', ${item.duration}, '${item.name.replace(/'/g, "\\'")}', '${item.cue.replace(/'/g, "\\'")}', ${item.switchSides})">
-                            <span class="play-icon">${icons.play}</span> Start
-                        </button>
-                    ` : ''}
+            `;
+
+        } else {
+            listHtml += `
+                <div class="nested-row ${isCheckedStr}">
+                    <button class="btn-check ${isCheckedStr}" onclick="toggleRound(event, ${dayIdStr}, '${item.id}')">${icons.checkmark}</button>
+                    <div style="flex: 1; margin-left: 12px; min-width: 0;">
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <h3 class="warmup-name" style="margin: 0; font-size: 14px; font-weight: 600; color: var(--text-primary);">${item.name}</h3>
+                            ${demoIconBtn}
+                        </div>
+                        <div class="warmup-cue" style="color: var(--text-secondary); font-size: 13px; margin-top: 2px;">${item.cue}</div>
+                    </div>
+                    <div class="warmup-actions" style="margin-left: 12px;">
+                        <span class="warmup-duration-label" style="font-weight: 600; font-size: 13px; color: var(--accent-color);">${timeOrRepsStr}</span>
+                        ${!isRepBased && !isCompleted && !day.warmupPlaylist ? `
+                            <button class="btn-play type-${cardType}" onclick="startWarmupTimer(${dayIdStr}, '${item.id}', ${item.duration}, '${item.name.replace(/'/g, "\\'")}', '${item.cue.replace(/'/g, "\\'")}', ${item.switchSides})">
+                                <span class="play-icon">${icons.play}</span> Start
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+    });
+
+    if (isDay5) {
+        listHtml += `
+            <div class="warmup-v2-tip-card">
+                <div class="warmup-v2-tip-icon">
+                    ${icons.lightbulb}
+                </div>
+                <div class="warmup-v2-tip-content">
+                    <h4>Warm up your body and mind</h4>
+                    <p>Good warm-ups improve performance and help prevent injuries.</p>
                 </div>
             </div>
         `;
-    });
+    }
+    
     listHtml += '</div>';
+
+    const durationDisplay = isDay5 ? '~5:30' : (mins > 0 ? `~${mins} min` : `${totalDurationSec}s`);
 
     let normalizedItem = {
         id: cardId,
         badge: badgeText,
         title: labelTitle,
         stats: [
-            { icon: icons.clock, value: `~${mins} min` }
+            { icon: icons.clock, value: durationDisplay }
         ],
         sections: [
             { title: "EXERCISES", content: listHtml }
         ]
     };
     
-    if (day.warmupPlaylist) {
+    if (isDay5) {
+        const isAllWUCompleted = day.warmup.every(item => (Store.getItemLog(sessionId, item.id) || {}).completed);
+        if (isAllWUCompleted) {
+            normalizedItem.actionHtml = `
+                <button class="btn-large" style="margin-top: var(--sp-4);" onclick="resetWarmup(${dayIdStr})">Reset Warm-up</button>
+            `;
+        } else {
+            normalizedItem.actionHtml = `
+                <button class="btn-large" style="margin-top: var(--sp-4);" onclick="startWarmupRoundTimer(${dayIdStr})">Start Warm-up</button>
+            `;
+        }
+    } else if (day.warmupPlaylist) {
         normalizedItem.actionHtml = `
         <div style="padding: 16px; border-top: 1px solid var(--border-color);">
             <button class="btn-primary" style="width: 100%;" onclick="startSectionSequence('${sessionId}', 'warmupPlaylist')">
@@ -411,6 +510,17 @@ function renderWarmup(day, parentSessionId, sessionType) {
 window.finishWorkout = function(dayId) {
     Store.finishWorkout(dayId);
     renderHome();
+};
+
+window.resetRound = function(dayId, exerciseId) {
+    const day = getDayData(dayId);
+    if (!day || !day.exercises) return;
+    const ex = day.exercises.find(e => e.id === exerciseId);
+    if (!ex || !ex.rounds) return;
+    ex.rounds.forEach(r => {
+        Store.logItem(dayId, r.id, { completed: false });
+    });
+    reRenderViewingDay();
 };
 
 const appContainer = document.getElementById('app-container');
@@ -1299,11 +1409,25 @@ window.renderDay = function(dayIdRaw) {
                            <svg viewBox="0 0 24 24" width="10" height="10"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
                        </button>`
                     : '';
+                let rowClass = `nested-row ${isChecked}`;
+                let iconOrCheck = `<button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>`;
+                let marginLeft = '12px';
+                
+                if (day.id === 5) {
+                    rowClass += ` continuous-row`;
+                    iconOrCheck = `
+                        <picture class="warmup-v2-icon-box" style="margin-right: 12px; margin-left: 0; width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; background: transparent; flex-shrink: 0; padding: 4px;">
+                            <img src="./assets/icon-192.png" alt="Strike First" style="width: 100%; height: 100%; object-fit: contain;">
+                        </picture>
+                    `;
+                    marginLeft = '0';
+                }
+
                 return `
-                <div class="nested-row ${isChecked}">
+                <div class="${rowClass}" data-item-id="${r.id}">
                     <div style="display: flex; align-items: center; width: 100%;">
-                        <button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
-                        <div style="flex: 1; margin-left: 12px; min-width: 0;">
+                        ${iconOrCheck}
+                        <div style="flex: 1; margin-left: ${marginLeft}; min-width: 0;">
                             <div style="display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                                 <span style="font-size: 14px; line-height: 1.4; color: var(--text-primary);">
                                     ${r.combo}
@@ -1314,6 +1438,17 @@ window.renderDay = function(dayIdRaw) {
                     </div>
                 </div>`;
             }).join('') : `<div class="nested-row"><button class="btn-check ${Store.getItemLog(day.id, ex.id)?.completed ? 'checked':''}" onclick="toggleRound(event, ${day.id}, '${ex.id}')">${icons.checkmark}</button><div style="flex:1; margin-left: 12px;">${ex.notes}</div></div>`;
+
+            let allCompleted = ex.rounds ? ex.rounds.every(r => Store.getItemLog(day.id, r.id)?.completed) : false;
+            let startLabel = "Start Round Timer";
+            let onClickAction = `startRoundTimer(${day.id}, '${ex.id}', ${ex.workSeconds}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', '${(ex.rounds ? ex.rounds.map(r => r.combo).join('<br>') : '').replace(/'/g, "\\'")}', '${(ex.restCue || '').replace(/'/g, "\\'")}')`;
+            
+            if (day.id === 5) {
+                if (allCompleted) {
+                    startLabel = `Reset ${ex.name}`;
+                    onClickAction = `resetRound(${day.id}, '${ex.id}')`;
+                }
+            }
 
             let normalizedItem = {
                 id: ex.id,
@@ -1327,7 +1462,7 @@ window.renderDay = function(dayIdRaw) {
                 sections: [
                     { title: "COMBINATIONS", content: `<div class="nested-list">${roundsHtml}</div>` }
                 ],
-                actionHtml: `<button class="btn-large" style="margin-top: var(--sp-4);" onclick="startRoundTimer(${day.id}, '${ex.id}', ${ex.workSeconds}, ${ex.restSeconds}, '${ex.name.replace(/'/g, "\\'")}', '${(ex.rounds ? ex.rounds.map(r => r.combo).join('<br>') : '').replace(/'/g, "\\'")}', '${(ex.restCue || '').replace(/'/g, "\\'")}')">Start Round Timer</button>`
+                actionHtml: `<button class="btn-large" style="margin-top: var(--sp-4);" onclick="${onClickAction}">${startLabel}</button>`
             };
             html += renderItemCard(normalizedItem, day.type);
         });
@@ -2558,7 +2693,7 @@ window.startSectionSequence = function(quickId, playlistType) {
 // ==========================================
 // PWA UPDATE NOTIFICATION SYSTEM
 // ==========================================
-const APP_VERSION = 'v35';
+const APP_VERSION = 'v37';
 const APP_UPDATE_MESSAGE = 'Strike First has been updated with improvements and fixes.';
 
 window.PWAUpdateManager = {

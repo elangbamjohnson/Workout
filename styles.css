@@ -822,6 +822,184 @@ body {
     font-size: 11px;
     color: var(--text-secondary);
 }
+/* Warmup V2 (Day 5 Refactor) */
+/* ─── Warmup V2 — Day 5 responsive card layout ─── */
+
+/* ── Desktop default: side-by-side row ── */
+.warmup-v2-row {
+    background: var(--bg-nested);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-inner);
+    padding: var(--sp-3) var(--sp-3) var(--sp-3) calc(var(--sp-3) + 6px);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--sp-3);
+    position: relative;
+}
+
+/* Accent bar on left edge */
+.warmup-v2-row::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: var(--radius-inner) 0 0 var(--radius-inner);
+    background-color: var(--accent-color);
+}
+.warmup-v2-row.checked {
+    background: rgba(34,197,94,0.05);
+    border-color: var(--success);
+}
+.warmup-v2-row.checked::before {
+    background-color: var(--success);
+}
+.warmup-v2-row.checked .warmup-v2-icon-box {
+    background: rgba(34, 197, 94, 0.12);
+    color: var(--success);
+}
+.warmup-v2-row.checked .warmup-v2-duration {
+    color: var(--success);
+}
+
+/* Main content area (band1 + band2 stacked, sits left of the button on desktop) */
+.warmup-v2-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+}
+
+/* Band 1 — icon + title + duration in one horizontal row */
+.warmup-v2-band1 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--sp-2);
+}
+
+.warmup-v2-icon-box {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 10px;
+    background: rgba(232, 100, 58, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-color);
+    flex-shrink: 0;
+}
+.warmup-v2-icon-box svg {
+    width: 24px;
+    height: 24px;
+}
+
+.warmup-v2-header-line {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 5px;
+    flex-wrap: nowrap;
+    flex: 1;
+    min-width: 0;
+}
+.warmup-v2-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.warmup-v2-dot {
+    color: var(--text-tertiary);
+    font-size: 13px;
+    flex-shrink: 0;
+}
+.warmup-v2-duration {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--accent-color);
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+/* Band 2 — description, sits below band1, still takes full main-column width */
+.warmup-v2-band2 {
+    width: 100%;
+}
+.warmup-v2-cue {
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* Band 3 — START button, pill on desktop (right of row) */
+.warmup-v2-band3 {
+    flex-shrink: 0;
+}
+.btn-play-full {
+    /* desktop: normal pill button, inherits .btn-play sizing */
+}
+
+/* ── Mobile ≤480px: switch to full 3-band stacked layout ── */
+@media (max-width: 480px) {
+    .warmup-v2-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--sp-2);
+        padding: var(--sp-3) var(--sp-3) var(--sp-3) calc(var(--sp-3) + 6px);
+    }
+    .warmup-v2-band3 {
+        width: 100%;
+        margin-top: 2px;
+    }
+    .btn-play-full {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+
+
+.warmup-v2-tip-card {
+    background: var(--bg-nested);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-inner);
+    padding: var(--sp-4);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--sp-3);
+    margin-top: var(--sp-2);
+}
+
+.warmup-v2-tip-icon {
+    color: var(--accent-color);
+    flex-shrink: 0;
+}
+.warmup-v2-tip-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.warmup-v2-tip-content h4 {
+    margin: 0 0 4px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.warmup-v2-tip-content p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
 
 /* Nested Lists (Combinations & Drills) */
 .nested-list {

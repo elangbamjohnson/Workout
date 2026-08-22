@@ -155,3 +155,4 @@ const Store = {
 
 // Initialize immediately
 Store.init();
+if (typeof window !== 'undefined') window.Store = Store;
