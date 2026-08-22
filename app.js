@@ -2558,7 +2558,7 @@ window.startSectionSequence = function(quickId, playlistType) {
 // ==========================================
 // PWA UPDATE NOTIFICATION SYSTEM
 // ==========================================
-const APP_VERSION = 'v34';
+const APP_VERSION = 'v35';
 const APP_UPDATE_MESSAGE = 'Strike First has been updated with improvements and fixes.';
 
 window.PWAUpdateManager = {
