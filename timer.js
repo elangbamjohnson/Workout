@@ -243,7 +243,8 @@ window.Timer = {
         }
         
         const hasTimedCues = timedCues && timedCues.length > 0;
-        this.roundData = { workSec, restSec, title, cue, combos, onComplete, timedCues, hasTimedCues, suppressEndAudio: suppressAudio, restCue, completionCue };
+        const normalizedTimedCues = timedCues ? timedCues.map(c => ({ ...c, triggered: false })) : null;
+        this.roundData = { workSec, restSec, title, cue, combos, onComplete, timedCues: normalizedTimedCues, hasTimedCues, suppressEndAudio: suppressAudio, restCue, completionCue };
         this.totalDuration = workSec;
         this.endTime = Date.now() + workSec * 1000;
         this.hasPlayed10Sec = false;
@@ -259,8 +260,9 @@ window.Timer = {
         if (this.workoutType === 'technical' && !suppressAudio) {
             window.speakAlert(`${this.roundData.title} started`);
         } else if (hasTimedCues) {
-            const cue0 = timedCues.find(c => c.time === 0);
+            const cue0 = normalizedTimedCues.find(c => c.time === 0);
             if (cue0) {
+                cue0.triggered = true;
                 window.speakAlert(cue0.text);
                 this.updateCueText(cue0.text);
                 if (cue0.uiIndex !== undefined) {
@@ -369,7 +371,7 @@ window.Timer = {
         const nextTick = () => {
             if (this.mode !== 'countdown') return; // Cancelled
             
-            const elapsed = totalCount - count; console.log("tick elapsed:", elapsed, "timedCues:", JSON.stringify(timedCues));
+            const elapsed = totalCount - count;
             let currentCueText = null;
             if (hasTimedCues) {
                 const currentCue = timedCues.find(c => c.time === elapsed);
@@ -394,8 +396,11 @@ window.Timer = {
                 if (navigator.vibrate) navigator.vibrate([200]);
                 this.countdownTimeoutId = setTimeout(() => {
                     if (this.mode === 'countdown') {
-                        if (!this.playlist) this.close();
-                        if (onDone) onDone();
+                        if (onDone) {
+                            onDone();
+                        } else {
+                            if (!this.playlist) this.close();
+                        }
                     }
                 }, 1000);
             }
@@ -419,14 +424,24 @@ window.Timer = {
             const hasTimedCues = this.roundData && this.roundData.hasTimedCues;
             
             if (hasTimedCues && !isResting) {
-                const currentCue = this.roundData.timedCues.find(c => c.time === elapsed);
-                if (currentCue) {
+                const untriggeredCues = this.roundData.timedCues.filter(c => !c.triggered && c.time <= elapsed);
+                untriggeredCues.forEach(currentCue => {
+                    currentCue.triggered = true;
                     window.speakAlert(currentCue.text);
                     this.updateCueText(currentCue.text);
                     if (currentCue.uiIndex !== undefined) {
                         this.activeComboIndex = currentCue.uiIndex;
                     }
-                }
+                    const storeObj = typeof Store !== 'undefined' ? Store : (typeof window !== 'undefined' && window.Store ? window.Store : null);
+                    if (currentCue.autoCheckId && storeObj) {
+                        const dId = (typeof window.viewingDayId !== 'undefined' && window.viewingDayId !== null) ? window.viewingDayId : 5;
+                        storeObj.logItem(dId, currentCue.autoCheckId, { completed: true });
+                        const rowEl = document.querySelector(`.warmup-v2-row[data-item-id="${currentCue.autoCheckId}"], .continuous-row[data-item-id="${currentCue.autoCheckId}"]`);
+                        if (rowEl) {
+                            rowEl.classList.add('checked');
+                        }
+                    }
+                });
             }
             
             if (this.mode === 'warmup' && this.roundData.switchSides && diff === Math.floor(this.totalDuration / 2)) {
