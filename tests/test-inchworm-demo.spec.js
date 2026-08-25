@@ -20,11 +20,11 @@ test.describe('Day 1 Inchworm Video Demo', () => {
         }
 
         // Find Inchworm row
-        const inchwormRow = warmupCard.locator('.nested-row').filter({ hasText: 'Inchworm' });
+        const inchwormRow = warmupCard.locator('.warmup-hybrid-row').filter({ hasText: 'Inchworm' });
         await expect(inchwormRow).toBeVisible();
 
         // Verify reps label and Watch Demo button are visible
-        const repsLabel = inchwormRow.locator('.warmup-duration-label');
+        const repsLabel = inchwormRow.locator('.warmup-hybrid-stat');
         await expect(repsLabel).toHaveText('5 reps');
 
         const demoBtn = inchwormRow.locator('.btn-demo-icon');

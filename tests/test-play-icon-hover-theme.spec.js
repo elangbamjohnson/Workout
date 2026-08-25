@@ -76,7 +76,7 @@ test.describe('Play Icon Theme-Scoped Hover Verification', () => {
         }
         await expect(warmupCard).toHaveClass(/expanded/);
 
-        const hipRow = warmupCard.locator('.nested-row').filter({ hasText: 'Hip 90/90 Stretch' });
+        const hipRow = warmupCard.locator('.warmup-hybrid-row').filter({ hasText: 'Hip 90/90 Stretch' });
         const playIcon = hipRow.locator('.btn-demo-icon');
         await playIcon.hover();
         await page.waitForTimeout(300);

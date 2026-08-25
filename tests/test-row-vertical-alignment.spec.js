@@ -8,7 +8,7 @@ test.describe('Vertical Alignment of Duration Label and Action Buttons', () => {
         await expect(page.locator('#splash-screen')).toBeHidden();
     });
 
-    test('Desktop (1280px): Day 1 Warm-up Hip 90/90 Stretch row and buttons are vertically centered', async ({ page }) => {
+    test('Desktop (1280px): Day 1 Warm-up Hip 90/90 Stretch row elements are vertically centered', async ({ page }) => {
         await page.setViewportSize({ width: 1280, height: 800 });
         await page.locator('.day-card').first().click();
         await expect(page.locator('.title-page')).toHaveText('Lower Body Power');
@@ -18,7 +18,7 @@ test.describe('Vertical Alignment of Duration Label and Action Buttons', () => {
             await warmupCard.locator('.item-header').click();
         }
 
-        const hipRow = warmupCard.locator('.nested-row').filter({ hasText: 'Hip 90/90 Stretch' });
+        const hipRow = warmupCard.locator('.warmup-hybrid-row').filter({ hasText: 'Hip 90/90 Stretch' });
         await expect(hipRow).toBeVisible();
 
         // Check CSS alignment properties
@@ -34,35 +34,22 @@ test.describe('Vertical Alignment of Duration Label and Action Buttons', () => {
         expect(rowStyle.alignItems).toBe('center');
         expect(rowStyle.flexDirection).toBe('row');
 
-        const actionsContainer = hipRow.locator('.warmup-actions');
-        await expect(actionsContainer).toBeVisible();
-        const actionsStyle = await actionsContainer.evaluate(el => {
-            const cs = window.getComputedStyle(el);
-            return {
-                display: cs.display,
-                alignItems: cs.alignItems,
-                flexDirection: cs.flexDirection
-            };
-        });
-        expect(actionsStyle.display).toBe('flex');
-        expect(actionsStyle.alignItems).toBe('center');
-
-        // Check vertical alignment of duration label, play icon, and start button
-        const durationBox = await hipRow.locator('.warmup-duration-label').boundingBox();
-        const demoBox = await hipRow.locator('.btn-demo-icon').boundingBox();
-        const startBox = await hipRow.locator('.btn-play').boundingBox();
+        // Check vertical alignment of number badge, content, and check button
+        const numBox = await hipRow.locator('.warmup-hybrid-num').boundingBox();
+        const contentBox = await hipRow.locator('.warmup-hybrid-content').boundingBox();
+        const checkBtnBox = await hipRow.locator('.btn-check').boundingBox();
         const rowBox = await hipRow.boundingBox();
 
-        expect(durationBox).not.toBeNull();
-        expect(demoBox).not.toBeNull();
-        expect(startBox).not.toBeNull();
+        expect(numBox).not.toBeNull();
+        expect(contentBox).not.toBeNull();
+        expect(checkBtnBox).not.toBeNull();
         expect(rowBox).not.toBeNull();
 
         const rowCenterY = rowBox.y + rowBox.height / 2;
-        const startCenterY = startBox.y + startBox.height / 2;
+        const checkBtnCenterY = checkBtnBox.y + checkBtnBox.height / 2;
 
-        // Button centers should be closely aligned with row center
-        expect(Math.abs(startCenterY - rowCenterY)).toBeLessThanOrEqual(4);
+        // Button center should be closely aligned with row center
+        expect(Math.abs(checkBtnCenterY - rowCenterY)).toBeLessThanOrEqual(4);
     });
 
     test('Mobile (375px): Day 1 Warm-up Hip 90/90 Stretch alignment holds on small screen', async ({ page }) => {
@@ -75,13 +62,13 @@ test.describe('Vertical Alignment of Duration Label and Action Buttons', () => {
             await warmupCard.locator('.item-header').click();
         }
 
-        const hipRow = warmupCard.locator('.nested-row').filter({ hasText: 'Hip 90/90 Stretch' });
+        const hipRow = warmupCard.locator('.warmup-hybrid-row').filter({ hasText: 'Hip 90/90 Stretch' });
         await expect(hipRow).toBeVisible();
 
-        const demoBtn = hipRow.locator('.btn-demo-icon');
-        const startBtn = hipRow.locator('.btn-play');
-        await expect(demoBtn).toBeVisible();
-        await expect(startBtn).toBeVisible();
+        const checkBtn = hipRow.locator('.btn-check');
+        const numBadge = hipRow.locator('.warmup-hybrid-num');
+        await expect(checkBtn).toBeVisible();
+        await expect(numBadge).toBeVisible();
     });
 
     test('Day 1 Exercise card set row: input groups and check button vertically centered', async ({ page }) => {

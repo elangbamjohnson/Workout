@@ -118,7 +118,7 @@ test.describe('Day 2 Bag Power Rounds & Combos Play Icon Pattern', () => {
         }
 
         // Verify Hip 90/90 Stretch has inline play icon
-        const hipRow = warmupCard.locator('.nested-row').filter({ hasText: 'Hip 90/90 Stretch' });
+        const hipRow = warmupCard.locator('.warmup-hybrid-row').filter({ hasText: 'Hip 90/90 Stretch' });
         await expect(hipRow.locator('.btn-demo-icon')).toBeVisible();
 
         // Click play icon

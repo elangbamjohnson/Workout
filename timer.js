@@ -231,7 +231,7 @@ window.Timer = {
         if (window.WakeLock) window.WakeLock.acquire();
     },
 
-    startRound(workSec, restSec, title, cue, workoutType = 'bag', onComplete, timedCues = null, suppressAudio = false, restCue = '', completionCue = '') {
+    startRound(workSec, restSec, title, cue, workoutType = 'bag', onComplete, timedCues = null, suppressAudio = false, restCue = '', completionCue = '', exerciseSegments = null) {
         this.initAudio();
         this.mode = 'round';
         this.phase = 'work';
@@ -244,7 +244,7 @@ window.Timer = {
         
         const hasTimedCues = timedCues && timedCues.length > 0;
         const normalizedTimedCues = timedCues ? timedCues.map(c => ({ ...c, triggered: false })) : null;
-        this.roundData = { workSec, restSec, title, cue, combos, onComplete, timedCues: normalizedTimedCues, hasTimedCues, suppressEndAudio: suppressAudio, restCue, completionCue };
+        this.roundData = { workSec, restSec, title, cue, combos, onComplete, timedCues: normalizedTimedCues, hasTimedCues, suppressEndAudio: suppressAudio, restCue, completionCue, exerciseSegments };
         this.totalDuration = workSec;
         this.endTime = Date.now() + workSec * 1000;
         this.hasPlayed10Sec = false;
@@ -428,7 +428,10 @@ window.Timer = {
                 untriggeredCues.forEach(currentCue => {
                     currentCue.triggered = true;
                     window.speakAlert(currentCue.text);
-                    this.updateCueText(currentCue.text);
+                    const hasPersistentCue = this.roundData.exerciseSegments && this.roundData.exerciseSegments.some(s => s.cue);
+                    if (!hasPersistentCue) {
+                        this.updateCueText(currentCue.text);
+                    }
                     if (currentCue.uiIndex !== undefined) {
                         this.activeComboIndex = currentCue.uiIndex;
                     }
@@ -436,7 +439,7 @@ window.Timer = {
                     if (currentCue.autoCheckId && storeObj) {
                         const dId = (typeof window.viewingDayId !== 'undefined' && window.viewingDayId !== null) ? window.viewingDayId : 5;
                         storeObj.logItem(dId, currentCue.autoCheckId, { completed: true });
-                        const rowEl = document.querySelector(`.warmup-v2-row[data-item-id="${currentCue.autoCheckId}"], .continuous-row[data-item-id="${currentCue.autoCheckId}"]`);
+                        const rowEl = document.querySelector(`.warmup-v2-row[data-item-id="${currentCue.autoCheckId}"], .warmup-hybrid-row[data-item-id="${currentCue.autoCheckId}"], .continuous-row[data-item-id="${currentCue.autoCheckId}"]`);
                         if (rowEl) {
                             rowEl.classList.add('checked');
                         }
@@ -693,14 +696,59 @@ window.Timer = {
 
     updateUI() {
         if (!this.modal) return;
-        const progress = Math.max(0, Math.min(1, this.remainingSeconds / this.totalDuration));
-        const progressPct = progress * 100;
         
         const displayEl = this.modal.querySelector('.timer-display');
-        const progressEl = this.modal.querySelector('.progress-bar-fill');
-        
         if (displayEl) displayEl.textContent = this.formatTime(this.remainingSeconds);
-        if (progressEl) progressEl.style.width = `${progressPct}%`;
+        
+        // Per-exercise phase progress bar (drains from full to empty per exercise)
+        const phaseProgressEl = this.modal.querySelector('.phase-progress-bar-fill');
+        if (this.roundData && this.roundData.exerciseSegments && this.phase === 'work') {
+            // Use real-time ms precision so the bar drains smoothly at 10Hz instead of
+            // jumping in 1-second increments (Math.ceil quantization in tick()).
+            const elapsed = Math.max(0, this.totalDuration - (this.endTime - Date.now()) / 1000);
+            const segs = this.roundData.exerciseSegments;
+            let seg = segs[segs.length - 1];
+            for (let i = 0; i < segs.length; i++) {
+                if (elapsed >= segs[i].start && elapsed < segs[i].end) {
+                    seg = segs[i];
+                    break;
+                }
+            }
+            if (phaseProgressEl) {
+                const segDuration = seg.end - seg.start;
+                const segElapsed = elapsed - seg.start;
+                const segRemaining = Math.max(0, segDuration - segElapsed);
+                const phaseProgress = segDuration > 0 ? (segRemaining / segDuration) : 0;
+                phaseProgressEl.style.width = `${phaseProgress * 100}%`;
+            }
+
+            // Update dynamic workout title in <h2> with progress bar color
+            const titleEl = this.modal.querySelector('.timer-header h2');
+            if (titleEl && seg.name && titleEl.textContent !== seg.name) {
+                titleEl.textContent = seg.name;
+                titleEl.style.color = 'var(--accent-color, var(--strength-accent))';
+            }
+
+            // Update dynamic workout coaching cue in .timer-cue
+            let cueEl = this.modal.querySelector('.timer-cue');
+            if (!cueEl && seg.cue) {
+                const mainEl = this.modal.querySelector('.timer-main');
+                if (mainEl) {
+                    cueEl = document.createElement('div');
+                    cueEl.className = 'timer-cue';
+                    cueEl.style.cssText = 'margin-top: 24px; font-size: 18px; color: var(--text-secondary);';
+                    mainEl.appendChild(cueEl);
+                }
+            }
+            if (cueEl && seg.cue && cueEl.textContent !== seg.cue) {
+                cueEl.textContent = seg.cue;
+            }
+        } else {
+            // Standard session-total bar
+            const progress = Math.max(0, Math.min(1, this.remainingSeconds / this.totalDuration));
+            const progressEl = this.modal.querySelector('.progress-bar-fill');
+            if (progressEl) progressEl.style.width = `${progress * 100}%`;
+        }
         
         // Update combo visual if needed
         const cueContainer = this.modal.querySelector('.timer-cue-container');
@@ -731,25 +779,42 @@ window.Timer = {
         const colorClass = isWork ? 'work-color' : 'rest-color';
         
         const headerTitle = isRestMode ? 'REST' : (isWork ? 'WORK' : 'REST');
-        const mainTitle = this.roundData ? this.roundData.title : 'Rest Period';
-        const cueText = this.roundData && this.roundData.cue ? this.roundData.cue : '';
+        let mainTitle = this.roundData ? this.roundData.title : 'Rest Period';
+        let cueText = this.roundData && this.roundData.cue ? this.roundData.cue : '';
         const restCueText = this.roundData && this.roundData.restCue ? this.roundData.restCue : '';
         
+        // If exerciseSegments are present, initialize title and cue to the active segment
+        if (this.roundData && this.roundData.exerciseSegments && this.roundData.exerciseSegments.length > 0 && isWork) {
+            const elapsed = Math.max(0, this.totalDuration - (this.endTime - Date.now()) / 1000);
+            const segs = this.roundData.exerciseSegments;
+            let seg = segs[0];
+            for (let i = 0; i < segs.length; i++) {
+                if (elapsed >= segs[i].start && elapsed < segs[i].end) {
+                    seg = segs[i];
+                    break;
+                }
+            }
+            if (seg) {
+                if (seg.name) mainTitle = seg.name;
+                if (seg.cue) cueText = seg.cue;
+            }
+        }
+
         let cueHtml = '';
         if (this.mode === 'round' && this.phase === 'rest') {
             if (restCueText) {
                 cueHtml = `<div class="timer-cue" style="margin-top: 24px; font-size: 18px;">${restCueText}</div>`;
             }
         } else {
-            if (this.roundData && this.roundData.combos && this.roundData.combos.length > 0) {
+            if (this.roundData && this.roundData.combos && this.roundData.combos.length > 0 && !this.roundData.exerciseSegments) {
                 cueHtml = `<div class="timer-cue-container" style="display:flex; flex-direction:column; gap:4px; margin-top:24px; font-size:18px;">`;
                 cueHtml += this.roundData.combos.map((combo, idx) => {
                     const isActive = (this.phase === 'work' && idx === this.activeComboIndex) ? 'color: var(--bag-accent, #ff4757); font-weight: bold; transform: scale(1.05); opacity: 1;' : 'color: var(--text-muted); opacity: 0.6;';
                     return `<div style="transition: all 0.3s ease; transform-origin: center; ${isActive}">${combo}</div>`;
                 }).join('');
                 cueHtml += `</div>`;
-            } else if (cueText) {
-                cueHtml = `<div class="timer-cue" style="margin-top: 24px; font-size: 18px;">${cueText}</div>`;
+            } else if (cueText || (this.roundData && this.roundData.exerciseSegments)) {
+                cueHtml = `<div class="timer-cue" style="margin-top: 24px; font-size: 18px; color: var(--text-secondary);">${cueText}</div>`;
             }
         }
         
@@ -773,17 +838,24 @@ window.Timer = {
             actionsHtml = `<button class="btn-large" onclick="Timer.skipPhase()">${btnText}</button>`;
         }
         
+        const titleColorStyle = (this.roundData && this.roundData.exerciseSegments && isWork)
+            ? `style="color: var(--accent-color, var(--strength-accent));"`
+            : '';
+
         const html = `
             <div class="timer-card round-mode ${colorClass}">
                 <button class="btn-cancel" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: var(--text-muted); font-size: 14px; cursor: pointer; text-transform: uppercase; font-weight: bold; padding: 8px; z-index: 2;" onclick="Timer.close()" aria-label="End timer early">Cancel</button>
                 <div class="timer-header">
                     <h3>${headerTitle}</h3>
-                    <h2>${mainTitle}</h2>
+                    <h2 ${titleColorStyle}>${mainTitle}</h2>
                 </div>
                 
                 <div class="timer-main">
                     <div class="timer-display giant ${colorClass}">${this.formatTime(this.remainingSeconds)}</div>
-                    <div class="progress-bar-bg"><div class="progress-bar-fill ${colorClass}" style="width: ${progressPct}%"></div></div>
+                    ${this.roundData && this.roundData.exerciseSegments
+                        ? `<div class="progress-bar-bg"><div class="phase-progress-bar-fill progress-bar-fill ${colorClass}" style="width: 100%"></div></div>`
+                        : `<div class="progress-bar-bg"><div class="progress-bar-fill ${colorClass}" style="width: ${progressPct}%"></div></div>`
+                    }
                     ${cueHtml}
                 </div>
                 <div class="timer-actions" style="margin-top: 24px;">
