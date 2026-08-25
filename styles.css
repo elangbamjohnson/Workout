@@ -1388,7 +1388,7 @@ body {
     width: 32px;
     height: 32px;
     border-radius: 16px;
-    border: 2px solid var(--border-card);
+    border: 2px solid rgba(255, 255, 255, 0.3);
     background: transparent;
     color: transparent;
     display: flex;
@@ -1402,8 +1402,8 @@ body {
     height: 16px;
 }
 .btn-check.checked {
-    background: var(--success);
-    border-color: var(--success);
+    background: var(--accent-color, var(--success));
+    border-color: var(--accent-color, var(--success));
     color: #000;
 }
 

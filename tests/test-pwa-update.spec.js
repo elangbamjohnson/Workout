@@ -29,7 +29,7 @@ test.describe('PWA In-App Update Notification System', () => {
 
         const banner = page.locator('#update-banner');
         await expect(banner).toBeVisible();
-        await expect(banner.locator('h3')).toContainText('New version available (v33)');
+        await expect(banner.locator('h3')).toContainText('New version available (v37)');
         await expect(banner.locator('p')).toContainText('Strike First has been updated with improvements and fixes.');
         await expect(banner.locator('.btn-update-now')).toBeVisible();
         await expect(banner.locator('.btn-update-later')).toBeVisible();

@@ -399,15 +399,14 @@ function renderWarmup(day, parentSessionId, sessionType) {
             : '';
         
         if (isDay5) {
-            const exerciseIcon = `<img src="./assets/icon-192.png" alt="Strike First" style="width: 100%; height: 100%; object-fit: contain; border-radius: 10px;">`;
 
             listHtml += `
                 <div class="warmup-v2-row ${isCheckedStr}" data-item-id="${item.id}">
                     <div class="warmup-v2-main">
                         <div class="warmup-v2-band1">
-                            <div class="warmup-v2-icon-box" style="background: transparent; padding: 0;">
-                                ${exerciseIcon}
-                            </div>
+                            <button class="btn-check ${isCheckedStr}" onclick="toggleRound(event, ${dayIdStr}, '${item.id}')">
+                                ${icons.checkmark}
+                            </button>
                             <div class="warmup-v2-header-line">
                                 <h3 class="warmup-v2-title">${item.name}</h3>
                                 <span class="warmup-v2-dot">&bull;</span>
@@ -1415,12 +1414,7 @@ window.renderDay = function(dayIdRaw) {
                 
                 if (day.id === 5) {
                     rowClass += ` continuous-row`;
-                    iconOrCheck = `
-                        <picture class="warmup-v2-icon-box" style="margin-right: 12px; margin-left: 0; width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; background: transparent; flex-shrink: 0; padding: 4px;">
-                            <img src="./assets/icon-192.png" alt="Strike First" style="width: 100%; height: 100%; object-fit: contain;">
-                        </picture>
-                    `;
-                    marginLeft = '0';
+                    iconOrCheck = `<button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>`;
                 }
 
                 return `

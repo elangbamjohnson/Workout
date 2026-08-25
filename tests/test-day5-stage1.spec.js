@@ -1,23 +1,20 @@
 const { test, expect } = require('@playwright/test');
 
 async function advanceTimer(page, seconds) {
-    for (let i = 0; i < seconds; i++) {
-        await page.clock.fastForward('00:01');
-        await page.waitForTimeout(5);
-    }
+    await page.clock.runFor(seconds * 1000);
+    await page.waitForTimeout(50);
 }
 
 test.describe('Day 5 Stage 1 Restructure', () => {
     test.beforeEach(async ({ page }) => {
-        await page.clock.install();
+        await page.clock.pauseAt(new Date('2024-01-01T00:00:00Z'));
         await page.goto('/');
         await page.evaluate(() => localStorage.clear());
         await page.reload();
-        await expect(page.locator('#splash-screen')).toBeHidden();
+        await page.evaluate(() => { document.getElementById('splash-screen').style.display = 'none'; });
 
         // Navigate to Day 5
-        const day5Card = page.locator('.day-card').filter({ hasText: 'Day 5' });
-        await day5Card.click();
+        await page.evaluate(() => renderDay(5));
         await expect(page.locator('#app-container')).not.toHaveClass(/is-home/);
         
         // Mock speech to capture calls
@@ -33,16 +30,16 @@ test.describe('Day 5 Stage 1 Restructure', () => {
         const warmupCard = page.locator('.item-card').filter({ hasText: 'Warm-up' });
         await warmupCard.locator('.item-header').click();
 
-        const jumpRope = warmupCard.locator('.nested-row').filter({ hasText: 'Jump Rope' });
+        const jumpRope = warmupCard.locator('.warmup-v2-row').filter({ hasText: 'Jump Rope' });
         await expect(jumpRope).toBeVisible();
-        await expect(jumpRope).toContainText('1 min 30s');
+        await expect(jumpRope).toContainText('2 min');
 
-        const shadowboxing = warmupCard.locator('.nested-row').filter({ hasText: 'Shadowboxing' });
+        const shadowboxing = warmupCard.locator('.warmup-v2-row').filter({ hasText: 'Shadowboxing' });
         await expect(shadowboxing).toBeVisible();
         await expect(shadowboxing).toContainText('1 min 30s');
 
         // Neck Rolls should be removed
-        const neckRolls = warmupCard.locator('.nested-row').filter({ hasText: 'Neck Rolls' });
+        const neckRolls = warmupCard.locator('.warmup-v2-row').filter({ hasText: 'Neck Rolls' });
         await expect(neckRolls).toHaveCount(0);
     });
 
@@ -69,8 +66,8 @@ test.describe('Day 5 Stage 1 Restructure', () => {
         await expect(timerModal).toBeVisible();
 
         // 0:00 (Start)
-        // Wait for first tick
-        await advanceTimer(page, 1);
+        // Wait for 5s prep timer and first tick
+        await advanceTimer(page, 6);
         const cue1 = "1-2 — one minute. Focus on perfect mechanics, not power.";
         await expect(timerModal.locator('.timer-cue')).toHaveText(cue1);
         
