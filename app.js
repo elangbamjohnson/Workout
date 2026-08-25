@@ -1896,9 +1896,9 @@ window.openVideoModal = function(videoId, title, format = 'short') {
                 <div class="video-modal-subtitle">EXERCISE DEMO</div>
             </div>
             <div class="video-container format-${format}">
-                <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&loop=1&playlist=${videoId}" 
+                <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&playsinline=1&mute=1&rel=0&modestbranding=1&loop=1&playlist=${videoId}" 
                     title="${title} video" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                     allowfullscreen>
                 </iframe>
             </div>

@@ -143,7 +143,9 @@ const workoutData = {
           "type": "timed",
           "duration": 180,
           "switchSides": false,
-          "cue": "Easy pace \u2014 this is activation, not cardio"
+          "cue": "Easy pace — this is activation, not cardio",
+          "videoId": "Gt9hlRMXDXc",
+          "videoFormat": "short"
         },
         {
           "id": "day1-wu2",
@@ -151,7 +153,9 @@ const workoutData = {
           "type": "timed",
           "duration": 30,
           "switchSides": false,
-          "cue": "Full arm extension overhead on every rep"
+          "cue": "Full arm extension overhead on every rep",
+          "videoId": "bT2iY8IjEU0",
+          "videoFormat": "short"
         },
         {
           "id": "day1-wu3",
@@ -159,7 +163,9 @@ const workoutData = {
           "type": "timed",
           "duration": 30,
           "switchSides": false,
-          "cue": "Hips level, drive each knee toward your chest"
+          "cue": "Hips level, drive each knee toward your chest",
+          "videoId": "0LvR42Z599c",
+          "videoFormat": "short"
         },
         {
           "id": "day1-wu4",
@@ -175,7 +181,7 @@ const workoutData = {
           "id": "day1-wu5",
           "name": "Glute Bridges",
           "type": "reps",
-          "reps": "2 \u00d7 10",
+          "reps": "2 × 10",
           "sessionDuration": 30,
           "switchSides": false,
           "cue": "Squeeze glutes hard at the top, hold 1 second",
@@ -189,7 +195,9 @@ const workoutData = {
           "duration": 30,
           "sessionDuration": 30,
           "switchSides": false,
-          "cue": "Full range \u2014 front and back, gradually increasing size"
+          "cue": "Full range — front and back, gradually increasing size",
+          "videoId": "lzR7tzI1JUI",
+          "videoFormat": "short"
         },
         {
           "id": "day1-wu7",
@@ -198,7 +206,9 @@ const workoutData = {
           "reps": "10 reps slow",
           "sessionDuration": 30,
           "switchSides": false,
-          "cue": "Pause 2 seconds at the bottom, drive through heels"
+          "cue": "Pause 2 seconds at the bottom, drive through heels",
+          "videoId": "aFYwHyS3mrw",
+          "videoFormat": "short"
         },
         {
           "id": "day1-wu8",
@@ -207,7 +217,7 @@ const workoutData = {
           "reps": "5 reps",
           "sessionDuration": 30,
           "switchSides": false,
-          "cue": "Walk hands out to full plank, walk feet back in \u2014 slow",
+          "cue": "Walk hands out to full plank, walk feet back in — slow",
           "videoId": "7jeW4v_oaes",
           "videoFormat": "short"
         }
