@@ -714,11 +714,11 @@ body {
     font-weight: 700;
     flex-shrink: 0;
 }
-.type-strength { --accent-color: var(--strength-accent); }
-.type-bag { --accent-color: var(--bag-accent); }
-.type-technical { --accent-color: var(--technical-accent); }
-.type-rest { --accent-color: var(--rest-accent); }
-.type-warmup { --accent-color: var(--strength-accent); }
+.type-strength { --accent-color: var(--strength-accent); --checked-bg: rgba(238, 108, 63, 0.05); }
+.type-bag { --accent-color: var(--bag-accent); --checked-bg: rgba(217, 154, 61, 0.05); }
+.type-technical { --accent-color: var(--technical-accent); --checked-bg: rgba(45, 212, 212, 0.05); }
+.type-rest { --accent-color: var(--rest-accent); --checked-bg: rgba(139, 143, 163, 0.05); }
+.type-warmup { --accent-color: var(--strength-accent); --checked-bg: rgba(238, 108, 63, 0.05); }
 
 .type-strength .num-badge { background: var(--strength-accent); color: #000; }
 .type-bag .num-badge { background: var(--bag-accent); color: #000; }
@@ -822,6 +822,84 @@ body {
     font-size: 11px;
     color: var(--text-secondary);
 }
+/* ─── Warmup Hybrid — Day 1 numbered-badge / right-checkbox layout ─── */
+.warmup-hybrid-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-3);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-card);
+    border: 1px solid transparent;
+    transition: border-color 0.2s, background 0.2s, opacity 0.2s;
+}
+.warmup-hybrid-row.checked {
+    border-color: var(--accent-color, var(--success));
+    background: var(--checked-bg, rgba(255, 255, 255, 0.04));
+    opacity: 0.65;
+}
+.warmup-hybrid-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent-color, var(--text-muted));
+    flex-shrink: 0;
+}
+.warmup-hybrid-row.checked .warmup-hybrid-num {
+    background: var(--accent-color, var(--success));
+    color: #000;
+}
+.warmup-hybrid-content {
+    flex: 1;
+    min-width: 0;
+}
+.warmup-hybrid-title-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.warmup-hybrid-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.warmup-hybrid-stat-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-top: 3px;
+    font-size: 12px;
+    line-height: 1.4;
+    flex-wrap: wrap;
+}
+.warmup-hybrid-stat {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent-color, var(--text-muted));
+    flex-shrink: 0;
+}
+.warmup-hybrid-dot {
+    color: var(--text-muted);
+    opacity: 0.5;
+    font-size: 11px;
+}
+.warmup-hybrid-cue {
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
 /* Warmup V2 (Day 5 Refactor) */
 /* ─── Warmup V2 — Day 5 responsive card layout ─── */
 
@@ -1021,8 +1099,9 @@ body {
     font-size: 14px;
 }
 .nested-row.checked {
-    border-color: var(--success);
-    background: rgba(34,197,94,0.05);
+    border-color: var(--accent-color, var(--success));
+    background: var(--checked-bg, rgba(255, 255, 255, 0.04));
+    opacity: 0.65;
 }
 .nested-icon {
     width: 20px;
@@ -1206,7 +1285,7 @@ body {
     margin-bottom: var(--sp-4);
 }
 .timer-card.round-mode {
-    border: 2px solid var(--accent);
+    border: 2px solid var(--accent-color);
 }
 .timer-card.round-mode.rest-color {
     border-color: #6366f1; /* distinct rest color */
@@ -1259,7 +1338,7 @@ body {
 .timer-display.giant {
     font-size: 80px;
 }
-.work-color { color: var(--accent); }
+.work-color { color: var(--accent-color); }
 .rest-color { color: #6366f1; }
 
 .progress-bar-bg {
@@ -1271,11 +1350,16 @@ body {
 }
 .progress-bar-fill {
     height: 100%;
-    background: var(--text);
+    background: var(--text-primary);
     transition: width 0.1s linear;
 }
-.progress-bar-fill.work-color { background: var(--accent); }
+.progress-bar-fill.work-color { background: var(--accent-color, var(--strength-accent)); }
 .progress-bar-fill.rest-color { background: #6366f1; }
+
+/* Phase progress bar — per-exercise drain, shown below session-total bar */
+.phase-progress-bar-bg {
+    opacity: 0.55;
+}
 
 .timer-actions {
     display: flex;
@@ -1342,20 +1426,26 @@ body {
     border: 1px solid transparent;
 }
 .set-row.checked {
-    border-color: var(--success);
-    background: rgba(34,197,94,0.05);
+    border-color: var(--accent-color, var(--success));
+    background: var(--checked-bg, rgba(255, 255, 255, 0.04));
+    opacity: 0.65;
 }
 .set-num {
-    width: 24px;
-    height: 24px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.1);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
-    color: var(--text-muted);
+    color: var(--accent-color, var(--text-muted));
+    flex-shrink: 0;
+}
+.set-row.checked .set-num {
+    background: var(--accent-color, var(--success));
+    color: #000;
 }
 .set-input-group {
     flex: 1;
@@ -1376,7 +1466,7 @@ body {
 }
 .input-val:focus {
     outline: none;
-    border-bottom-color: var(--accent);
+    border-bottom-color: var(--accent-color);
 }
 .input-label {
     font-size: 10px;
@@ -1419,7 +1509,7 @@ body {
     background: rgba(255,255,255,0.05);
 }
 .play-icon {
-    color: var(--accent);
+    color: var(--accent-color);
 }
 
 
@@ -1533,21 +1623,21 @@ body {
     transition: all 0.2s ease;
 }
 .btn-demo:hover {
-    border-color: var(--accent);
-    color: var(--accent);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
 }
 
-/* Subtle Play Icon Button next to exercise name */
+/* YouTube-style Play Video Button next to exercise name */
 .btn-demo-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: var(--text-secondary);
+    height: 15px;
+    border-radius: 4px;
+    background: #ff0000;
+    border: none;
+    color: #ffffff;
     cursor: pointer;
     padding: 0;
     margin: 0;
@@ -1555,14 +1645,15 @@ body {
     position: relative;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     vertical-align: middle;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
 }
 .btn-demo-icon::before {
     content: '';
     position: absolute;
-    top: -11px;
-    bottom: -11px;
-    left: -11px;
-    right: -11px;
+    top: -10px;
+    bottom: -10px;
+    left: -10px;
+    right: -10px;
 }
 .btn-demo-icon svg {
     margin-left: 1px;
@@ -1572,7 +1663,8 @@ body {
     background: var(--accent-color, var(--strength-accent));
     border-color: var(--accent-color, var(--strength-accent));
     color: #000;
-    transform: scale(1.1);
+    transform: scale(1.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 .btn-demo-icon:active {
     transform: scale(0.95);
@@ -1613,7 +1705,7 @@ body {
     width: calc(100% - 48px);
     max-width: 340px;
     background: rgba(30, 30, 30, 0.95); 
-    border-left: 3px solid var(--accent);
+    border-left: 3px solid var(--accent-color);
     color: #ffffff; 
     padding: 16px 20px; 
     border-radius: 12px;

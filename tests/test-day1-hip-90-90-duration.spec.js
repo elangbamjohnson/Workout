@@ -23,11 +23,11 @@ test.describe('Day 1 Hip 90/90 Stretch 1 min duration & Switch Sides', () => {
             await warmupCard.locator('.item-header').click();
         }
 
-        const hipRow = warmupCard.locator('.nested-row').filter({ hasText: 'Hip 90/90 Stretch' });
+        const hipRow = warmupCard.locator('.warmup-hybrid-row').filter({ hasText: 'Hip 90/90 Stretch' });
         await expect(hipRow).toBeVisible();
 
         // Duration label should show "1 min"
-        const durationLabel = hipRow.locator('.warmup-duration-label');
+        const durationLabel = hipRow.locator('.warmup-hybrid-stat');
         await expect(durationLabel).toHaveText('1 min');
     });
 
@@ -40,7 +40,7 @@ test.describe('Day 1 Hip 90/90 Stretch 1 min duration & Switch Sides', () => {
             await warmupCard.locator('.item-header').click();
         }
 
-        const hipRow = warmupCard.locator('.nested-row').filter({ hasText: 'Hip 90/90 Stretch' });
+        const hipRow = warmupCard.locator('.warmup-hybrid-row').filter({ hasText: 'Hip 90/90 Stretch' });
         await expect(hipRow).toBeVisible();
 
         // Capture speakAlert calls

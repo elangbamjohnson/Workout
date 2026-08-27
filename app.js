@@ -291,7 +291,8 @@ window.startWarmupRoundTimer = function(dayId) {
     const day = getDayData(dayId);
     if (!day || !day.warmup) return;
     
-    const workSec = day.warmup.reduce((sum, w) => sum + (w.duration || 0), 0);
+    // Use sessionDuration for rep-based exercises that don't have a duration, or warmupSessionDuration if defined
+    const workSec = day.warmupSessionDuration || day.warmup.reduce((sum, w) => sum + (w.duration || w.sessionDuration || 0), 0);
     const title = "Warm-up";
     const timedCues = day.warmupTimedCues;
     const comboStr = (day.warmupCombos || day.warmup.map(w => {
@@ -299,17 +300,45 @@ window.startWarmupRoundTimer = function(dayId) {
         return `${w.name} — ${dStr}`;
     })).join('<br>');
     
-    const startPrompt = "Get ready for Warm-up.";
+    const isDay1 = day.id === 1 || day.id === '1' || day.id === 0 || day.id === '0';
     
+    // Build per-exercise phase segments from warmupTimedCues for the phase progress bar.
+    // Each segment spans from its start time to the next segment's start (or total duration).
+    let exerciseSegments = null;
+    if (timedCues && timedCues.length > 0) {
+        // Collect the start time of each exercise (cues that introduce a new uiIndex)
+        const seenUiIndexes = new Set();
+        const starts = [];
+        const ordered = [...timedCues].sort((a, b) => a.time - b.time);
+        for (const cue of ordered) {
+            if (cue.uiIndex !== undefined && !seenUiIndexes.has(cue.uiIndex)) {
+                seenUiIndexes.add(cue.uiIndex);
+                starts.push(cue.time);
+            }
+        }
+        // Build segments: each goes from starts[i] to starts[i+1] (or workSec)
+        exerciseSegments = starts.map((start, i) => {
+            const wuItem = day.warmup[i];
+            return {
+                start,
+                end: i + 1 < starts.length ? starts[i + 1] : workSec,
+                name: (isDay1 && wuItem) ? `${i + 1}. ${wuItem.name}` : null,
+                cue: (isDay1 && wuItem) ? (wuItem.cue || '') : null
+            };
+        });
+    }
+    
+    // Pass null as customGoText so the countdown ends with only "Go" (one syllable,
+    // completes before the first timedCue audio fires — prevents overlapping audio).
     Timer.startCountdown(5, title, () => {
-        Timer.startRound(workSec, 0, title, comboStr, day.type || 'bag', () => {
+        Timer.startRound(workSec, 0, title, isDay1 ? '' : comboStr, day.type || 'bag', () => {
             day.warmup.forEach(item => {
                 Store.logItem(dayId, item.id, { completed: true });
             });
             Store.logItem(dayId, 'warmup-card', { completed: true });
             reRenderViewingDay();
-        }, timedCues, false, '', "Warm-up complete. Take a breath and get ready for Round 1.");
-    }, null, startPrompt);
+        }, timedCues, false, '', "Warm-up complete. Take a breath and get ready.", exerciseSegments);
+    }, null, null);
 };
 
 window.resetWarmup = function(dayId) {
@@ -320,6 +349,35 @@ window.resetWarmup = function(dayId) {
     });
     Store.logItem(dayId, 'warmup-card', { completed: false });
     reRenderViewingDay();
+};
+
+// Day 1 hybrid warmup: checkbox tap triggers individual exercise timer (timed),
+// or simply toggles completed state (reps-based).
+window.startWarmupExerciseFromCheckbox = function(e, dayId, itemId) {
+    e.stopPropagation();
+    const day = getDayData(dayId);
+    if (!day || !day.warmup) return;
+    const item = day.warmup.find(w => w.id === itemId);
+    if (!item) return;
+
+    const logData = Store.getItemLog(dayId, itemId) || {};
+    const isCompleted = logData.completed;
+
+    if (isCompleted) {
+        // Uncheck — toggle off
+        Store.logItem(dayId, itemId, { completed: false });
+        reRenderViewingDay();
+        return;
+    }
+
+    if (item.type === 'timed') {
+        // Start individual timer for this exercise
+        startWarmupTimer(dayId, itemId, item.duration, item.name, item.cue, item.switchSides);
+    } else {
+        // Rep-based — just mark complete
+        Store.logItem(dayId, itemId, { completed: true });
+        reRenderViewingDay();
+    }
 };
 
 window.startPowerCircuitRound = function(quickId, roundId, workSec, restSec, title, restCue) {
@@ -371,6 +429,7 @@ function renderWarmup(day, parentSessionId, sessionType) {
     const cardType = isRecovery ? 'rest' : (day.type || sessionType || 'strength');
     
     const isDay5 = (sessionId === 5 || sessionId === '5');
+    const isDay1 = (sessionId === 1 || sessionId === '1');
     let listHtml = `<div class="nested-list${isDay5 ? ' warmup-v2-list' : ''}">`;
     day.warmup.forEach((item, idx) => {
         const logData = Store.getItemLog(sessionId, item.id) || {};
@@ -421,6 +480,26 @@ function renderWarmup(day, parentSessionId, sessionType) {
                 </div>
             `;
 
+        } else if (isDay1) {
+            // Day 1 hybrid layout: numbered badge left, name + stat/cue center, checkbox right
+            // Checkbox tap triggers individual exercise timer (timed) or toggles (reps)
+            listHtml += `
+                <div class="warmup-hybrid-row ${isCheckedStr}" data-item-id="${item.id}">
+                    <div class="warmup-hybrid-num">${idx + 1}</div>
+                    <div class="warmup-hybrid-content">
+                        <div class="warmup-hybrid-title-row">
+                            <span class="warmup-hybrid-name">${item.name}</span>
+                            ${demoIconBtn}
+                        </div>
+                        <div class="warmup-hybrid-stat-row">
+                            <span class="warmup-hybrid-stat">${timeOrRepsStr}</span>
+                            ${item.cue ? `<span class="warmup-hybrid-dot">&bull;</span><span class="warmup-hybrid-cue">${item.cue}</span>` : ''}
+                        </div>
+                    </div>
+                    <button class="btn-check ${isCheckedStr}" aria-label="${isCompleted ? 'Uncheck' : (isRepBased ? 'Mark complete' : 'Start timer for')} ${item.name}" onclick="startWarmupExerciseFromCheckbox(event, ${dayIdStr}, '${item.id}')">${icons.checkmark}</button>
+                </div>
+            `;
+
         } else {
             listHtml += `
                 <div class="nested-row ${isCheckedStr}">
@@ -461,7 +540,7 @@ function renderWarmup(day, parentSessionId, sessionType) {
     
     listHtml += '</div>';
 
-    const durationDisplay = isDay5 ? '~5:30' : (mins > 0 ? `~${mins} min` : `${totalDurationSec}s`);
+    const durationDisplay = isDay5 ? '~5:30' : isDay1 ? '~7 min' : (mins > 0 ? `~${mins} min` : `${totalDurationSec}s`);
 
     let normalizedItem = {
         id: cardId,
@@ -475,7 +554,7 @@ function renderWarmup(day, parentSessionId, sessionType) {
         ]
     };
     
-    if (isDay5) {
+    if (isDay5 || isDay1) {
         const isAllWUCompleted = day.warmup.every(item => (Store.getItemLog(sessionId, item.id) || {}).completed);
         if (isAllWUCompleted) {
             normalizedItem.actionHtml = `
@@ -483,7 +562,7 @@ function renderWarmup(day, parentSessionId, sessionType) {
             `;
         } else {
             normalizedItem.actionHtml = `
-                <button class="btn-large" style="margin-top: var(--sp-4);" onclick="startWarmupRoundTimer(${dayIdStr})">Start Warm-up</button>
+                <button class="btn-large" style="margin-top: var(--sp-4);" onclick="startWarmupRoundTimer(${dayIdStr})">Start Warm-up Session</button>
             `;
         }
     } else if (day.warmupPlaylist) {
@@ -1820,9 +1899,9 @@ window.openVideoModal = function(videoId, title, format = 'short') {
                 <div class="video-modal-subtitle">EXERCISE DEMO</div>
             </div>
             <div class="video-container format-${format}">
-                <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&loop=1&playlist=${videoId}" 
+                <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&playsinline=1&mute=1&rel=0&modestbranding=1&loop=1&playlist=${videoId}" 
                     title="${title} video" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                     allowfullscreen>
                 </iframe>
             </div>

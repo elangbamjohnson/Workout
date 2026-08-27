@@ -22,7 +22,7 @@ test.describe('Day 1 Hip 90/90 Stretch Video Demo', () => {
         await expect(warmupCard).toHaveClass(/expanded/);
 
         // Find Hip 90/90 Stretch row
-        const hipRow = warmupCard.locator('.nested-row').filter({ hasText: 'Hip 90/90 Stretch' });
+        const hipRow = warmupCard.locator('.warmup-hybrid-row').filter({ hasText: 'Hip 90/90 Stretch' });
         await expect(hipRow).toBeVisible();
 
         // Verify subtle play icon button is visible next to Hip 90/90 Stretch name

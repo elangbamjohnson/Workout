@@ -28,8 +28,8 @@ test('Warmup Voice Prompt - Regular Day (Day 1)', async ({ page }) => {
   await page.locator('.item-card').filter({ hasText: 'Warm-up' }).first().locator('.item-header').click();
   
   // Click Jump Rope Play
-  const warmupRow = page.locator('.nested-row').filter({ hasText: 'Jump Rope' }).first();
-  await warmupRow.locator('.btn-play').click();
+  const warmupRow = page.locator('.warmup-hybrid-row').filter({ hasText: 'Jump Rope' }).first();
+  await warmupRow.locator('.btn-check').click();
 
   // Fast forward the 5s countdown
   for (let i = 0; i < 6; i++) {

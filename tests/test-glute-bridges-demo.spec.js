@@ -20,11 +20,11 @@ test.describe('Day 1 Glute Bridges Video Demo', () => {
         }
 
         // Find Glute Bridges row
-        const gluteRow = warmupCard.locator('.nested-row').filter({ hasText: 'Glute Bridges' });
+        const gluteRow = warmupCard.locator('.warmup-hybrid-row').filter({ hasText: 'Glute Bridges' });
         await expect(gluteRow).toBeVisible();
 
         // Verify reps label and Watch Demo button are visible
-        const repsLabel = gluteRow.locator('.warmup-duration-label');
+        const repsLabel = gluteRow.locator('.warmup-hybrid-stat');
         await expect(repsLabel).toHaveText('2 × 10');
 
         const demoBtn = gluteRow.locator('.btn-demo-icon');

@@ -26,7 +26,7 @@ test.describe('Warmup Card Label & Expansion Verification Across All Days & Quic
         // Click to expand
         await firstHeader.click();
         await expect(firstCard).toHaveClass(/expanded/);
-        await expect(firstCard.locator('.nested-row').first()).toBeVisible();
+        await expect(firstCard.locator('.warmup-hybrid-row').first()).toBeVisible();
 
         // Click again to collapse
         await firstHeader.click();
