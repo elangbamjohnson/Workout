@@ -714,11 +714,11 @@ body {
     font-weight: 700;
     flex-shrink: 0;
 }
-.type-strength { --accent-color: var(--strength-accent); }
-.type-bag { --accent-color: var(--bag-accent); }
-.type-technical { --accent-color: var(--technical-accent); }
-.type-rest { --accent-color: var(--rest-accent); }
-.type-warmup { --accent-color: var(--strength-accent); }
+.type-strength { --accent-color: var(--strength-accent); --checked-bg: rgba(238, 108, 63, 0.05); }
+.type-bag { --accent-color: var(--bag-accent); --checked-bg: rgba(217, 154, 61, 0.05); }
+.type-technical { --accent-color: var(--technical-accent); --checked-bg: rgba(45, 212, 212, 0.05); }
+.type-rest { --accent-color: var(--rest-accent); --checked-bg: rgba(139, 143, 163, 0.05); }
+.type-warmup { --accent-color: var(--strength-accent); --checked-bg: rgba(238, 108, 63, 0.05); }
 
 .type-strength .num-badge { background: var(--strength-accent); color: #000; }
 .type-bag .num-badge { background: var(--bag-accent); color: #000; }
@@ -831,13 +831,12 @@ body {
     padding: var(--sp-3);
     background: rgba(255, 255, 255, 0.02);
     border-radius: var(--radius-card);
-    margin-bottom: var(--sp-2);
     border: 1px solid transparent;
     transition: border-color 0.2s, background 0.2s, opacity 0.2s;
 }
 .warmup-hybrid-row.checked {
     border-color: var(--accent-color, var(--success));
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--checked-bg, rgba(255, 255, 255, 0.04));
     opacity: 0.65;
 }
 .warmup-hybrid-num {
@@ -874,12 +873,31 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.warmup-hybrid-stat-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-top: 3px;
+    font-size: 12px;
+    line-height: 1.4;
+    flex-wrap: wrap;
+}
 .warmup-hybrid-stat {
     font-size: 12px;
     font-weight: 600;
     color: var(--accent-color, var(--text-muted));
-    margin-top: 3px;
-    opacity: 0.85;
+    flex-shrink: 0;
+}
+.warmup-hybrid-dot {
+    color: var(--text-muted);
+    opacity: 0.5;
+    font-size: 11px;
+}
+.warmup-hybrid-cue {
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.4;
 }
 
 /* Warmup V2 (Day 5 Refactor) */
@@ -1081,8 +1099,9 @@ body {
     font-size: 14px;
 }
 .nested-row.checked {
-    border-color: var(--success);
-    background: rgba(34,197,94,0.05);
+    border-color: var(--accent-color, var(--success));
+    background: var(--checked-bg, rgba(255, 255, 255, 0.04));
+    opacity: 0.65;
 }
 .nested-icon {
     width: 20px;
@@ -1407,20 +1426,26 @@ body {
     border: 1px solid transparent;
 }
 .set-row.checked {
-    border-color: var(--success);
-    background: rgba(34,197,94,0.05);
+    border-color: var(--accent-color, var(--success));
+    background: var(--checked-bg, rgba(255, 255, 255, 0.04));
+    opacity: 0.65;
 }
 .set-num {
-    width: 24px;
-    height: 24px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.1);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
-    color: var(--text-muted);
+    color: var(--accent-color, var(--text-muted));
+    flex-shrink: 0;
+}
+.set-row.checked .set-num {
+    background: var(--accent-color, var(--success));
+    color: #000;
 }
 .set-input-group {
     flex: 1;

@@ -481,7 +481,7 @@ function renderWarmup(day, parentSessionId, sessionType) {
             `;
 
         } else if (isDay1) {
-            // Day 1 hybrid layout: numbered badge left, name + stat center, checkbox right
+            // Day 1 hybrid layout: numbered badge left, name + stat/cue center, checkbox right
             // Checkbox tap triggers individual exercise timer (timed) or toggles (reps)
             listHtml += `
                 <div class="warmup-hybrid-row ${isCheckedStr}" data-item-id="${item.id}">
@@ -491,7 +491,10 @@ function renderWarmup(day, parentSessionId, sessionType) {
                             <span class="warmup-hybrid-name">${item.name}</span>
                             ${demoIconBtn}
                         </div>
-                        <div class="warmup-hybrid-stat">${timeOrRepsStr}</div>
+                        <div class="warmup-hybrid-stat-row">
+                            <span class="warmup-hybrid-stat">${timeOrRepsStr}</span>
+                            ${item.cue ? `<span class="warmup-hybrid-dot">&bull;</span><span class="warmup-hybrid-cue">${item.cue}</span>` : ''}
+                        </div>
                     </div>
                     <button class="btn-check ${isCheckedStr}" aria-label="${isCompleted ? 'Uncheck' : (isRepBased ? 'Mark complete' : 'Start timer for')} ${item.name}" onclick="startWarmupExerciseFromCheckbox(event, ${dayIdStr}, '${item.id}')">${icons.checkmark}</button>
                 </div>

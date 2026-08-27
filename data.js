@@ -118,8 +118,8 @@ const workoutData = {
           "muscles": "Obliques, core, shoulders, glutes.",
           "restSeconds": 90,
           "restCue": "Almost done. Relax the grip and shoulders.",
-          "videoId": "e5DP6961WEk",
-          "videoFormat": "regular",
+          "videoId": "oR_FBD_hAig",
+          "videoFormat": "short",
           "id": "day1-ex8"
         },
         {
