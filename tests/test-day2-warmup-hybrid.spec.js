@@ -32,7 +32,7 @@ test.describe('Day 2 Hybrid Warm-up Session Verification', () => {
             { name: 'Mountain Climbers', stat: '30s', cue: 'Hips level', videoId: '0LvR42Z599c' },
             { name: 'Arm Circles & Shoulder Rolls', stat: '30s', cue: 'Loosen the shoulder joint', videoId: 'lzR7tzI1JUI' },
             { name: 'Hip Rotations', stat: '1 min', cue: 'Stand tall, rotate from the hip', videoId: 'PZFKu9583Ms' },
-            { name: 'Shadowboxing', stat: '2 min', cue: '50% speed', videoId: null }
+            { name: 'Shadowboxing', stat: '2 min', cue: 'speed', videoId: 'dN75QUuRI9A' }
         ];
 
         for (let i = 0; i < 6; i++) {

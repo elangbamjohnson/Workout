@@ -1232,7 +1232,7 @@ function renderHome() {
                         <div class="card-icon-box" aria-hidden="true">${icons[iconName]}</div>
                         <span class="label-small">DAY ${typeof day.id === 'number' ? day.id : index + 1}</span>
                     </div>
-                    <div class="type-badge" aria-hidden="true">${icons[iconName]} ${day.type}</div>
+                    <div class="type-badge" aria-hidden="true">${icons[iconName]} ${day.typeLabel || day.type}</div>
                 </div>
                 <div class="title-card" style="margin-bottom: 4px;">${day.title}</div>
                 <div class="text-sec" style="font-size: 12px; margin-bottom: var(--sp-3); min-height: 18px;">${day.subtitle || ''}</div>
@@ -1338,7 +1338,7 @@ window.renderDay = function(dayIdRaw) {
         <div class="card day-header-card type-${day.type}">
             <div class="flex justify-between items-start" style="margin-bottom: var(--sp-2);">
                 <span class="label-small">DAY ${typeof day.id === 'number' ? day.id : '6-7'}</span>
-                <span class="type-badge" aria-hidden="true">${icons[iconName]} ${day.type}</span>
+                <span class="type-badge" aria-hidden="true">${icons[iconName]} ${day.typeLabel || day.type}</span>
             </div>
             <h1 class="title-page" style="margin-bottom: var(--sp-1);">${day.title}</h1>
             ${day.subtitle ? `<div class="text-sec" style="margin-bottom: var(--sp-2);">${day.subtitle}</div>` : ''}

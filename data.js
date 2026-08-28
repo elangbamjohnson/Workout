@@ -585,7 +585,9 @@ const workoutData = {
           "type": "timed",
           "duration": 120,
           "switchSides": false,
-          "cue": "50% speed — focus on form and weight transfer, no power",
+          "cue": "Fifty percent speed — focus on form and weight transfer, no power",
+          "videoId": "dN75QUuRI9A",
+          "videoFormat": "short",
           "segments": [
             { "time": 120, "text": "Fifty percent speed — focus on form and weight transfer, no power." },
             { "time": 30, "text": "Final thirty seconds of shadowboxing. Stay loose and relaxed." }
@@ -876,7 +878,7 @@ const workoutData = {
       "subtitle": "Shoulder, Rotational & Pressing Strength",
       "note": "Explosive upper body pressing and rotational power \u2014 the shoulder and core engine.",
       "type": "strength",
-      "duration": "~60 min",
+      "duration": "~45 min with warm-up",
       "exercises": [
         {
           "id": "day4-ex1",
@@ -1135,7 +1137,8 @@ const workoutData = {
       "title": "Conditioning Bag Day",
       "subtitle": "Power Under Fatigue",
       "type": "bag",
-      "note": "Higher-volume bag work building power endurance \u2014 maintaining punch quality under accumulated fatigue.",
+      "typeLabel": "Conditioning",
+      "note": "Higher-volume bag work building power endurance — maintaining punch quality under accumulated fatigue.",
       "exercises": [
         {
           "id": "day5-ex1",
@@ -1465,6 +1468,8 @@ const workoutData = {
           "duration": 90,
           "switchSides": false,
           "cue": "1-2, hooks, body shots, slips, pivots. Light movement. Gradually increase speed to approximately 60 percent.",
+          "videoId": "dN75QUuRI9A",
+          "videoFormat": "short",
           "segments": [
             { "time": 90, "text": "1-2, hooks, body shots, slips, pivots. Light movement." },
             { "time": 30, "text": "Gradually increase speed to approximately 60 percent." }
