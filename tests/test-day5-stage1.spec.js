@@ -30,16 +30,16 @@ test.describe('Day 5 Stage 1 Restructure', () => {
         const warmupCard = page.locator('.item-card').filter({ hasText: 'Warm-up' });
         await warmupCard.locator('.item-header').click();
 
-        const jumpRope = warmupCard.locator('.warmup-v2-row').filter({ hasText: 'Jump Rope' });
+        const jumpRope = warmupCard.locator('.warmup-hybrid-row, .warmup-v2-row').filter({ hasText: 'Jump Rope' });
         await expect(jumpRope).toBeVisible();
         await expect(jumpRope).toContainText('2 min');
 
-        const shadowboxing = warmupCard.locator('.warmup-v2-row').filter({ hasText: 'Shadowboxing' });
+        const shadowboxing = warmupCard.locator('.warmup-hybrid-row, .warmup-v2-row').filter({ hasText: 'Shadowboxing' });
         await expect(shadowboxing).toBeVisible();
         await expect(shadowboxing).toContainText('1 min 30s');
 
         // Neck Rolls should be removed
-        const neckRolls = warmupCard.locator('.warmup-v2-row').filter({ hasText: 'Neck Rolls' });
+        const neckRolls = warmupCard.locator('.warmup-hybrid-row, .warmup-v2-row').filter({ hasText: 'Neck Rolls' });
         await expect(neckRolls).toHaveCount(0);
     });
 

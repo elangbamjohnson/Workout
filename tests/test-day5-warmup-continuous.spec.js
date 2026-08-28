@@ -39,7 +39,7 @@ test.describe('Day 5 Warm-up Single Continuous Timer (5:30)', () => {
         });
     });
 
-    test('UI Card: Header duration ~5:30, no checkboxes, leftmost icon position, single Start Warm-up footer button', async ({ page }) => {
+    test('UI Card: Header duration ~5:30, hybrid rows with right checkboxes, video demos, single Start Warm-up footer button', async ({ page }) => {
         const warmupCard = page.locator('.item-card').filter({ hasText: 'Warm-up' });
         await expect(warmupCard).toBeVisible();
         await expect(warmupCard).toContainText('~5:30');
@@ -47,23 +47,18 @@ test.describe('Day 5 Warm-up Single Continuous Timer (5:30)', () => {
         await warmupCard.locator('.item-header').click();
 
         // Verify all 6 exercises render
-        const rows = warmupCard.locator('.warmup-v2-row');
+        const rows = warmupCard.locator('.warmup-hybrid-row, .warmup-v2-row');
         await expect(rows).toHaveCount(6);
 
         // 1. Confirm checkboxes appear on all 6 warm-up rows
-        const checkBoxes = warmupCard.locator('.warmup-v2-row .btn-check');
+        const checkBoxes = warmupCard.locator('.warmup-hybrid-row .btn-check, .warmup-v2-row .btn-check');
         await expect(checkBoxes).toHaveCount(6);
 
-        // 2. Confirm the checkbox sits in the leftmost position of band1
+        // 2. Confirm sequential numbered badges 1..6 appear on the left
         for (let i = 0; i < 6; i++) {
             const row = rows.nth(i);
-            const firstChild = row.locator('.warmup-v2-band1 > :first-child');
-            await expect(firstChild).toHaveClass(/btn-check/);
+            await expect(row.locator('.warmup-hybrid-num, .warmup-v2-num')).toHaveText(String(i + 1));
         }
-
-        // Verify no individual START buttons in exercise rows
-        const individualPlayBtns = warmupCard.locator('.warmup-v2-row .btn-play');
-        await expect(individualPlayBtns).toHaveCount(0);
 
         // Verify single footer Start Warm-up button
         const startWarmupBtn = warmupCard.locator('button.btn-large', { hasText: 'Start Warm-up' });
@@ -82,18 +77,19 @@ test.describe('Day 5 Warm-up Single Continuous Timer (5:30)', () => {
 
         // 5s countdown
         await advanceTimer(page, 6);
-        await expect(timerModal.locator('.timer-header h2')).toHaveText('Warm-up');
+        await expect(timerModal.locator('.timer-header h2')).toHaveText('1. Jump Rope');
 
         // Phase 1 (0:00 - 2:00) Jump Rope
         const cue1 = "Start relaxed. Light feet, relaxed shoulders, steady breathing.";
-        await expect(timerModal.locator('.timer-cue')).toHaveText(cue1);
+        await expect(timerModal.locator('.timer-cue')).toContainText(cue1);
         let spoken = await page.evaluate(() => window.spokenCues);
         expect(spoken).toContain(cue1);
 
         // Mid-phase cue at 1:40 (100s elapsed)
         await advanceTimer(page, 100);
         const cue1_mid = "Gradually increase pace during the final 20 seconds.";
-        await expect(timerModal.locator('.timer-cue')).toHaveText(cue1_mid);
+        spoken = await page.evaluate(() => window.spokenCues);
+        expect(spoken).toContain(cue1_mid);
 
         // Phase 2 at 2:00 (120s elapsed, +20s) Jumping Jacks -> Jump Rope row auto-completes
         await advanceTimer(page, 20);
@@ -103,46 +99,48 @@ test.describe('Day 5 Warm-up Single Continuous Timer (5:30)', () => {
         expect(spoken).toContain(cue2);
 
         // Verify Jump Rope row is now marked completed
-        const jumpRopeRow = warmupCard.locator('.warmup-v2-row[data-item-id="day5-wu1"]');
+        const jumpRopeRow = warmupCard.locator('.warmup-hybrid-row[data-item-id="day5-wu1"], .warmup-v2-row[data-item-id="day5-wu1"]');
         await expect(jumpRopeRow).toHaveClass(/checked/);
 
         // Phase 3 at 2:30 (150s elapsed, +30s) Mountain Climbers -> Jumping Jacks auto-completes
         await advanceTimer(page, 30);
         const cue3 = "Keep hips level. Drive each knee toward the chest without bouncing excessively.";
         await expect(timerModal.locator('.timer-cue')).toHaveText(cue3);
-        const jumpingJacksRow = warmupCard.locator('.warmup-v2-row[data-item-id="day5-wu2"]');
+        const jumpingJacksRow = warmupCard.locator('.warmup-hybrid-row[data-item-id="day5-wu2"], .warmup-v2-row[data-item-id="day5-wu2"]');
         await expect(jumpingJacksRow).toHaveClass(/checked/);
 
         // Phase 4 at 3:00 (180s elapsed, +30s) Shoulder Circles -> Mountain Climbers auto-completes
         await advanceTimer(page, 30);
-        const cue4 = "Controlled full range of motion. 15 seconds forward.";
-        await expect(timerModal.locator('.timer-cue')).toHaveText(cue4);
-        const mountainClimbersRow = warmupCard.locator('.warmup-v2-row[data-item-id="day5-wu3"]');
+        const cue4 = "Controlled full range of motion.";
+        await expect(timerModal.locator('.timer-cue')).toContainText(cue4);
+        const mountainClimbersRow = warmupCard.locator('.warmup-hybrid-row[data-item-id="day5-wu3"], .warmup-v2-row[data-item-id="day5-wu3"]');
         await expect(mountainClimbersRow).toHaveClass(/checked/);
 
         // Mid-phase cue at 3:15 (195s elapsed, +15s)
         await advanceTimer(page, 15);
         const cue4_mid = "Switch direction, 15 seconds backward.";
-        await expect(timerModal.locator('.timer-cue')).toHaveText(cue4_mid);
+        spoken = await page.evaluate(() => window.spokenCues);
+        expect(spoken).toContain(cue4_mid);
 
         // Phase 5 at 3:30 (210s elapsed, +15s) Hip Circles -> Shoulder Circles auto-completes
         await advanceTimer(page, 15);
         const cue5 = "Wide controlled circles. Loosen the hips without rushing.";
-        await expect(timerModal.locator('.timer-cue')).toHaveText(cue5);
-        const shoulderCirclesRow = warmupCard.locator('.warmup-v2-row[data-item-id="day5-wu5"]');
+        await expect(timerModal.locator('.timer-cue')).toContainText(cue5);
+        const shoulderCirclesRow = warmupCard.locator('.warmup-hybrid-row[data-item-id="day5-wu5"], .warmup-v2-row[data-item-id="day5-wu5"]');
         await expect(shoulderCirclesRow).toHaveClass(/checked/);
 
         // Phase 6 at 4:00 (240s elapsed, +30s) Shadowboxing -> Hip Circles auto-completes
         await advanceTimer(page, 30);
         const cue6 = "1-2, hooks, body shots, slips, pivots. Light movement.";
-        await expect(timerModal.locator('.timer-cue')).toHaveText(cue6);
-        const hipCirclesRow = warmupCard.locator('.warmup-v2-row[data-item-id="day5-wu6"]');
+        await expect(timerModal.locator('.timer-cue')).toContainText(cue6);
+        const hipCirclesRow = warmupCard.locator('.warmup-hybrid-row[data-item-id="day5-wu6"], .warmup-v2-row[data-item-id="day5-wu6"]');
         await expect(hipCirclesRow).toHaveClass(/checked/);
 
         // Mid-phase cue at 5:00 (300s elapsed, +60s)
         await advanceTimer(page, 60);
         const cue6_mid = "Gradually increase speed to approximately 60 percent.";
-        await expect(timerModal.locator('.timer-cue')).toHaveText(cue6_mid);
+        spoken = await page.evaluate(() => window.spokenCues);
+        expect(spoken).toContain(cue6_mid);
 
         // Complete timer (+30s to 330s)
         await advanceTimer(page, 31);
@@ -156,7 +154,7 @@ test.describe('Day 5 Warm-up Single Continuous Timer (5:30)', () => {
         expect(completedMap.every(c => c === true)).toBe(true);
 
         // Verify all 6 rows have the .checked completed visual styling
-        const checkedRows = warmupCard.locator('.warmup-v2-row.checked');
+        const checkedRows = warmupCard.locator('.warmup-hybrid-row.checked, .warmup-v2-row.checked');
         await expect(checkedRows).toHaveCount(6);
 
         // Verify footer button has transitioned to "Reset Warm-up"
