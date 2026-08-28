@@ -9,7 +9,7 @@ test.describe('Day 4 R-9 and Cool Down Design Consistency', () => {
         await expect(page.locator('#splash-screen')).toBeHidden();
     });
 
-    test('R-9 Punch Power Circuit and Cool Down have checkboxes on the right and consistent theme colors when selected', async ({ page }) => {
+    test('R-9: No standalone Start button, checkbox is on right and starts round timer; Cool Down has consistent theme colors', async ({ page }) => {
         // Navigate to Day 4
         await page.locator('.day-card').nth(3).click();
         await expect(page.locator('.title-page')).toHaveText('Upper Body Power');
@@ -19,10 +19,13 @@ test.describe('Day 4 R-9 and Cool Down Design Consistency', () => {
         await r9Card.locator('.item-header').click();
         await expect(r9Card).toHaveClass(/expanded/);
 
+        // Verify standalone Start Round button is removed
+        await expect(r9Card.locator('.btn-play')).toHaveCount(0);
+
         const r9Rows = r9Card.locator('.nested-row');
         await expect(r9Rows).toHaveCount(2);
 
-        // Verify R-9 Row 1 layout: set-num on left, combo in middle, checkmark on right
+        // Verify R-9 Row layout: set-num on left, combo in middle, checkmark on right
         for (let i = 0; i < 2; i++) {
             const row = r9Rows.nth(i);
             const numEl = row.locator('.set-num');
@@ -37,8 +40,24 @@ test.describe('Day 4 R-9 and Cool Down Design Consistency', () => {
             expect(checkBtnBox.x).toBeGreaterThan(numBox.x);
         }
 
-        // Click R-9 Row 1 check button
+        // Install clock for fast forwarding
+        await page.clock.install();
+
+        // Click R-9 Row 1 check button to start timer
         await r9Rows.first().locator('.btn-check').click();
+
+        // Verify timer modal opened with countdown
+        const timerModal = page.locator('#timer-modal');
+        await expect(timerModal).not.toHaveClass(/hidden/);
+        await expect(timerModal.locator('.label-small')).toContainText('GET READY');
+
+        // Fast forward 5s countdown + 60s work + 60s rest
+        for (let i = 0; i < 135; i++) {
+            await page.clock.fastForward('00:01');
+            await page.waitForTimeout(5);
+        }
+
+        // When round finishes, modal closes and row is checked
         await expect(r9Rows.first()).toHaveClass(/checked/);
 
         // Check selected styling on R9 Row 1

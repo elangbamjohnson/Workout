@@ -418,6 +418,22 @@ window.startPowerCircuitRound = function(quickId, roundId, workSec, restSec, tit
     });
 };
 
+window.startPowerCircuitRoundFromCheckbox = function(e, sessionId, roundId, workSec, restSec, title, restCue) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    const logData = Store.getItemLog(sessionId, roundId) || {};
+    const isCompleted = !!logData.completed;
+
+    if (isCompleted) {
+        // Uncheck — toggle off
+        Store.logItem(sessionId, roundId, { completed: false });
+        reRenderViewingDay();
+        return;
+    }
+
+    // Start power circuit round timer
+    startPowerCircuitRound(sessionId, roundId, workSec, restSec, title, restCue);
+};
+
 window.toggleWarmupExpanded = function() {
     const day = getDayData(viewingDayId);
     if (!day) return;
@@ -1599,17 +1615,13 @@ window.renderDay = function(dayIdRaw) {
             const log = Store.getItemLog(day.id, r.id) || {};
             const isCompleted = !!log.completed;
             const isChecked = isCompleted ? 'checked' : '';
+            const dayIdStr = typeof day.id === 'string' ? `'${day.id}'` : day.id;
             
             return `
             <div class="nested-row ${isChecked}">
                 <div class="set-num">${i + 1}</div>
                 <div style="flex: 1; min-width: 0;">${r.combo}</div>
-                <div class="nested-actions">
-                    ${!isCompleted ? `
-                    <button class="btn-play type-${day.type || 'strength'}" onclick="startPowerCircuitRound(${day.id}, '${r.id}', ${r.workSeconds}, ${r.restSeconds}, '${r.name.replace(/'/g, "\\'")}', '${r.restCue ? r.restCue.replace(/'/g, "\\'") : ''}')"><span class="play-icon">${icons.play}</span> Start Round</button>
-                    ` : ''}
-                    <button class="btn-check ${isChecked}" aria-label="${isCompleted ? 'Uncheck' : 'Complete'} ${r.name}" onclick="Store.logItem(${day.id}, '${r.id}', { completed: !${isCompleted} }); renderDay(${day.id})">${icons.checkmark}</button>
-                </div>
+                <button class="btn-check ${isChecked}" aria-label="${isCompleted ? 'Uncheck' : 'Start timer for'} ${r.name}" onclick="startPowerCircuitRoundFromCheckbox(event, ${dayIdStr}, '${r.id}', ${r.workSeconds}, ${r.restSeconds}, '${r.name.replace(/'/g, "\\'")}', '${r.restCue ? r.restCue.replace(/'/g, "\\'") : ''}')">${icons.checkmark}</button>
             </div>`;
         }).join('');
         
@@ -2588,12 +2600,7 @@ window.renderQuickSession = function(quickId) {
             <div class="nested-row ${isChecked}">
                 <div class="set-num">${i + 1}</div>
                 <div style="flex: 1; min-width: 0;">${r.combo}</div>
-                <div class="nested-actions">
-                    ${!isCompleted && !session.isContinuous ? `
-                    <button class="btn-play type-${session.type || 'strength'}" onclick="startPowerCircuitRound('${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, '${r.name.replace(/'/g, "\\'")}', '${r.restCue ? r.restCue.replace(/'/g, "\\'") : ''}')"><span class="play-icon">${icons.play}</span> Start Round</button>
-                    ` : ''}
-                    <button class="btn-check ${isChecked}" aria-label="${isCompleted ? 'Uncheck' : 'Complete'} ${r.name}" onclick="Store.logItem('${quickId}', '${r.id}', { completed: !${isCompleted} }); renderQuickSession('${quickId}')">${icons.checkmark}</button>
-                </div>
+                <button class="btn-check ${isChecked}" aria-label="${isCompleted ? 'Uncheck' : 'Start timer for'} ${r.name}" onclick="startPowerCircuitRoundFromCheckbox(event, '${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, '${r.name.replace(/'/g, "\\'")}', '${r.restCue ? r.restCue.replace(/'/g, "\\'") : ''}')">${icons.checkmark}</button>
             </div>`;
         }).join('');
         
