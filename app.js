@@ -267,9 +267,8 @@ window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue, 
     else if (workSec === 45) durationText = "forty five seconds";
     else if (workSec === 30) durationText = "thirty seconds";
     
-    // We only announce the title if we don't have a complex cue, or just "Get ready"
-    const startPrompt = `Get ready for ${title}.`;
-
+    // Pass null as customGoText so countdown cleanly ends with "Go" (single syllable)
+    // and allows the initial work round cue at 0s to speak naturally without cutoff.
     Timer.startCountdown(5, title, () => {
         Timer.startRound(workSec, restSec, title, cue, day ? day.type : 'bag', () => {
             console.log('Completing round:', dayId, roundId);
@@ -282,7 +281,7 @@ window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue, 
             }
             reRenderViewingDay();
         }, timedCues, false, restCue, completionCue);
-    }, null, startPrompt);
+    }, null, null);
 };
 
 
@@ -308,7 +307,7 @@ window.startWarmupTimer = function(dayId, itemId, duration, title, cue, switchSi
         Timer.startWarmup(duration, title, cue, switchSides, day ? day.type : 'strength', () => {
             Store.logItem(dayId, itemId, { completed: true });
             reRenderViewingDay();
-        }, segments);
+        }, segments, true);
     }, null, startPrompt);
 };
 
@@ -325,7 +324,7 @@ window.startWarmupRoundTimer = function(dayId) {
         return `${w.name} — ${dStr}`;
     })).join('<br>');
     
-    const isHybridTimer = day.id === 1 || day.id === '1' || day.id === 0 || day.id === '0' || day.id === 4 || day.id === '4' || day.id === 'quick-upper-power';
+    const isHybridTimer = day.id === 1 || day.id === '1' || day.id === 0 || day.id === '0' || day.id === 4 || day.id === '4' || day.id === 5 || day.id === '5' || day.id === 'quick-upper-power';
     
     // Build per-exercise phase segments from warmupTimedCues for the phase progress bar.
     // Each segment spans from its start time to the next segment's start (or total duration).
@@ -469,9 +468,9 @@ function renderWarmup(day, parentSessionId, sessionType) {
     const badgeText = isRecovery ? 'RC' : 'WU';
     const cardType = isRecovery ? 'rest' : (day.type || sessionType || 'strength');
     
-    const isDay5 = (sessionId === 5 || sessionId === '5');
-    const isHybridDay = (sessionId === 1 || sessionId === '1' || sessionId === 4 || sessionId === '4' || sessionId === 'quick-upper-power');
-    let listHtml = `<div class="nested-list${isDay5 ? ' warmup-v2-list' : ''}">`;
+    const isDay5 = false;
+    const isHybridDay = (sessionId === 1 || sessionId === '1' || sessionId === 4 || sessionId === '4' || sessionId === 5 || sessionId === '5' || sessionId === 'quick-upper-power');
+    let listHtml = `<div class="nested-list">`;
     day.warmup.forEach((item, idx) => {
         const logData = Store.getItemLog(sessionId, item.id) || {};
         const isCompleted = logData.completed;
@@ -498,31 +497,8 @@ function renderWarmup(day, parentSessionId, sessionType) {
                </button>`
             : '';
         
-        if (isDay5) {
-
-            listHtml += `
-                <div class="warmup-v2-row ${isCheckedStr}" data-item-id="${item.id}">
-                    <div class="warmup-v2-main">
-                        <div class="warmup-v2-band1">
-                            <button class="btn-check ${isCheckedStr}" onclick="toggleRound(event, ${dayIdStr}, '${item.id}')">
-                                ${icons.checkmark}
-                            </button>
-                            <div class="warmup-v2-header-line">
-                                <h3 class="warmup-v2-title">${item.name}</h3>
-                                <span class="warmup-v2-dot">&bull;</span>
-                                <span class="warmup-v2-duration">${timeOrRepsStr}</span>
-                                ${demoIconBtn}
-                            </div>
-                        </div>
-                        <div class="warmup-v2-band2">
-                            <div class="warmup-v2-cue">${item.cue}</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-        } else if (isHybridDay) {
-            // Hybrid layout (Day 1 & Day 4): numbered badge left, name + stat/cue center, checkbox right
+        if (isHybridDay) {
+            // Hybrid layout (Day 1, Day 4 & Day 5): numbered badge left, name + stat/cue center, checkbox right
             // Checkbox tap triggers individual exercise timer (timed) or toggles (reps)
             listHtml += `
                 <div class="warmup-hybrid-row ${isCheckedStr}" data-item-id="${item.id}">
@@ -564,24 +540,10 @@ function renderWarmup(day, parentSessionId, sessionType) {
             `;
         }
     });
-
-    if (isDay5) {
-        listHtml += `
-            <div class="warmup-v2-tip-card">
-                <div class="warmup-v2-tip-icon">
-                    ${icons.lightbulb}
-                </div>
-                <div class="warmup-v2-tip-content">
-                    <h4>Warm up your body and mind</h4>
-                    <p>Good warm-ups improve performance and help prevent injuries.</p>
-                </div>
-            </div>
-        `;
-    }
     
     listHtml += '</div>';
 
-    const durationDisplay = isDay5 ? '~5:30' : isHybridDay ? '~7 min' : (mins > 0 ? `~${mins} min` : `${totalDurationSec}s`);
+    const durationDisplay = (sessionId === 5 || sessionId === '5') ? '~5:30' : isHybridDay ? '~7 min' : (mins > 0 ? `~${mins} min` : `${totalDurationSec}s`);
 
     let normalizedItem = {
         id: cardId,
@@ -1091,10 +1053,12 @@ function updateGlobalHeader(isHome, day = null, dayIndex = 0, totalDays = 7) {
           </div>
         `;
     } else {
-        const hasPrev = dayIndex > 0;
-        const hasNext = dayIndex < totalDays - 1;
-        const prevId = hasPrev ? workoutData.days[dayIndex - 1].id : null;
-        const nextId = hasNext ? workoutData.days[dayIndex + 1].id : null;
+        const workoutDays = workoutData.days.slice(0, 5);
+        const currentIndex = workoutDays.findIndex(d => d.id === (day ? day.id : null));
+        const hasPrev = currentIndex > 0;
+        const hasNext = currentIndex >= 0 && currentIndex < workoutDays.length - 1;
+        const prevId = hasPrev && workoutDays[currentIndex - 1] ? workoutDays[currentIndex - 1].id : null;
+        const nextId = hasNext && workoutDays[currentIndex + 1] ? workoutDays[currentIndex + 1].id : null;
         
         innerHtml = `
           <div class="nav-day">
@@ -1316,12 +1280,13 @@ window.renderDay = function(dayIdRaw) {
     viewingDayId = day.id;
     
     let iconName = day.type === 'rest' ? 'rest' : (day.type === 'strength' ? 'strength' : (day.type === 'bag' ? 'bag' : 'technical'));
-    const prevDay = dayIndex > 0 ? workoutData.days[dayIndex - 1] : null;
-    const nextDay = dayIndex < workoutData.days.length - 1 ? workoutData.days[dayIndex + 1] : null;
+    const workoutDays = workoutData.days.slice(0, 5);
+    const prevDay = dayIndex > 0 ? workoutDays[dayIndex - 1] : null;
+    const nextDay = (dayIndex >= 0 && dayIndex < workoutDays.length - 1) ? workoutDays[dayIndex + 1] : null;
 
     clearApp();
     appContainer.className = '';
-    updateGlobalHeader(false, day, dayIndex, workoutData.days.length);
+    updateGlobalHeader(false, day, dayIndex, workoutDays.length);
     let html = '';
 
     // Nav Row
@@ -1329,7 +1294,7 @@ window.renderDay = function(dayIdRaw) {
         <div class="nav-row">
             <button class="btn-nav" onclick="renderHome()">← Week</button>
             ${prevDay ? `<button class="btn-nav" onclick="renderDay('${prevDay.id}')">‹ Day ${prevDay.id}</button>` : ''}
-            <span class="nav-indicator">${dayIndex + 1} / ${workoutData.days.length}</span>
+            <span class="nav-indicator">${dayIndex + 1} / ${workoutDays.length}</span>
             ${nextDay ? `<button class="btn-nav" onclick="renderDay('${nextDay.id}')">Day ${nextDay.id} ›</button>` : ''}
         </div>
     `;
@@ -1488,29 +1453,24 @@ window.renderDay = function(dayIdRaw) {
                        </button>`
                     : '';
                 let rowClass = `nested-row ${isChecked}`;
-                let iconOrCheck = `<button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>`;
-                let marginLeft = '12px';
-                
                 if (day.id === 5) {
                     rowClass += ` continuous-row`;
-                    iconOrCheck = `<button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>`;
                 }
 
                 return `
                 <div class="${rowClass}" data-item-id="${r.id}">
-                    <div style="display: flex; align-items: center; width: 100%;">
-                        ${iconOrCheck}
-                        <div style="flex: 1; margin-left: ${marginLeft}; min-width: 0;">
-                            <div style="display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                                <span style="font-size: 14px; line-height: 1.4; color: var(--text-primary);">
-                                    ${r.combo}
-                                </span>
-                                ${demoIconBtn}
-                            </div>
+                    <div class="set-num">${i + 1}</div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                            <span style="font-size: 14px; line-height: 1.4; color: var(--text-primary);">
+                                ${r.combo}
+                            </span>
+                            ${demoIconBtn}
                         </div>
                     </div>
+                    <button class="btn-check ${isChecked}" aria-label="${isChecked ? 'Uncheck' : 'Complete'} segment ${i + 1}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
                 </div>`;
-            }).join('') : `<div class="nested-row"><button class="btn-check ${Store.getItemLog(day.id, ex.id)?.completed ? 'checked':''}" onclick="toggleRound(event, ${day.id}, '${ex.id}')">${icons.checkmark}</button><div style="flex:1; margin-left: 12px;">${ex.notes}</div></div>`;
+            }).join('') : `<div class="nested-row"><div class="set-num">1</div><div style="flex:1; min-width: 0;">${ex.notes}</div><button class="btn-check ${Store.getItemLog(day.id, ex.id)?.completed ? 'checked':''}" onclick="toggleRound(event, ${day.id}, '${ex.id}')">${icons.checkmark}</button></div>`;
 
             let allCompleted = ex.rounds ? ex.rounds.every(r => Store.getItemLog(day.id, r.id)?.completed) : false;
             let startLabel = "Start Round Timer";
@@ -1684,7 +1644,7 @@ window.renderDay = function(dayIdRaw) {
     
     html += `
         <div style="margin-top: 32px; margin-bottom: 64px;">
-            <button class="btn-large" onclick="finishWorkout(${day.id})">Complete Session</button>
+            <button class="btn-complete-session" onclick="finishWorkout(${day.id})">${icons.checkmark} Complete Session</button>
         </div>
     `;
 

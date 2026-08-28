@@ -195,7 +195,7 @@ window.Timer = {
     },
 
 
-    startWarmup(duration, title, cue, switchSides, workoutType, onComplete, segments = null) {
+    startWarmup(duration, title, cue, switchSides, workoutType, onComplete, segments = null, suppressAudio = false) {
         this.initAudio();
         this.mode = 'warmup';
         this.phase = 'work';
@@ -210,19 +210,21 @@ window.Timer = {
         this.modal.classList.remove('hidden');
         this.attachListener();
         
-        if (switchSides) {
-            window.speakAlert(`${this.roundData.title} — first side, start now`);
-        } else if (segments && segments.length > 0) {
-            const firstSeg = segments.find(s => s.time === duration);
-            if (firstSeg) {
-                window.speakAlert(`${this.roundData.title} started. ${firstSeg.text}`);
-                this.roundData.cue = firstSeg.text;
-                this.updateCueText(firstSeg.text);
+        if (!suppressAudio) {
+            if (switchSides) {
+                window.speakAlert(`${this.roundData.title} — first side, start now`);
+            } else if (segments && segments.length > 0) {
+                const firstSeg = segments.find(s => s.time === duration);
+                if (firstSeg) {
+                    window.speakAlert(`${this.roundData.title} started. ${firstSeg.text}`);
+                    this.roundData.cue = firstSeg.text;
+                    this.updateCueText(firstSeg.text);
+                } else {
+                    window.speakAlert(`${this.roundData.title} started`);
+                }
             } else {
                 window.speakAlert(`${this.roundData.title} started`);
             }
-        } else {
-            window.speakAlert(`${this.roundData.title} started`);
         }
         
         this.tick();

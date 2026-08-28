@@ -590,13 +590,13 @@ const workoutData = {
             {
               "id": "day3-sec1-r2",
               "combo": "Hip circles \u2014 10 each direction",
-              "videoId": "jUft857xWzw",
+              "videoId": "PZFKu9583Ms",
               "videoFormat": "short"
             },
             {
               "id": "day3-sec1-r3",
               "combo": "Shoulder circles \u2014 10 each direction",
-              "videoId": "rB0qSl1I-fc",
+              "videoId": "UGg2V8npqeM",
               "videoFormat": "short"
             },
             {
@@ -1280,6 +1280,8 @@ const workoutData = {
           "duration": 120,
           "switchSides": false,
           "cue": "Start relaxed. Light feet, relaxed shoulders, steady breathing. Gradually increase pace during the final 20 seconds.",
+          "videoId": "Gt9hlRMXDXc",
+          "videoFormat": "short",
           "segments": [
             { "time": 120, "text": "Start relaxed. Light feet, relaxed shoulders, steady breathing." },
             { "time": 20, "text": "Gradually increase pace during the final 20 seconds." }
@@ -1291,7 +1293,9 @@ const workoutData = {
           "type": "timed",
           "duration": 30,
           "switchSides": false,
-          "cue": "Full arm extension overhead. Land softly and maintain a steady rhythm."
+          "cue": "Full arm extension overhead. Land softly and maintain a steady rhythm.",
+          "videoId": "bT2iY8IjEU0",
+          "videoFormat": "short"
         },
         {
           "id": "day5-wu3",
@@ -1299,7 +1303,9 @@ const workoutData = {
           "type": "timed",
           "duration": 30,
           "switchSides": false,
-          "cue": "Keep hips level. Drive each knee toward the chest without bouncing excessively."
+          "cue": "Keep hips level. Drive each knee toward the chest without bouncing excessively.",
+          "videoId": "0LvR42Z599c",
+          "videoFormat": "short"
         },
         {
           "id": "day5-wu5",
@@ -1308,6 +1314,8 @@ const workoutData = {
           "duration": 30,
           "switchSides": false,
           "cue": "Controlled full range of motion. 15 seconds forward, 15 seconds backward.",
+          "videoId": "UGg2V8npqeM",
+          "videoFormat": "short",
           "segments": [
             { "time": 30, "text": "Controlled full range of motion. 15 seconds forward." },
             { "time": 15, "text": "Switch direction, 15 seconds backward." }
@@ -1319,7 +1327,9 @@ const workoutData = {
           "type": "timed",
           "duration": 30,
           "switchSides": false,
-          "cue": "Wide controlled circles. Loosen the hips without rushing."
+          "cue": "Wide controlled circles. Loosen the hips without rushing.",
+          "videoId": "PZFKu9583Ms",
+          "videoFormat": "short"
         },
         {
           "id": "day5-wu7",
@@ -1334,6 +1344,7 @@ const workoutData = {
           ]
         }
       ],
+      "warmupSessionDuration": 330,
       "warmupTimedCues": [
         { "time": 0, "text": "Start relaxed. Light feet, relaxed shoulders, steady breathing.", "uiIndex": 0 },
         { "time": 100, "text": "Gradually increase pace during the final 20 seconds.", "uiIndex": 0 },
