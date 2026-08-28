@@ -172,6 +172,31 @@ function getDayData(dayId) {
     return workoutData.days.find(d => d.id === dayId || d.id == dayId);
 }
 
+function getExpandableCardIds(session) {
+    if (!session) return [];
+    const ids = [];
+    if (session.warmup && session.warmup.length > 0) ids.push('warmup-card');
+    if (session.exercises) session.exercises.forEach(ex => ids.push(ex.id));
+    if (session.sections) session.sections.forEach(sec => ids.push(sec.id));
+    if (session.powerCircuit) ids.push(session.powerCircuit.id);
+    if (session.bagRounds) ids.push(session.bagRounds.id);
+    if (session.circuit) ids.push(session.circuit.id);
+    if (session.finisher) ids.push(session.finisher.id);
+    if (session.blocks) {
+        session.blocks.forEach(block => {
+            if (block.type === 'exercises') {
+                ids.push(block.data.id);
+            } else if (block.type === 'warmup') {
+                ids.push(block.data.id || 'warmup-card');
+            } else if (block.type === 'bagRounds' || block.type === 'circuit') {
+                ids.push(block.data.id);
+            }
+        });
+    }
+    if (session.cooldown && session.cooldown.length > 0) ids.push('cooldown-card');
+    return ids;
+}
+
 function reRenderViewingDay() {
     if (typeof viewingDayId === 'string' && viewingDayId.startsWith('quick-')) {
         window.renderQuickSession(viewingDayId);
@@ -300,7 +325,7 @@ window.startWarmupRoundTimer = function(dayId) {
         return `${w.name} — ${dStr}`;
     })).join('<br>');
     
-    const isDay1 = day.id === 1 || day.id === '1' || day.id === 0 || day.id === '0';
+    const isHybridTimer = day.id === 1 || day.id === '1' || day.id === 0 || day.id === '0' || day.id === 4 || day.id === '4' || day.id === 'quick-upper-power';
     
     // Build per-exercise phase segments from warmupTimedCues for the phase progress bar.
     // Each segment spans from its start time to the next segment's start (or total duration).
@@ -322,8 +347,8 @@ window.startWarmupRoundTimer = function(dayId) {
             return {
                 start,
                 end: i + 1 < starts.length ? starts[i + 1] : workSec,
-                name: (isDay1 && wuItem) ? `${i + 1}. ${wuItem.name}` : null,
-                cue: (isDay1 && wuItem) ? (wuItem.cue || '') : null
+                name: (isHybridTimer && wuItem) ? `${i + 1}. ${wuItem.name}` : null,
+                cue: (isHybridTimer && wuItem) ? (wuItem.cue || '') : null
             };
         });
     }
@@ -331,7 +356,7 @@ window.startWarmupRoundTimer = function(dayId) {
     // Pass null as customGoText so the countdown ends with only "Go" (one syllable,
     // completes before the first timedCue audio fires — prevents overlapping audio).
     Timer.startCountdown(5, title, () => {
-        Timer.startRound(workSec, 0, title, isDay1 ? '' : comboStr, day.type || 'bag', () => {
+        Timer.startRound(workSec, 0, title, isHybridTimer ? '' : comboStr, day.type || 'bag', () => {
             day.warmup.forEach(item => {
                 Store.logItem(dayId, item.id, { completed: true });
             });
@@ -393,6 +418,22 @@ window.startPowerCircuitRound = function(quickId, roundId, workSec, restSec, tit
     });
 };
 
+window.startPowerCircuitRoundFromCheckbox = function(e, sessionId, roundId, workSec, restSec, title, restCue) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    const logData = Store.getItemLog(sessionId, roundId) || {};
+    const isCompleted = !!logData.completed;
+
+    if (isCompleted) {
+        // Uncheck — toggle off
+        Store.logItem(sessionId, roundId, { completed: false });
+        reRenderViewingDay();
+        return;
+    }
+
+    // Start power circuit round timer
+    startPowerCircuitRound(sessionId, roundId, workSec, restSec, title, restCue);
+};
+
 window.toggleWarmupExpanded = function() {
     const day = getDayData(viewingDayId);
     if (!day) return;
@@ -429,7 +470,7 @@ function renderWarmup(day, parentSessionId, sessionType) {
     const cardType = isRecovery ? 'rest' : (day.type || sessionType || 'strength');
     
     const isDay5 = (sessionId === 5 || sessionId === '5');
-    const isDay1 = (sessionId === 1 || sessionId === '1');
+    const isHybridDay = (sessionId === 1 || sessionId === '1' || sessionId === 4 || sessionId === '4' || sessionId === 'quick-upper-power');
     let listHtml = `<div class="nested-list${isDay5 ? ' warmup-v2-list' : ''}">`;
     day.warmup.forEach((item, idx) => {
         const logData = Store.getItemLog(sessionId, item.id) || {};
@@ -480,8 +521,8 @@ function renderWarmup(day, parentSessionId, sessionType) {
                 </div>
             `;
 
-        } else if (isDay1) {
-            // Day 1 hybrid layout: numbered badge left, name + stat/cue center, checkbox right
+        } else if (isHybridDay) {
+            // Hybrid layout (Day 1 & Day 4): numbered badge left, name + stat/cue center, checkbox right
             // Checkbox tap triggers individual exercise timer (timed) or toggles (reps)
             listHtml += `
                 <div class="warmup-hybrid-row ${isCheckedStr}" data-item-id="${item.id}">
@@ -540,7 +581,7 @@ function renderWarmup(day, parentSessionId, sessionType) {
     
     listHtml += '</div>';
 
-    const durationDisplay = isDay5 ? '~5:30' : isDay1 ? '~7 min' : (mins > 0 ? `~${mins} min` : `${totalDurationSec}s`);
+    const durationDisplay = isDay5 ? '~5:30' : isHybridDay ? '~7 min' : (mins > 0 ? `~${mins} min` : `${totalDurationSec}s`);
 
     let normalizedItem = {
         id: cardId,
@@ -554,7 +595,7 @@ function renderWarmup(day, parentSessionId, sessionType) {
         ]
     };
     
-    if (isDay5 || isDay1) {
+    if (isDay5 || isHybridDay) {
         const isAllWUCompleted = day.warmup.every(item => (Store.getItemLog(sessionId, item.id) || {}).completed);
         if (isAllWUCompleted) {
             normalizedItem.actionHtml = `
@@ -772,48 +813,24 @@ function toggleCard(id) {
 
 function expandAll() {
     if (viewingDayId === null) return;
+    const session = getDayData(viewingDayId);
+    if (!session) return;
     
-    if (typeof viewingDayId === 'string' && viewingDayId.startsWith('quick-')) {
-        const session = window.quickWorkouts.find(q => q.id === viewingDayId);
-        if (session) {
-            if (session.bagRounds) expandedCardIds.add(session.bagRounds.id);
-            if (session.circuit) expandedCardIds.add(session.circuit.id);
-            if (session.finisher) expandedCardIds.add(session.finisher.id);
-            if (session.powerCircuit) expandedCardIds.add(session.powerCircuit.id);
-            if (session.exercises) session.exercises.forEach(ex => expandedCardIds.add(ex.id));
-            if (session.warmup && session.warmup.length > 0) expandedCardIds.add('warmup-card');
-            if (session.cooldown && session.cooldown.length > 0) expandedCardIds.add('cooldown-card');
-            if (session.blocks) {
-                session.blocks.forEach(block => {
-                    if (block.type === 'exercises') {
-                        expandedCardIds.add(block.data.id);
-                        if (block.data.exercises) {
-                            block.data.exercises.forEach(ex => expandedCardIds.add(ex.id));
-                        }
-                    }
-                    else if (block.type === 'warmup') expandedCardIds.add(block.data.id || 'warmup-card');
-                    else if (block.type === 'bagRounds' || block.type === 'circuit') expandedCardIds.add(block.data.id);
-                });
-            }
-            renderQuickSession(viewingDayId);
-        }
-        return;
-    }
-    
-    const currentDay = workoutData.days.find(d => d.id === viewingDayId);
-    if (!currentDay) return;
-    
-    if (currentDay.exercises) currentDay.exercises.forEach(ex => expandedCardIds.add(ex.id));
-    if (currentDay.sections) currentDay.sections.forEach(sec => expandedCardIds.add(sec.id));
-    if (currentDay.warmup && currentDay.warmup.length > 0) expandedCardIds.add('warmup-card');
+    const cardIds = getExpandableCardIds(session);
+    cardIds.forEach(id => {
+        expandedCardIds.add(id);
+        expandedCardIds.add(String(id));
+    });
     
     reRenderViewingDay();
 }
+window.expandAll = expandAll;
 
 function collapseAll() {
     expandedCardIds.clear();
     reRenderViewingDay();
 }
+window.collapseAll = collapseAll;
 
 function renderItemCard(item, dayType) {
     const isExpanded = expandedCardIds.has(item.id) || expandedCardIds.has(String(item.id));
@@ -1368,30 +1385,13 @@ window.renderDay = function(dayIdRaw) {
             if (totalMins > 0) totalTime = `${totalMins} min total`;
         }
 
+        const expandableIds = getExpandableCardIds(day);
+        const totalExpandable = expandableIds.length;
+        const totalExpanded = expandableIds.filter(id => expandedCardIds.has(id) || expandedCardIds.has(String(id))).length;
+
         let allExpanded = false;
         let toggleAction = "expandAll()";
         let toggleText = "Expand all";
-        
-        let totalExpandable = 0;
-        let totalExpanded = 0;
-        
-        if (day.warmup && day.warmup.length > 0) {
-            totalExpandable++;
-            if (expandedCardIds.has('warmup-card')) totalExpanded++;
-        }
-        
-        if (day.powerCircuit) {
-            totalExpandable++;
-            if (expandedCardIds.has(day.powerCircuit.id)) totalExpanded++;
-        }
-        
-        if (day.cooldown && day.cooldown.length > 0) {
-            totalExpandable++;
-            if (expandedCardIds.has('cooldown-card')) totalExpanded++;
-        }
-
-        if (day.exercises) { totalExpandable += day.exercises.length; totalExpanded += day.exercises.filter(ex => expandedCardIds.has(ex.id)).length; }
-        if (day.sections) { totalExpandable += day.sections.length; totalExpanded += day.sections.filter(sec => expandedCardIds.has(sec.id)).length; }
         
         if (totalExpandable > 0 && totalExpanded === totalExpandable) {
             allExpanded = true;
@@ -1615,14 +1615,13 @@ window.renderDay = function(dayIdRaw) {
             const log = Store.getItemLog(day.id, r.id) || {};
             const isCompleted = !!log.completed;
             const isChecked = isCompleted ? 'checked' : '';
+            const dayIdStr = typeof day.id === 'string' ? `'${day.id}'` : day.id;
             
             return `
             <div class="nested-row ${isChecked}">
-                <button class="btn-check ${isChecked}" onclick="Store.logItem(${day.id}, '${r.id}', { completed: !${isCompleted} }); renderDay(${day.id})">${icons.checkmark}</button>
-                <div style="flex: 1;">${r.combo}</div>
-                ${!isCompleted ? `
-                <button class="btn-play type-strength" onclick="startPowerCircuitRound(${day.id}, '${r.id}', ${r.workSeconds}, ${r.restSeconds}, '${r.name.replace(/'/g, "\\'")}', '${r.restCue ? r.restCue.replace(/'/g, "\\'") : ''}')"><span class="play-icon">${icons.play}</span> Start Round</button>
-                ` : ''}
+                <div class="set-num">${i + 1}</div>
+                <div style="flex: 1; min-width: 0;">${r.combo}</div>
+                <button class="btn-check ${isChecked}" aria-label="${isCompleted ? 'Uncheck' : 'Start timer for'} ${r.name}" onclick="startPowerCircuitRoundFromCheckbox(event, ${dayIdStr}, '${r.id}', ${r.workSeconds}, ${r.restSeconds}, '${r.name.replace(/'/g, "\\'")}', '${r.restCue ? r.restCue.replace(/'/g, "\\'") : ''}')">${icons.checkmark}</button>
             </div>`;
         }).join('');
         
@@ -1640,20 +1639,22 @@ window.renderDay = function(dayIdRaw) {
                 { title: "ROUNDS", content: `<div class="nested-list">${roundsHtml}</div>` }
             ]
         };
-        html += renderItemCard(normalizedItem, 'strength');
+        html += renderItemCard(normalizedItem, day.type || 'strength');
     }
     
     if (day.cooldown) {
         let drillsHtml = day.cooldown.map((n, i) => {
             const log = Store.getItemLog(day.id, 'cooldown-card-' + i) || {};
-            const isChecked = log.completed ? 'checked' : '';
+            const isCompleted = !!log.completed;
+            const isChecked = isCompleted ? 'checked' : '';
             return `
-            <div class="nested-row interactive ${isChecked}" role="button" tabindex="0" onclick="Store.logItem(${day.id}, 'cooldown-card-${i}', { completed: !${!!log.completed} }); renderDay(${day.id})">
-                <button class="btn-check ${isChecked}">${icons.checkmark}</button>
-                <div style="flex: 1;">
+            <div class="nested-row interactive ${isChecked}" role="button" tabindex="0" onclick="Store.logItem(${day.id}, 'cooldown-card-${i}', { completed: !${isCompleted} }); renderDay(${day.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); Store.logItem(${day.id}, 'cooldown-card-${i}', { completed: !${isCompleted} }); renderDay(${day.id});}">
+                <div class="set-num">${i + 1}</div>
+                <div style="flex: 1; min-width: 0;">
                     <div style="font-weight: 500;">${n.name} — ${n.duration}</div>
                     ${n.desc ? `<div style="font-size: 13px; opacity: 0.8; margin-top: 2px;">${n.desc}</div>` : ''}
                 </div>
+                <button class="btn-check ${isChecked}" aria-label="${isCompleted ? 'Uncheck' : 'Complete'} ${n.name}">${icons.checkmark}</button>
             </div>`;
         }).join('');
         
@@ -1676,7 +1677,7 @@ window.renderDay = function(dayIdRaw) {
             stats: [{ icon: icons.clock, value: cdMinsStr }],
             sections: [ { title: "STRETCHES & RECOVERY", content: `<div class="nested-list">${drillsHtml}</div>` } ]
         };
-        html += renderItemCard(normalizedItem, 'rest');
+        html += renderItemCard(normalizedItem, day.type || 'strength');
     }
     
     html += `</div>`; // .item-list
@@ -2233,34 +2234,9 @@ window.renderQuickSession = function(quickId) {
     }
 
     // Expand/Collapse All Logic for Quick Sessions
-    let totalExpandable = 0;
-    let totalExpanded = 0;
-    if (session.warmup && session.warmup.length > 0) { totalExpandable++; if (expandedCardIds.has('warmup-card')) totalExpanded++; }
-    if (session.bagRounds) { totalExpandable++; if (expandedCardIds.has(session.bagRounds.id)) totalExpanded++; }
-    if (session.circuit) { totalExpandable++; if (expandedCardIds.has(session.circuit.id)) totalExpanded++; }
-    if (session.finisher) { totalExpandable++; if (expandedCardIds.has(session.finisher.id)) totalExpanded++; }
-    if (session.powerCircuit) { totalExpandable++; if (expandedCardIds.has(session.powerCircuit.id)) totalExpanded++; }
-    if (session.exercises) { 
-        session.exercises.forEach(ex => {
-            totalExpandable++;
-            if (expandedCardIds.has(ex.id)) totalExpanded++;
-        });
-    }
-    if (session.blocks) {
-        session.blocks.forEach(block => {
-            if (block.type === 'exercises') {
-                totalExpandable++;
-                if (expandedCardIds.has(block.data.id)) totalExpanded++;
-            } else if (block.type === 'warmup') {
-                totalExpandable++;
-                if (expandedCardIds.has(block.data.id || 'warmup-card')) totalExpanded++;
-            } else if (block.type === 'bagRounds' || block.type === 'circuit') {
-                totalExpandable++;
-                if (expandedCardIds.has(block.data.id)) totalExpanded++;
-            }
-        });
-    }
-    if (session.cooldown && session.cooldown.length > 0) { totalExpandable++; if (expandedCardIds.has('cooldown-card')) totalExpanded++; }
+    const expandableIds = getExpandableCardIds(session);
+    const totalExpandable = expandableIds.length;
+    const totalExpanded = expandableIds.filter(id => expandedCardIds.has(id) || expandedCardIds.has(String(id))).length;
     
     let toggleAction = "expandAll()";
     let toggleText = "Expand all";
@@ -2622,11 +2598,9 @@ window.renderQuickSession = function(quickId) {
             
             return `
             <div class="nested-row ${isChecked}">
-                <button class="btn-check ${isChecked}" onclick="Store.logItem('${quickId}', '${r.id}', { completed: !${isCompleted} }); renderQuickSession('${quickId}')">${icons.checkmark}</button>
-                <div style="flex: 1;">${r.combo}</div>
-                ${!isCompleted && !session.isContinuous ? `
-                <button class="btn-play type-strength" onclick="startPowerCircuitRound('${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, '${r.name.replace(/'/g, "\\'")}', '${r.restCue ? r.restCue.replace(/'/g, "\\'") : ''}')"><span class="play-icon">${icons.play}</span> Start Round</button>
-                ` : ''}
+                <div class="set-num">${i + 1}</div>
+                <div style="flex: 1; min-width: 0;">${r.combo}</div>
+                <button class="btn-check ${isChecked}" aria-label="${isCompleted ? 'Uncheck' : 'Start timer for'} ${r.name}" onclick="startPowerCircuitRoundFromCheckbox(event, '${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, '${r.name.replace(/'/g, "\\'")}', '${r.restCue ? r.restCue.replace(/'/g, "\\'") : ''}')">${icons.checkmark}</button>
             </div>`;
         }).join('');
         
@@ -2644,7 +2618,7 @@ window.renderQuickSession = function(quickId) {
                 { title: "ROUNDS", content: `<div class="nested-list">${roundsHtml}</div>` }
             ]
         };
-        html += renderItemCard(normalizedItem, 'strength');
+        html += renderItemCard(normalizedItem, session.type || 'strength');
     }
     
     // 4.8 Custom Blocks
@@ -2666,14 +2640,16 @@ window.renderQuickSession = function(quickId) {
     if (session.cooldown) {
         let drillsHtml = session.cooldown.map((n, i) => {
             const log = Store.getItemLog(quickId, 'cooldown-card-' + i) || {};
-            const isChecked = log.completed ? 'checked' : '';
+            const isCompleted = !!log.completed;
+            const isChecked = isCompleted ? 'checked' : '';
             return `
-            <div class="nested-row interactive ${isChecked}" role="button" tabindex="0" onclick="Store.logItem('${quickId}', 'cooldown-card-${i}', { completed: !${!!log.completed} }); renderQuickSession('${quickId}')">
-                <button class="btn-check ${isChecked}">${icons.checkmark}</button>
-                <div style="flex: 1;">
+            <div class="nested-row interactive ${isChecked}" role="button" tabindex="0" onclick="Store.logItem('${quickId}', 'cooldown-card-${i}', { completed: !${isCompleted} }); renderQuickSession('${quickId}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); Store.logItem('${quickId}', 'cooldown-card-${i}', { completed: !${isCompleted} }); renderQuickSession('${quickId}');}">
+                <div class="set-num">${i + 1}</div>
+                <div style="flex: 1; min-width: 0;">
                     <div style="font-weight: 500;">${n.name} — ${n.duration}</div>
                     ${n.desc ? `<div style="font-size: 13px; opacity: 0.8; margin-top: 2px;">${n.desc}</div>` : ''}
                 </div>
+                <button class="btn-check ${isChecked}" aria-label="${isCompleted ? 'Uncheck' : 'Complete'} ${n.name}">${icons.checkmark}</button>
             </div>`;
         }).join('');
         
@@ -2715,7 +2691,7 @@ window.renderQuickSession = function(quickId) {
             </div>`;
         }
         
-        html += renderItemCard(normalizedItem, 'rest');
+        html += renderItemCard(normalizedItem, session.type || 'strength');
     }
     
     html += `</div>`; // .item-list

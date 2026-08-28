@@ -1103,6 +1103,22 @@ body {
     background: var(--checked-bg, rgba(255, 255, 255, 0.04));
     opacity: 0.65;
 }
+.nested-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    flex-shrink: 0;
+}
+@media (max-width: 480px) {
+    .nested-row:has(.btn-play) {
+        flex-wrap: wrap;
+    }
+    .nested-row:has(.btn-play) .nested-actions {
+        width: 100%;
+        justify-content: flex-end;
+        margin-top: 4px;
+    }
+}
 .nested-icon {
     width: 20px;
     height: 20px;
@@ -1443,7 +1459,8 @@ body {
     color: var(--accent-color, var(--text-muted));
     flex-shrink: 0;
 }
-.set-row.checked .set-num {
+.set-row.checked .set-num,
+.nested-row.checked .set-num {
     background: var(--accent-color, var(--success));
     color: #000;
 }
@@ -1502,7 +1519,7 @@ body {
     display: flex;
     align-items: center;
     gap: var(--sp-3);
-    padding: var(--sp-2);
+    padding: var(--sp-3) var(--sp-4);
     border-radius: var(--radius-card);
 }
 .nested-row.interactive:hover {

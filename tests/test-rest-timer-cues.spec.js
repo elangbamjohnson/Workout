@@ -324,7 +324,7 @@ test.describe('Rest Timer Text & Voice Prompts Audit & UI Bleed Fix Verification
         await finisherCard.locator('.item-header').click();
 
         // Start Round 1
-        await finisherCard.locator('.btn-play').first().click();
+        await finisherCard.locator('.btn-check').first().click();
         const timerModal = page.locator('#timer-modal');
         await expect(timerModal).toBeVisible();
 
