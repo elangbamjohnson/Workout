@@ -244,28 +244,46 @@ window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue, 
     let itemsToComplete = [];
     if (day && day.exercises) {
         const ex = day.exercises.find(e => e.id === roundId);
-        if (ex && ex.timedCues) {
-            timedCues = ex.timedCues;
-        }
-        if (ex && ex.completionCue) {
-            completionCue = ex.completionCue;
-        }
-        if (ex && ex.rounds) {
-            itemsToComplete = ex.rounds;
+        if (ex) {
+            if (ex.timedCues) timedCues = ex.timedCues;
+            if (ex.completionCue) completionCue = ex.completionCue;
+            if (ex.rounds) itemsToComplete = ex.rounds;
+            if (ex.restCue && !restCue) restCue = ex.restCue;
+            if (ex.restSeconds !== undefined && (restSec === undefined || restSec === null)) restSec = ex.restSeconds;
         }
     } else if (day && day.sections) {
         const sec = day.sections.find(s => s.id === roundId);
-        if (sec && sec.rounds) {
-            itemsToComplete = sec.rounds;
+        if (sec) {
+            if (sec.timedCues) timedCues = sec.timedCues;
+            if (sec.completionCue) completionCue = sec.completionCue;
+            if (sec.rounds) itemsToComplete = sec.rounds;
+            if (sec.restCue && !restCue) restCue = sec.restCue;
+            if (sec.restSeconds !== undefined && (restSec === undefined || restSec === null)) restSec = sec.restSeconds;
         }
     }
-    let durationText = workSec + " seconds";
-    if (workSec === 180) durationText = "three minutes";
-    else if (workSec === 120) durationText = "two minutes";
-    else if (workSec === 90) durationText = "ninety seconds";
-    else if (workSec === 60) durationText = "one minute";
-    else if (workSec === 45) durationText = "forty five seconds";
-    else if (workSec === 30) durationText = "thirty seconds";
+
+    // Build per-exercise phase segments from timedCues for sections (e.g. Day 3 Dynamic Warm-Up & technical drills)
+    let exerciseSegments = null;
+    if (day && day.sections && timedCues && timedCues.length > 0) {
+        const seenUiIndexes = new Set();
+        const starts = [];
+        const ordered = [...timedCues].sort((a, b) => a.time - b.time);
+        for (const cueItem of ordered) {
+            if (cueItem.uiIndex !== undefined && !seenUiIndexes.has(cueItem.uiIndex)) {
+                seenUiIndexes.add(cueItem.uiIndex);
+                starts.push(cueItem.time);
+            }
+        }
+        exerciseSegments = starts.map((start, i) => {
+            const childItem = itemsToComplete[i];
+            return {
+                start,
+                end: i + 1 < starts.length ? starts[i + 1] : workSec,
+                name: childItem ? `${i + 1}. ${childItem.name || childItem.combo || childItem.title}` : null,
+                cue: childItem ? (childItem.cue || childItem.detail || childItem.focus || '') : null
+            };
+        });
+    }
     
     // Pass null as customGoText so countdown cleanly ends with "Go" (single syllable)
     // and allows the initial work round cue at 0s to speak naturally without cutoff.
@@ -280,7 +298,7 @@ window.startRoundTimer = function(dayId, roundId, workSec, restSec, title, cue, 
                 });
             }
             reRenderViewingDay();
-        }, timedCues, false, restCue, completionCue);
+        }, timedCues, false, restCue, completionCue, exerciseSegments);
     }, null, null);
 };
 
@@ -595,12 +613,23 @@ window.finishWorkout = function(dayId) {
 
 window.resetRound = function(dayId, exerciseId) {
     const day = getDayData(dayId);
-    if (!day || !day.exercises) return;
-    const ex = day.exercises.find(e => e.id === exerciseId);
-    if (!ex || !ex.rounds) return;
-    ex.rounds.forEach(r => {
-        Store.logItem(dayId, r.id, { completed: false });
-    });
+    if (!day) return;
+    if (day.exercises) {
+        const ex = day.exercises.find(e => e.id === exerciseId);
+        if (ex && ex.rounds) {
+            ex.rounds.forEach(r => {
+                Store.logItem(dayId, r.id, { completed: false });
+            });
+        }
+    }
+    if (day.sections) {
+        const sec = day.sections.find(s => s.id === exerciseId);
+        if (sec && sec.rounds) {
+            sec.rounds.forEach(r => {
+                Store.logItem(dayId, r.id, { completed: false });
+            });
+        }
+    }
     reRenderViewingDay();
 };
 
@@ -1401,14 +1430,15 @@ window.renderDay = function(dayIdRaw) {
                     : '';
                 const drillText = `${r.round ? `Round ${r.round} — ` : ''}${r.combo}${r.focus ? ` : ${r.focus}` : ''}`;
                 return `
-                <div class="nested-row interactive ${isChecked}" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}">
-                    <button class="btn-check ${isChecked}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
-                    <div style="flex: 1; margin-left: 12px; min-width: 0;">
+                <div class="nested-row ${isChecked}" data-item-id="${r.id}">
+                    <div class="set-num">${i + 1}</div>
+                    <div style="flex: 1; min-width: 0;">
                         <div style="display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                             <span style="font-size: 14px; line-height: 1.4; color: var(--text-primary);">${drillText}</span>
                             ${demoIconBtn}
                         </div>
                     </div>
+                    <button class="btn-check ${isChecked}" aria-label="${isChecked ? 'Uncheck' : 'Complete'} segment ${i + 1}" onclick="toggleRound(event, ${day.id}, '${r.id}')">${icons.checkmark}</button>
                 </div>`;
             }).join('') : '';
 
@@ -1424,20 +1454,29 @@ window.renderDay = function(dayIdRaw) {
                 badge = `R${roundCounter++}`;
             }
 
+            let allCompleted = sec.rounds ? sec.rounds.every(r => Store.getItemLog(day.id, r.id)?.completed) : false;
+            let startLabel = "Start Section Timer";
+            let onClickAction = `startRoundTimer(${day.id}, '${sec.id}', ${sec.workSeconds}, ${sec.restSeconds || 0}, '${sec.name.replace(/'/g, "\\'")}', '', '${(sec.restCue || '').replace(/'/g, "\\'")}')`;
+            if (allCompleted) {
+                startLabel = `Reset ${sec.name}`;
+                onClickAction = `resetRound(${day.id}, '${sec.id}')`;
+            }
+
             let normalizedItem = {
                 id: sec.id,
                 badge: badge,
                 title: sec.name,
                 stats: [
                     { value: sec.duration },
-                    { label: `· ${sec.rounds ? sec.rounds.length : 'Multiple'} drills` }
+                    'divider',
+                    { value: `${sec.rounds ? sec.rounds.length : 'Multiple'} drills` }
                 ],
                 callout: { icon: icons.technical, text: sec.cue || "Focus on mechanics and form over power." },
                 sections: [
                     { title: "DETAILS", content: `<p>${sec.detail}</p>` },
                     { title: "DRILLS", content: `<div class="nested-list">${drillsHtml}</div>` }
                 ],
-                actionHtml: `<button class="btn-large" onclick="startRoundTimer(${day.id}, '${sec.id}', ${sec.workSeconds}, ${sec.restSeconds}, '${sec.name.replace(/'/g, "\\'")}', '')">Start Section Timer</button>`
+                actionHtml: `<button class="btn-large" style="margin-top: var(--sp-4);" onclick="${onClickAction}">${startLabel}</button>`
             };
             
             html += renderItemCard(normalizedItem, day.type);

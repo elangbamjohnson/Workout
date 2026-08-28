@@ -623,128 +623,184 @@ const workoutData = {
           "name": "Dynamic Warm-Up",
           "duration": "8 min",
           "workSeconds": 480,
-          "restSeconds": 0,
+          "restSeconds": 60,
+          "restCue": "Dynamic warm-up complete. Shake it out, breathe deep. Footwork patterns coming up next.",
           "detail": "Prepare joints and activate the movement patterns you will be training.",
           "cue": "Do not rush this. Cold joints and tight hip flexors are the #1 cause of mechanical breakdown in the first round.",
           "id": "day3-sec1",
           "rounds": [
             {
               "id": "day3-sec1-r1",
-              "combo": "Leg swings (front-back, lateral) \u2014 15 each direction, each leg",
+              "combo": "Leg swings (front-back, lateral) — 15 each direction, each leg",
               "videoId": "DTXpjDJDoeI",
-              "videoFormat": "short"
+              "videoFormat": "short",
+              "cue": "Stand tall, hold a wall if needed. 15 front-back then 15 lateral per leg."
             },
             {
               "id": "day3-sec1-r2",
-              "combo": "Hip circles \u2014 10 each direction",
+              "combo": "Hip circles — 10 each direction",
               "videoId": "PZFKu9583Ms",
-              "videoFormat": "short"
+              "videoFormat": "short",
+              "cue": "10 big, controlled circles clockwise, then 10 counter-clockwise."
             },
             {
               "id": "day3-sec1-r3",
-              "combo": "Shoulder circles \u2014 10 each direction",
+              "combo": "Shoulder circles — 10 each direction",
               "videoId": "UGg2V8npqeM",
-              "videoFormat": "short"
+              "videoFormat": "short",
+              "cue": "10 wide circles forward, then 10 backward. Open up the shoulders."
             },
             {
               "id": "day3-sec1-r4",
-              "combo": "Neck rolls \u2014 5 each direction, slow",
+              "combo": "Neck rolls — 5 each direction, slow",
               "videoId": "DDt_ig6Iy6E",
-              "videoFormat": "short"
+              "videoFormat": "short",
+              "cue": "5 slow, gentle rolls in each direction. Keep shoulders down."
             },
             {
               "id": "day3-sec1-r5",
-              "combo": "Squat to stand \u2014 10 reps, pause at bottom",
+              "combo": "Squat to stand — 10 reps, pause at bottom",
               "videoId": "B1mCETTy6WA",
-              "videoFormat": "short"
+              "videoFormat": "short",
+              "cue": "Reach for toes, drop into deep squat, pause, then stand tall."
             },
             {
               "id": "day3-sec1-r6",
-              "combo": "Lateral lunge to hip flexor stretch \u2014 5 each side",
+              "combo": "Lateral lunge to hip flexor stretch — 5 each side",
               "videoId": "lCrd5DSYRnw",
-              "videoFormat": "short"
+              "videoFormat": "short",
+              "cue": "Step wide, sink into the hip, then rotate to stretch the flexor."
             }
+          ],
+          "timedCues": [
+            { "time": 0, "text": "Leg swings. Stand tall, hold a wall if needed. Fifteen swings front to back, then lateral. Start with your first leg.", "uiIndex": 0 },
+            { "time": 45, "text": "Switch legs on the leg swings.", "uiIndex": 0 },
+            { "time": 90, "text": "Hip circles. Ten big, controlled circles clockwise, then counter-clockwise.", "uiIndex": 1, "autoCheckId": "day3-sec1-r1" },
+            { "time": 120, "text": "Switch direction on the hip circles.", "uiIndex": 1 },
+            { "time": 150, "text": "Shoulder circles. Ten wide circles forward, then ten backward. Open up the shoulders.", "uiIndex": 2, "autoCheckId": "day3-sec1-r2" },
+            { "time": 180, "text": "Switch direction, shoulder circles backward.", "uiIndex": 2 },
+            { "time": 210, "text": "Neck rolls. Five slow, gentle rolls in each direction. Keep shoulders relaxed.", "uiIndex": 3, "autoCheckId": "day3-sec1-r3" },
+            { "time": 240, "text": "Switch direction on the neck rolls.", "uiIndex": 3 },
+            { "time": 270, "text": "Squat to stand. Ten reps. Reach down, sink into a deep squat, pause, then drive up.", "uiIndex": 4, "autoCheckId": "day3-sec1-r4" },
+            { "time": 360, "text": "Lateral lunge to hip flexor stretch. Five each side. Step wide, sink down, then rotate.", "uiIndex": 5, "autoCheckId": "day3-sec1-r5" },
+            { "time": 420, "text": "Switch sides on the lateral lunge.", "uiIndex": 5 },
+            { "time": 475, "text": "Final five seconds. Finish strong.", "uiIndex": 5 }
           ]
         },
         {
           "name": "Footwork Patterns",
           "duration": "8 min",
           "workSeconds": 480,
-          "restSeconds": 0,
-          "detail": "Boxing footwork is the foundation of power \u2014 you cannot punch hard from bad position.",
-          "cue": "Stay on the balls of your feet. Heels should barely touch the floor. Move like you are standing on hot coals \u2014 light and ready.",
+          "restSeconds": 60,
+          "restCue": "Footwork drills complete. Sixty seconds rest. Defense and head movement next.",
+          "detail": "Boxing footwork is the foundation of power — you cannot punch hard from bad position.",
+          "cue": "Stay on the balls of your feet. Heels should barely touch the floor. Move like you are standing on hot coals — light and ready.",
           "id": "day3-sec2",
           "rounds": [
             {
               "id": "day3-sec2-r1",
-              "combo": "Box step pattern \u2014 forward, back, lateral \u00d7 5 min",
+              "combo": "Box step pattern — forward, back, lateral × 5 min",
               "videoId": "M2EN9AH7cDc",
-              "videoFormat": "short"
+              "videoFormat": "short",
+              "cue": "Stay on the balls of your feet. Move in a square: forward, lateral, back, lateral."
             },
             {
               "id": "day3-sec2-r2",
-              "combo": "Pivot drills \u2014 lead foot pivot (hook position) \u00d7 3 min",
+              "combo": "Pivot drills — lead foot pivot (hook position) × 3 min",
               "videoId": "dN75QUuRI9A",
-              "videoFormat": "short"
+              "videoFormat": "short",
+              "cue": "Plant the lead foot and swing the rear leg 90 degrees into hook position."
             }
+          ],
+          "timedCues": [
+            { "time": 0, "text": "Box step pattern. Forward, back, lateral. Five minutes. Stay on the balls of your feet.", "uiIndex": 0 },
+            { "time": 150, "text": "Halfway through box steps. Keep that rhythm crisp.", "uiIndex": 0 },
+            { "time": 300, "text": "Pivot drills. Lead foot pivot into hook position. Three minutes.", "uiIndex": 1, "autoCheckId": "day3-sec2-r1" },
+            { "time": 420, "text": "Final minute of pivot drills. Snap that pivot quickly.", "uiIndex": 1 },
+            { "time": 475, "text": "Final five seconds. Finish clean.", "uiIndex": 1 }
           ]
         },
         {
           "name": "Defense & Head Movement",
           "duration": "8 min",
           "workSeconds": 480,
-          "restSeconds": 0,
+          "restSeconds": 60,
+          "restCue": "Defense and head movement complete. Sixty seconds rest. Combination drilling next.",
           "detail": "Slips, rolls, and parries integrated with offense.",
-          "cue": "Defense creates offense. Every defensive movement should end in a position to counter. Do not just evade \u2014 evade and return.",
+          "cue": "Defense creates offense. Every defensive movement should end in a position to counter. Do not just evade — evade and return.",
           "id": "day3-sec3",
           "rounds": [
             {
               "id": "day3-sec3-r1",
-              "combo": "Slip jab, return cross \u2014 3 min",
+              "combo": "Slip jab, return cross — 3 min",
               "videoId": "6wJu5xm8VXA",
-              "videoFormat": "short"
+              "videoFormat": "short",
+              "cue": "Slip outside the jab, drive off rear foot to return the cross immediately."
             },
             {
               "id": "day3-sec3-r2",
-              "combo": "Roll under hook, return hook \u2014 3 min",
+              "combo": "Roll under hook, return hook — 3 min",
               "videoId": "-WXGz0Mbcr0",
-              "videoFormat": "short"
+              "videoFormat": "short",
+              "cue": "Duck and roll in a U-shape under the hook, load the legs, return hook."
             },
             {
               "id": "day3-sec3-r3",
-              "combo": "Parry cross, jab return \u2014 2 min",
+              "combo": "Parry cross, jab return — 2 min",
               "videoId": "OVdalU7Zd9M",
-              "videoFormat": "short"
+              "videoFormat": "short",
+              "cue": "Redirect the incoming cross with rear hand, snap your jab back instantly."
             }
+          ],
+          "timedCues": [
+            { "time": 0, "text": "Slip jab, return cross. Three minutes. Evade and counter immediately.", "uiIndex": 0 },
+            { "time": 90, "text": "Keep eyes up on the slip. Return with authority.", "uiIndex": 0 },
+            { "time": 180, "text": "Roll under hook, return hook. Three minutes. Stay low, load the legs, come back with the hook.", "uiIndex": 1, "autoCheckId": "day3-sec3-r1" },
+            { "time": 270, "text": "Maintain your balance on the roll.", "uiIndex": 1 },
+            { "time": 360, "text": "Parry cross, jab return. Two minutes. Deflect and snap the jab back.", "uiIndex": 2, "autoCheckId": "day3-sec3-r2" },
+            { "time": 475, "text": "Final five seconds. Finish strong.", "uiIndex": 2 }
           ]
         },
         {
           "name": "Combination Drilling",
           "duration": "15 min",
           "workSeconds": 900,
-          "restSeconds": 0,
+          "restSeconds": 60,
+          "restCue": "Combination drilling complete. Great work. Take sixty seconds rest before cool down and mobility.",
           "detail": "Link mechanics into combinations, building complexity each round.",
-          "cue": "Each combination should feel smooth \u2014 not mechanical or choppy. If a transition feels awkward, slow down and isolate that transition.",
+          "cue": "Each combination should feel smooth — not mechanical or choppy. If a transition feels awkward, slow down and isolate that transition.",
           "id": "day3-sec4",
           "rounds": [
             {
               "id": "day3-sec4-r1",
-              "combo": "Round 1 \u2014 1-2 only: Jab-Cross at 60% speed, focus on transition between the two",
+              "combo": "Round 1 — 1-2 only: Jab-Cross at 60% speed, focus on transition between the two",
               "videoId": "3qSg2evfEQ8",
-              "videoFormat": "short"
+              "videoFormat": "short",
+              "cue": "Jab-Cross at 60% speed. Focus on the hip transition between 1 and 2."
             },
             {
               "id": "day3-sec4-r2",
-              "combo": "Round 2 \u2014 1-2-3: Add the hook, feel the hip pivot sequence",
+              "combo": "Round 2 — 1-2-3: Add the hook, feel the hip pivot sequence",
               "videoId": "REoImtOx--Q",
-              "videoFormat": "short"
+              "videoFormat": "short",
+              "cue": "1-2-3 combo. Add the lead hook, feel the hip weight transfer."
             },
             {
               "id": "day3-sec4-r3",
-              "combo": "Round 3 \u2014 1-2-3-2: Add the rear cross return, flow through all four punches smoothly",
+              "combo": "Round 3 — 1-2-3-2: Add the rear cross return, flow through all four punches smoothly",
               "videoId": "l3e3qeLwC6Q",
-              "videoFormat": "short"
+              "videoFormat": "short",
+              "cue": "1-2-3-2 combo. Add the rear cross finish, fluid motion."
             }
+          ],
+          "timedCues": [
+            { "time": 0, "text": "Round one. One-two only. Jab cross at sixty percent speed. Focus on seamless transition.", "uiIndex": 0 },
+            { "time": 150, "text": "Two and a half minutes left on round one. Crisp mechanics.", "uiIndex": 0 },
+            { "time": 300, "text": "Round two. One-two-three. Add the lead hook, feel the hip pivot sequence.", "uiIndex": 1, "autoCheckId": "day3-sec4-r1" },
+            { "time": 450, "text": "Halfway through round two. Flow smoothly from cross into hook.", "uiIndex": 1 },
+            { "time": 600, "text": "Round three. One-two-three-two. Add the rear cross return, flow smoothly through all four punches.", "uiIndex": 2, "autoCheckId": "day3-sec4-r2" },
+            { "time": 750, "text": "Final two and a half minutes. Keep that fluid combination going.", "uiIndex": 2 },
+            { "time": 895, "text": "Final five seconds. Finish strong.", "uiIndex": 2 }
           ]
         },
         {
@@ -752,40 +808,58 @@ const workoutData = {
           "duration": "7 min",
           "workSeconds": 420,
           "restSeconds": 0,
+          "completionCue": "Technical session complete! Great focus and mechanics today.",
           "detail": "Restore range of motion and lower the nervous system.",
           "cue": "Do not skip this. Hip flexor and shoulder mobility directly affect punch mechanics. Athletes who skip cool-downs develop compensatory patterns.",
           "id": "day3-sec5",
           "rounds": [
             {
               "id": "day3-sec5-r1",
-              "combo": "Pigeon pose \u2014 60 sec each side",
+              "combo": "Pigeon pose — 60 sec each side",
               "videoId": "UlyMK4MJ1v4",
-              "videoFormat": "short"
+              "videoFormat": "short",
+              "cue": "60 sec each side. Drop deep into the hip, breathe into the glute."
             },
             {
               "id": "day3-sec5-r2",
-              "combo": "Hip flexor stretch (kneeling) \u2014 45 sec each side",
+              "combo": "Hip flexor stretch (kneeling) — 45 sec each side",
               "videoId": "41ReSOu0dh4",
-              "videoFormat": "short"
+              "videoFormat": "short",
+              "cue": "45 sec each side. Tuck tailbone, squeeze glute on the kneeling side."
             },
             {
               "id": "day3-sec5-r3",
-              "combo": "Chest opener \u2014 60 sec (arms back, open chest)",
+              "combo": "Chest opener — 60 sec (arms back, open chest)",
               "videoId": "crnw1IKWNZY",
-              "videoFormat": "short"
+              "videoFormat": "short",
+              "cue": "60 sec. Interlace fingers behind back, lift chest, breathe deep."
             },
             {
               "id": "day3-sec5-r4",
-              "combo": "Wrist and forearm stretch \u2014 30 sec each direction",
+              "combo": "Wrist and forearm stretch — 30 sec each direction",
               "videoId": "n2H09xUYiOQ",
-              "videoFormat": "short"
+              "videoFormat": "short",
+              "cue": "30 sec each direction. Gently pull fingers back, then down."
             },
             {
               "id": "day3-sec5-r5",
-              "combo": "Slow neck rolls \u2014 5 each direction",
+              "combo": "Slow neck rolls — 5 each direction",
               "videoId": "DGwTMgAapxU",
-              "videoFormat": "short"
+              "videoFormat": "short",
+              "cue": "5 slow rolls each direction. Relax the traps and jaw."
             }
+          ],
+          "timedCues": [
+            { "time": 0, "text": "Pigeon pose. Sixty seconds on your first side. Breathe deep into the hip.", "uiIndex": 0 },
+            { "time": 60, "text": "Switch sides on the pigeon pose.", "uiIndex": 0 },
+            { "time": 120, "text": "Hip flexor stretch. Kneeling, forty-five seconds on the first side.", "uiIndex": 1, "autoCheckId": "day3-sec5-r1" },
+            { "time": 165, "text": "Switch sides on the hip flexor stretch.", "uiIndex": 1 },
+            { "time": 210, "text": "Chest opener. Arms back, open up the ribcage. Sixty seconds.", "uiIndex": 2, "autoCheckId": "day3-sec5-r2" },
+            { "time": 270, "text": "Wrist and forearm stretch. Thirty seconds each direction.", "uiIndex": 3, "autoCheckId": "day3-sec5-r3" },
+            { "time": 300, "text": "Switch direction on the wrist stretch.", "uiIndex": 3 },
+            { "time": 330, "text": "Slow neck rolls. Five each direction. Relax the upper traps.", "uiIndex": 4, "autoCheckId": "day3-sec5-r4" },
+            { "time": 375, "text": "Switch direction on the neck rolls.", "uiIndex": 4 },
+            { "time": 415, "text": "Final five seconds. Great session.", "uiIndex": 4 }
           ]
         }
       ],
