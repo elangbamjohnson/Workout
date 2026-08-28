@@ -14,12 +14,12 @@ test('Quick Session Play Icons and Video IDs Check', async ({ page }) => {
 
     const expectedWarmupVideos = [
         { name: 'Hip 90/90 Stretch', videoId: 'fDC2KC1XqY8' },
-        { name: 'Glute Bridges', videoId: 'mzDpWDoJVFU' },
-        { name: 'Inchworm', videoId: 'RLSHZEomHCA' }
+        { name: 'Glute Bridges', videoId: 'GI5BtRDTuyc' },
+        { name: 'Inchworm', videoId: '7jeW4v_oaes' }
     ];
 
     for (const item of expectedWarmupVideos) {
-        const row = page.locator(`.nested-row:has-text("${item.name}")`);
+        const row = page.locator(`.warmup-hybrid-row:has-text("${item.name}"), .nested-row:has-text("${item.name}")`);
         const btn = row.locator('.btn-demo-icon');
         await expect(btn).toBeVisible();
         

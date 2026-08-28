@@ -873,7 +873,9 @@ const workoutData = {
           "type": "timed",
           "duration": 180,
           "switchSides": false,
-          "cue": "Easy pace \u2014 this is activation, not cardio"
+          "cue": "Easy pace — this is activation, not cardio",
+          "videoId": "Gt9hlRMXDXc",
+          "videoFormat": "short"
         },
         {
           "id": "day4-wu2",
@@ -881,7 +883,9 @@ const workoutData = {
           "type": "timed",
           "duration": 30,
           "switchSides": false,
-          "cue": "Full arm extension overhead on every rep"
+          "cue": "Full arm extension overhead on every rep",
+          "videoId": "bT2iY8IjEU0",
+          "videoFormat": "short"
         },
         {
           "id": "day4-wu3",
@@ -889,7 +893,9 @@ const workoutData = {
           "type": "timed",
           "duration": 30,
           "switchSides": false,
-          "cue": "Hips level, drive each knee toward your chest"
+          "cue": "Hips level, drive each knee toward your chest",
+          "videoId": "0LvR42Z599c",
+          "videoFormat": "short"
         },
         {
           "id": "day4-wu4",
@@ -905,44 +911,68 @@ const workoutData = {
           "id": "day4-wu5",
           "name": "Glute Bridges",
           "type": "reps",
-          "reps": "2 \u00d7 10",
+          "reps": "2 × 10",
+          "sessionDuration": 30,
           "switchSides": false,
           "cue": "Squeeze glutes hard at the top, hold 1 second",
-          "videoId": "mzDpWDoJVFU",
+          "videoId": "GI5BtRDTuyc",
           "videoFormat": "short"
         },
         {
           "id": "day4-wu6",
           "name": "Arm Circles",
           "type": "timed",
-          "duration": 120,
+          "duration": 30,
+          "sessionDuration": 30,
           "switchSides": false,
           "cue": "Full range — front and back, gradually increasing size",
-          "segments": [
-            { "time": 120, "text": "Right arm, clockwise" },
-            { "time": 90, "text": "Right arm, counter-clockwise" },
-            { "time": 60, "text": "Left arm, clockwise" },
-            { "time": 30, "text": "Left arm, counter-clockwise" }
-          ]
+          "videoId": "lzR7tzI1JUI",
+          "videoFormat": "short"
         },
         {
           "id": "day4-wu7",
           "name": "Bodyweight Squat",
           "type": "reps",
           "reps": "10 reps slow",
+          "sessionDuration": 30,
           "switchSides": false,
-          "cue": "Pause 2 seconds at the bottom, drive through heels"
+          "cue": "Pause 2 seconds at the bottom, drive through heels",
+          "videoId": "aFYwHyS3mrw",
+          "videoFormat": "short"
         },
         {
           "id": "day4-wu8",
           "name": "Inchworm",
           "type": "reps",
           "reps": "5 reps",
+          "sessionDuration": 30,
           "switchSides": false,
-          "cue": "Walk hands out to full plank, walk feet back in \u2014 slow",
-          "videoId": "RLSHZEomHCA",
+          "cue": "Walk hands out to full plank, walk feet back in — slow",
+          "videoId": "7jeW4v_oaes",
           "videoFormat": "short"
         }
+      ],
+      "warmupSessionDuration": 455,
+      "warmupTimedCues": [
+        { "time": 0, "text": "Jump Rope. Easy pace — this is activation, not cardio.", "uiIndex": 0 },
+        { "time": 180, "text": "Jumping Jacks. Full arm extension overhead on every rep.", "uiIndex": 1, "autoCheckId": "day4-wu1" },
+        { "time": 210, "text": "Mountain Climbers. Hips level, drive each knee toward your chest.", "uiIndex": 2, "autoCheckId": "day4-wu2" },
+        { "time": 240, "text": "Hip 90/90 Stretch. Sit tall, press the front shin down, feel the hip open.", "uiIndex": 3, "autoCheckId": "day4-wu3" },
+        { "time": 270, "text": "Switch sides on the hip stretch.", "uiIndex": 3 },
+        { "time": 300, "text": "Glute Bridges. Two sets of ten reps. Squeeze glutes hard at the top, hold 1 second.", "uiIndex": 4, "autoCheckId": "day4-wu4" },
+        { "time": 330, "text": "Arm Circles. Full range — front and back, gradually increasing size.", "uiIndex": 5, "autoCheckId": "day4-wu5" },
+        { "time": 360, "text": "Bodyweight Squat. Ten reps slow. Pause 2 seconds at the bottom, drive through heels.", "uiIndex": 6, "autoCheckId": "day4-wu6" },
+        { "time": 390, "text": "Inchworm. Five reps. Walk hands out to full plank, walk feet back in — slow.", "uiIndex": 7, "autoCheckId": "day4-wu7" }
+      ],
+      "warmupCombos": [
+        "Jump Rope — 3:00",
+        "Jumping Jacks — 30s",
+        "Mountain Climbers — 30s",
+        "Hip 90/90 Stretch — 1:00 (switch at 30s)",
+        "Glute Bridges — 2 × 10 (~30s)",
+        "Arm Circles — 30s",
+        "Bodyweight Squat — 10 reps slow (~30s)",
+        "Inchworm — 5 reps (~30s)"
       ],
     powerCircuit: {
       id: 'upper-finisher',

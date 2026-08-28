@@ -121,8 +121,8 @@ test.describe('Day 4 (Upper Body Power) 8-Exercise Reordered Session Audit & Ren
         // Verify warmup has 8 exercises unchanged
         expect(day4.warmup.length).toBe(8);
         expect(day4.warmup.find(w => w.id === 'day4-wu4').videoId).toBe('fDC2KC1XqY8');
-        expect(day4.warmup.find(w => w.id === 'day4-wu5').videoId).toBe('mzDpWDoJVFU');
-        expect(day4.warmup.find(w => w.id === 'day4-wu8').videoId).toBe('RLSHZEomHCA');
+        expect(day4.warmup.find(w => w.id === 'day4-wu5').videoId).toBe('GI5BtRDTuyc');
+        expect(day4.warmup.find(w => w.id === 'day4-wu8').videoId).toBe('7jeW4v_oaes');
     });
 
     test('UI Verification: Renders 8 exercise cards with badges 1 to 8 and shorter duration estimate', async ({ page }) => {
@@ -132,7 +132,7 @@ test.describe('Day 4 (Upper Body Power) 8-Exercise Reordered Session Audit & Ren
 
         // Check header session duration tag
         const durationStat = page.locator('.session-duration-stat');
-        await expect(durationStat).toContainText('~46 min with warm-up');
+        await expect(durationStat).toContainText('~45 min with warm-up');
 
         // Check section header label
         const countHeader = page.locator('.content-header-row h2');
@@ -285,9 +285,9 @@ test.describe('Day 4 (Upper Body Power) 8-Exercise Reordered Session Audit & Ren
         await warmupCard.locator('.item-header').click();
         await expect(warmupCard).toHaveClass(/expanded/);
 
-        // Click Start on Jumping Jacks (30 sec drill)
-        const jumpingJacksRow = warmupCard.locator('.nested-row').filter({ hasText: 'Jumping Jacks' });
-        await jumpingJacksRow.locator('.btn-play').click();
+        // Click Checkbox on Jumping Jacks (30 sec drill) to start individual timer
+        const jumpingJacksRow = warmupCard.locator('.warmup-hybrid-row').filter({ hasText: 'Jumping Jacks' });
+        await jumpingJacksRow.locator('.btn-check').click();
 
         // Wait through 5s countdown
         const timerModal = page.locator('#timer-modal');
@@ -322,7 +322,7 @@ test.describe('Day 4 (Upper Body Power) 8-Exercise Reordered Session Audit & Ren
         const videoModal = page.locator('#videoModalOverlay');
 
         // 1. Hip 90/90 Stretch (fDC2KC1XqY8)
-        const hipRow = warmupCard.locator('.nested-row').filter({ hasText: 'Hip 90/90 Stretch' });
+        const hipRow = warmupCard.locator('.warmup-hybrid-row').filter({ hasText: 'Hip 90/90 Stretch' });
         const hipPlayBtn = hipRow.locator('.btn-demo-icon');
         await expect(hipPlayBtn).toBeVisible();
         await hipPlayBtn.click();
@@ -331,32 +331,25 @@ test.describe('Day 4 (Upper Body Power) 8-Exercise Reordered Session Audit & Ren
         await videoModal.locator('.btn-close-modal').click();
         await expect(videoModal).toBeHidden();
 
-        // 2. Glute Bridges (mzDpWDoJVFU)
-        const gluteRow = warmupCard.locator('.nested-row').filter({ hasText: 'Glute Bridges' });
+        // 2. Glute Bridges (GI5BtRDTuyc)
+        const gluteRow = warmupCard.locator('.warmup-hybrid-row').filter({ hasText: 'Glute Bridges' });
         const glutePlayBtn = gluteRow.locator('.btn-demo-icon');
         await expect(glutePlayBtn).toBeVisible();
         await glutePlayBtn.click();
         await expect(videoModal).toBeVisible();
-        await expect(videoModal.locator('iframe')).toHaveAttribute('src', /mzDpWDoJVFU/);
+        await expect(videoModal.locator('iframe')).toHaveAttribute('src', /GI5BtRDTuyc/);
         await videoModal.locator('.btn-close-modal').click();
         await expect(videoModal).toBeHidden();
 
-        // 3. Inchworm (RLSHZEomHCA)
-        const inchwormRow = warmupCard.locator('.nested-row').filter({ hasText: 'Inchworm' });
+        // 3. Inchworm (7jeW4v_oaes)
+        const inchwormRow = warmupCard.locator('.warmup-hybrid-row').filter({ hasText: 'Inchworm' });
         const inchwormPlayBtn = inchwormRow.locator('.btn-demo-icon');
         await expect(inchwormPlayBtn).toBeVisible();
         await inchwormPlayBtn.click();
         await expect(videoModal).toBeVisible();
-        await expect(videoModal.locator('iframe')).toHaveAttribute('src', /RLSHZEomHCA/);
+        await expect(videoModal.locator('iframe')).toHaveAttribute('src', /7jeW4v_oaes/);
         await videoModal.locator('.btn-close-modal').click();
         await expect(videoModal).toBeHidden();
-
-        // Confirm other 5 drills have NO demo icon
-        const noVideoDrills = ['Jump Rope', 'Jumping Jacks', 'Mountain Climbers', 'Arm Circles', 'Bodyweight Squat'];
-        for (const drillName of noVideoDrills) {
-            const row = warmupCard.locator('.nested-row').filter({ hasText: drillName });
-            await expect(row.locator('.btn-demo-icon')).toHaveCount(0);
-        }
     });
 
     test('Mobile Viewport (375px): Warm-up "Skip" button fits cleanly without wrapping', async ({ page }) => {
@@ -366,8 +359,8 @@ test.describe('Day 4 (Upper Body Power) 8-Exercise Reordered Session Audit & Ren
         const warmupCard = page.locator('.item-card[data-id="warmup-card"]');
         await warmupCard.locator('.item-header').click();
 
-        const armCirclesRow = warmupCard.locator('.nested-row').filter({ hasText: 'Arm Circles' });
-        await armCirclesRow.locator('.btn-play').click();
+        const armCirclesRow = warmupCard.locator('.warmup-hybrid-row').filter({ hasText: 'Arm Circles' });
+        await armCirclesRow.locator('.btn-check').click();
 
         const timerModal = page.locator('#timer-modal');
         await expect(timerModal.locator('.timer-header h2')).toHaveText('Arm Circles', { timeout: 8000 });
