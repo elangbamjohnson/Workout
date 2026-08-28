@@ -324,7 +324,7 @@ window.startWarmupRoundTimer = function(dayId) {
         return `${w.name} — ${dStr}`;
     })).join('<br>');
     
-    const isHybridTimer = day.id === 1 || day.id === '1' || day.id === 0 || day.id === '0' || day.id === 4 || day.id === '4' || day.id === 5 || day.id === '5' || day.id === 'quick-upper-power';
+    const isHybridTimer = day.id === 1 || day.id === '1' || day.id === 0 || day.id === '0' || day.id === 2 || day.id === '2' || day.id === 4 || day.id === '4' || day.id === 5 || day.id === '5' || day.id === 'quick-upper-power';
     
     // Build per-exercise phase segments from warmupTimedCues for the phase progress bar.
     // Each segment spans from its start time to the next segment's start (or total duration).
@@ -469,7 +469,7 @@ function renderWarmup(day, parentSessionId, sessionType) {
     const cardType = isRecovery ? 'rest' : (day.type || sessionType || 'strength');
     
     const isDay5 = false;
-    const isHybridDay = (sessionId === 1 || sessionId === '1' || sessionId === 4 || sessionId === '4' || sessionId === 5 || sessionId === '5' || sessionId === 'quick-upper-power');
+    const isHybridDay = (sessionId === 1 || sessionId === '1' || sessionId === 2 || sessionId === '2' || sessionId === 4 || sessionId === '4' || sessionId === 5 || sessionId === '5' || sessionId === 'quick-upper-power');
     let listHtml = `<div class="nested-list">`;
     day.warmup.forEach((item, idx) => {
         const logData = Store.getItemLog(sessionId, item.id) || {};
@@ -543,7 +543,7 @@ function renderWarmup(day, parentSessionId, sessionType) {
     
     listHtml += '</div>';
 
-    const durationDisplay = (sessionId === 5 || sessionId === '5') ? '~5:30' : isHybridDay ? '~7 min' : (mins > 0 ? `~${mins} min` : `${totalDurationSec}s`);
+    const durationDisplay = (sessionId === 5 || sessionId === '5') ? '~5:30' : (sessionId === 2 || sessionId === '2') ? '~6:30' : isHybridDay ? '~7 min' : (mins > 0 ? `~${mins} min` : `${totalDurationSec}s`);
 
     let normalizedItem = {
         id: cardId,

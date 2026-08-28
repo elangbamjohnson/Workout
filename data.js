@@ -521,7 +521,13 @@ const workoutData = {
           "type": "timed",
           "duration": 120,
           "switchSides": false,
-          "cue": "Moderate pace \u2014 get your feet and rhythm ready"
+          "cue": "Moderate pace — get your feet and rhythm ready",
+          "videoId": "Gt9hlRMXDXc",
+          "videoFormat": "short",
+          "segments": [
+            { "time": 120, "text": "Moderate pace — get your feet and rhythm ready." },
+            { "time": 20, "text": "Last twenty seconds on the rope. Pick up the pace slightly." }
+          ]
         },
         {
           "id": "day2-wu2",
@@ -529,7 +535,9 @@ const workoutData = {
           "type": "timed",
           "duration": 30,
           "switchSides": false,
-          "cue": "Full arm extension overhead on every rep"
+          "cue": "Full arm extension overhead on every rep",
+          "videoId": "bT2iY8IjEU0",
+          "videoFormat": "short"
         },
         {
           "id": "day2-wu3",
@@ -537,7 +545,9 @@ const workoutData = {
           "type": "timed",
           "duration": 30,
           "switchSides": false,
-          "cue": "Hips level, drive each knee toward your chest"
+          "cue": "Hips level, drive each knee toward your chest",
+          "videoId": "0LvR42Z599c",
+          "videoFormat": "short"
         },
         {
           "id": "day2-wu4",
@@ -545,7 +555,13 @@ const workoutData = {
           "type": "timed",
           "duration": 30,
           "switchSides": false,
-          "cue": "Loosen the shoulder joint \u2014 full range in both directions"
+          "cue": "Loosen the shoulder joint — full range in both directions",
+          "videoId": "lzR7tzI1JUI",
+          "videoFormat": "short",
+          "segments": [
+            { "time": 30, "text": "Loosen the shoulder joint — full range in both directions." },
+            { "time": 15, "text": "Switch direction on the circles." }
+          ]
         },
         {
           "id": "day2-wu5",
@@ -553,7 +569,13 @@ const workoutData = {
           "type": "timed",
           "duration": 60,
           "switchSides": true,
-          "cue": "Stand tall, rotate from the hip \u2014 not just the knee"
+          "cue": "Stand tall, rotate from the hip — not just the knee",
+          "videoId": "PZFKu9583Ms",
+          "videoFormat": "short",
+          "segments": [
+            { "time": 60, "text": "Stand tall, rotate from the hip — not just the knee. Thirty seconds on the first side." },
+            { "time": 30, "text": "Switch sides on the hip rotations." }
+          ]
         },
         {
           "id": "day2-wu6",
@@ -561,8 +583,33 @@ const workoutData = {
           "type": "timed",
           "duration": 120,
           "switchSides": false,
-          "cue": "50% speed \u2014 focus on form and weight transfer, no power"
+          "cue": "50% speed — focus on form and weight transfer, no power",
+          "segments": [
+            { "time": 120, "text": "Fifty percent speed — focus on form and weight transfer, no power." },
+            { "time": 30, "text": "Final thirty seconds of shadowboxing. Stay loose and relaxed." }
+          ]
         }
+      ],
+      "warmupSessionDuration": 390,
+      "warmupTimedCues": [
+        { "time": 0, "text": "Warm-up started. Jump rope — moderate pace, get your feet and rhythm ready.", "uiIndex": 0 },
+        { "time": 100, "text": "Last twenty seconds on the rope. Pick up the pace slightly.", "uiIndex": 0 },
+        { "time": 120, "text": "Jumping jacks. Full arm extension overhead on every rep.", "uiIndex": 1, "autoCheckId": "day2-wu1" },
+        { "time": 150, "text": "Mountain climbers. Hips level, drive each knee toward your chest.", "uiIndex": 2, "autoCheckId": "day2-wu2" },
+        { "time": 180, "text": "Arm circles and shoulder rolls. Loosen the shoulder joint — full range in both directions.", "uiIndex": 3, "autoCheckId": "day2-wu3" },
+        { "time": 195, "text": "Switch direction on the circles.", "uiIndex": 3 },
+        { "time": 210, "text": "Hip rotations. Stand tall, rotate from the hip — not just the knee. Thirty seconds per side.", "uiIndex": 4, "autoCheckId": "day2-wu4" },
+        { "time": 240, "text": "Switch sides on the hip rotations.", "uiIndex": 4 },
+        { "time": 270, "text": "Shadowboxing. Fifty percent speed — focus on form and weight transfer, no power.", "uiIndex": 5, "autoCheckId": "day2-wu5" },
+        { "time": 360, "text": "Final thirty seconds of shadowboxing. Stay loose and relaxed.", "uiIndex": 5 }
+      ],
+      "warmupCombos": [
+        "Jump Rope — 2:00",
+        "Jumping Jacks — 30s",
+        "Mountain Climbers — 30s",
+        "Arm Circles & Shoulder Rolls — 30s",
+        "Hip Rotations — 1:00 (switch at 30s)",
+        "Shadowboxing — 2:00"
       ]
     },
     {
