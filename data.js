@@ -283,15 +283,17 @@ const workoutData = {
         { "time": 454, "text": "1", "uiIndex": 7 }
       ],
       "warmupCombos": [
-        "Jump Rope \u2014 3:00",
-        "Jumping Jacks \u2014 30s",
-        "Mountain Climbers \u2014 30s",
-        "Hip 90/90 Stretch \u2014 1:00",
-        "Glute Bridges \u2014 2\u00d710",
-        "Arm Circles \u2014 30s",
-        "Bodyweight Squat \u2014 10 reps",
-        "Inchworm \u2014 5 reps"
-      ]
+        "Jump Rope — 3:00",
+        "Jumping Jacks — 30s",
+        "Mountain Climbers — 30s",
+        "Hip 90/90 Stretch — 1:00",
+        "Glute Bridges — 2×10",
+        "Arm Circles — 30s",
+        "Bodyweight Squat — 10 reps",
+        "Inchworm — 5 reps"
+      ],
+      "warmupRestSeconds": 60,
+      "warmupRestCue": "Warm-up complete! Sixty seconds rest. First lift — Barbell deadlift coming up."
     },
     {
       "id": 2,
@@ -610,7 +612,9 @@ const workoutData = {
         "Arm Circles & Shoulder Rolls — 30s",
         "Hip Rotations — 1:00 (switch at 30s)",
         "Shadowboxing — 2:00"
-      ]
+      ],
+      "warmupRestSeconds": 60,
+      "warmupRestCue": "Warm-up complete! Sixty seconds rest. Put on your wraps and gloves. Power jabs coming up in Round 1."
     },
     {
       "id": 3,
@@ -1095,6 +1099,8 @@ const workoutData = {
         "Bodyweight Squat — 10 reps slow (~30s)",
         "Inchworm — 5 reps (~30s)"
       ],
+      "warmupRestSeconds": 60,
+      "warmupRestCue": "Warm-up complete! Sixty seconds rest. First lift — Plyometric push-ups coming up.",
     powerCircuit: {
       id: 'upper-finisher',
       name: 'Punch Power Circuit',
@@ -1484,7 +1490,9 @@ const workoutData = {
         "Shoulder Circles — 30s",
         "Hip Circles — 30s",
         "Shadowboxing — 1:30"
-      ]
+      ],
+      "warmupRestSeconds": 60,
+      "warmupRestCue": "Warm-up complete! Sixty seconds rest. Put on your wraps and gloves. Technical combination build coming up in Round 1."
     },
     {
       "id": 6,

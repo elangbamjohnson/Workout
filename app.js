@@ -370,16 +370,19 @@ window.startWarmupRoundTimer = function(dayId) {
         });
     }
     
+    const restSec = day.warmupRestSeconds || 60;
+    const restCue = day.warmupRestCue || "Warm-up complete! Sixty seconds rest. Take a breath and get ready.";
+
     // Pass null as customGoText so the countdown ends with only "Go" (one syllable,
     // completes before the first timedCue audio fires — prevents overlapping audio).
     Timer.startCountdown(5, title, () => {
-        Timer.startRound(workSec, 0, title, isHybridTimer ? '' : comboStr, day.type || 'bag', () => {
+        Timer.startRound(workSec, restSec, title, isHybridTimer ? '' : comboStr, day.type || 'bag', () => {
             day.warmup.forEach(item => {
                 Store.logItem(dayId, item.id, { completed: true });
             });
             Store.logItem(dayId, 'warmup-card', { completed: true });
             reRenderViewingDay();
-        }, timedCues, false, '', "Warm-up complete. Take a breath and get ready.", exerciseSegments);
+        }, timedCues, false, restCue, "Warm-up complete. Take a breath and get ready.", exerciseSegments);
     }, null, null);
 };
 

@@ -142,8 +142,12 @@ test.describe('Day 5 Warm-up Single Continuous Timer (5:30)', () => {
         spoken = await page.evaluate(() => window.spokenCues);
         expect(spoken).toContain(cue6_mid);
 
-        // Complete timer (+30s to 330s)
+        // Complete work timer (+30s to 330s) -> transitions into 60s Rest period
         await advanceTimer(page, 31);
+        await expect(timerModal.locator('.timer-header h3')).toHaveText('REST');
+
+        // Click Skip Rest to finish warm-up session
+        await timerModal.locator('button.btn-large', { hasText: 'Skip Rest' }).click();
         await expect(timerModal).toBeHidden();
 
         // Check completion in Store for all 6 exercises
