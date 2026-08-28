@@ -259,9 +259,7 @@ window.Timer = {
         this.modal.classList.remove('hidden');
         this.attachListener();
         
-        if (this.workoutType === 'technical' && !suppressAudio) {
-            window.speakAlert(`${this.roundData.title} started`);
-        } else if (hasTimedCues) {
+        if (hasTimedCues) {
             const cue0 = normalizedTimedCues.find(c => c.time === 0);
             if (cue0) {
                 cue0.triggered = true;
@@ -272,6 +270,8 @@ window.Timer = {
                     this.updateUI();
                 }
             }
+        } else if (this.workoutType === 'technical' && !suppressAudio) {
+            window.speakAlert(`${this.roundData.title} started`);
         } else if (this.workoutType === 'bag' && combos.length > 0 && !suppressAudio) {
             this.speakCombo(0);
         } else if (!suppressAudio) {
@@ -441,7 +441,7 @@ window.Timer = {
                     if (currentCue.autoCheckId && storeObj) {
                         const dId = (typeof window.viewingDayId !== 'undefined' && window.viewingDayId !== null) ? window.viewingDayId : 5;
                         storeObj.logItem(dId, currentCue.autoCheckId, { completed: true });
-                        const rowEl = document.querySelector(`.warmup-v2-row[data-item-id="${currentCue.autoCheckId}"], .warmup-hybrid-row[data-item-id="${currentCue.autoCheckId}"], .continuous-row[data-item-id="${currentCue.autoCheckId}"]`);
+                        const rowEl = document.querySelector(`.warmup-v2-row[data-item-id="${currentCue.autoCheckId}"], .warmup-hybrid-row[data-item-id="${currentCue.autoCheckId}"], .continuous-row[data-item-id="${currentCue.autoCheckId}"], .nested-row[data-item-id="${currentCue.autoCheckId}"]`);
                         if (rowEl) {
                             rowEl.classList.add('checked');
                         }
@@ -517,7 +517,11 @@ window.Timer = {
             if (this.phase === 'work') {
                 this.playDoubleBeep();
                 if (this.roundData.restSec > 0) {
-                    window.speakAlert("Workout ended, rest starting");
+                    if (this.roundData.restCue) {
+                        window.speakAlert(this.roundData.restCue);
+                    } else {
+                        window.speakAlert("Workout ended, rest starting");
+                    }
                     this.phase = 'rest';
                     this.totalDuration = this.roundData.restSec;
                     this.endTime = Date.now() + this.roundData.restSec * 1000;
@@ -571,7 +575,11 @@ window.Timer = {
             this.render(); // Update UI for rest phase
             if (this.intervalId) clearInterval(this.intervalId);
             this.intervalId = setInterval(() => this.tick(), 100);
-            window.speakAlert("Rest starting");
+            if (this.roundData.restCue) {
+                window.speakAlert(this.roundData.restCue);
+            } else {
+                window.speakAlert("Rest starting");
+            }
         } else {
             // Otherwise finish completely
             this.completeRound();
@@ -700,9 +708,8 @@ window.Timer = {
         if (!this.modal) return;
         
         const displayEl = this.modal.querySelector('.timer-display');
-        if (displayEl) displayEl.textContent = this.formatTime(this.remainingSeconds);
         
-        // Per-exercise phase progress bar (drains from full to empty per exercise)
+        // Per-exercise phase progress bar and per-exercise countdown timer
         const phaseProgressEl = this.modal.querySelector('.phase-progress-bar-fill');
         if (this.roundData && this.roundData.exerciseSegments && this.phase === 'work') {
             // Use real-time ms precision so the bar drains smoothly at 10Hz instead of
@@ -716,12 +723,28 @@ window.Timer = {
                     break;
                 }
             }
+            const segDuration = seg.end - seg.start;
+            const segElapsed = elapsed - seg.start;
+            const segRemaining = Math.max(0, segDuration - segElapsed);
+            const segDisplaySeconds = Math.ceil(segRemaining);
+
+            // Display per-workout/drill countdown timer in sync with progress bar
+            if (displayEl) {
+                displayEl.textContent = this.formatTime(segDisplaySeconds);
+            }
+
             if (phaseProgressEl) {
-                const segDuration = seg.end - seg.start;
-                const segElapsed = elapsed - seg.start;
-                const segRemaining = Math.max(0, segDuration - segElapsed);
                 const phaseProgress = segDuration > 0 ? (segRemaining / segDuration) : 0;
                 phaseProgressEl.style.width = `${phaseProgress * 100}%`;
+            }
+
+            // Update header title in <h3> with session title and total countdown timer: "WARM UP : 7:45"
+            const headerEl = this.modal.querySelector('.timer-header h3');
+            if (headerEl) {
+                const sessionTitle = (this.roundData.title && this.roundData.title.toLowerCase().includes('warm'))
+                    ? 'WARM UP'
+                    : (this.roundData.title ? this.roundData.title.toUpperCase() : 'WARM UP');
+                headerEl.textContent = `${sessionTitle} : ${this.formatTime(this.remainingSeconds)}`;
             }
 
             // Update dynamic workout title in <h2> with progress bar color
@@ -746,6 +769,7 @@ window.Timer = {
                 cueEl.textContent = seg.cue;
             }
         } else {
+            if (displayEl) displayEl.textContent = this.formatTime(this.remainingSeconds);
             // Standard session-total bar
             const progress = Math.max(0, Math.min(1, this.remainingSeconds / this.totalDuration));
             const progressEl = this.modal.querySelector('.progress-bar-fill');
@@ -780,13 +804,19 @@ window.Timer = {
         const isWork = !isRestMode && this.phase === 'work';
         const colorClass = isWork ? 'work-color' : 'rest-color';
         
-        const headerTitle = isRestMode ? 'REST' : (isWork ? 'WORK' : 'REST');
+        let headerTitle = isRestMode ? 'REST' : (isWork ? 'WORK' : 'REST');
         let mainTitle = this.roundData ? this.roundData.title : 'Rest Period';
         let cueText = this.roundData && this.roundData.cue ? this.roundData.cue : '';
         const restCueText = this.roundData && this.roundData.restCue ? this.roundData.restCue : '';
+        let displaySeconds = this.remainingSeconds;
         
-        // If exerciseSegments are present, initialize title and cue to the active segment
+        // If exerciseSegments are present, initialize title, cue, header title and display time to the active segment
         if (this.roundData && this.roundData.exerciseSegments && this.roundData.exerciseSegments.length > 0 && isWork) {
+            const sessionTitle = (this.roundData.title && this.roundData.title.toLowerCase().includes('warm'))
+                ? 'WARM UP'
+                : (this.roundData.title ? this.roundData.title.toUpperCase() : 'WARM UP');
+            headerTitle = `${sessionTitle} : ${this.formatTime(this.remainingSeconds)}`;
+
             const elapsed = Math.max(0, this.totalDuration - (this.endTime - Date.now()) / 1000);
             const segs = this.roundData.exerciseSegments;
             let seg = segs[0];
@@ -799,6 +829,10 @@ window.Timer = {
             if (seg) {
                 if (seg.name) mainTitle = seg.name;
                 if (seg.cue) cueText = seg.cue;
+                const segDuration = seg.end - seg.start;
+                const segElapsed = elapsed - seg.start;
+                const segRemaining = Math.max(0, segDuration - segElapsed);
+                displaySeconds = Math.ceil(segRemaining);
             }
         }
 
@@ -853,7 +887,7 @@ window.Timer = {
                 </div>
                 
                 <div class="timer-main">
-                    <div class="timer-display giant ${colorClass}">${this.formatTime(this.remainingSeconds)}</div>
+                    <div class="timer-display giant ${colorClass}">${this.formatTime(displaySeconds)}</div>
                     ${this.roundData && this.roundData.exerciseSegments
                         ? `<div class="progress-bar-bg"><div class="phase-progress-bar-fill progress-bar-fill ${colorClass}" style="width: 100%"></div></div>`
                         : `<div class="progress-bar-bg"><div class="progress-bar-fill ${colorClass}" style="width: ${progressPct}%"></div></div>`
