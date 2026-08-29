@@ -22,8 +22,8 @@ test.describe('Hybrid Boxing - Conditioning Circuit Auto-Trigger on All Checkbox
         // Confirm no "Complete Round" button exists in the card
         await expect(circCard.locator('button:has-text("Complete Round")')).toHaveCount(0);
         
-        // 1. Check Kettlebell Swings (1st exercise)
-        await circCard.locator('.nested-row').filter({ hasText: 'Kettlebell Swings' }).click();
+        // 1. Check KB Swings (1st exercise)
+        await circCard.locator('.nested-row').filter({ hasText: 'KB Swings' }).click();
         await page.waitForTimeout(300);
         await expect(timerModal).toBeHidden();
         
@@ -43,7 +43,7 @@ test.describe('Hybrid Boxing - Conditioning Circuit Auto-Trigger on All Checkbox
         
         const restCue = timerModal.locator('.timer-cue');
         await expect(restCue).toBeVisible();
-        await expect(restCue).toHaveText('One round down. Shake out the legs before the next round.');
+        await expect(restCue).toHaveText('Round one complete! Forty-five seconds rest. Walk it off, breathe through your nose, and prepare for round two.');
         
         // 5. Fast forward 45s rest timer to completion
         await page.clock.fastForward('00:46');
@@ -54,7 +54,7 @@ test.describe('Hybrid Boxing - Conditioning Circuit Auto-Trigger on All Checkbox
         await expect(circCard.locator('.title-card')).toHaveText('Conditioning Circuit (Round 2 of 2)');
         
         // All 3 checkboxes should now be reset to unchecked for Round 2
-        const kbRow = circCard.locator('.nested-row').filter({ hasText: 'Kettlebell Swings' });
+        const kbRow = circCard.locator('.nested-row').filter({ hasText: 'KB Swings' });
         await expect(kbRow).not.toHaveClass(/checked/);
         const burpeeRow = circCard.locator('.nested-row').filter({ hasText: 'Burpees' });
         await expect(burpeeRow).not.toHaveClass(/checked/);
@@ -62,12 +62,12 @@ test.describe('Hybrid Boxing - Conditioning Circuit Auto-Trigger on All Checkbox
         await expect(squatRow).not.toHaveClass(/checked/);
     });
 
-    test('Round 2: checking all 3 exercises marks circuit complete without triggering rest timer', async ({ page }) => {
+    test('Round 2: checking all 3 exercises triggers finish rest timer and completes circuit', async ({ page }) => {
         const circCard = page.locator('.item-card').filter({ hasText: 'Conditioning Circuit' });
         const timerModal = page.locator('#timer-modal');
         
         // --- ROUND 1 ---
-        await circCard.locator('.nested-row').filter({ hasText: 'Kettlebell Swings' }).click();
+        await circCard.locator('.nested-row').filter({ hasText: 'KB Swings' }).click();
         await circCard.locator('.nested-row').filter({ hasText: 'Burpees' }).click();
         await circCard.locator('.nested-row').filter({ hasText: 'Squat Jumps' }).click();
         
@@ -79,16 +79,21 @@ test.describe('Hybrid Boxing - Conditioning Circuit Auto-Trigger on All Checkbox
         // --- ROUND 2 (Final Round) ---
         await expect(circCard.locator('.title-card')).toHaveText('Conditioning Circuit (Round 2 of 2)');
         
-        await circCard.locator('.nested-row').filter({ hasText: 'Kettlebell Swings' }).click();
+        await circCard.locator('.nested-row').filter({ hasText: 'KB Swings' }).click();
         await circCard.locator('.nested-row').filter({ hasText: 'Burpees' }).click();
         await circCard.locator('.nested-row').filter({ hasText: 'Squat Jumps' }).click();
         
-        // Expect timer modal to NOT appear because Round 2 is the final round
-        await page.waitForTimeout(300);
+        // Expect finish timer modal to appear
+        await expect(timerModal).toBeVisible();
+        await expect(timerModal.locator('.timer-header h2')).toHaveText('Circuit Complete');
+        await expect(timerModal.locator('.timer-cue')).toHaveText('Conditioning circuit complete! Forty-five seconds rest. Shake it out before the Bag Finisher.');
+        
+        await page.clock.fastForward('00:46');
+        await page.waitForTimeout(500);
         await expect(timerModal).toBeHidden();
         
         // All 3 checkboxes remain checked
-        const kbRow = circCard.locator('.nested-row').filter({ hasText: 'Kettlebell Swings' });
+        const kbRow = circCard.locator('.nested-row').filter({ hasText: 'KB Swings' });
         await expect(kbRow).toHaveClass(/checked/);
         const burpeeRow = circCard.locator('.nested-row').filter({ hasText: 'Burpees' });
         await expect(burpeeRow).toHaveClass(/checked/);
@@ -101,15 +106,15 @@ test.describe('Hybrid Boxing - Conditioning Circuit Auto-Trigger on All Checkbox
         const timerModal = page.locator('#timer-modal');
         
         // Check 2 boxes then uncheck them
-        await circCard.locator('.nested-row').filter({ hasText: 'Kettlebell Swings' }).click();
+        await circCard.locator('.nested-row').filter({ hasText: 'KB Swings' }).click();
         await circCard.locator('.nested-row').filter({ hasText: 'Burpees' }).click();
         
         // Uncheck both
-        await circCard.locator('.nested-row').filter({ hasText: 'Kettlebell Swings' }).click();
+        await circCard.locator('.nested-row').filter({ hasText: 'KB Swings' }).click();
         await circCard.locator('.nested-row').filter({ hasText: 'Burpees' }).click();
         
         // Now check all 3 fresh
-        await circCard.locator('.nested-row').filter({ hasText: 'Kettlebell Swings' }).click();
+        await circCard.locator('.nested-row').filter({ hasText: 'KB Swings' }).click();
         await circCard.locator('.nested-row').filter({ hasText: 'Burpees' }).click();
         await circCard.locator('.nested-row').filter({ hasText: 'Squat Jumps' }).click();
         
@@ -124,7 +129,7 @@ test.describe('Hybrid Boxing - Conditioning Circuit Auto-Trigger on All Checkbox
         const circCard = page.locator('.item-card').filter({ hasText: 'Conditioning Circuit' });
         const timerModal = page.locator('#timer-modal');
         
-        await circCard.locator('.nested-row').filter({ hasText: 'Kettlebell Swings' }).click();
+        await circCard.locator('.nested-row').filter({ hasText: 'KB Swings' }).click();
         await circCard.locator('.nested-row').filter({ hasText: 'Burpees' }).click();
         await circCard.locator('.nested-row').filter({ hasText: 'Squat Jumps' }).click();
         

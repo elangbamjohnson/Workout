@@ -31,7 +31,7 @@ test.describe('Real Simulation Rest Timer Cues (Phase & Tick Logic)', () => {
         await bagCard.locator('.item-header').click();
         
         const round1 = bagCard.locator('.nested-row').filter({ hasText: 'Basic Power Combinations' });
-        await round1.locator('.btn-play').click();
+        await round1.locator('.btn-check').click();
 
         const timerModal = page.locator('#timer-modal');
         await expect(timerModal).toBeVisible();
@@ -46,7 +46,7 @@ test.describe('Real Simulation Rest Timer Cues (Phase & Tick Logic)', () => {
 
         const restCue = timerModal.locator('.timer-cue');
         await expect(restCue).toBeVisible();
-        await expect(restCue).toHaveText('Great combinations. Hands down, shake it out. Body and head combos next.');
+        await expect(restCue).toHaveText('Rest. Sixty seconds. Shake your arms out, breathe through your nose, and prepare for Round two.');
         
         await expect(timerModal.locator('.timer-cue-container')).toBeHidden();
         await expect(restCue).not.toContainText('One Two Three');
@@ -62,15 +62,20 @@ test.describe('Real Simulation Rest Timer Cues (Phase & Tick Logic)', () => {
         const timerModal = page.locator('#timer-modal');
         await expect(timerModal).toBeVisible();
 
-        await advanceTimer(page, 6);
-        await advanceTimer(page, 180);
+        await advanceTimer(page, 10);
+        await expect(timerModal.locator('.timer-header h3')).toHaveText('WORK');
 
+        await advanceTimer(page, 180);
         await expect(timerModal.locator('.timer-header h3')).toHaveText('REST');
-        await advanceTimer(page, 5);
+
+        await advanceTimer(page, 20);
 
         const restCue = timerModal.locator('.timer-cue');
         await expect(restCue).toBeVisible();
         await expect(restCue).toHaveText('Shake out the lead arm. Breathe deep. Power crosses coming up.');
+        
+        await expect(timerModal.locator('.timer-cue-container')).toBeHidden();
+        await expect(restCue).not.toContainText('Straight rights');
     });
 
     test('Day 5 (Conditioning Bag Day) - Round 1 rest modal', async ({ page }) => {
@@ -102,7 +107,7 @@ test.describe('Real Simulation Rest Timer Cues (Phase & Tick Logic)', () => {
         await bagCard.locator('.item-header').click();
         
         const round1 = bagCard.locator('.nested-row').filter({ hasText: 'Round 1 — Footwork + Basic Combos' });
-        await round1.locator('.btn-play').click();
+        await round1.locator('.btn-check').click();
 
         const timerModal = page.locator('#timer-modal');
         await expect(timerModal).toBeVisible();

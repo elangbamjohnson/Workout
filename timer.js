@@ -508,11 +508,11 @@ window.Timer = {
                 window.speakAlert("Rest time ended, get ready");
             }
             this.playDoubleBeep();
+            const onComp = this.roundData ? this.roundData.onComplete : null;
             if (!this.playlist) this.close();
-            if (this.roundData && this.roundData.onComplete) {
-                this.roundData.onComplete();
+            if (onComp) {
+                onComp();
             }
-
         } else if (this.mode === 'round') {
             if (this.phase === 'work') {
                 this.playDoubleBeep();

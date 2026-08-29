@@ -23,9 +23,9 @@ test.describe('Hybrid Boxing Content Audit Fixes', () => {
         const circuitCard = page.locator('.item-card').filter({ hasText: 'Conditioning Circuit' });
         await circuitCard.locator('.item-header').click();
         await expect(circuitCard).toContainText('No rest between exercises');
-        await expect(circuitCard).toContainText('Kettlebell Swings — 15 reps');
-        await expect(circuitCard).toContainText('Burpees — 10 reps');
-        await expect(circuitCard).toContainText('Squat Jumps — 10 reps');
+        await expect(circuitCard).toContainText('18 kg KB Swings — 15 reps');
+        await expect(circuitCard).toContainText('Burpees — 8 reps');
+        await expect(circuitCard).toContainText('Squat Jumps — 8 reps');
 
         // Fix 4 & Fix 7 — Bag Finisher round names & Round 2 combo instruction
         const finisherCard = page.locator('.item-card').filter({ hasText: 'Bag Finisher' });
@@ -45,25 +45,26 @@ test.describe('Hybrid Boxing Content Audit Fixes', () => {
         // Fix 2 & 3 — Verify audio cues in data object
         const cuesCheck = await page.evaluate(() => {
             const hybrid = window.quickWorkouts.find(q => q.id === 'quick-hybrid');
+            const r1Cues = hybrid.bagRounds.rounds[0].timedCues;
             const r2Cues = hybrid.bagRounds.rounds[1].timedCues;
             const r3Cues = hybrid.bagRounds.rounds[2].timedCues;
             
-            const r2Cue145 = r2Cues.find(c => c.time === 145);
-            const r3Cue120 = r3Cues.find(c => c.time === 120);
-            const r3Cue105 = r3Cues.find(c => c.time === 105);
-            const r3Cue135 = r3Cues.find(c => c.time === 135);
+            const r1Cue60 = r1Cues.find(c => c.time === 60);
+            const r2Cue60 = r2Cues.find(c => c.time === 60);
+            const r3Cue60 = r3Cues.find(c => c.time === 60);
+            const r3Cue150 = r3Cues.find(c => c.time === 150);
 
             return {
-                r2Cue145Text: r2Cue145 ? r2Cue145.text : null,
-                r3Cue120Text: r3Cue120 ? r3Cue120.text : null,
-                has105: !!r3Cue105,
-                has135: !!r3Cue135
+                r1Cue60Text: r1Cue60 ? r1Cue60.text : null,
+                r2Cue60Text: r2Cue60 ? r2Cue60.text : null,
+                r3Cue60Text: r3Cue60 ? r3Cue60.text : null,
+                has150: !!r3Cue150
             };
         });
 
-        expect(cuesCheck.r2Cue145Text).toBe("Thirty seconds — finish with everything!");
-        expect(cuesCheck.r3Cue120Text).toBe("Keep throwing — don't stop!");
-        expect(cuesCheck.has105).toBe(true);
-        expect(cuesCheck.has135).toBe(true);
+        expect(cuesCheck.r1Cue60Text).toContain("One minute mark. Add the lead hook");
+        expect(cuesCheck.r2Cue60Text).toContain("One minute mark. Jab, Cross, Lead Body Hook");
+        expect(cuesCheck.r3Cue60Text).toContain("One minute in. Jab, Cross, Lead Uppercut, Cross");
+        expect(cuesCheck.has150).toBe(true);
     });
 });

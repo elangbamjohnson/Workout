@@ -51,7 +51,7 @@ test('Screenshot Hybrid Boxing Round 1 Rest Modal', async ({ page }) => {
   await bagCard.locator('.item-header').click();
 
   const round1 = bagCard.locator('.nested-row').filter({ hasText: 'Basic Power Combinations' });
-  await round1.locator('.btn-play').click();
+  await round1.locator('.btn-check').click();
 
   const timerModal = page.locator('#timer-modal');
   await expect(timerModal).toBeVisible();

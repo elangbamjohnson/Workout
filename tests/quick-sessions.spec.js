@@ -55,12 +55,13 @@ test.describe('Quick Sessions Feature', () => {
     // Expand the card
     await roundsCard.locator('.item-header').click();
     
-    // Start button is inside the expanded content (first round)
-    const startBtn = roundsCard.locator('.btn-play.type-bag').first();
+    // Round row has set-num on left and btn-check on right
+    const firstRow = roundsCard.locator('.nested-row').first();
+    await expect(firstRow.locator('.set-num')).toHaveText('1');
+    const startBtn = firstRow.locator('.btn-check');
     await expect(startBtn).toBeVisible();
-    await expect(startBtn).toContainText('Start');
 
-    // Click Start Timer
+    // Click Check / Start Timer
     await startBtn.click();
 
     // Timer modal should appear (it's used for countdown too)
