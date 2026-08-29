@@ -111,8 +111,8 @@ test.describe('Hybrid Boxing: Design Consistency Verification', () => {
         const cooldownCard = page.locator('.item-card').filter({ hasText: 'Cool Down' }).first();
         await expect(cooldownCard.locator('.num-badge')).toHaveText('CD');
         const cdRows = cooldownCard.locator('.nested-row');
-        await expect(cdRows).toHaveCount(3);
-        for (let i = 0; i < 3; i++) {
+        await expect(cdRows).toHaveCount(5);
+        for (let i = 0; i < 5; i++) {
             await expect(cdRows.nth(i).locator('.set-num')).toHaveText(String(i + 1));
             await expect(cdRows.nth(i).locator('.btn-check')).toBeVisible();
         }
@@ -163,7 +163,7 @@ test.describe('Hybrid Boxing: Design Consistency Verification', () => {
         // Check Cooldown descriptions
         const cdCard = cards.nth(5);
         await cdCard.locator('.item-header').click();
-        await expect(cdCard).toContainText('Gentle rhythmic movement, shake out the arms and shoulders');
-        await expect(cdCard).toContainText('Place forearm against a doorway at 90 degrees, turn away gently');
+        await expect(cdCard).toContainText('~30–40% intensity. Gentle rhythmic movement to bring heart rate down.');
+        await expect(cdCard).toContainText('Open the chest and front deltoids, ease tension from power punches.');
     });
 });
