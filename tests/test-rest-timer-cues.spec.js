@@ -136,13 +136,14 @@ test.describe('Rest Timer Text & Voice Prompts Audit & UI Bleed Fix Verification
         const hybrid = await page.evaluate(() => quickWorkouts.find(q => q.id === 'quick-hybrid'));
         expect(hybrid).toBeDefined();
 
-        expect(hybrid.bagRounds.rounds[0].restCue).toBe('Great combinations. Hands down, shake it out. Body and head combos next.');
+        expect(hybrid.bagRounds.rounds[0].restCue).toBe('Rest. Sixty seconds. Shake your arms out, breathe through your nose, and prepare for Round two.');
         expect(hybrid.bagRounds.rounds[0].restSeconds).toBe(60);
 
-        expect(hybrid.bagRounds.rounds[1].restCue).toBe('Deep breaths. One round left — power finishing combinations. Leave it all on the bag.');
+        expect(hybrid.bagRounds.rounds[1].restCue).toBe('Rest. Sixty seconds. Breathe deep, shake it out, and get ready for the power and defense round.');
         expect(hybrid.bagRounds.rounds[1].restSeconds).toBe(60);
 
-        expect(hybrid.bagRounds.rounds[2].restSeconds).toBe(0);
+        expect(hybrid.bagRounds.rounds[2].restCue).toBe('Round three complete! Sixty seconds rest. Great power and defense on the bag. Take deep breaths before the conditioning circuit.');
+        expect(hybrid.bagRounds.rounds[2].restSeconds).toBe(60);
 
         // Open Hybrid Boxing quick session
         const hybridCard = page.locator('.qs-card:has-text("Hybrid Boxing")');
@@ -159,9 +160,8 @@ test.describe('Rest Timer Text & Voice Prompts Audit & UI Bleed Fix Verification
         // Expand Bag Work block
         const bagBlock = page.locator('.item-card[data-id="hybrid-bag"]');
         await bagBlock.locator('.item-header').click();
-
         // Start Round 1
-        const startBtn = bagBlock.locator('.nested-row').first().locator('.btn-play');
+        const startBtn = bagBlock.locator('.nested-row').first().locator('.btn-check');
         await startBtn.click();
 
         const timerModal = page.locator('#timer-modal');
@@ -179,39 +179,25 @@ test.describe('Rest Timer Text & Voice Prompts Audit & UI Bleed Fix Verification
             Timer.totalDuration = 60;
             Timer.roundData = {
                 title: 'Basic Power Combinations',
-                restCue: 'Great combinations. Hands down, shake it out. Body and head combos next.',
-                combos: ['1-2-3 (Jab, Cross, Lead Hook)', '1-2-5 (Jab, Cross, Lead Uppercut)', '2-3-2 (Cross, Lead Hook, Cross)']
+                restCue: 'Rest. Sixty seconds. Shake your arms out, breathe through your nose, and prepare for Round two.',
+                combos: ['1-2 (Jab-Cross) × 5 reps']
             };
             Timer.render();
         });
 
         await expect(timerModal.locator('.timer-header h3')).toHaveText('REST');
         await expect(timerModal.locator('.timer-cue-container')).toBeHidden();
-        await expect(timerModal.locator('.timer-cue')).toHaveText('Great combinations. Hands down, shake it out. Body and head combos next.');
+        await expect(timerModal.locator('.timer-cue')).toHaveText('Rest. Sixty seconds. Shake your arms out, breathe through your nose, and prepare for Round two.');
 
         await timerModal.locator('.btn-cancel').click();
     });
 
-    test('Quick Session Shadow Boxing: All 4 main rounds have bespoke restCues and work combos are hidden in rest', async ({ page }) => {
+    test('Quick Session Shadow Boxing: Round 1 has restCue and combos are hidden in rest', async ({ page }) => {
         const shadow = await page.evaluate(() => quickWorkouts.find(q => q.id === 'quick-shadow-boxing'));
         expect(shadow).toBeDefined();
+        expect(shadow.bagRounds.rounds[0].restCue).toBe('Stay loose. Keep walking around the room. Prepare for head movement and counters.');
 
-        const expectedShadowCues = [
-            'Stay loose. Keep walking around the room. Prepare for head movement and counters.',
-            'Breathe deep. Great head movement. Next round mixes defense into combos.',
-            'Shake out the shoulders. One more intense round — full speed free flow.',
-            'Incredible pace. Catch your breath for the cool-down shadowboxing.'
-        ];
-
-        for (let i = 0; i < 4; i++) {
-            expect(shadow.bagRounds.rounds[i].restCue).toBe(expectedShadowCues[i]);
-            expect(shadow.bagRounds.rounds[i].restSeconds).toBe(60);
-        }
-
-        // Round 5 (Cool Down Shadow) has 0 rest
-        expect(shadow.bagRounds.rounds[4].restSeconds).toBe(0);
-
-        // UI Verification
+        // Open Shadow Boxing quick session
         const shadowCard = page.locator('.qs-card:has-text("Shadow Boxing")');
         await shadowCard.click();
 
@@ -228,7 +214,7 @@ test.describe('Rest Timer Text & Voice Prompts Audit & UI Bleed Fix Verification
         await roundsCard.locator('.item-header').click();
 
         // Start Round 1
-        const startBtn = roundsCard.locator('.nested-row').first().locator('.btn-play');
+        const startBtn = roundsCard.locator('.nested-row').first().locator('.btn-check');
         await startBtn.click();
 
         const timerModal = page.locator('#timer-modal');

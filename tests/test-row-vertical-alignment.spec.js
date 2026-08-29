@@ -102,7 +102,7 @@ test.describe('Vertical Alignment of Duration Label and Action Buttons', () => {
         }
         const hybridWarmup = page.locator('.item-card').filter({ hasText: 'Warm-up' });
         await hybridWarmup.locator('.item-header').click();
-        const hybridRow = hybridWarmup.locator('.nested-row').first();
+        const hybridRow = hybridWarmup.locator('.warmup-hybrid-row, .nested-row').first();
         const hybridRowStyle = await hybridRow.evaluate(el => window.getComputedStyle(el).alignItems);
         expect(hybridRowStyle).toBe('center');
 

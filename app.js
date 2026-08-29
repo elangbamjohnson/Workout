@@ -176,6 +176,12 @@ function getExpandableCardIds(session) {
     if (!session) return [];
     const ids = [];
     if (session.warmup && session.warmup.length > 0) ids.push('warmup-card');
+    if (session.powerPrimer) {
+        ids.push(session.powerPrimer.id || 'hybrid-primer');
+        if (session.powerPrimer.exercises) {
+            session.powerPrimer.exercises.forEach(ex => ids.push(ex.id));
+        }
+    }
     if (session.exercises) session.exercises.forEach(ex => ids.push(ex.id));
     if (session.sections) session.sections.forEach(sec => ids.push(sec.id));
     if (session.powerCircuit) ids.push(session.powerCircuit.id);
@@ -186,6 +192,9 @@ function getExpandableCardIds(session) {
         session.blocks.forEach(block => {
             if (block.type === 'exercises') {
                 ids.push(block.data.id);
+                if (block.data.exercises) {
+                    block.data.exercises.forEach(ex => ids.push(ex.id));
+                }
             } else if (block.type === 'warmup') {
                 ids.push(block.data.id || 'warmup-card');
             } else if (block.type === 'bagRounds' || block.type === 'circuit') {
@@ -342,7 +351,7 @@ window.startWarmupRoundTimer = function(dayId) {
         return `${w.name} — ${dStr}`;
     })).join('<br>');
     
-    const isHybridTimer = day.id === 1 || day.id === '1' || day.id === 0 || day.id === '0' || day.id === 2 || day.id === '2' || day.id === 4 || day.id === '4' || day.id === 5 || day.id === '5' || day.id === 'quick-upper-power';
+    const isHybridTimer = day.id === 1 || day.id === '1' || day.id === 0 || day.id === '0' || day.id === 2 || day.id === '2' || day.id === 4 || day.id === '4' || day.id === 5 || day.id === '5' || day.id === 'quick-upper-power' || day.id === 'quick-hybrid';
     
     // Build per-exercise phase segments from warmupTimedCues for the phase progress bar.
     // Each segment spans from its start time to the next segment's start (or total duration).
@@ -490,7 +499,7 @@ function renderWarmup(day, parentSessionId, sessionType) {
     const cardType = isRecovery ? 'rest' : (day.type || sessionType || 'strength');
     
     const isDay5 = false;
-    const isHybridDay = (sessionId === 1 || sessionId === '1' || sessionId === 2 || sessionId === '2' || sessionId === 4 || sessionId === '4' || sessionId === 5 || sessionId === '5' || sessionId === 'quick-upper-power');
+    const isHybridDay = (sessionId === 1 || sessionId === '1' || sessionId === 2 || sessionId === '2' || sessionId === 3 || sessionId === '3' || sessionId === 4 || sessionId === '4' || sessionId === 5 || sessionId === '5' || sessionId === 'quick-upper-power' || sessionId === 'quick-hybrid');
     let listHtml = `<div class="nested-list">`;
     day.warmup.forEach((item, idx) => {
         const logData = Store.getItemLog(sessionId, item.id) || {};
@@ -564,7 +573,7 @@ function renderWarmup(day, parentSessionId, sessionType) {
     
     listHtml += '</div>';
 
-    const durationDisplay = (sessionId === 5 || sessionId === '5') ? '~5:30' : (sessionId === 2 || sessionId === '2') ? '~6:30' : isHybridDay ? '~7 min' : (mins > 0 ? `~${mins} min` : `${totalDurationSec}s`);
+    const durationDisplay = (sessionId === 5 || sessionId === '5') ? '~5:30' : (sessionId === 2 || sessionId === '2') ? '~6:30' : (sessionId === 'quick-hybrid' || sessionId === 'quick-upper-power') ? '~5 min' : isHybridDay ? '~7 min' : (mins > 0 ? `~${mins} min` : `${totalDurationSec}s`);
 
     let normalizedItem = {
         id: cardId,
@@ -703,6 +712,11 @@ function calculateQuickSessionDuration(qs) {
     // Warm-up
     if (qs.warmup) {
         totalSec += qs.warmup.filter(w => w.type === 'timed').reduce((s, w) => s + (w.duration || 0), 0);
+    }
+
+    // Power Primer
+    if (qs.powerPrimer) {
+        totalSec += 420;
     }
     
     // Bag Rounds
@@ -1970,6 +1984,25 @@ window.addEventListener('load', () => {
 // Phase 2 — Quick Sessions Renderer
 // =====================================================================
 
+window.startQuickBagRoundFromCheckbox = function(e, quickId, exId, workSec, restSec, roundNum, title, comboArg, isLast, timedCuesArg, skipCountdown, restCueArg) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    const logData = Store.getItemLog(quickId, exId) || {};
+    const isCompleted = !!logData.completed;
+
+    if (isCompleted) {
+        // Uncheck — toggle off
+        Store.logItem(quickId, exId, { completed: false });
+        if (String(viewingDayId).startsWith('quick-')) {
+            renderQuickSession(viewingDayId);
+        } else {
+            reRenderViewingDay();
+        }
+        return;
+    }
+
+    startQuickRound(quickId, exId, workSec, restSec, roundNum, title, comboArg, isLast, timedCuesArg, skipCountdown, restCueArg);
+};
+
 window.startQuickRound = function(quickId, exId, workSec, restSec, roundNum, title, comboArg, isLast, timedCuesArg, skipCountdown, restCueArg) {
     const cue = decodeURIComponent(comboArg);
     const restCue = restCueArg ? decodeURIComponent(restCueArg) : '';
@@ -2021,13 +2054,21 @@ window.toggleQuickCircuitItem = function(quickId, itemId) {
                 
                 if (completionsLog.count < session.circuit.rounds) {
                     shouldStartRest = true;
-                    restDuration = session.circuit.restSeconds;
+                    restDuration = session.circuit.restSeconds || 45;
                     restTitle = "Circuit Rest";
-                    restCue = "One round down. Shake out the legs before the next round.";
+                    restCue = session.circuit.restCue || "One round down. Shake out the legs before the next round.";
                     onRestComplete = () => {
                         session.circuit.exercises.forEach(e => {
                             Store.logItem(quickId, e.id, { completed: false });
                         });
+                        if (viewingDayId === quickId) renderQuickSession(quickId);
+                    };
+                } else if (session.circuit.finishRestCue) {
+                    shouldStartRest = true;
+                    restDuration = session.circuit.restSeconds || 45;
+                    restTitle = "Circuit Complete";
+                    restCue = session.circuit.finishRestCue;
+                    onRestComplete = () => {
                         if (viewingDayId === quickId) renderQuickSession(quickId);
                     };
                 }
@@ -2407,15 +2448,24 @@ window.renderQuickSession = function(quickId) {
                 `;
             }
 
+            const demoIconBtn = ex.videoId
+                ? `<button class="btn-demo-icon" aria-label="Watch demo for ${ex.name.replace(/"/g, '&quot;')}" onclick="event.stopPropagation(); openVideoModal('${ex.videoId}', '${ex.name.replace(/'/g, "\\'")}', '${ex.videoFormat || 'short'}')">
+                       <svg viewBox="0 0 24 24" width="10" height="10"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+                   </button>`
+                : '';
+
             exercisesHtml += `
                 <div class="nested-row ${isCheckedRow}" style="flex-direction: column; align-items: stretch; gap: 0;">
-                    <div role="button" tabindex="0" aria-expanded="${isExExpanded}" aria-label="Toggle ${ex.name.replace(/"/g, '&quot;')} details" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCard('${ex.id}');}" style="margin-bottom: ${isExExpanded ? '12px' : '0'}; display: flex; justify-content: space-between; align-items: flex-start; cursor: pointer;" onclick="toggleCard('${ex.id}')">
-                        <div style="width: 100%;">
-                            <h4 class="label-small" style="margin-bottom: 2px; color: var(--text-primary); font-size: 14px; text-transform: none; letter-spacing: normal;">${ex.name}</h4>
+                    <div role="button" tabindex="0" aria-expanded="${isExExpanded}" aria-label="Toggle ${ex.name.replace(/"/g, '&quot;')} details" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCard('${ex.id}');}" style="margin-bottom: ${isExExpanded ? '12px' : '0'}; display: flex; justify-content: space-between; align-items: center; cursor: pointer; gap: 8px;" onclick="toggleCard('${ex.id}')">
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <h4 class="label-small" style="margin-bottom: 2px; color: var(--text-primary); font-size: 14px; text-transform: none; letter-spacing: normal;">${ex.name}</h4>
+                                ${demoIconBtn}
+                            </div>
                             ${ex.subtitle ? `<div style="font-size: 13px; color: var(--accent-color); margin-bottom: 4px; font-weight: 500;">${ex.subtitle}</div>` : ''}
                             ${statsHtml}
                         </div>
-                        <div class="item-chevron" aria-hidden="true" style="transform: ${isExExpanded ? 'rotate(90deg)' : 'rotate(0)'}; margin-top: 2px;">${icons.chevron}</div>
+                        <div class="item-chevron" aria-hidden="true" style="transform: ${isExExpanded ? 'rotate(90deg)' : 'rotate(0)'}; flex-shrink: 0;">${icons.chevron}</div>
                     </div>
                     ${isExExpanded ? `
                     ${logHtml}
@@ -2449,27 +2499,48 @@ window.renderQuickSession = function(quickId) {
         });
         exercisesHtml += '</div>';
         
+        let stats = blockData.stats || [
+            { icon: icons.clock, value: blockData.duration || '~7 min' },
+            'divider',
+            { icon: icons.repeat, value: `${blockData.rounds || 2} sets` },
+            'divider',
+            { icon: icons.strength, value: `${blockData.exercises.length} exercises` }
+        ];
+
         let normalizedItem = {
             id: blockData.id,
             badge: blockData.badge || `R${globalBlockIndex++}`,
-            title: blockData.title,
-            stats: [], // Empty stats array to maintain schema but hide rendering
+            title: blockData.title || blockData.name,
+            stats: stats,
+            callout: blockData.benefits ? { icon: icons.strength, text: blockData.benefits } : null,
             sections: [
                 { title: "EXERCISES", content: exercisesHtml }
             ]
         };
+
+        if (blockData.rule) {
+            normalizedItem.sections.unshift({
+                title: "POWER BLOCK RULES",
+                content: `<p style="font-size: 13px; line-height: 1.5; color: var(--text-secondary); margin: 0;">${blockData.rule}</p>`
+            });
+        }
         
         if (blockData.isBlockStart) {
             normalizedItem.actionHtml = `
             <div style="padding: 16px; border-top: 1px solid var(--border-color);">
-                <button class="btn-primary" style="width: 100%;" onclick="Timer.startCountdown(5, '${blockData.title.replace(/'/g, "\\'")}', null)">
-                    <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start ${blockData.title}
+                <button class="btn-primary" style="width: 100%;" onclick="Timer.startCountdown(5, '${(blockData.title || blockData.name).replace(/'/g, "\\'")}', null)">
+                    <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start ${blockData.title || blockData.name}
                 </button>
             </div>`;
         }
         
         return renderItemCard(normalizedItem, sessionType);
     };
+
+    // 1.2 Punch Power Primer (Explosive Preparation)
+    if (session.powerPrimer) {
+        html += renderExercisesBlock(session.powerPrimer, quickId, 'strength');
+    }
 
     // 1.5 Main Exercises (Strength)
     if (session.exercises) {
@@ -2489,15 +2560,13 @@ window.renderQuickSession = function(quickId) {
             const restCueArg = r.restCue ? encodeURIComponent(r.restCue).replace(/'/g, "%27") : '';
             
             return `
-            <div class="nested-row ${isChecked}">
-                <button class="btn-check ${isChecked}" onclick="Store.logItem('${quickId}', '${r.id}', { completed: !${isCompleted} }); renderQuickSession('${quickId}')">${icons.checkmark}</button>
-                <div style="flex: 1;">
+            <div class="nested-row interactive ${isChecked}" role="button" tabindex="0" onclick="startQuickBagRoundFromCheckbox(event, '${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, ${i+1}, '${r.name ? r.name.replace(/'/g, "\\'") : ''}', '${comboArg}', ${isLast}, '${timedCuesArg}', ${!!r.skipCountdown}, '${restCueArg}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); startQuickBagRoundFromCheckbox(event, '${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, ${i+1}, '${r.name ? r.name.replace(/'/g, "\\'") : ''}', '${comboArg}', ${isLast}, '${timedCuesArg}', ${!!r.skipCountdown}, '${restCueArg}');}">
+                <div class="set-num">${i + 1}</div>
+                <div style="flex: 1; min-width: 0;">
                     ${r.name ? `<div style="font-weight: 700; font-size: 14px; color: var(--text-primary); margin-bottom: 4px;">${r.name}</div>` : ''}
-                    <div>${r.description || r.combo}</div>
+                    <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">${r.description || r.combo}</div>
                 </div>
-                ${!isCompleted && !session.isContinuous ? `
-                <button class="btn-play type-bag" onclick="startQuickRound('${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, ${i+1}, '${r.name.replace(/'/g, "\\'")}', '${comboArg}', ${isLast}, '${timedCuesArg}', ${!!r.skipCountdown}, '${restCueArg}')"><span class="play-icon">${icons.play}</span> Start</button>
-                ` : ''}
+                <button class="btn-check ${isChecked}" aria-label="${isCompleted ? 'Uncheck' : 'Start'} ${r.name || 'Round ' + (i+1)}" onclick="startQuickBagRoundFromCheckbox(event, '${quickId}', '${r.id}', ${r.workSeconds}, ${r.restSeconds}, ${i+1}, '${r.name ? r.name.replace(/'/g, "\\'") : ''}', '${comboArg}', ${isLast}, '${timedCuesArg}', ${!!r.skipCountdown}, '${restCueArg}')">${icons.checkmark}</button>
             </div>`;
         }).join('');
         
@@ -2548,13 +2617,22 @@ window.renderQuickSession = function(quickId) {
         let drillsHtml = c.exercises.map((ex, i) => {
             const log = Store.getItemLog(quickId, ex.id) || {};
             const isChecked = log.completed ? 'checked' : '';
+            const demoIconBtn = ex.videoId
+                ? `<button class="btn-demo-icon" aria-label="Watch demo for ${ex.name.replace(/"/g, '&quot;')}" onclick="event.stopPropagation(); openVideoModal('${ex.videoId}', '${ex.name.replace(/'/g, "\\'")}', '${ex.videoFormat || 'short'}')">
+                       <svg viewBox="0 0 24 24" width="10" height="10"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+                   </button>`
+                : '';
             return `
             <div class="nested-row interactive ${isChecked}" role="button" tabindex="0" onclick="toggleQuickCircuitItem('${quickId}', '${ex.id}')">
-                <button class="btn-check ${isChecked}">${icons.checkmark}</button>
-                <div style="flex: 1;">
-                    <div style="font-weight: 500;">${ex.name} — ${ex.reps}</div>
+                <div class="set-num">${i + 1}</div>
+                <div style="flex: 1; min-width: 0;">
+                    <div style="display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <span style="font-weight: 500;">${ex.name} — ${ex.reps}</span>
+                        ${demoIconBtn}
+                    </div>
                     ${ex.description ? `<div style="font-size: 13px; color: var(--text-secondary); margin-top: 4px; line-height: 1.4;">${ex.description}</div>` : ''}
                 </div>
+                <button class="btn-check ${isChecked}" aria-label="${isChecked ? 'Uncheck' : 'Complete'} ${ex.name}">${icons.checkmark}</button>
             </div>`;
         }).join('');
         
@@ -2569,7 +2647,7 @@ window.renderQuickSession = function(quickId) {
             badge: c.badge || `R${globalBlockIndex++}`,
             title: c.name + currentRoundStr,
             stats: [
-                { icon: icons.clock, value: `~${mins} min` },
+                { icon: icons.clock, value: c.duration || `~${mins} min` },
                 'divider',
                 { icon: icons.repeat, value: `${c.rounds} rounds` },
                 'divider',

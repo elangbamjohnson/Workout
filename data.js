@@ -1591,34 +1591,90 @@ window.quickWorkouts = [
     id: 'quick-hybrid',
     title: 'Hybrid Boxing',
     type: 'bag',
-    duration: '~35 min',
+    duration: '~42 min',
     focus: 'Box + Conditioning',
+    equipment: 'Heavy bag, 7 kg medicine ball, barbell + landmine attachment, boxing gloves, wraps, jump rope',
     warmup: [
-      { id: 'hybrid-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Moderate pace — get your feet and rhythm ready' },
-      { id: 'hybrid-wu2', name: 'Jumping Jacks', type: 'timed', duration: 60, cue: 'Full arm extension overhead on every rep' },
-      { id: 'hybrid-wu3', name: 'Arm Circles + Shoulder Rolls', type: 'timed', duration: 60, cue: 'Loosen the shoulder joint — full range in both directions' },
-      { id: 'hybrid-wu4', name: 'Hip Rotations', type: 'timed', duration: 60, cue: 'Hands on hips, draw big circles — loosen the hip joint fully' }
+      { id: 'hybrid-wu1', name: 'Jump Rope', type: 'timed', duration: 120, cue: 'Moderate pace — get your feet and rhythm ready', videoId: 'Gt9hlRMXDXc', videoFormat: 'short' },
+      { id: 'hybrid-wu2', name: 'Jumping Jacks', type: 'timed', duration: 60, cue: 'Full arm extension overhead on every rep', videoId: 'bT2iY8IjEU0', videoFormat: 'short' },
+      { id: 'hybrid-wu3', name: 'Arm Circles + Shoulder Rolls', type: 'timed', duration: 60, cue: 'Loosen the shoulder joint — full range in both directions', videoId: 'lzR7tzI1JUI', videoFormat: 'short' },
+      { id: 'hybrid-wu4', name: 'Hip Rotations', type: 'timed', duration: 60, cue: 'Hands on hips, draw big circles — loosen the hip joint fully', videoId: 'PZFKu9583Ms', videoFormat: 'short' }
     ],
+    powerPrimer: {
+      id: 'hybrid-primer',
+      name: 'Punch Power Primer',
+      duration: '~7 min',
+      rounds: 2,
+      restSeconds: 60,
+      benefits: 'Develop hip explosiveness, rotational power, force transfer, upper-body explosiveness, and punch-specific power.',
+      rule: 'This is NOT conditioning. Every explosive repetition should be high quality. If your speed drops noticeably: STOP THE SET. We are training explosiveness, not exhaustion.',
+      recovery: 'After completing all three exercises: rest 45–60 sec, then repeat for Set 2.',
+      exercises: [
+        {
+          id: 'hybrid-primer-1',
+          name: 'Medicine Ball Rotational Throw',
+          setsReps: '2 × 4/side',
+          weight: '7 kg',
+          restSeconds: 20,
+          restCue: 'Hips first. Hands finish. Stand in your boxing stance and throw explosively.',
+          cue: 'Hips first. Hands finish.',
+          notes: 'Stand in your boxing stance. Rotate: Foot → hip → torso → shoulder → ball. Throw explosively against a suitable wall/target. Cue: "Hips first. Hands finish." Don\'t use your arms alone. If 7 kg feels too heavy to throw explosively, reduce the reps rather than slowing down.',
+          benefits: 'Develops hip explosiveness, rotational power, and punch-specific force transfer.',
+          muscles: 'Obliques, core, hips, shoulders',
+          videoId: '02c2YLgF8iE',
+          videoFormat: 'short'
+        },
+        {
+          id: 'hybrid-primer-2',
+          name: 'Landmine Rotational Press',
+          setsReps: '2 × 5/side',
+          weight: '20 kg bar + 5 kg',
+          restSeconds: 20,
+          restCue: 'Drive from the floor, rotate the hip, rotate the torso, and press.',
+          cue: 'Drive from the floor → rotate the hip → rotate the torso → press.',
+          notes: 'Barbell + landmine. Start with a light load (20 kg bar + 5 kg plate) and adjust based on speed and technique. Don\'t chase maximum weight. Cue: Drive from the floor → rotate the hip → rotate the torso → press. Think of it as teaching your body to transfer force into a punch.',
+          benefits: 'Combines rotational drive from the floor with upper-body punch force transfer.',
+          muscles: 'Shoulders, triceps, obliques, core, legs, glutes',
+          videoId: 'kYj_kuUCla4',
+          videoFormat: 'short'
+        },
+        {
+          id: 'hybrid-primer-3',
+          name: 'Explosive Push-ups',
+          setsReps: '2 × 5–8',
+          weight: 'Bodyweight',
+          restSeconds: 60,
+          restCue: 'Push the floor away violently. Rest 45 to 60 seconds before repeating.',
+          cue: 'Push the floor away violently.',
+          notes: 'Hands leave the floor slightly. If explosive push-ups aren\'t comfortable: Fast push-ups instead. Cue: Push the floor away violently. Recovery: After completing all three, rest 45–60 sec, then repeat for Set 2.',
+          benefits: 'Builds upper-body fast-twitch rate of force development and pushing speed.',
+          muscles: 'Chest, anterior deltoids, triceps, core',
+          videoId: 'iO0sT5FDgj4',
+          videoFormat: 'short'
+        }
+      ]
+    },
     bagRounds: {
       id: 'hybrid-bag',
       name: 'Bag Work',
-      benefits: 'Focus on clean technique and power.',
+      benefits: "Now you go to the heavy bag. Your body is warm and your nervous system is activated, but your shoulders shouldn't be fatigued.",
       rounds: [
         {
           id: 'hybrid-bag-r1',
           name: 'Basic Power Combinations',
           workSeconds: 180,
           restSeconds: 60,
-          restCue: 'Great combinations. Hands down, shake it out. Body and head combos next.',
-          combo: '1-2 (Jab-Cross) × 5 reps<br>1-2-3 (Jab-Cross-Lead Hook) × 5 reps<br>1-2-3-2 (Jab-Cross-Lead Hook-Cross) × 5 reps<br>Freestyle 1-2 for remaining time',
+          restCue: 'Rest. Sixty seconds. Shake your arms out, breathe through your nose, and prepare for Round two.',
+          combo: '1-2 (Jab-Cross) × 5 reps<br>1-2-3 (Jab-Cross-Lead Hook) × 5 reps<br>1-2-3-2 (Jab-Cross-Lead Hook-Cross) × 5 reps<br>Freestyle (80–85% power + movement)',
+          description: '0:00–1:00: 1-2 × 5 — Hip & heel rotation, return to guard, move<br>1:00–2:00: 1-2-3 × 5 — Transfer weight rear side to lead side<br>2:00–2:30: 1-2-3-2 × 5 — Rotate, recover, rotate again<br>2:30–3:00: Freestyle (80–85% power) — Combo → defense → exit',
           timedCues: [
-            { time: 0, text: "Hands up! Jab, Cross — One Two! Let's go!", uiIndex: 0 },
-            { time: 18, text: "Good! Jab, Cross, Lead Hook — One Two Three!", uiIndex: 1 },
-            { time: 42, text: "Nice! Jab, Cross, Lead Hook, Cross — One Two Three Two!", uiIndex: 2 },
-            { time: 72, text: "Beautiful! Freestyle — Jab Cross, keep moving, stay sharp!", uiIndex: 3 },
-            { time: 100, text: "Push the pace — don't stop!", uiIndex: 3 },
-            { time: 130, text: "Last minute — dig deep!", uiIndex: 3 },
-            { time: 170, text: "Ten seconds — everything you've got!", uiIndex: 3 }
+            { time: 0, text: "Round one! Basic power combinations. Jab, Cross — One Two! Five reps. Focus on hip rotation and snapping hands back to guard.", uiIndex: 0 },
+            { time: 30, text: "Thirty seconds. Keep rotating the rear heel. One Two, then move!", uiIndex: 0 },
+            { time: 60, text: "One minute mark. Add the lead hook — One Two Three! Five reps. Transfer weight from rear side to lead side.", uiIndex: 1 },
+            { time: 90, text: "Thirty seconds on the One Two Three. Turn that lead hip over on the hook!", uiIndex: 1 },
+            { time: 120, text: "Two minutes! One Two Three Two! Five reps. Rotate, recover, rotate again!", uiIndex: 2 },
+            { time: 150, text: "Last thirty seconds! Freestyle, eighty to eighty-five percent power. Combination, defense, exit!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds! Strong finish!", uiIndex: 3 }
           ]
         },
         {
@@ -1626,34 +1682,35 @@ window.quickWorkouts = [
           name: 'Body + Head Combinations',
           workSeconds: 180,
           restSeconds: 60,
-          restCue: 'Deep breaths. One round left — power finishing combinations. Leave it all on the bag.',
-          combo: '1-2 to the body, 1-2 to the head × 5 reps<br>1-2-3b (Jab-Cross-Lead Body Hook) × 5 reps<br>1-6-3-2 (Jab-Rear Body Hook-Lead Hook-Cross) × 5 reps<br>Freestyle movement + 1-2 for remaining time',
+          restCue: 'Rest. Sixty seconds. Breathe deep, shake it out, and get ready for the power and defense round.',
+          combo: '1-2 Body → 1-2 Head × 5 reps<br>1-2-3b (Jab-Cross-Lead Body Hook) × 5 reps<br>1-6-3-2 (Jab-Rear Body Hook-Lead Hook-Cross) × 5 reps<br>Movement + Freestyle (80–90% intensity)',
+          description: "0:00–1:00: 1-2 Body → 1-2 Head × 5 — Level change with knees, don't bend at waist<br>1:00–2:00: 1-2-3b × 5 — Jab-Cross-Lead Body Hook, then exit/pivot<br>2:00–2:30: 1-6-3-2 × 5 — Level change → rotation → recovery<br>2:30–3:00: Movement + Freestyle (80–90%) — Head & body shots, defense",
           timedCues: [
-            { time: 0, text: "Body then head — Jab Cross to the body, Jab Cross to the head! One Two down, One Two up!", uiIndex: 0 },
-            { time: 25, text: "Jab, Cross, Lead Body Hook — One Two Three to the body!", uiIndex: 1 },
-            { time: 52, text: "Jab, Rear Body Hook, Lead Hook, Cross — One Six Three Two!", uiIndex: 2 },
-            { time: 85, text: "Good work! Freestyle — move your head, Jab Cross!", uiIndex: 3 },
-            { time: 110, text: "Stay on your toes — keep that jab working!", uiIndex: 3 },
-            { time: 140, text: "Last minute — head movement!", uiIndex: 3 },
-            { time: 145, text: "Thirty seconds — finish with everything!", uiIndex: 3 },
-            { time: 170, text: "Ten seconds — finish strong!", uiIndex: 3 }
+            { time: 0, text: "Round two! Body and head. One Two to the body, One Two to the head! Five reps. Change levels with your knees, don't bend at the waist.", uiIndex: 0 },
+            { time: 30, text: "Thirty seconds. Drop your level with your legs, drive down, then come up top.", uiIndex: 0 },
+            { time: 60, text: "One minute mark. Jab, Cross, Lead Body Hook — One Two Three to the body! Five reps, then exit and pivot.", uiIndex: 1 },
+            { time: 90, text: "Thirty seconds on the body hook. Dig underneath the ribs, then angle out!", uiIndex: 1 },
+            { time: 120, text: "Two minutes! Jab, Rear Body Hook, Lead Hook, Cross — One Six Three Two! Level change, rotate, recover!", uiIndex: 2 },
+            { time: 150, text: "Last thirty seconds! Movement and freestyle. Mix body and head shots, eighty to ninety percent intensity.", uiIndex: 3 },
+            { time: 170, text: "Ten seconds! Keep moving your head and working the bag!", uiIndex: 3 }
           ]
         },
         {
           id: 'hybrid-bag-r3',
-          name: 'Power Finishing Combinations',
+          name: 'Power + Defense Combinations',
           workSeconds: 180,
-          restSeconds: 0,
-          combo: '2-3-2 (Cross-Lead Hook-Cross) × 5 reps<br>1-2-5-2 (Jab-Cross-Lead Uppercut-Cross) × 5 reps<br>1-2-3-4 (Jab-Cross-Lead Hook-Rear Hook) × 5 reps<br>All-out freestyle last 30 seconds',
+          restSeconds: 60,
+          restCue: 'Round three complete! Sixty seconds rest. Great power and defense on the bag. Take deep breaths before the conditioning circuit.',
+          combo: '2-3-2 (Cross-Lead Hook-Cross) × 5 reps<br>1-2-5-2 (Jab-Cross-Lead Uppercut-Cross) × 5 reps<br>1-2-3-4 (Jab-Cross-Lead Hook-Rear Hook) × 5 reps<br>Controlled Power Freestyle (85–90%)',
+          description: '0:00–1:00: 2-3-2 × 5 — Cross-Lead Hook-Cross, throw with power<br>1:00–2:00: 1-2-5-2 × 5 — Uppercut driven from legs, not just arm<br>2:00–2:30: 1-2-3-4 × 5 — 4-punch power combination<br>2:30–3:00: Controlled Power Freestyle (85–90%) — Slips, rolls, pivots, step-outs',
           timedCues: [
-            { time: 0, text: "Power round! Cross, Lead Hook, Cross — Two Three Two! Put your weight into it!", uiIndex: 0 },
-            { time: 22, text: "Jab, Cross, Uppercut, Cross — One Two Five Two! Drive that uppercut!", uiIndex: 1 },
-            { time: 50, text: "Jab, Cross, Lead Hook, Rear Hook — One Two Three Four! Full combo!", uiIndex: 2 },
-            { time: 82, text: "Last 30 seconds coming — stay with me!", uiIndex: 2 },
-            { time: 105, text: "ALL OUT — freestyle, everything, GO!", uiIndex: 3 },
-            { time: 120, text: "Keep throwing — don't stop!", uiIndex: 3 },
-            { time: 135, text: "Don't slow down — this is where champions are made!", uiIndex: 3 },
-            { time: 170, text: "Ten seconds — FINISH!", uiIndex: 3 }
+            { time: 0, text: "Round three! Power and defense. Cross, Lead Hook, Cross — Two Three Two! Five reps. Throw with power!", uiIndex: 0 },
+            { time: 30, text: "Thirty seconds. Plant your feet, sit down on your punches — Two Three Two!", uiIndex: 0 },
+            { time: 60, text: "One minute in. Jab, Cross, Lead Uppercut, Cross — One Two Five Two! Drive that uppercut from your legs, not just your arm.", uiIndex: 1 },
+            { time: 90, text: "Thirty seconds. Dip the lead hip and explode upward on the uppercut — One Two Five Two!", uiIndex: 1 },
+            { time: 120, text: "Two minutes! Four-punch combo — Jab, Cross, Lead Hook, Rear Hook! One Two Three Four!", uiIndex: 2 },
+            { time: 150, text: "Last thirty seconds! Controlled power freestyle. Eighty-five to ninety percent. Slips, rolls, pivots, step-outs!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds! Sharp defense, crisp power — finish the round!", uiIndex: 3 }
           ]
         }
       ]
@@ -1661,13 +1718,37 @@ window.quickWorkouts = [
     circuit: {
       id: 'hybrid-circuit',
       name: 'Conditioning Circuit',
-      benefits: 'Perform back to back with NO rest. Rest 45 seconds after all 3 are complete.',
+      duration: '~4 min',
+      benefits: 'Now we deliberately create fatigue. Move directly to the next exercise with no planned rest. 45 sec rest between rounds.',
       rounds: 2,
       restSeconds: 45,
+      restCue: 'Round one complete! Forty-five seconds rest. Walk it off, breathe through your nose, and prepare for round two.',
+      finishRestCue: 'Conditioning circuit complete! Forty-five seconds rest. Shake it out before the Bag Finisher.',
       exercises: [
-        { id: 'hybrid-circ-1', name: 'Kettlebell Swings', reps: '15 reps' },
-        { id: 'hybrid-circ-2', name: 'Burpees', reps: '10 reps' },
-        { id: 'hybrid-circ-3', name: 'Squat Jumps', reps: '10 reps' }
+        {
+          id: 'hybrid-circ-1',
+          name: '18 kg KB Swings',
+          reps: '15 reps',
+          videoId: 'TIy6s4O2bOY',
+          videoFormat: 'short',
+          description: 'Hips drive the bell — hinge, snap, float. Reinforce punch hip snap.'
+        },
+        {
+          id: 'hybrid-circ-2',
+          name: 'Burpees',
+          reps: '8 reps',
+          videoId: 'gYiE_2BtSTg',
+          videoFormat: 'short',
+          description: 'Chest to floor, explode up with hands overhead'
+        },
+        {
+          id: 'hybrid-circ-3',
+          name: 'Squat Jumps',
+          reps: '8 reps',
+          videoId: '36vnWAkL7ZQ',
+          videoFormat: 'short',
+          description: 'Explosive vertical jump from squat, soft landing into next rep'
+        }
       ]
     },
     finisher: {
@@ -1680,9 +1761,7 @@ window.quickWorkouts = [
           name: 'Speed Endurance Round',
           workSeconds: 180,
           restSeconds: 60,
-              restCue: 'Deep breaths. Bring the heart rate down before we hit the core.',
-              restCue: 'Walk it off. Keep the legs warm.',
-        restCue: 'Keep the legs warm. Shake out the calves.',
+          restCue: 'Keep the legs warm. Shake out the calves.',
           combo: '1-2 fast × 10 reps<br>1-2-3-2 fast × 5 reps<br>Freestyle — maximum output for remaining time',
           timedCues: [
             { time: 0, text: "Speed round! Fast Jab Cross — One Two, rapid fire!", uiIndex: 0 },
@@ -1712,9 +1791,9 @@ window.quickWorkouts = [
       ]
     },
     cooldown: [
-      { id: 'hybrid-cd1', name: 'Slow shadowboxing 50% effort', duration: '90s', workSeconds: 90 },
-      { id: 'hybrid-cd2', name: 'Chest opener stretch', duration: '60s', workSeconds: 60 },
-      { id: 'hybrid-cd3', name: 'Wrist + shoulder stretch', duration: '45s', workSeconds: 45 }
+      { id: 'hybrid-cd1', name: 'Slow shadowboxing 50% effort', duration: '90s', workSeconds: 90, desc: 'Gentle rhythmic movement, shake out the arms and shoulders' },
+      { id: 'hybrid-cd2', name: 'Chest opener stretch', duration: '60s', workSeconds: 60, desc: 'Place forearm against a doorway at 90 degrees, turn away gently' },
+      { id: 'hybrid-cd3', name: 'Wrist + shoulder stretch', duration: '45s', workSeconds: 45, desc: 'Wrist flexor/extensor stretches followed by cross-body shoulder stretch' }
     ]
   },
   {
@@ -2053,7 +2132,9 @@ window.quickWorkouts = [
               cue: 'Recover and breathe.',
               notes: 'Load hips/shoulders away from wall, explosively reverse — legs drive, hips snap, release ball hard.',
               benefits: 'Trains the ground-hip-shoulder chain a punch uses, at full speed.',
-              muscles: 'Obliques/core, glutes/legs, shoulders/chest.'
+              muscles: 'Obliques/core, glutes/legs, shoulders/chest.',
+              videoId: '02c2YLgF8iE',
+              videoFormat: 'short'
             },
             {
               id: 'fb-blk2-2',
@@ -2065,7 +2146,9 @@ window.quickWorkouts = [
               cue: 'Recover and breathe.',
               benefits: 'Combines press + rotation — closer to a real punch than a straight press.',
               notes: 'Drive bar diagonally up and across body, rotating through hips/torso as you press.',
-              muscles: 'Shoulders/chest, obliques/core, legs/glutes.'
+              muscles: 'Shoulders/chest, obliques/core, legs/glutes.',
+              videoId: 'kYj_kuUCla4',
+              videoFormat: 'short'
             },
             {
               id: 'fb-blk2-3',
@@ -2077,7 +2160,9 @@ window.quickWorkouts = [
               cue: 'Recover and breathe. Explosive power block complete.',
               benefits: 'Trains speed/snap, not just strength — the "fast-twitch" complement to heavier lifts.',
               notes: 'Lower controlled, push up hard enough hands leave the floor, land soft.',
-              muscles: 'Chest, front shoulders, triceps, core.'
+              muscles: 'Chest, front shoulders, triceps, core.',
+              videoId: 'iO0sT5FDgj4',
+              videoFormat: 'short'
             }
           ]
         }
@@ -2207,6 +2292,8 @@ window.quickWorkouts = [
             {
               id: 'fb-blk5-2',
               name: 'Burpees',
+              videoId: 'gYiE_2BtSTg',
+              videoFormat: 'short',
               setsReps: '4 x 30s',
               weight: 'Bodyweight',
               restSeconds: 45,
