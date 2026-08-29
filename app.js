@@ -1649,11 +1649,19 @@ window.renderDay = function(dayIdRaw) {
             const log = Store.getItemLog(day.id, 'cooldown-card-' + i) || {};
             const isCompleted = !!log.completed;
             const isChecked = isCompleted ? 'checked' : '';
+            const demoIconBtn = n.videoId
+                ? `<button class="btn-demo-icon" aria-label="Watch demo for ${n.name.replace(/"/g, '&quot;')}" onclick="event.stopPropagation(); openVideoModal('${n.videoId}', '${n.name.replace(/'/g, "\\'")}', '${n.videoFormat || 'short'}')">
+                       <svg viewBox="0 0 24 24" width="10" height="10"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+                   </button>`
+                : '';
             return `
             <div class="nested-row interactive ${isChecked}" role="button" tabindex="0" onclick="Store.logItem(${day.id}, 'cooldown-card-${i}', { completed: !${isCompleted} }); renderDay(${day.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); Store.logItem(${day.id}, 'cooldown-card-${i}', { completed: !${isCompleted} }); renderDay(${day.id});}">
                 <div class="set-num">${i + 1}</div>
                 <div style="flex: 1; min-width: 0;">
-                    <div style="font-weight: 500;">${n.name} — ${n.duration}</div>
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <span style="font-weight: 500;">${n.name} — ${n.duration}</span>
+                        ${demoIconBtn}
+                    </div>
                     ${n.desc ? `<div style="font-size: 13px; opacity: 0.8; margin-top: 2px;">${n.desc}</div>` : ''}
                 </div>
                 <button class="btn-check ${isChecked}" aria-label="${isCompleted ? 'Uncheck' : 'Complete'} ${n.name}">${icons.checkmark}</button>

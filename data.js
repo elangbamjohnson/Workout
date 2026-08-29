@@ -293,7 +293,12 @@ const workoutData = {
         "Inchworm — 5 reps"
       ],
       "warmupRestSeconds": 60,
-      "warmupRestCue": "Warm-up complete! Sixty seconds rest. First lift — Barbell deadlift coming up."
+      "warmupRestCue": "Warm-up complete! Sixty seconds rest. First lift — Barbell deadlift coming up.",
+      "cooldown": [
+        { "id": "day1-cd1", "name": "Hamstring stretch", "duration": "1 min", "desc": "Sit or stand with one leg extended forward, hinge at the hips with a flat back until you feel a deep stretch through the posterior chain." },
+        { "id": "day1-cd2", "name": "Kneeling hip flexor stretch", "duration": "1 min", "desc": "Drop into a half-kneeling lunge, tuck your pelvis slightly, and gently shift your weight forward to open up the hip flexor." },
+        { "id": "day1-cd3", "name": "Pigeon / glute stretch", "duration": "1 min", "desc": "Bring one leg in front at a 90/45 degree angle, extend the back leg long, and fold forward over the front shin to release tight glutes." }
+      ]
     },
     {
       "id": 2,
@@ -616,7 +621,12 @@ const workoutData = {
         "Shadowboxing — 2:00"
       ],
       "warmupRestSeconds": 60,
-      "warmupRestCue": "Warm-up complete! Sixty seconds rest. Put on your wraps and gloves. Power jabs coming up in Round 1."
+      "warmupRestCue": "Warm-up complete! Sixty seconds rest. Put on your wraps and gloves. Power jabs coming up in Round 1.",
+      "cooldown": [
+        { "id": "day2-cd1", "name": "Shoulder cross-body stretch", "duration": "1 min", "desc": "Pull one arm gently across your chest, keeping the shoulder blade depressed and relaxed." },
+        { "id": "day2-cd2", "name": "Chest opener stretch", "duration": "1 min", "desc": "Find a wall or doorway, place your forearm against it at a 90-degree angle, and gently turn your body away to stretch the pecs." },
+        { "id": "day2-cd3", "name": "Wrist + forearm stretch", "duration": "1 min", "desc": "Extend your arm in front of you, palm up, and gently pull your fingers down towards the floor to relieve forearm tension." }
+      ]
     },
     {
       "id": 3,
