@@ -2885,13 +2885,8 @@ window.renderQuickSession = function(quickId) {
     html += `</div>`; // .item-list
     
     html += `
-        <div style="margin-top: 32px; margin-bottom: 24px;">
+        <div style="margin-top: 32px; margin-bottom: 64px;">
             <button class="btn-complete-session" onclick="finishQuickHybrid('${quickId}', '${session.title}')">${icons.checkmark} Complete Session</button>
-        </div>
-        <div style="margin-bottom: 64px; text-align: center;">
-            <button class="btn-ghost" style="font-size: 13px; color: var(--text-muted); border: 1px dashed var(--border-card); padding: 8px 16px; border-radius: 6px; cursor: pointer;" onclick="SFDebug.showModal()">
-                🛠️ View Diagnostic Trace (<span id="sf-debug-count">${SFDebug.logs.length}</span>)
-            </button>
         </div>
     `;
 
