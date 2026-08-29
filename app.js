@@ -405,6 +405,75 @@ window.resetWarmup = function(dayId) {
     reRenderViewingDay();
 };
 
+window.startCooldownRoundTimer = function(dayId) {
+    const day = getDayData(dayId);
+    if (!day || !day.cooldown) return;
+    
+    const workSec = day.cooldownSessionDuration || day.cooldown.reduce((sum, w) => sum + (w.workSeconds || (w.duration && String(w.duration).includes('s') ? parseInt(w.duration) : (parseFloat(w.duration) || 0) * 60) || 60), 0);
+    const title = "Cool Down";
+    const timedCues = day.cooldownTimedCues;
+    
+    // Build per-exercise phase segments from cooldownTimedCues for the phase progress bar.
+    let exerciseSegments = null;
+    if (timedCues && timedCues.length > 0) {
+        const seenUiIndexes = new Set();
+        const starts = [];
+        const ordered = [...timedCues].sort((a, b) => a.time - b.time);
+        for (const cue of ordered) {
+            if (cue.uiIndex !== undefined && !seenUiIndexes.has(cue.uiIndex)) {
+                seenUiIndexes.add(cue.uiIndex);
+                starts.push(cue.time);
+            }
+        }
+        exerciseSegments = starts.map((start, i) => {
+            const cdItem = day.cooldown[i];
+            return {
+                start,
+                end: i + 1 < starts.length ? starts[i + 1] : workSec,
+                name: cdItem ? `${i + 1}. ${cdItem.name}` : null,
+                cue: cdItem ? (cdItem.desc || cdItem.cue || '') : null
+            };
+        });
+    } else {
+        let currStart = 0;
+        exerciseSegments = day.cooldown.map((cdItem, i) => {
+            const duration = cdItem.workSeconds || (cdItem.duration && String(cdItem.duration).includes('s') ? parseInt(cdItem.duration) : (parseFloat(cdItem.duration) || 0) * 60) || 60;
+            const seg = {
+                start: currStart,
+                end: currStart + duration,
+                name: `${i + 1}. ${cdItem.name}`,
+                cue: cdItem.desc || cdItem.cue || ''
+            };
+            currStart += duration;
+            return seg;
+        });
+    }
+    
+    const completionCue = day.cooldownCompletionCue || "Cool-down complete! Fantastic work today. Hydrate and recover well.";
+
+    Timer.startCountdown(5, title, () => {
+        Timer.startRound(workSec, 0, title, '', 'bag', () => {
+            day.cooldown.forEach((item, idx) => {
+                Store.logItem(dayId, item.id || `cooldown-card-${idx}`, { completed: true });
+                Store.logItem(dayId, `cooldown-card-${idx}`, { completed: true });
+            });
+            Store.logItem(dayId, 'cooldown-card', { completed: true });
+            reRenderViewingDay();
+        }, timedCues, false, '', completionCue, exerciseSegments);
+    }, null, null);
+};
+
+window.resetCooldown = function(dayId) {
+    const day = getDayData(dayId);
+    if (!day || !day.cooldown) return;
+    day.cooldown.forEach((item, idx) => {
+        Store.logItem(dayId, item.id || `cooldown-card-${idx}`, { completed: false });
+        Store.logItem(dayId, `cooldown-card-${idx}`, { completed: false });
+    });
+    Store.logItem(dayId, 'cooldown-card', { completed: false });
+    reRenderViewingDay();
+};
+
 // Day 1 hybrid warmup: checkbox tap triggers individual exercise timer (timed),
 // or simply toggles completed state (reps-based).
 window.startWarmupExerciseFromCheckbox = function(e, dayId, itemId) {
@@ -1701,6 +1770,18 @@ window.renderDay = function(dayIdRaw) {
             stats: [{ icon: icons.clock, value: cdMinsStr }],
             sections: [ { title: "STRETCHES & RECOVERY", content: `<div class="nested-list">${drillsHtml}</div>` } ]
         };
+
+        const isAllCDCompleted = day.cooldown.every((item, i) => (Store.getItemLog(day.id, 'cooldown-card-' + i) || {}).completed || (Store.getItemLog(day.id, item.id) || {}).completed);
+        if (isAllCDCompleted) {
+            normalizedItem.actionHtml = `
+                <button class="btn-large" style="margin-top: var(--sp-4);" onclick="resetCooldown(${day.id})">Reset Cool Down</button>
+            `;
+        } else {
+            normalizedItem.actionHtml = `
+                <button class="btn-large" style="margin-top: var(--sp-4);" onclick="startCooldownRoundTimer(${day.id})">Start Cool Down Session</button>
+            `;
+        }
+
         html += renderItemCard(normalizedItem, day.type || 'strength');
     }
     
@@ -2730,11 +2811,19 @@ window.renderQuickSession = function(quickId) {
             const log = Store.getItemLog(quickId, 'cooldown-card-' + i) || {};
             const isCompleted = !!log.completed;
             const isChecked = isCompleted ? 'checked' : '';
+            const demoIconBtn = n.videoId
+                ? `<button class="btn-demo-icon" aria-label="Watch demo for ${n.name.replace(/"/g, '&quot;')}" onclick="event.stopPropagation(); openVideoModal('${n.videoId}', '${n.name.replace(/'/g, "\\'")}', '${n.videoFormat || 'short'}')">
+                       <svg viewBox="0 0 24 24" width="10" height="10"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+                   </button>`
+                : '';
             return `
             <div class="nested-row interactive ${isChecked}" role="button" tabindex="0" onclick="Store.logItem('${quickId}', 'cooldown-card-${i}', { completed: !${isCompleted} }); renderQuickSession('${quickId}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); Store.logItem('${quickId}', 'cooldown-card-${i}', { completed: !${isCompleted} }); renderQuickSession('${quickId}');}">
                 <div class="set-num">${i + 1}</div>
                 <div style="flex: 1; min-width: 0;">
-                    <div style="font-weight: 500;">${n.name} — ${n.duration}</div>
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <span style="font-weight: 500;">${n.name} — ${n.duration}</span>
+                        ${demoIconBtn}
+                    </div>
                     ${n.desc ? `<div style="font-size: 13px; opacity: 0.8; margin-top: 2px;">${n.desc}</div>` : ''}
                 </div>
                 <button class="btn-check ${isChecked}" aria-label="${isCompleted ? 'Uncheck' : 'Complete'} ${n.name}">${icons.checkmark}</button>
@@ -2777,6 +2866,17 @@ window.renderQuickSession = function(quickId) {
                     <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start Cool Down
                 </button>
             </div>`;
+        } else {
+            const isAllCDCompleted = session.cooldown.every((item, i) => (Store.getItemLog(quickId, 'cooldown-card-' + i) || {}).completed || (Store.getItemLog(quickId, item.id) || {}).completed);
+            if (isAllCDCompleted) {
+                normalizedItem.actionHtml = `
+                    <button class="btn-large" style="margin-top: var(--sp-4);" onclick="resetCooldown('${quickId}')">Reset Cool Down</button>
+                `;
+            } else {
+                normalizedItem.actionHtml = `
+                    <button class="btn-large" style="margin-top: var(--sp-4);" onclick="startCooldownRoundTimer('${quickId}')">Start Cool Down Session</button>
+                `;
+            }
         }
         
         html += renderItemCard(normalizedItem, session.type || 'strength');

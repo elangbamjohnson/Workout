@@ -36,10 +36,12 @@ test.describe('Hybrid Boxing Content Audit Fixes', () => {
         // Fix 5 — Cool Down timing and duration
         const cooldownCard = page.locator('.item-card').filter({ hasText: 'Cool Down' });
         await cooldownCard.locator('.item-header').click();
-        await expect(cooldownCard).toContainText('Slow shadowboxing 50% effort — 90s');
-        await expect(cooldownCard).toContainText('Chest opener stretch — 60s');
-        await expect(cooldownCard).toContainText('Wrist + shoulder stretch — 45s');
-        await expect(cooldownCard).toContainText('~3 min 15s');
+        await expect(cooldownCard).toContainText('Slow shadowboxing — 1 min');
+        await expect(cooldownCard).toContainText('Slow walking + controlled breathing — 45s');
+        await expect(cooldownCard).toContainText('Chest + shoulder stretch — 45s');
+        await expect(cooldownCard).toContainText('Lat/upper-back stretch — 45s');
+        await expect(cooldownCard).toContainText('Wrist + forearm + hip mobility — 45s');
+        await expect(cooldownCard).toContainText('~4 min');
 
         // Fix 2 & 3 — Verify audio cues in data object
         const cuesCheck = await page.evaluate(() => {

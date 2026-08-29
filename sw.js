@@ -1,14 +1,14 @@
-const CACHE_NAME = 'strike-first-v89';
+const CACHE_NAME = 'strike-first-v92';
 
 // All files to cache for offline use
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './app.js?v=29',
+  './app.js?v=30',
   './styles.css?v=7',
-  './data.js?v=25',
+  './data.js?v=28',
   './store.js?v=7',
-  './timer.js?v=11',
+  './timer.js?v=12',
   './offline.html',
   './assets/boxer-icon.png',
   './assets/icon-192.png',

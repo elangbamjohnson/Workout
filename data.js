@@ -298,7 +298,18 @@ const workoutData = {
         { "id": "day1-cd1", "name": "Hamstring stretch", "duration": "1 min", "desc": "Sit or stand with one leg extended forward, hinge at the hips with a flat back until you feel a deep stretch through the posterior chain." },
         { "id": "day1-cd2", "name": "Kneeling hip flexor stretch", "duration": "1 min", "desc": "Drop into a half-kneeling lunge, tuck your pelvis slightly, and gently shift your weight forward to open up the hip flexor." },
         { "id": "day1-cd3", "name": "Pigeon / glute stretch", "duration": "1 min", "desc": "Bring one leg in front at a 90/45 degree angle, extend the back leg long, and fold forward over the front shin to release tight glutes." }
-      ]
+      ],
+      "cooldownSessionDuration": 180,
+      "cooldownTimedCues": [
+        { "time": 0, "text": "Cool-down started. Hamstring stretch — thirty seconds per leg. Hinge at the hips with a flat back, feel the stretch down the back of your leg.", "uiIndex": 0 },
+        { "time": 30, "text": "Switch legs on the hamstring stretch.", "uiIndex": 0 },
+        { "time": 60, "text": "Kneeling hip flexor stretch. Drop into a half-kneeling lunge, tuck your pelvis, and gently press forward. Thirty seconds first side.", "uiIndex": 1, "autoCheckId": "day1-cd1" },
+        { "time": 90, "text": "Switch sides on the hip flexor stretch.", "uiIndex": 1 },
+        { "time": 120, "text": "Pigeon and glute stretch. Bring one leg across in front, extend the back leg long, and sink into the glute. Thirty seconds per side.", "uiIndex": 2, "autoCheckId": "day1-cd2" },
+        { "time": 150, "text": "Switch sides on the pigeon stretch.", "uiIndex": 2 },
+        { "time": 175, "text": "Final five seconds. Breathe deep and relax.", "uiIndex": 2 }
+      ],
+      "cooldownCompletionCue": "Cool-down complete! Fantastic strength session today. Hydrate and recover well."
     },
     {
       "id": 2,
@@ -626,7 +637,18 @@ const workoutData = {
         { "id": "day2-cd1", "name": "Shoulder cross-body stretch", "duration": "1 min", "desc": "Pull one arm gently across your chest, keeping the shoulder blade depressed and relaxed." },
         { "id": "day2-cd2", "name": "Chest opener stretch", "duration": "1 min", "desc": "Find a wall or doorway, place your forearm against it at a 90-degree angle, and gently turn your body away to stretch the pecs." },
         { "id": "day2-cd3", "name": "Wrist + forearm stretch", "duration": "1 min", "desc": "Extend your arm in front of you, palm up, and gently pull your fingers down towards the floor to relieve forearm tension." }
-      ]
+      ],
+      "cooldownSessionDuration": 180,
+      "cooldownTimedCues": [
+        { "time": 0, "text": "Cool-down started. Shoulder cross-body stretch. Pull one arm across your chest, keep the shoulder blade relaxed. Thirty seconds each side.", "uiIndex": 0 },
+        { "time": 30, "text": "Switch arms on the shoulder stretch.", "uiIndex": 0 },
+        { "time": 60, "text": "Chest opener stretch. Place your forearm against a wall or doorway, gently turn away to stretch the pecs and front delts. Thirty seconds each side.", "uiIndex": 1, "autoCheckId": "day2-cd1" },
+        { "time": 90, "text": "Switch sides on the chest opener.", "uiIndex": 1 },
+        { "time": 120, "text": "Wrist and forearm stretch. Extend your arm, palm facing out, gently draw fingers back to release forearm tension from heavy bag punching.", "uiIndex": 2, "autoCheckId": "day2-cd2" },
+        { "time": 150, "text": "Switch arms on the wrist stretch.", "uiIndex": 2 },
+        { "time": 175, "text": "Final five seconds. Shake out the arms.", "uiIndex": 2 }
+      ],
+      "cooldownCompletionCue": "Cool-down complete! Outstanding bag power work today."
     },
     {
       "id": 3,
@@ -1140,7 +1162,18 @@ const workoutData = {
       { id: 'upper-cd1', name: 'Chest opener stretch', duration: '1 min', desc: 'Find a wall or doorway, place your forearm against it at a 90-degree angle, and gently turn your body away to stretch the pecs.' },
       { id: 'upper-cd2', name: 'Shoulder cross-body stretch', duration: '1 min', desc: 'Pull one arm gently across your chest, keeping the shoulder blade down and back.' },
       { id: 'upper-cd3', name: 'Wrist + forearm stretch', duration: '1 min', desc: 'Extend your arm in front of you, palm up, and gently pull your fingers down towards the floor.' }
-    ]
+    ],
+    cooldownSessionDuration: 180,
+    cooldownTimedCues: [
+      { time: 0, text: "Cool-down started. Chest opener stretch. Place your forearm against a wall at ninety degrees, turn away to release the chest and front delts. Thirty seconds each side.", uiIndex: 0 },
+      { time: 30, text: "Switch sides on the chest opener.", uiIndex: 0 },
+      { time: 60, text: "Shoulder cross-body stretch. Pull one arm across your chest, keeping the shoulder blade down. Thirty seconds per side.", uiIndex: 1, autoCheckId: "upper-cd1" },
+      { time: 90, text: "Switch arms on the shoulder stretch.", uiIndex: 1 },
+      { time: 120, text: "Wrist and forearm stretch. Extend arm palm forward, gently pull fingers back to decompress the forearms and wrists.", uiIndex: 2, autoCheckId: "upper-cd2" },
+      { time: 150, text: "Switch hands on the wrist stretch.", uiIndex: 2 },
+      { time: 175, text: "Final five seconds. Deep breaths.", uiIndex: 2 }
+    ],
+    cooldownCompletionCue: "Cool-down complete! Exceptional upper body power session."
     },
     {
       "id": 5,
@@ -1588,8 +1621,10 @@ window.quickWorkouts = [
     get warmupRestSeconds() { return workoutData.days.find(d => d.id === 4).warmupRestSeconds; },
     get warmupRestCue() { return workoutData.days.find(d => d.id === 4).warmupRestCue; },
     get exercises() { return workoutData.days.find(d => d.id === 4).exercises; },
-    get powerCircuit() { return workoutData.days.find(d => d.id === 4).powerCircuit; },
-    get cooldown() { return workoutData.days.find(d => d.id === 4).cooldown; }
+    get cooldown() { return workoutData.days.find(d => d.id === 4).cooldown; },
+    get cooldownSessionDuration() { return workoutData.days.find(d => d.id === 4).cooldownSessionDuration; },
+    get cooldownTimedCues() { return workoutData.days.find(d => d.id === 4).cooldownTimedCues; },
+    get cooldownCompletionCue() { return workoutData.days.find(d => d.id === 4).cooldownCompletionCue; }
   },
   {
     id: 'quick-hybrid',
@@ -1824,10 +1859,22 @@ window.quickWorkouts = [
       ]
     },
     cooldown: [
-      { id: 'hybrid-cd1', name: 'Slow shadowboxing 50% effort', duration: '90s', workSeconds: 90, desc: 'Gentle rhythmic movement, shake out the arms and shoulders' },
-      { id: 'hybrid-cd2', name: 'Chest opener stretch', duration: '60s', workSeconds: 60, desc: 'Place forearm against a doorway at 90 degrees, turn away gently' },
-      { id: 'hybrid-cd3', name: 'Wrist + shoulder stretch', duration: '45s', workSeconds: 45, desc: 'Wrist flexor/extensor stretches followed by cross-body shoulder stretch' }
-    ]
+      { id: 'hybrid-cd1', name: 'Slow shadowboxing', duration: '1 min', workSeconds: 60, desc: '~30–40% intensity. Gentle rhythmic movement to bring heart rate down.' },
+      { id: 'hybrid-cd2', name: 'Slow walking + controlled breathing', duration: '45s', workSeconds: 45, desc: 'Try: 4 sec inhale → 6 sec exhale (parasympathetic recovery).' },
+      { id: 'hybrid-cd3', name: 'Chest + shoulder stretch', duration: '45s', workSeconds: 45, desc: 'Open the chest and front deltoids, ease tension from power punches.', videoId: 'Cka38QWoVeY', videoFormat: 'short' },
+      { id: 'hybrid-cd4', name: 'Lat/upper-back stretch', duration: '45s', workSeconds: 45, desc: 'Release lats and upper back from explosive rotational power.', videoId: 'ExTlW_pfX_s', videoFormat: 'short' },
+      { id: 'hybrid-cd5', name: 'Wrist + forearm + hip mobility', duration: '45s', workSeconds: 45, desc: 'Wrist rotations, forearm flexor/extensor stretches, and gentle hip mobility.' }
+    ],
+    cooldownSessionDuration: 240,
+    cooldownTimedCues: [
+      { time: 0, text: "Cool-down started. Slow shadowboxing at thirty to forty percent effort. Fluid, easy combinations to bring your heart rate down.", uiIndex: 0 },
+      { time: 60, text: "Slow walking and controlled breathing. Breathe in through your nose for four seconds, exhale through your mouth for six seconds.", uiIndex: 1, autoCheckId: "hybrid-cd1" },
+      { time: 105, text: "Chest and shoulder stretch. Interlace hands or use a doorway, open up the chest and front shoulders.", uiIndex: 2, autoCheckId: "hybrid-cd2" },
+      { time: 150, text: "Lat and upper-back stretch. Reach arm across and gently pull, decompressing the lats and thoracic spine.", uiIndex: 3, autoCheckId: "hybrid-cd3" },
+      { time: 195, text: "Wrist, forearm, and hip mobility. Roll the wrists, gently stretch the forearms, and shift your weight to open the hips.", uiIndex: 4, autoCheckId: "hybrid-cd4" },
+      { time: 235, text: "Final five seconds. Great work today.", uiIndex: 4 }
+    ],
+    cooldownCompletionCue: "Hybrid Boxing session complete! Outstanding effort from start to finish."
   },
   {
     id: 'quick-lower-power',
@@ -1926,7 +1973,18 @@ window.quickWorkouts = [
       { id: 'lower-cd1', name: 'Pigeon Pose', duration: '1 min each side', desc: 'Cross one leg in front of you, extending the other leg back. Lean forward to stretch the glute.' },
       { id: 'lower-cd2', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' },
       { id: 'lower-cd3', name: 'Hamstring Stretch', duration: '1 min', desc: 'Sit with legs extended, reach for toes while keeping a straight back.' }
-    ]
+    ],
+    cooldownSessionDuration: 180,
+    cooldownTimedCues: [
+      { time: 0, text: "Cool-down started. Pigeon pose. Bring front leg across at forty-five degrees, sink into the hip and breathe into the glute. Thirty seconds first side.", uiIndex: 0 },
+      { time: 30, text: "Switch sides on the pigeon pose.", uiIndex: 0 },
+      { time: 60, text: "Hip flexor stretch. Kneeling lunge, tuck your pelvis and push hips forward gently. Thirty seconds first side.", uiIndex: 1, autoCheckId: "lower-cd1" },
+      { time: 90, text: "Switch sides on the hip flexor stretch.", uiIndex: 1 },
+      { time: 120, text: "Hamstring stretch. Hinge at the hips with a flat back, reach towards your toes to stretch the posterior chain.", uiIndex: 2, autoCheckId: "lower-cd2" },
+      { time: 150, text: "Switch sides on the hamstring stretch.", uiIndex: 2 },
+      { time: 175, text: "Final five seconds. Breathe deep and relax.", uiIndex: 2 }
+    ],
+    cooldownCompletionCue: "Lower body session complete! Fantastic power output today."
   },
   {
     id: 'quick-shadow-boxing',
@@ -2036,9 +2094,18 @@ window.quickWorkouts = [
     },
     cooldown: [
       { id: 'shadow-cd1', name: 'Deep Breathing', duration: '1 min', desc: 'Inhale for 4 counts, hold for 4, exhale for 4. Slow the heart rate fully.' },
-      { id: 'shadow-cd2', name: 'Shoulder + Chest Stretch', duration: '1 min', desc: 'Clasp hands behind your back, open the chest, and hold.' },
+      { id: 'shadow-cd2', name: 'Shoulder + Chest Stretch', duration: '1 min', desc: 'Clasp hands behind your back, open the chest, and hold.', videoId: 'Cka38QWoVeY', videoFormat: 'short' },
       { id: 'shadow-cd3', name: 'Hip Flexor Stretch', duration: '1 min', desc: 'Kneel on one knee, push hips forward gently while keeping torso upright.' }
-    ]
+    ],
+    cooldownSessionDuration: 180,
+    cooldownTimedCues: [
+      { time: 0, text: "Cool-down started. Deep nasal breathing. Inhale for four counts, hold for four, exhale for four. Slow the heart rate down.", uiIndex: 0 },
+      { time: 60, text: "Shoulder and chest stretch. Clasp hands behind your back, open the chest, and breathe deeply.", uiIndex: 1, autoCheckId: "shadow-cd1" },
+      { time: 120, text: "Hip flexor stretch. Drop into a half-kneeling lunge, tuck your pelvis, and gently press forward. Thirty seconds per side.", uiIndex: 2, autoCheckId: "shadow-cd2" },
+      { time: 150, text: "Switch sides on the hip flexor stretch.", uiIndex: 2 },
+      { time: 175, text: "Final five seconds. Shake out the arms.", uiIndex: 2 }
+    ],
+    cooldownCompletionCue: "Shadow Boxing complete! Phenomenal skill and precision today."
   },
   {
     id: 'quick-hiit-boxing',
