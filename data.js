@@ -1754,22 +1754,23 @@ window.quickWorkouts = [
     finisher: {
       id: 'hybrid-finish',
       name: 'Bag Finisher',
-      benefits: 'Test power under fatigue. Maximum intent.',
+      benefits: "Now we're deliberately asking you to box while fatigued. This is where the hybrid nature of the workout really comes together.",
       rounds: [
         {
           id: 'hybrid-finish-r1',
           name: 'Speed Endurance Round',
           workSeconds: 180,
           restSeconds: 60,
-          restCue: 'Keep the legs warm. Shake out the calves.',
-          combo: '1-2 fast × 10 reps<br>1-2-3-2 fast × 5 reps<br>Freestyle — maximum output for remaining time',
+          restCue: 'Round one complete! Sixty seconds rest. Deep breathing, one final round.',
+          combo: '0:00–0:30 Fast 1-2 (maintain form)<br>0:30–1:00 Movement (light footwork + jab)<br>1:00–1:30 1-2-3-2 fast × 5 reps<br>1:30–2:00 Movement + 1-2<br>2:00–2:30 Freestyle (90% output)<br>2:30–3:00 Fast hands: 1-2 → 1-2-3 → 1-2',
           timedCues: [
-            { time: 0, text: "Speed round! Fast Jab Cross — One Two, rapid fire!", uiIndex: 0 },
-            { time: 20, text: "Jab, Cross, Lead Hook, Cross — One Two Three Two, fast!", uiIndex: 1 },
-            { time: 48, text: "Freestyle — maximum speed, don't think, just throw!", uiIndex: 2 },
-            { time: 90, text: "Keep the pace up — faster!", uiIndex: 2 },
-            { time: 130, text: "Last minute — speed speed speed!", uiIndex: 2 },
-            { time: 170, text: "Ten seconds — sprint to the finish!", uiIndex: 2 }
+            { time: 0, text: "Round one — Speed Endurance! Fast Jab Cross, rapid fire without sacrificing form!", uiIndex: 0 },
+            { time: 30, text: "Thirty seconds in. Movement — light footwork and jab. Stay light on your feet!", uiIndex: 1 },
+            { time: 60, text: "One minute mark. Fast combo — Jab, Cross, Lead Hook, Cross — five reps fast!", uiIndex: 2 },
+            { time: 90, text: "Minute and a half. Move and reset with the one-two!", uiIndex: 3 },
+            { time: 120, text: "Two minute mark. Freestyle — ninety percent output!", uiIndex: 4 },
+            { time: 150, text: "Final thirty seconds! Fast hands — alternate one-two, one-two-three, one-two!", uiIndex: 5 },
+            { time: 170, text: "Ten seconds — fast hands to the bell!", uiIndex: 5 }
           ]
         },
         {
@@ -1777,15 +1778,14 @@ window.quickWorkouts = [
           name: 'Fight Finish Round',
           workSeconds: 180,
           restSeconds: 0,
-          combo: '2-3-2 with power × 5 reps<br>1-2-5-2 with power × 5 reps<br>End with 10 explosive rear crosses — maximum hip rotation, maximum power',
+          combo: '0:00–1:00 2-3-2 with power × 5 reps<br>1:00–2:00 1-2-5-2 with power × 5 reps → Freestyle<br>2:00–2:30 Body → Head combos (1-2 body → 3 head → 2)<br>2:30–3:00 🔥 Fight Finish: 10 Rear Crosses (10s) → Fast 1-2 (10s) → All-Out Output (10s)',
           timedCues: [
-            { time: 0, text: "Power round! Cross, Lead Hook, Cross — Two Three Two, put your body into it!", uiIndex: 0 },
-            { time: 22, text: "Jab, Cross, Uppercut, Cross — One Two Five Two! Mean it!", uiIndex: 1 },
-            { time: 52, text: "Ten hard crosses — Two, Two, Two — maximum power!", uiIndex: 2 },
-            { time: 85, text: "This is your last round — leave everything on the bag!", uiIndex: 2 },
-            { time: 120, text: "Push through — don't slow down!", uiIndex: 2 },
-            { time: 155, text: "Last 25 seconds — EVERYTHING!", uiIndex: 2 },
-            { time: 170, text: "Ten seconds — finish like a champion!", uiIndex: 2 }
+            { time: 0, text: "Round two — Fight Finish! Hardest round. Cross, Lead Hook, Cross — five reps with maximum power!", uiIndex: 0 },
+            { time: 60, text: "One minute mark. Jab, Cross, Lead Uppercut, Cross — power from the legs, then freestyle!", uiIndex: 1 },
+            { time: 120, text: "Two minute mark. Level changes — one-two body, lead hook head, cross. Keep moving!", uiIndex: 2 },
+            { time: 150, text: "Final thirty seconds — Fight Finish! Ten explosive rear crosses, throw with everything!", uiIndex: 3 },
+            { time: 160, text: "Fast one-two! Speed speed speed!", uiIndex: 3 },
+            { time: 170, text: "Ten seconds — all-out bag output! Maintain crisp form to the bell!", uiIndex: 3 }
           ]
         }
       ]
