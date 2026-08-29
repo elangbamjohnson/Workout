@@ -80,7 +80,6 @@ const SFDebug = {
             sessionStorage.setItem('sf_debug_trace', JSON.stringify(this.logs));
         } catch (e) {}
         console.log(`[SF-DEBUG ${time}] ${step}`, data !== null ? data : '');
-        this.updateUI();
     },
     error(step, err) {
         const time = new Date().toISOString().split('T')[1].slice(0, 8) + '.' + String(new Date().getMilliseconds()).padStart(3, '0');
@@ -90,62 +89,9 @@ const SFDebug = {
             sessionStorage.setItem('sf_debug_trace', JSON.stringify(this.logs));
         } catch (e) {}
         console.error(`[SF-DEBUG-ERR ${time}] ${step}`, err);
-        this.updateUI();
     },
     getText() {
         return this.logs.map(l => `[${l.time}] ${l.step}${l.data !== null && l.data !== undefined ? ' -> ' + (typeof l.data === 'object' ? JSON.stringify(l.data) : l.data) : ''}${l.error ? ' -> ERROR: ' + l.error : ''}`).join('\n');
-    },
-    copy() {
-        const text = this.getText();
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert('Diagnostic trace copied to clipboard!');
-            }).catch(() => {
-                this.fallbackCopy(text);
-            });
-        } else {
-            this.fallbackCopy(text);
-        }
-    },
-    fallbackCopy(text) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        alert('Diagnostic trace copied to clipboard!');
-    },
-    showModal() {
-        let modal = document.getElementById('sf-debug-modal');
-        if (!modal) {
-            modal = document.createElement('div');
-            modal.id = 'sf-debug-modal';
-            modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:999999;display:flex;flex-direction:column;padding:16px;box-sizing:border-box;font-family:monospace;color:#fff;';
-            modal.innerHTML = `
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-                    <h3 style="margin:0;font-size:16px;color:#00ff88;">🛠️ Live Diagnostic Trace</h3>
-                    <div style="display:flex;gap:8px;">
-                        <button id="btn-copy-debug" style="background:#00ff88;color:#000;border:none;padding:6px 12px;border-radius:4px;font-weight:bold;cursor:pointer;">Copy Trace</button>
-                        <button id="btn-close-debug" style="background:#333;color:#fff;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;">Close</button>
-                    </div>
-                </div>
-                <div style="font-size:12px;color:#aaa;margin-bottom:8px;">Copy and paste this output directly back into the chat.</div>
-                <textarea id="sf-debug-textarea" readonly style="flex:1;background:#111;color:#00ff88;border:1px solid #333;padding:10px;font-size:12px;border-radius:4px;resize:none;white-space:pre;overflow:auto;"></textarea>
-            `;
-            document.body.appendChild(modal);
-            modal.querySelector('#btn-copy-debug').onclick = () => this.copy();
-            modal.querySelector('#btn-close-debug').onclick = () => { modal.style.display = 'none'; };
-        }
-        modal.style.display = 'flex';
-        const ta = modal.querySelector('#sf-debug-textarea');
-        if (ta) ta.value = this.getText() || 'No logs recorded yet. Tap "Complete Round" and check back.';
-    },
-    updateUI() {
-        const ta = document.getElementById('sf-debug-textarea');
-        if (ta) ta.value = this.getText();
-        const badge = document.getElementById('sf-debug-count');
-        if (badge) badge.innerText = `${this.logs.length} events`;
     }
 };
 window.SFDebug = SFDebug;
