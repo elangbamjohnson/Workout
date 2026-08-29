@@ -2885,11 +2885,8 @@ window.renderQuickSession = function(quickId) {
     html += `</div>`; // .item-list
     
     html += `
-        <div class="qs-cooldown-complete">
-            🥊 Session Complete — Great work today!
-        </div>
-        <div style="margin-bottom: 24px;">
-            <button class="btn-large" onclick="finishQuickHybrid('${quickId}', '${session.title}')">Finish & Save</button>
+        <div style="margin-top: 32px; margin-bottom: 24px;">
+            <button class="btn-complete-session" onclick="finishQuickHybrid('${quickId}', '${session.title}')">${icons.checkmark} Complete Session</button>
         </div>
         <div style="margin-bottom: 64px; text-align: center;">
             <button class="btn-ghost" style="font-size: 13px; color: var(--text-muted); border: 1px dashed var(--border-card); padding: 8px 16px; border-radius: 6px; cursor: pointer;" onclick="SFDebug.showModal()">
