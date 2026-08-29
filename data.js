@@ -283,14 +283,21 @@ const workoutData = {
         { "time": 454, "text": "1", "uiIndex": 7 }
       ],
       "warmupCombos": [
-        "Jump Rope \u2014 3:00",
-        "Jumping Jacks \u2014 30s",
-        "Mountain Climbers \u2014 30s",
-        "Hip 90/90 Stretch \u2014 1:00",
-        "Glute Bridges \u2014 2\u00d710",
-        "Arm Circles \u2014 30s",
-        "Bodyweight Squat \u2014 10 reps",
-        "Inchworm \u2014 5 reps"
+        "Jump Rope — 3:00",
+        "Jumping Jacks — 30s",
+        "Mountain Climbers — 30s",
+        "Hip 90/90 Stretch — 1:00",
+        "Glute Bridges — 2×10",
+        "Arm Circles — 30s",
+        "Bodyweight Squat — 10 reps",
+        "Inchworm — 5 reps"
+      ],
+      "warmupRestSeconds": 60,
+      "warmupRestCue": "Warm-up complete! Sixty seconds rest. First lift — Barbell deadlift coming up.",
+      "cooldown": [
+        { "id": "day1-cd1", "name": "Hamstring stretch", "duration": "1 min", "desc": "Sit or stand with one leg extended forward, hinge at the hips with a flat back until you feel a deep stretch through the posterior chain." },
+        { "id": "day1-cd2", "name": "Kneeling hip flexor stretch", "duration": "1 min", "desc": "Drop into a half-kneeling lunge, tuck your pelvis slightly, and gently shift your weight forward to open up the hip flexor." },
+        { "id": "day1-cd3", "name": "Pigeon / glute stretch", "duration": "1 min", "desc": "Bring one leg in front at a 90/45 degree angle, extend the back leg long, and fold forward over the front shin to release tight glutes." }
       ]
     },
     {
@@ -583,7 +590,9 @@ const workoutData = {
           "type": "timed",
           "duration": 120,
           "switchSides": false,
-          "cue": "50% speed — focus on form and weight transfer, no power",
+          "cue": "Fifty percent speed — focus on form and weight transfer, no power",
+          "videoId": "dN75QUuRI9A",
+          "videoFormat": "short",
           "segments": [
             { "time": 120, "text": "Fifty percent speed — focus on form and weight transfer, no power." },
             { "time": 30, "text": "Final thirty seconds of shadowboxing. Stay loose and relaxed." }
@@ -610,6 +619,13 @@ const workoutData = {
         "Arm Circles & Shoulder Rolls — 30s",
         "Hip Rotations — 1:00 (switch at 30s)",
         "Shadowboxing — 2:00"
+      ],
+      "warmupRestSeconds": 60,
+      "warmupRestCue": "Warm-up complete! Sixty seconds rest. Put on your wraps and gloves. Power jabs coming up in Round 1.",
+      "cooldown": [
+        { "id": "day2-cd1", "name": "Shoulder cross-body stretch", "duration": "1 min", "desc": "Pull one arm gently across your chest, keeping the shoulder blade depressed and relaxed." },
+        { "id": "day2-cd2", "name": "Chest opener stretch", "duration": "1 min", "desc": "Find a wall or doorway, place your forearm against it at a 90-degree angle, and gently turn your body away to stretch the pecs." },
+        { "id": "day2-cd3", "name": "Wrist + forearm stretch", "duration": "1 min", "desc": "Extend your arm in front of you, palm up, and gently pull your fingers down towards the floor to relieve forearm tension." }
       ]
     },
     {
@@ -872,7 +888,7 @@ const workoutData = {
       "subtitle": "Shoulder, Rotational & Pressing Strength",
       "note": "Explosive upper body pressing and rotational power \u2014 the shoulder and core engine.",
       "type": "strength",
-      "duration": "~60 min",
+      "duration": "~45 min with warm-up",
       "exercises": [
         {
           "id": "day4-ex1",
@@ -1095,6 +1111,8 @@ const workoutData = {
         "Bodyweight Squat — 10 reps slow (~30s)",
         "Inchworm — 5 reps (~30s)"
       ],
+      "warmupRestSeconds": 60,
+      "warmupRestCue": "Warm-up complete! Sixty seconds rest. First lift — Plyometric push-ups coming up.",
     powerCircuit: {
       id: 'upper-finisher',
       name: 'Punch Power Circuit',
@@ -1129,7 +1147,8 @@ const workoutData = {
       "title": "Conditioning Bag Day",
       "subtitle": "Power Under Fatigue",
       "type": "bag",
-      "note": "Higher-volume bag work building power endurance \u2014 maintaining punch quality under accumulated fatigue.",
+      "typeLabel": "Conditioning",
+      "note": "Higher-volume bag work building power endurance — maintaining punch quality under accumulated fatigue.",
       "exercises": [
         {
           "id": "day5-ex1",
@@ -1459,6 +1478,8 @@ const workoutData = {
           "duration": 90,
           "switchSides": false,
           "cue": "1-2, hooks, body shots, slips, pivots. Light movement. Gradually increase speed to approximately 60 percent.",
+          "videoId": "dN75QUuRI9A",
+          "videoFormat": "short",
           "segments": [
             { "time": 90, "text": "1-2, hooks, body shots, slips, pivots. Light movement." },
             { "time": 30, "text": "Gradually increase speed to approximately 60 percent." }
@@ -1484,7 +1505,9 @@ const workoutData = {
         "Shoulder Circles — 30s",
         "Hip Circles — 30s",
         "Shadowboxing — 1:30"
-      ]
+      ],
+      "warmupRestSeconds": 60,
+      "warmupRestCue": "Warm-up complete! Sixty seconds rest. Put on your wraps and gloves. Technical combination build coming up in Round 1."
     },
     {
       "id": 6,

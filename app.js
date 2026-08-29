@@ -370,16 +370,19 @@ window.startWarmupRoundTimer = function(dayId) {
         });
     }
     
+    const restSec = day.warmupRestSeconds || 60;
+    const restCue = day.warmupRestCue || "Warm-up complete! Sixty seconds rest. Take a breath and get ready.";
+
     // Pass null as customGoText so the countdown ends with only "Go" (one syllable,
     // completes before the first timedCue audio fires — prevents overlapping audio).
     Timer.startCountdown(5, title, () => {
-        Timer.startRound(workSec, 0, title, isHybridTimer ? '' : comboStr, day.type || 'bag', () => {
+        Timer.startRound(workSec, restSec, title, isHybridTimer ? '' : comboStr, day.type || 'bag', () => {
             day.warmup.forEach(item => {
                 Store.logItem(dayId, item.id, { completed: true });
             });
             Store.logItem(dayId, 'warmup-card', { completed: true });
             reRenderViewingDay();
-        }, timedCues, false, '', "Warm-up complete. Take a breath and get ready.", exerciseSegments);
+        }, timedCues, false, restCue, "Warm-up complete. Take a breath and get ready.", exerciseSegments);
     }, null, null);
 };
 
@@ -1229,7 +1232,7 @@ function renderHome() {
                         <div class="card-icon-box" aria-hidden="true">${icons[iconName]}</div>
                         <span class="label-small">DAY ${typeof day.id === 'number' ? day.id : index + 1}</span>
                     </div>
-                    <div class="type-badge" aria-hidden="true">${icons[iconName]} ${day.type}</div>
+                    <div class="type-badge" aria-hidden="true">${icons[iconName]} ${day.typeLabel || day.type}</div>
                 </div>
                 <div class="title-card" style="margin-bottom: 4px;">${day.title}</div>
                 <div class="text-sec" style="font-size: 12px; margin-bottom: var(--sp-3); min-height: 18px;">${day.subtitle || ''}</div>
@@ -1335,7 +1338,7 @@ window.renderDay = function(dayIdRaw) {
         <div class="card day-header-card type-${day.type}">
             <div class="flex justify-between items-start" style="margin-bottom: var(--sp-2);">
                 <span class="label-small">DAY ${typeof day.id === 'number' ? day.id : '6-7'}</span>
-                <span class="type-badge" aria-hidden="true">${icons[iconName]} ${day.type}</span>
+                <span class="type-badge" aria-hidden="true">${icons[iconName]} ${day.typeLabel || day.type}</span>
             </div>
             <h1 class="title-page" style="margin-bottom: var(--sp-1);">${day.title}</h1>
             ${day.subtitle ? `<div class="text-sec" style="margin-bottom: var(--sp-2);">${day.subtitle}</div>` : ''}
@@ -1646,11 +1649,19 @@ window.renderDay = function(dayIdRaw) {
             const log = Store.getItemLog(day.id, 'cooldown-card-' + i) || {};
             const isCompleted = !!log.completed;
             const isChecked = isCompleted ? 'checked' : '';
+            const demoIconBtn = n.videoId
+                ? `<button class="btn-demo-icon" aria-label="Watch demo for ${n.name.replace(/"/g, '&quot;')}" onclick="event.stopPropagation(); openVideoModal('${n.videoId}', '${n.name.replace(/'/g, "\\'")}', '${n.videoFormat || 'short'}')">
+                       <svg viewBox="0 0 24 24" width="10" height="10"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+                   </button>`
+                : '';
             return `
             <div class="nested-row interactive ${isChecked}" role="button" tabindex="0" onclick="Store.logItem(${day.id}, 'cooldown-card-${i}', { completed: !${isCompleted} }); renderDay(${day.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); Store.logItem(${day.id}, 'cooldown-card-${i}', { completed: !${isCompleted} }); renderDay(${day.id});}">
                 <div class="set-num">${i + 1}</div>
                 <div style="flex: 1; min-width: 0;">
-                    <div style="font-weight: 500;">${n.name} — ${n.duration}</div>
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <span style="font-weight: 500;">${n.name} — ${n.duration}</span>
+                        ${demoIconBtn}
+                    </div>
                     ${n.desc ? `<div style="font-size: 13px; opacity: 0.8; margin-top: 2px;">${n.desc}</div>` : ''}
                 </div>
                 <button class="btn-check ${isChecked}" aria-label="${isCompleted ? 'Uncheck' : 'Complete'} ${n.name}">${icons.checkmark}</button>
