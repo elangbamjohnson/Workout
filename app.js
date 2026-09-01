@@ -420,6 +420,74 @@ window.resetCooldown = function(dayId) {
     reRenderViewingDay();
 };
 
+window.startConditioningCircuitTimer = function(quickId) {
+    const session = window.quickWorkouts.find(q => q.id === quickId);
+    if (!session || !session.circuit) return;
+    const c = session.circuit;
+    
+    const completionsLog = Store.getItemLog(quickId, 'circuit_completions') || { count: 0 };
+    const startingRound = completionsLog.count < c.rounds ? completionsLog.count + 1 : 1;
+    
+    const workSec = c.workSeconds || 90;
+    const restSec = c.restSeconds || 45;
+    
+    const buildSegments = () => {
+        const segDuration = Math.floor(workSec / c.exercises.length);
+        return c.exercises.map((ex, i) => ({
+            start: i * segDuration,
+            end: (i + 1) * segDuration,
+            name: `${i + 1}. ${ex.name} — ${ex.reps}`,
+            cue: ex.description || ''
+        }));
+    };
+    
+    const runCircuitRound = (rNum) => {
+        const title = `Circuit Round ${rNum}`;
+        const timedCues = rNum === 1 ? (c.round1TimedCues || c.timedCues) : (c.round2TimedCues || c.timedCues);
+        const segments = buildSegments();
+        const isFinalRound = rNum >= c.rounds;
+        const currentRestSec = isFinalRound ? 0 : restSec;
+        const restCueText = c.restCue || "Round one complete! Forty-five seconds rest. Walk it off, breathe through your nose, and prepare for round two.";
+        const completionCueText = c.completionCue || c.finishRestCue || "Conditioning circuit complete! Forty-five seconds rest. Shake it out before the Bag Finisher.";
+        
+        Timer.startRound(workSec, currentRestSec, title, '', 'strength', () => {
+            // Auto-check all exercises for this round
+            c.exercises.forEach(ex => {
+                Store.logItem(quickId, ex.id, { completed: true });
+            });
+            Store.logItem(quickId, 'circuit_completions', { count: rNum });
+            
+            if (isFinalRound) {
+                Store.logItem(quickId, c.id, { completed: true });
+                reRenderViewingDay();
+            } else {
+                // Reset exercises for next round and auto-advance to round 2
+                c.exercises.forEach(ex => {
+                    Store.logItem(quickId, ex.id, { completed: false });
+                });
+                reRenderViewingDay();
+                runCircuitRound(rNum + 1);
+            }
+        }, timedCues, false, restCueText, completionCueText, segments);
+    };
+    
+    Timer.startCountdown(5, `Conditioning Circuit (Round ${startingRound} of ${c.rounds})`, () => {
+        runCircuitRound(startingRound);
+    }, null, null);
+};
+
+window.resetConditioningCircuit = function(quickId) {
+    const session = window.quickWorkouts.find(q => q.id === quickId);
+    if (!session || !session.circuit) return;
+    const c = session.circuit;
+    c.exercises.forEach(ex => {
+        Store.logItem(quickId, ex.id, { completed: false });
+    });
+    Store.logItem(quickId, 'circuit_completions', { count: 0 });
+    Store.logItem(quickId, c.id, { completed: false });
+    reRenderViewingDay();
+};
+
 // Day 1 hybrid warmup: checkbox tap triggers individual exercise timer (timed),
 // or simply toggles completed state (reps-based).
 window.startWarmupExerciseFromCheckbox = function(e, dayId, itemId) {
@@ -2693,6 +2761,17 @@ window.renderQuickSession = function(quickId) {
                     <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start Conditioning Circuit
                 </button>
             </div>`;
+        } else {
+            const isCircuitComplete = (Store.getItemLog(quickId, 'circuit_completions') || {}).count >= c.rounds || !!(Store.getItemLog(quickId, c.id) || {}).completed;
+            if (isCircuitComplete) {
+                normalizedItem.actionHtml = `
+                    <button class="btn-large" style="margin-top: var(--sp-4);" onclick="resetConditioningCircuit('${quickId}')">Reset Conditioning Circuit</button>
+                `;
+            } else {
+                normalizedItem.actionHtml = `
+                    <button class="btn-large" style="margin-top: var(--sp-4);" onclick="startConditioningCircuitTimer('${quickId}')">Start Conditioning Circuit</button>
+                `;
+            }
         }
 
         html += renderItemCard(normalizedItem, 'strength');
