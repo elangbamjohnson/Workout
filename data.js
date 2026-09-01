@@ -1684,7 +1684,7 @@ window.quickWorkouts = [
           setsReps: '2 × 4/side',
           weight: '7 kg',
           restSeconds: 20,
-          restCue: 'Hips first. Hands finish. Stand in your boxing stance and throw explosively.',
+          restCue: 'Rest 20 seconds. Catch your breath and shake out your arms before switching sides or starting the next set.',
           cue: 'Hips first. Hands finish.',
           notes: 'Stand in your boxing stance. Rotate: Foot → hip → torso → shoulder → ball. Throw explosively against a suitable wall/target. Cue: "Hips first. Hands finish." Don\'t use your arms alone. If 7 kg feels too heavy to throw explosively, reduce the reps rather than slowing down.',
           benefits: 'Develops hip explosiveness, rotational power, and punch-specific force transfer.',
@@ -1698,7 +1698,7 @@ window.quickWorkouts = [
           setsReps: '2 × 5/side',
           weight: '20 kg bar + 5 kg',
           restSeconds: 20,
-          restCue: 'Drive from the floor, rotate the hip, rotate the torso, and press.',
+          restCue: 'Rest 20 seconds. Shake out your shoulders and switch sides or prepare for Set 2.',
           cue: 'Drive from the floor → rotate the hip → rotate the torso → press.',
           notes: 'Barbell + landmine. Start with a light load (20 kg bar + 5 kg plate) and adjust based on speed and technique. Don\'t chase maximum weight. Cue: Drive from the floor → rotate the hip → rotate the torso → press. Think of it as teaching your body to transfer force into a punch.',
           benefits: 'Combines rotational drive from the floor with upper-body punch force transfer.',
@@ -1712,7 +1712,7 @@ window.quickWorkouts = [
           setsReps: '2 × 5–8',
           weight: 'Bodyweight',
           restSeconds: 60,
-          restCue: 'Push the floor away violently. Rest 45 to 60 seconds before repeating.',
+          restCue: 'Rest 60 seconds. Shake out your chest and arms, breathe deep, and prepare for Set 2.',
           cue: 'Push the floor away violently.',
           notes: 'Hands leave the floor slightly. If explosive push-ups aren\'t comfortable: Fast push-ups instead. Cue: Push the floor away violently. Recovery: After completing all three, rest 45–60 sec, then repeat for Set 2.',
           benefits: 'Builds upper-body fast-twitch rate of force development and pushing speed.',
@@ -1789,9 +1789,11 @@ window.quickWorkouts = [
       duration: '~4 min',
       benefits: 'Now we deliberately create fatigue. Move directly to the next exercise with no planned rest. 45 sec rest between rounds.',
       rounds: 2,
+      workSeconds: 90,
       restSeconds: 45,
       restCue: 'Round one complete! Forty-five seconds rest. Walk it off, breathe through your nose, and prepare for round two.',
       finishRestCue: 'Conditioning circuit complete! Forty-five seconds rest. Shake it out before the Bag Finisher.',
+      completionCue: 'Conditioning circuit complete! Forty-five seconds rest. Shake it out before the Bag Finisher.',
       exercises: [
         {
           id: 'hybrid-circ-1',
@@ -1807,7 +1809,7 @@ window.quickWorkouts = [
           reps: '8 reps',
           videoId: 'gYiE_2BtSTg',
           videoFormat: 'short',
-          description: 'Chest to floor, explode up with hands overhead'
+          description: 'Chest to floor, explode up with hands overhead.'
         },
         {
           id: 'hybrid-circ-3',
@@ -1815,8 +1817,20 @@ window.quickWorkouts = [
           reps: '8 reps',
           videoId: '36vnWAkL7ZQ',
           videoFormat: 'short',
-          description: 'Explosive vertical jump from squat, soft landing into next rep'
+          description: 'Explosive vertical jump from squat, soft landing into next rep.'
         }
+      ],
+      round1TimedCues: [
+        { time: 0, text: "Conditioning circuit started. Round one! Eighteen kilogram kettlebell swings for fifteen reps. Hinge at the hips, snap through, and let the bell float.", uiIndex: 0 },
+        { time: 30, text: "Thirty seconds! Transition immediately into eight burpees. Chest all the way to the floor, explode up, hands overhead!", uiIndex: 1, autoCheckId: "hybrid-circ-1" },
+        { time: 60, text: "One minute! Eight explosive squat jumps. Sink deep into the squat, launch upward, and land softly into the next rep!", uiIndex: 2, autoCheckId: "hybrid-circ-2" },
+        { time: 85, text: "Final five seconds of round one! Finish strong!", uiIndex: 2 }
+      ],
+      round2TimedCues: [
+        { time: 0, text: "Round two! Eighteen kilogram kettlebell swings for fifteen reps. Powerful hip drive — maintain crisp form through the fatigue!", uiIndex: 0 },
+        { time: 30, text: "Thirty seconds! Eight burpees. Drop fast, pop right back up with power!", uiIndex: 1, autoCheckId: "hybrid-circ-1" },
+        { time: 60, text: "One minute! Final eight squat jumps. Maximum vertical height, empty the tank!", uiIndex: 2, autoCheckId: "hybrid-circ-2" },
+        { time: 85, text: "Final five seconds! Push all the way to the bell!", uiIndex: 2 }
       ]
     },
     finisher: {

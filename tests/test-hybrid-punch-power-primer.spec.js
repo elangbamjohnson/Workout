@@ -175,7 +175,7 @@ test.describe('Hybrid Boxing: Punch Power Primer Section', () => {
         await expect(timerModal).toBeVisible();
         await expect(timerModal.locator('.timer-header h2')).toContainText('Medicine Ball Rotational Throw');
         await expect(timerModal.locator('.timer-display')).toContainText('0:20');
-        await expect(timerModal.locator('.timer-cue')).toContainText('Hips first');
+        await expect(timerModal.locator('.timer-cue')).toContainText('Rest 20 seconds');
 
         // Close rest timer
         await timerModal.locator('.btn-cancel').click();
