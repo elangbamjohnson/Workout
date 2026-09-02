@@ -861,18 +861,13 @@ window.Timer = {
             btnText = "Skip";
         }
         
-        let actionsHtml = '';
-        if (this.playlist) {
-            const pauseText = this.isPaused ? "Resume" : "Pause";
-            actionsHtml = `
-                <div style="display: flex; gap: 12px; width: 100%;">
-                    <button id="btn-timer-pause" class="btn-large btn-secondary" style="flex: 1; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-card);" onclick="Timer.togglePause()">${pauseText}</button>
-                    <button class="btn-large" style="flex: 1;" onclick="Timer.skipPhase()">${btnText}</button>
-                </div>
-            `;
-        } else {
-            actionsHtml = `<button class="btn-large" onclick="Timer.skipPhase()">${btnText}</button>`;
-        }
+        const pauseText = this.isPaused ? "Resume" : "Pause";
+        let actionsHtml = `
+            <div style="display: flex; gap: 12px; width: 100%;">
+                <button id="btn-timer-pause" class="btn-large btn-secondary" style="flex: 1; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-card);" onclick="Timer.togglePause()">${pauseText}</button>
+                <button class="btn-large" style="flex: 1;" onclick="Timer.skipPhase()">${btnText}</button>
+            </div>
+        `;
         
         const titleColorStyle = (this.roundData && this.roundData.exerciseSegments && isWork)
             ? `style="color: var(--accent-color, var(--strength-accent));"`

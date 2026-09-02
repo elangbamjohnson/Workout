@@ -297,8 +297,6 @@ window.startWarmupRoundTimer = function(dayId) {
         return `${w.name} — ${dStr}`;
     })).join('<br>');
     
-    const isHybridTimer = day.id === 1 || day.id === '1' || day.id === 0 || day.id === '0' || day.id === 2 || day.id === '2' || day.id === 4 || day.id === '4' || day.id === 5 || day.id === '5' || day.id === 'quick-upper-power' || day.id === 'quick-hybrid';
-    
     // Build per-exercise phase segments from warmupTimedCues for the phase progress bar.
     // Each segment spans from its start time to the next segment's start (or total duration).
     let exerciseSegments = null;
@@ -319,8 +317,8 @@ window.startWarmupRoundTimer = function(dayId) {
             return {
                 start,
                 end: i + 1 < starts.length ? starts[i + 1] : workSec,
-                name: (isHybridTimer && wuItem) ? `${i + 1}. ${wuItem.name}` : null,
-                cue: (isHybridTimer && wuItem) ? (wuItem.cue || '') : null
+                name: wuItem ? `${i + 1}. ${wuItem.name}` : null,
+                cue: wuItem ? (wuItem.cue || '') : null
             };
         });
     }
@@ -331,7 +329,7 @@ window.startWarmupRoundTimer = function(dayId) {
     // Pass null as customGoText so the countdown ends with only "Go" (one syllable,
     // completes before the first timedCue audio fires — prevents overlapping audio).
     Timer.startCountdown(5, title, () => {
-        Timer.startRound(workSec, restSec, title, isHybridTimer ? '' : comboStr, day.type || 'bag', () => {
+        Timer.startRound(workSec, restSec, title, exerciseSegments ? '' : comboStr, day.type || 'bag', () => {
             day.warmup.forEach(item => {
                 Store.logItem(dayId, item.id, { completed: true });
             });
@@ -581,8 +579,6 @@ function renderWarmup(day, parentSessionId, sessionType) {
     const badgeText = isRecovery ? 'RC' : 'WU';
     const cardType = isRecovery ? 'rest' : (day.type || sessionType || 'strength');
     
-    const isDay5 = false;
-    const isHybridDay = (sessionId === 1 || sessionId === '1' || sessionId === 2 || sessionId === '2' || sessionId === 3 || sessionId === '3' || sessionId === 4 || sessionId === '4' || sessionId === 5 || sessionId === '5' || sessionId === 'quick-upper-power' || sessionId === 'quick-hybrid');
     let listHtml = `<div class="nested-list">`;
     day.warmup.forEach((item, idx) => {
         const logData = Store.getItemLog(sessionId, item.id) || {};
@@ -610,53 +606,29 @@ function renderWarmup(day, parentSessionId, sessionType) {
                </button>`
             : '';
         
-        if (isHybridDay) {
-            // Hybrid layout (Day 1, Day 4 & Day 5): numbered badge left, name + stat/cue center, checkbox right
-            // Checkbox tap triggers individual exercise timer (timed) or toggles (reps)
-            listHtml += `
-                <div class="warmup-hybrid-row ${isCheckedStr}" data-item-id="${item.id}">
-                    <div class="warmup-hybrid-num">${idx + 1}</div>
-                    <div class="warmup-hybrid-content">
-                        <div class="warmup-hybrid-title-row">
-                            <span class="warmup-hybrid-name">${item.name}</span>
-                            ${demoIconBtn}
-                        </div>
-                        <div class="warmup-hybrid-stat-row">
-                            <span class="warmup-hybrid-stat">${timeOrRepsStr}</span>
-                            ${item.cue ? `<span class="warmup-hybrid-dot">&bull;</span><span class="warmup-hybrid-cue">${item.cue}</span>` : ''}
-                        </div>
+        // Hybrid layout: numbered badge left, name + stat/cue center, checkbox right
+        // Checkbox tap triggers individual exercise timer (timed) or toggles (reps)
+        listHtml += `
+            <div class="warmup-hybrid-row ${isCheckedStr}" data-item-id="${item.id}">
+                <div class="warmup-hybrid-num">${idx + 1}</div>
+                <div class="warmup-hybrid-content">
+                    <div class="warmup-hybrid-title-row">
+                        <span class="warmup-hybrid-name">${item.name}</span>
+                        ${demoIconBtn}
                     </div>
-                    <button class="btn-check ${isCheckedStr}" aria-label="${isCompleted ? 'Uncheck' : (isRepBased ? 'Mark complete' : 'Start timer for')} ${item.name}" onclick="startWarmupExerciseFromCheckbox(event, ${dayIdStr}, '${item.id}')">${icons.checkmark}</button>
-                </div>
-            `;
-
-        } else {
-            listHtml += `
-                <div class="nested-row ${isCheckedStr}">
-                    <button class="btn-check ${isCheckedStr}" onclick="toggleRound(event, ${dayIdStr}, '${item.id}')">${icons.checkmark}</button>
-                    <div style="flex: 1; margin-left: 12px; min-width: 0;">
-                        <div style="display: flex; align-items: center; gap: 6px;">
-                            <h3 class="warmup-name" style="margin: 0; font-size: 14px; font-weight: 600; color: var(--text-primary);">${item.name}</h3>
-                            ${demoIconBtn}
-                        </div>
-                        <div class="warmup-cue" style="color: var(--text-secondary); font-size: 13px; margin-top: 2px;">${item.cue}</div>
-                    </div>
-                    <div class="warmup-actions" style="margin-left: 12px;">
-                        <span class="warmup-duration-label" style="font-weight: 600; font-size: 13px; color: var(--accent-color);">${timeOrRepsStr}</span>
-                        ${!isRepBased && !isCompleted && !day.warmupPlaylist ? `
-                            <button class="btn-play type-${cardType}" onclick="startWarmupTimer(${dayIdStr}, '${item.id}', ${item.duration}, '${item.name.replace(/'/g, "\\'")}', '${item.cue.replace(/'/g, "\\'")}', ${item.switchSides})">
-                                <span class="play-icon">${icons.play}</span> Start
-                            </button>
-                        ` : ''}
+                    <div class="warmup-hybrid-stat-row">
+                        <span class="warmup-hybrid-stat">${timeOrRepsStr}</span>
+                        ${item.cue ? `<span class="warmup-hybrid-dot">&bull;</span><span class="warmup-hybrid-cue">${item.cue}</span>` : ''}
                     </div>
                 </div>
-            `;
-        }
+                <button class="btn-check ${isCheckedStr}" aria-label="${isCompleted ? 'Uncheck' : (isRepBased ? 'Mark complete' : 'Start timer for')} ${item.name}" onclick="startWarmupExerciseFromCheckbox(event, ${dayIdStr}, '${item.id}')">${icons.checkmark}</button>
+            </div>
+        `;
     });
     
     listHtml += '</div>';
 
-    const durationDisplay = (sessionId === 5 || sessionId === '5') ? '~5:30' : (sessionId === 2 || sessionId === '2') ? '~6:30' : (sessionId === 'quick-hybrid' || sessionId === 'quick-upper-power') ? '~5 min' : isHybridDay ? '~7 min' : (mins > 0 ? `~${mins} min` : `${totalDurationSec}s`);
+    const durationDisplay = (sessionId === 5 || sessionId === '5') ? '~5:30' : (sessionId === 2 || sessionId === '2') ? '~6:30' : (sessionId === 'quick-hybrid' || sessionId === 'quick-upper-power') ? '~5 min' : '~7 min';
 
     let normalizedItem = {
         id: cardId,
@@ -670,7 +642,22 @@ function renderWarmup(day, parentSessionId, sessionType) {
         ]
     };
     
-    if (isDay5 || isHybridDay) {
+    if (day.warmupPlaylist) {
+        normalizedItem.actionHtml = `
+        <div style="padding: 16px; border-top: 1px solid var(--border-card);">
+            <button class="btn-primary" style="width: 100%;" onclick="startSectionSequence('${sessionId}', 'warmupPlaylist')">
+                <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start Warm Up
+            </button>
+        </div>`;
+    } else if (day.isBlockStart) {
+        let startLabel = labelTitle || "Warm-up";
+        normalizedItem.actionHtml = `
+        <div style="padding: 16px; border-top: 1px solid var(--border-card);">
+            <button class="btn-primary" style="width: 100%;" onclick="Timer.startCountdown(5, '${startLabel.replace(/'/g, "\\'")}', null)">
+                <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start ${startLabel}
+            </button>
+        </div>`;
+    } else {
         const isAllWUCompleted = day.warmup.every(item => (Store.getItemLog(sessionId, item.id) || {}).completed);
         if (isAllWUCompleted) {
             normalizedItem.actionHtml = `
@@ -681,21 +668,6 @@ function renderWarmup(day, parentSessionId, sessionType) {
                 <button class="btn-large" style="margin-top: var(--sp-4);" onclick="startWarmupRoundTimer(${dayIdStr})">Start Warm-up Session</button>
             `;
         }
-    } else if (day.warmupPlaylist) {
-        normalizedItem.actionHtml = `
-        <div style="padding: 16px; border-top: 1px solid var(--border-color);">
-            <button class="btn-primary" style="width: 100%;" onclick="startSectionSequence('${sessionId}', 'warmupPlaylist')">
-                <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start Warm Up
-            </button>
-        </div>`;
-    } else if (day.isBlockStart) {
-        let startLabel = labelTitle || "Warm-up";
-        normalizedItem.actionHtml = `
-        <div style="padding: 16px; border-top: 1px solid var(--border-color);">
-            <button class="btn-primary" style="width: 100%;" onclick="Timer.startCountdown(5, '${startLabel.replace(/'/g, "\\'")}', null)">
-                <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start ${startLabel}
-            </button>
-        </div>`;
     }
 
     return renderItemCard(normalizedItem, cardType);
@@ -1020,7 +992,7 @@ function generateDashboardHTML() {
                         <div class="label-small" style="color: var(--strength-accent); margin-bottom: 4px;">PROGRESSION UNLOCKED</div>
                         <div style="font-size: 13px; line-height: 1.4;">${workoutData.progression.rules[0]}</div>
                     </div>
-                    <button class="btn-close" onclick="document.getElementById('progressionBanner').style.display='none'; localStorage.setItem('punchpower_banner_dismissed', 'true');" style="background: none; border: none; color: var(--text-muted); padding: 4px;">✕</button>
+                    <button class="btn-close" onclick="document.getElementById('progressionBanner').style.display='none'; localStorage.setItem('punchpower_banner_dismissed', 'true');" style="background: none; border: none; color: var(--text-muted); padding: 12px;">✕</button>
                 </div>
             </div>`;
         }
@@ -1174,34 +1146,31 @@ function updateGlobalHeader(isHome, day = null, dayIndex = 0, totalDays = 7) {
 
             <button class="header-info-btn" onclick="renderAbout()" aria-label="About Strike First">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <circle cx="10" cy="10" r="9" stroke="#6b7280" stroke-width="1.4"/>
-                <circle cx="10" cy="6.5" r="1.1" fill="#6b7280"/>
-                <rect x="9.2" y="9" width="1.6" height="5" rx="0.8" fill="#6b7280"/>
+                <circle cx="10" cy="10" r="9" stroke="var(--text-muted)" stroke-width="1.4"/>
+                <circle cx="10" cy="6.5" r="1.1" fill="var(--text-muted)"/>
+                <rect x="9.2" y="9" width="1.6" height="5" rx="0.8" fill="var(--text-muted)"/>
               </svg>
             </button>
           </div>
         `;
     } else {
-        const workoutDays = workoutData.days.slice(0, 5);
-        const currentIndex = workoutDays.findIndex(d => d.id === (day ? day.id : null));
-        const hasPrev = currentIndex > 0;
-        const hasNext = currentIndex >= 0 && currentIndex < workoutDays.length - 1;
-        const prevId = hasPrev && workoutDays[currentIndex - 1] ? workoutDays[currentIndex - 1].id : null;
-        const nextId = hasNext && workoutDays[currentIndex + 1] ? workoutDays[currentIndex + 1].id : null;
-        
-        innerHtml = `
-          <div class="nav-day">
-            <button class="nav-back-btn" onclick="renderHome()" aria-label="Back to Week">
-              <svg width="10" height="16" viewBox="0 0 10 16" fill="none">
-                <path d="M8 2L2 8L8 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              Week
-            </button>
+        const isQuickSession = day && day.isQuickSession;
+        let titleHtml = '';
+        let arrowsHtml = '';
 
-            <span class="nav-day-title">
-              Day ${day.id} — ${day.title}
-            </span>
-
+        if (isQuickSession) {
+            titleHtml = `<span class="nav-day-title">${day.title}</span>`;
+            arrowsHtml = `<div style="width: 64px; height: 36px; flex-shrink: 0; visibility: hidden;"></div>`;
+        } else if (day) {
+            const workoutDays = workoutData.days.slice(0, 5);
+            const currentIndex = workoutDays.findIndex(d => d.id === day.id);
+            const hasPrev = currentIndex > 0;
+            const hasNext = currentIndex >= 0 && currentIndex < workoutDays.length - 1;
+            const prevId = hasPrev && workoutDays[currentIndex - 1] ? workoutDays[currentIndex - 1].id : null;
+            const nextId = hasNext && workoutDays[currentIndex + 1] ? workoutDays[currentIndex + 1].id : null;
+            
+            titleHtml = `<span class="nav-day-title">Day ${day.id} — ${day.title}</span>`;
+            arrowsHtml = `
             <div class="nav-day-arrows">
               <button class="nav-arrow-btn" onclick="${hasPrev ? `renderDay(${prevId})` : ''}" aria-label="Previous day" ${hasPrev ? '' : 'disabled'}>
                 <svg width="10" height="16" viewBox="0 0 10 16" fill="none">
@@ -1214,6 +1183,24 @@ function updateGlobalHeader(isHome, day = null, dayIndex = 0, totalDays = 7) {
                 </svg>
               </button>
             </div>
+            `;
+        } else {
+            // About Page
+            titleHtml = `<span class="nav-day-title">About</span>`;
+            arrowsHtml = `<div style="width: 64px; height: 36px; flex-shrink: 0; visibility: hidden;"></div>`;
+        }
+        
+        innerHtml = `
+          <div class="nav-day">
+            <button class="nav-back-btn" onclick="renderHome()" aria-label="Back to Week">
+              <svg width="10" height="16" viewBox="0 0 10 16" fill="none">
+                <path d="M8 2L2 8L8 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Week
+            </button>
+
+            ${titleHtml}
+            ${arrowsHtml}
           </div>
         `;
     }
@@ -1232,7 +1219,7 @@ const quickSessionCards = [
     { id: 'quick-upper-power', emoji: '💪', name: 'Upper Body Power',     duration: '~45 min', tag: 'Strength',            pill: 'qs-pill-orange', type: 'strength'  },
     { id: 'quick-lower-power', emoji: '🦵', name: 'Lower Body Power',     duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-lower-power')) || '~50 min', tag: 'Strength',            pill: 'qs-pill-orange', type: 'strength'  },
     { id: 'quick-shadow-boxing', emoji: '<img src="./assets/boxer-icon.png" class="qs-boxer-icon" alt="Shadow Boxing" />', name: 'Shadow Boxing', duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-shadow-boxing')) || '~30 min', tag: 'Technical', pill: 'qs-pill-cyan', type: 'technical' },
-    { id: 'quick-hiit-boxing', emoji: '🔥', name: 'HIIT Boxing',          duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-hiit-boxing')) || '~25 min', tag: 'Conditioning',        pill: 'qs-pill-red',    type: 'bag'      },
+    { id: 'quick-hiit-boxing', emoji: '🔥', name: 'HIIT Boxing',          duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-hiit-boxing')) || '~25 min', tag: 'Conditioning',        pill: 'qs-pill-amber',    type: 'bag'      },
     { id: 'quick-full-body-explosive', emoji: '💥', name: 'Full-Body Workout',  duration: calculateQuickSessionDuration(window.quickWorkouts.find(q => q.id === 'quick-full-body-explosive')) || '~45 min', tag: 'Full Body',           pill: 'qs-pill-orange', type: 'strength'  },
 ];
 
@@ -1822,7 +1809,7 @@ function renderAbout() {
     html += `
         <div class="card about-card" style="padding: var(--sp-6);">
             <div class="flex items-center gap-4">
-                <div class="header-icon" style="width: 48px; height: 48px; border-radius: 12px; margin: 0; flex-shrink: 0; background: #E8643A; display: flex; align-items: center; justify-content: center;">
+                <div class="header-icon" style="width: 48px; height: 48px; border-radius: 12px; margin: 0; flex-shrink: 0; background: var(--strength-accent); display: flex; align-items: center; justify-content: center;">
                     <img src="./assets/boxer-icon.png" style="width: 32px; height: 32px; object-fit: contain; filter: brightness(0) invert(1);"/>
                 </div>
                 <div style="text-align: left;">
@@ -2329,21 +2316,7 @@ window.renderQuickSession = function(quickId) {
         });
     }
     
-    const headerHtml = `
-        <header class="app-header">
-            <div class="nav-day">
-                <button class="nav-back-btn" onclick="renderHome()" aria-label="Back to Week">
-                  <svg width="10" height="16" viewBox="0 0 10 16" fill="none">
-                    <path d="M8 2L2 8L8 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  Back
-                </button>
-                <span class="nav-day-title">${session.title}</span>
-                <div class="nav-day-arrows"></div>
-            </div>
-        </header>
-    `;
-    document.getElementById('global-header').innerHTML = headerHtml;
+    updateGlobalHeader(false, { id: quickId, title: session.title, isQuickSession: true });
     
     let html = '';
     
@@ -2470,7 +2443,7 @@ window.renderQuickSession = function(quickId) {
             
             if (ex.isBlockStart) {
                 normalizedItem.actionHtml = `
-                <div style="padding: 16px; border-top: 1px solid var(--border-color);">
+                <div style="padding: 16px; border-top: 1px solid var(--border-card);">
                     <button class="btn-primary" style="width: 100%;" onclick="Timer.startCountdown(5, '${ex.name.replace(/'/g, "\\'")}', null)">
                         <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start ${ex.name}
                     </button>
@@ -2622,7 +2595,7 @@ window.renderQuickSession = function(quickId) {
         
         if (blockData.isBlockStart) {
             normalizedItem.actionHtml = `
-            <div style="padding: 16px; border-top: 1px solid var(--border-color);">
+            <div style="padding: 16px; border-top: 1px solid var(--border-card);">
                 <button class="btn-primary" style="width: 100%;" onclick="Timer.startCountdown(5, '${(blockData.title || blockData.name).replace(/'/g, "\\'")}', null)">
                     <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start ${blockData.title || blockData.name}
                 </button>
@@ -2685,14 +2658,14 @@ window.renderQuickSession = function(quickId) {
         
         if (sectionObj.isBlockStart) {
             normalizedItem.actionHtml = `
-            <div style="padding: 16px; border-top: 1px solid var(--border-color);">
+            <div style="padding: 16px; border-top: 1px solid var(--border-card);">
                 <button class="btn-primary" style="width: 100%;" onclick="Timer.startCountdown(5, '${sectionObj.name.replace(/'/g, "\\'")}', null)">
                     <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start ${sectionObj.name}
                 </button>
             </div>`;
         } else if (sectionObj.id === 'hiit-tabata' && session.bagRoundsPlaylist) {
             normalizedItem.actionHtml = `
-            <div style="padding: 16px; border-top: 1px solid var(--border-color);">
+            <div style="padding: 16px; border-top: 1px solid var(--border-card);">
                 <button class="btn-primary" style="width: 100%;" onclick="startSectionSequence('${quickId}', 'bagRoundsPlaylist')">
                     <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start Tabata Bag Rounds
                 </button>
@@ -2756,7 +2729,7 @@ window.renderQuickSession = function(quickId) {
         
         if (session.circuitPlaylist) {
             normalizedItem.actionHtml = `
-            <div style="padding: 16px; border-top: 1px solid var(--border-color);">
+            <div style="padding: 16px; border-top: 1px solid var(--border-card);">
                 <button class="btn-primary" style="width: 100%;" onclick="startSectionSequence('${quickId}', 'circuitPlaylist')">
                     <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start Conditioning Circuit
                 </button>
@@ -2886,7 +2859,7 @@ window.renderQuickSession = function(quickId) {
         
         if (session.cooldownPlaylist) {
             normalizedItem.actionHtml = `
-            <div style="padding: 16px; border-top: 1px solid var(--border-color);">
+            <div style="padding: 16px; border-top: 1px solid var(--border-card);">
                 <button class="btn-primary" style="width: 100%;" onclick="startSectionSequence('${quickId}', 'cooldownPlaylist')">
                     <span class="play-icon" style="margin-right: 8px;">${icons.play}</span> Start Cool Down
                 </button>
