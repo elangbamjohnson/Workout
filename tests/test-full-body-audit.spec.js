@@ -9,13 +9,32 @@ test.describe('Full-Body Workout Streamlining Audit (quick-full-body-explosive)'
         await expect(page.locator('#splash-screen')).toBeHidden();
     });
 
-    test('Data Model Verification: Exactly 15 exercises, Block 5 has 2, Block 6 has 3, duration ~45 min', async ({ page }) => {
+    test('Data Model Verification: Exactly 8 unique warmup drills (no duplicates), 15 exercises, Block 5 has 2, Block 6 has 3, duration ~45 min', async ({ page }) => {
         const fullBodyData = await page.evaluate(() => {
             return window.quickWorkouts.find(q => q.id === 'quick-full-body-explosive');
         });
 
         expect(fullBodyData).toBeDefined();
         expect(fullBodyData.duration).toBe('~45 min');
+
+        // Block 1: Warm-up & Mobility (exactly 8 unique drills, no duplicates, no transition rest)
+        const blk1 = fullBodyData.blocks.find(b => b.data.id === 'fb-blk1');
+        expect(blk1.data.warmup.length).toBe(8);
+        const wuNames = blk1.data.warmup.map(w => w.name);
+        expect(new Set(wuNames).size).toBe(8);
+        expect(wuNames).toEqual([
+            'Jumping jacks',
+            'High knees',
+            'Bodyweight squats',
+            'Reverse lunges with rotation',
+            'Inchworm to push-up',
+            "World's Greatest Stretch",
+            'Thoracic rotation',
+            'Arm circles'
+        ]);
+        expect(wuNames).not.toContain('Rest / Transition');
+        expect(blk1.data.warmup[0].videoId).toBe('bT2iY8IjEU0'); // Jumping jacks
+        expect(blk1.data.warmup[7].videoId).toBe('lzR7tzI1JUI'); // Arm circles
 
         // Total exercises across exercise blocks (Blocks 2, 3, 4, 5, 6)
         const exerciseBlocks = fullBodyData.blocks.filter(b => b.type === 'exercises');
@@ -28,11 +47,16 @@ test.describe('Full-Body Workout Streamlining Audit (quick-full-body-explosive)'
         const blk2Names = blk2.data.exercises.map(e => e.name);
         expect(blk2Names).toContain('Landmine Rotational Press');
 
+        // Block 4: Unilateral Athletic Strength (Bulgarian Split Squat video demo linked)
+        const blk4 = fullBodyData.blocks.find(b => b.data.id === 'fb-blk4');
+        expect(blk4.data.exercises[0].videoId).toBe('or1frhkjBDc');
+
         // Block 5: Full-Body Athletic Conditioning (2 exercises: Kettlebell Swings, Burpees)
         const blk5 = fullBodyData.blocks.find(b => b.data.id === 'fb-blk5');
         expect(blk5.data.exercises.length).toBe(2);
         expect(blk5.data.exercises[0].name).toBe('Kettlebell Swings');
         expect(blk5.data.exercises[0].id).toBe('fb-blk5-1');
+        expect(blk5.data.exercises[0].videoId).toBe('TIy6s4O2bOY');
         expect(blk5.data.exercises[0].restSeconds).toBe(0);
         expect(blk5.data.exercises[0].cue).toBe('Good set. Move to Burpees.');
         expect(blk5.data.exercises[0].notes).not.toContain('Dumbbell Thrusters');
@@ -118,6 +142,13 @@ test.describe('Full-Body Workout Streamlining Audit (quick-full-body-explosive)'
         const wuBadgeBg = await wuBadge.evaluate(el => window.getComputedStyle(el).backgroundColor);
         expect(wuBadgeBg).not.toBe('rgba(0, 0, 0, 0)');
         expect(wuBadgeBg).toBe('rgb(238, 108, 63)'); // --strength-accent
+
+        // Expand Warm-up & Mobility (WU) card and verify exactly 8 unique drills render
+        await wuCard.locator('.item-header').click();
+        await expect(wuCard).toHaveClass(/expanded/);
+        const wuRows = wuCard.locator('.warmup-hybrid-row');
+        await expect(wuRows).toHaveCount(8);
+        await expect(wuCard).not.toContainText('Rest / Transition');
 
         // Verify Mobility & Recovery (RC) card styling & badge visibility
         const rcCard = page.locator('.item-card').filter({ hasText: 'Mobility & Recovery' });
