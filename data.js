@@ -2206,25 +2206,14 @@ window.quickWorkouts = [
           title: 'Warm-up & Mobility',
           isBlockStart: true,
           warmup: [
-            // Round 1
-            { id: 'fb-wu-1-1', name: 'Jumping jacks', type: 'timed', duration: 30, cue: 'Welcome to the Full-Body Workout. We are training power, strength, explosiveness, conditioning, core, and mobility in one forty-five minute session. Start with jumping jacks.' },
+            { id: 'fb-wu-1-1', name: 'Jumping jacks', videoId: 'bT2iY8IjEU0', videoFormat: 'short', type: 'timed', duration: 30, cue: 'Welcome to the Full-Body Workout. We are training power, strength, explosiveness, conditioning, core, and mobility in one forty-five minute session. Start with jumping jacks.' },
             { id: 'fb-wu-1-2', name: 'High knees', type: 'timed', duration: 30, cue: 'High knees, get them up.' },
             { id: 'fb-wu-1-3', name: 'Bodyweight squats', type: 'reps', reps: '10 reps', cue: 'Bodyweight squats.' },
             { id: 'fb-wu-1-4', name: 'Reverse lunges with rotation', type: 'reps', reps: '6 reps each side', cue: 'Reverse lunges with rotation.' },
             { id: 'fb-wu-1-5', name: 'Inchworm to push-up', type: 'reps', reps: '5 reps', cue: 'Inchworm to push-up.' },
             { id: 'fb-wu-1-6', name: 'World\'s Greatest Stretch', type: 'reps', reps: '4 reps each side', cue: 'World\'s greatest stretch.' },
             { id: 'fb-wu-1-7', name: 'Thoracic rotation', type: 'reps', reps: '6 reps each side', cue: 'Thoracic rotation.' },
-            { id: 'fb-wu-1-8', name: 'Arm circles', type: 'reps', reps: '15 reps each direction', cue: 'Arm circles.' },
-            // Round 2
-            { id: 'fb-wu-2-1', name: 'Jumping jacks', type: 'timed', duration: 30, cue: 'Round 2 starting. Move with a bit more intent. Jumping jacks.' },
-            { id: 'fb-wu-2-2', name: 'High knees', type: 'timed', duration: 30, cue: 'High knees.' },
-            { id: 'fb-wu-2-3', name: 'Bodyweight squats', type: 'reps', reps: '10 reps', cue: 'Bodyweight squats.' },
-            { id: 'fb-wu-2-4', name: 'Reverse lunges with rotation', type: 'reps', reps: '6 reps each side', cue: 'Reverse lunges with rotation.' },
-            { id: 'fb-wu-2-5', name: 'Inchworm to push-up', type: 'reps', reps: '5 reps', cue: 'Inchworm to push-up.' },
-            { id: 'fb-wu-2-6', name: 'World\'s Greatest Stretch', type: 'reps', reps: '4 reps each side', cue: 'World\'s greatest stretch.' },
-            { id: 'fb-wu-2-7', name: 'Thoracic rotation', type: 'reps', reps: '6 reps each side', cue: 'Thoracic rotation.' },
-            { id: 'fb-wu-2-8', name: 'Arm circles', type: 'reps', reps: '15 reps each direction', cue: 'Arm circles.' },
-            { id: 'fb-wu-rest', name: 'Rest / Transition', type: 'timed', duration: 30, cue: 'Body is warmed up and ready for explosive work. Rest and transition.' }
+            { id: 'fb-wu-1-8', name: 'Arm circles', videoId: 'lzR7tzI1JUI', videoFormat: 'short', type: 'reps', reps: '15 reps each direction', cue: 'Arm circles.' }
           ]
         }
       },
@@ -2349,6 +2338,8 @@ window.quickWorkouts = [
             {
               id: 'fb-blk4-1',
               name: 'Bulgarian Split Squat',
+              videoId: 'or1frhkjBDc',
+              videoFormat: 'short',
               setsReps: '3 x 8/leg',
               weight: 'Dumbbells',
               restSeconds: 0,
@@ -2395,6 +2386,8 @@ window.quickWorkouts = [
             {
               id: 'fb-blk5-1',
               name: 'Kettlebell Swings',
+              videoId: 'TIy6s4O2bOY',
+              videoFormat: 'short',
               setsReps: '4 x 30s',
               weight: '18kg KB',
               restSeconds: 0,
